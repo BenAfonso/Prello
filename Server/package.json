@@ -1,0 +1,12 @@
+{
+  "name": "prello-server",
+  "version": "0.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.5",
+    "mongoose": "^4.11.13"
+  }
+}
