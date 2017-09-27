@@ -1,0 +1,6 @@
+const User = require('./User')
+const Team = require('./Team')
+const Comment = require('./Comment')
+const Card = require('./Card')
+const List = require('./List')
+const Board = require('./Board')
