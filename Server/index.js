@@ -5,9 +5,6 @@ const mongoose = require('mongoose')
 const models = require('./models/index')
 
 
-
-
-
 require('dotenv').config()
 
 app.use(bodyParser.json())
@@ -44,3 +41,4 @@ function connect () {
   var options = { server: { socketOptions: { keepAlive: 1 } } }
   return mongoose.connect(process.env.MONGODB_URL_DEV, options).connection
 }
+require('./controllers/index');

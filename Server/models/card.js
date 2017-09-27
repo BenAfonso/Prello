@@ -17,6 +17,8 @@ const CardSchema = new Schema({
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comment'}],
     createdAt: {type : Date},
     isArchived: {type : Boolean, default : false},
+    attachments: [{ type: Schema.Types.ObjectId, ref: 'Attachment'}],
+    
 })
 
 mongoose.model('Card', CardSchema);
