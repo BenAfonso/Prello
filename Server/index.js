@@ -1,6 +1,8 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
+const mongoose = require('mongoose')
+const models = './models'
 require('dotenv').config()
 
 app.use(bodyParser.json())
@@ -28,5 +30,13 @@ app.use(function (req, res, next) {
 })
 
 app.listen(process.env.PORT || 3000, () => {
+  console.log(process.env.MONGODB_URL_DEV)
   console.log('Server listening at port ' + (process.env.PORT || 3000))
 })
+
+connect()
+
+function connect () {
+  var options = { server: { socketOptions: { keepAlive: 1 } } }
+  return mongoose.connect(process.env.MONGODB_URL_DEV, options).connection
+}
