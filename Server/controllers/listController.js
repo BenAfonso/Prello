@@ -4,25 +4,26 @@ const boardController = require('./boardController')
 
 const listController = {}
 
-listController.createList = function (req, res, next) {
-  console.log(req)
-  if (req.params.boardid === null) {
-    res.status(500).send('Missing board ID')
-  } else {
-    const listToAdd = new List(req.body)
-    listToAdd.save((err, item) => {
-      if (err) {
-        res.status(500).send(err)
-      } else {
-        boardController.addListToBoard(req.params.boardid, listToAdd)
-          .then((data) => {
-            res.status(200).json(data)
-          })
-          .catch((err) => {
-            res.status(500).send(err)
-          })
-      }
-    })
-  }
+listController.createList = function (req) {
+  return new Promise((resolve, reject) => {
+    if (req.params.id === null) {
+      reject(new Error('Missing boardID'))
+    } else {
+      const listToAdd = new List(req.body)
+      listToAdd.save((err, item) => {
+        if (err) {
+          reject(err)
+        } else {
+          boardController.addListToBoard(req.params.id, listToAdd)
+            .then((data) => {
+              resolve(item)
+            })
+            .catch((err) => {
+              reject(err)
+            })
+        }
+      })
+    }
+  })
 }
 module.exports = listController

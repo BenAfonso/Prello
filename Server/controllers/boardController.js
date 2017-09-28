@@ -3,29 +3,36 @@ const Board = mongoose.model('Board')
 
 const boardController = {}
 
-boardController.getAllBoards = function (req, res, next) {
-  Board.find().populate('owner lists collaborators').exec(function (err, item) {
-    if (err) {
-      res.status(500).json(err)
-    } else {
-      res.status(200).json(item)
-    }
+boardController.getAllBoards = function () {
+  return new Promise((resolve, reject) => {
+    Board.find().populate('owner lists collaborators').exec(function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
   })
 }
 
-boardController.createBoard = function (req, res, next) {
-  const boardToAdd = new Board(req.body)
-  boardToAdd.save((err, item) => {
-    if (err) {
-      res.status(500).json(err)
-    } else {
-      res.status(200).json(item)
-    }
+boardController.createBoard = function (board) {
+  return new Promise((resolve, reject) => {
+    const boardToAdd = new Board(board)
+    boardToAdd.save((err, item) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(item)
+      }
+    })
   })
 }
-boardController.addListToBoard = function (boardId, list, callback) {
+boardController.addListToBoard = function (boardId, list) {
   return new Promise((resolve, reject) => {
-    Board.findOneAndUpdate({id: boardId}, {$push: {lists: list}}).then((err, res) => {
+    console.log(boardId)
+    Board.findOneAndUpdate({'_id': boardId}, {$push: {lists: list}}, {new: true}, function (err, res){
+      console.log(res)
+      console.log(err)
       if (err) {
         reject(err)
       } else {
