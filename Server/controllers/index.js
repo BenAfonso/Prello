@@ -1,5 +1,7 @@
 const boardController = require('./boardController')
+const listController = require('./listController')
 
 module.exports = {
-    boardController: boardController
-};
+  boardController: boardController,
+  listController: listController
+}
