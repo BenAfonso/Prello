@@ -1,1 +1,5 @@
-const Board = require('./boardController')
+const boardController = require('./boardController')
+
+module.exports = {
+    boardController: boardController
+};
