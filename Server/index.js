@@ -2,6 +2,34 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const mongoose = require('mongoose')
+const swaggerJSDoc = require('swagger-jsdoc')
+
+// swagger definition
+let swaggerDefinition = {
+  info: {
+    title: 'Prello Swagger API',
+    version: '1.0.0',
+    description: 'Demonstrating how to describe a RESTful API with Swagger'
+  },
+  host: 'localhost:3000',
+  basePath: '/'
+}
+
+// options for the swagger docs
+let options = {
+  // import swaggerDefinitions
+  swaggerDefinition: swaggerDefinition,
+  // path to the API docs
+  apis: ['./routes/**/*.js']
+}
+
+// initialize swagger-jsdoc
+const swaggerSpec = swaggerJSDoc(options)
+// serve swagger
+app.get('/swagger.json', function (req, res) {
+  res.setHeader('Content-Type', 'application/json')
+  res.send(swaggerSpec)
+})
 
 require('./models/index')
 require('./controllers/index')
@@ -21,6 +49,8 @@ app.all('/*', (req, res, next) => {
     next()
   }
 })
+// Serving doc files
+app.use('/api-docs', express.static('./api-doc'))
 
 app.use('/', require('./routes'))
 
