@@ -1,6 +1,15 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import styles from './Card.styles'
 
 export default class Card extends React.Component {
+  static propTypes = {
+    content: PropTypes.string.isRequired,
+    createdAt: PropTypes.string,
+  }
+
+  static defaultProps = {
+  }
 
   constructor (props) {
     super(props)
@@ -14,9 +23,7 @@ export default class Card extends React.Component {
     event.preventDefault()
   }
 
-  drag (event) {
-
-  }
+  drag (event) {}
 
   allowDrop (event) {
     event.preventDefault()
@@ -24,8 +31,16 @@ export default class Card extends React.Component {
 
   render () {
     return (
-      <div draggable='true' style={{height: '200px', width: '200px', backgroundColor: 'black'}}ondragstart={this.drag} ondragover={this.allowDrop} ondrop={this.drop}>
+      <div
+        className='root'
+        draggable='true'
+        onDragStart={this.drag}
+        onDragOver={this.allowDrop}
+        onDrop={this.drop}>
         {this.props.content}
+        <style jsx>
+          {styles}
+        </style>
       </div>
     )
   }
