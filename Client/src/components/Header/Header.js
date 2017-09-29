@@ -10,8 +10,8 @@ export default class Header extends React.Component {
   }
 
   static defaultProps = {
-    bgColor: 'orange',
-    color: 'white'
+    bgColor: '#ae4d7b',
+    color: 'white',
   }
   render () {
     return <div className='host' style={{

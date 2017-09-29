@@ -2,7 +2,8 @@ export default `
 .host {
   background-color: #E2E4E6;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
 }
 
 .title {

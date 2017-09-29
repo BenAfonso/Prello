@@ -2,7 +2,7 @@ export default `
   .host {
     height: 100%;
     width: 100%;
-    background-color: grey;
+    background-color: #cd5a91;
     padding: 30px 10px;
     overflow-x: scroll;
   }
