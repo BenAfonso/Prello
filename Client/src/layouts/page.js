@@ -2,8 +2,10 @@ import React from 'react'
 import Header from '../components/Header/Header'
 
 export default (props) => (
-  <div>
+  <div style={{height: '100%'}}>
     <Header />
-    {props.children}
+    <div className='content' style={{height: 'calc(100% - 50px)'}}>
+      {props.children}
+    </div>
   </div>
 )
