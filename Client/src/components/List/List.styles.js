@@ -8,4 +8,14 @@ export default `
 .title {
   margin-bottom: 15px;
 }
+
+ul li {
+  margin-top: 10px;
+}
+
+ul li:nth-child(1) {
+  margin-top: 0;
+}
+
+
 `

@@ -19,3 +19,11 @@ ul {
 .App {
   height: 100%;
 }
+
+input {
+  border: none;
+}
+
+*:focus {
+  outline: none;
+}

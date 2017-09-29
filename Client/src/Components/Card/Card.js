@@ -37,7 +37,7 @@ export default class Card extends React.Component {
         onDragStart={this.drag}
         onDragOver={this.allowDrop}
         onDrop={this.drop}>
-        {this.props.content}
+        { this.props.content }
         <style jsx>
           {styles}
         </style>

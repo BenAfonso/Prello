@@ -21,4 +21,13 @@ export default `
   ul li:nth-child(1) {
     margin-left: 0;
   }
+
+  .newListButton {
+    height: 45px !important;
+    width: 150px !important;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: white;
+    color: rgba(0,0,0,0.6);
+  }
 `
