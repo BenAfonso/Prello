@@ -1,6 +1,9 @@
 import React from 'react'
 import Board from '../Components/Board/Board'
+import PageLayout from '../layouts/page'
 
 export default (props) => (
-  <Board />
+  <PageLayout>
+    <Board />
+  </PageLayout>
 )
