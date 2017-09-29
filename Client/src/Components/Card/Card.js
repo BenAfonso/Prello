@@ -10,14 +10,6 @@ export default class Card extends React.Component {
     this.allowDrop = this.allowDrop.bind(this)
   }
 
-  render () {
-    return (
-      <div draggable='true' ondragstart={this.drag} ondragover={this.allowDrop} ondrop={this.drop}>
-        {this.props.content}
-      </div>
-    )
-  }
-
   drop (event) {
     event.preventDefault()
   }
@@ -28,5 +20,13 @@ export default class Card extends React.Component {
 
   allowDrop (event) {
     event.preventDefault()
+  }
+
+  render () {
+    return (
+      <div draggable='true' style={{height: '200px', width: '200px', backgroundColor: 'black'}}ondragstart={this.drag} ondragover={this.allowDrop} ondrop={this.drop}>
+        {this.props.content}
+      </div>
+    )
   }
 }
