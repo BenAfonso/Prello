@@ -6,30 +6,66 @@ export default class List extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      newCardFormDisplayed: false,
       cards: ['Finish Prello', 'Say Hi']
     }
 
     this.addCard = this.addCard.bind(this)
+    this.displayNewCardForm = this.displayNewCardForm.bind(this)
+    this.undisplayNewCardForm = this.undisplayNewCardForm.bind(this)
+    this.clearForm = this.clearForm.bind(this)
+  }
+
+  displayNewCardForm () {
+    this.setState({
+      newCardFormDisplayed: true
+    })
+  }
+
+  undisplayNewCardForm () {
+    this.setState({
+      newCardFormDisplayed: false
+    })
+  }
+
+  clearForm () {
+    this.newCardTitle = ''
   }
 
   addCard () {
-    let newCards = this.state.cards
-    newCards.push('')
-    this.setState({
-      card: newCards
-    })
+    this.undisplayNewCardForm()
+    this.clearForm()
   }
+
   render () {
     return (
       <div className='host'>
         <div className='title'>{this.props.title}</div>
         <ul>
           {
-            this.state.cards.map((card, i) => (
-              <li key={i}><Card content={card} /></li>
+            this.props.cards.map((card, i) => (
+              <li key={i}><Card content={card.description} /></li>
             ))
           }
-          <li onClick={this.addCard}>Add a card</li>
+          <li>
+            {
+              this.state.newCardFormDisplayed
+              ? <div className='newCardForm'>
+                <form onSubmit={this.addCard}>
+                  <textarea
+                    ref={(t) => { this.newCardTitle = t }}
+                  />
+                </form>
+                <div className='newCardFormButtons'>
+                  <div className='button confirm'
+                    onClick={this.addCard}></div>
+                  <div className='button cancel'
+                    onClick={this.undisplayNewCardForm}></div>
+                </div>
+              </div>
+              : <li className='newCardButton' onClick={this.displayNewCardForm}>Add a card...</li>
+            }
+          </li>
         </ul>
         <style jsx>{styles}</style>
       </div>

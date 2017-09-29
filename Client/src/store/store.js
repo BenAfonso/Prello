@@ -17,6 +17,22 @@ const enhancer = composeEnhancers(
 )
 
 export const defaultState = {
+  currentBoard: {
+    lists: [
+      {
+        title: 'TODO',
+        cards: []
+      },
+      {
+        title: 'WIP',
+        cards: [
+          {
+            description: 'Work on Prello'
+          }
+        ]
+      }
+    ]
+  }
 }
 
 export default () => {

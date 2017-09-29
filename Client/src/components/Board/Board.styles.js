@@ -3,18 +3,19 @@ export default `
     height: 100%;
     width: 100%;
     background-color: grey;
-    padding: 30px;
+    padding: 30px 10px;
     overflow-x: scroll;
   }
 
   ul {
     display: flex;
     flex-wrap: nowrap;
+    align-items: flex-start;
   }
 
   ul li {
-    width: 300px;
-    margin-left: 20px;
+    width: 270px;
+    margin-left: 10px;
     flex-shrink: 0;
   }
 
@@ -23,11 +24,42 @@ export default `
   }
 
   .newListButton {
-    height: 45px !important;
-    width: 150px !important;
-    padding: 15px;
+    cursor: pointer;
+    color: white;
+    opacity: 0.8;
+  }
+
+  .newList {
+    background-color: rgba(50,50,50,0.3);
+    padding: 10px;
     border-radius: 5px;
-    background-color: white;
-    color: rgba(0,0,0,0.6);
+  }
+
+  .newListForm input {
+    font-size: inherit;
+    width: 100%;
+    padding: 8px;
+    border-radius: 3px;
+  }
+
+  .newListFormButtons {
+    margin-top: 8px;
+  }
+
+  .button {
+    display: inline-block;
+    height: 35px;
+    width: 100px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .confirm {
+    background-color: #5AAC44;
+    margin-right: 10px;
+  }
+
+  .cancel {
+    background-color: grey;
   }
 `

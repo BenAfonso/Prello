@@ -1,10 +1,13 @@
 export default `
 
 .root {
-  background-color: red;
+  background-color: #FFF;
   padding: 10px;
-  border-radius: 5px;
+  color: #444;
+  border-radius: 3px;
+  font-size: 16px;
   min-height: 38px;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
 }
 
 input {
