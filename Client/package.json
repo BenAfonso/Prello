@@ -49,14 +49,22 @@
     "whatwg-fetch": "2.0.3"
   },
   "devDependencies": {
+    "@storybook/addon-knobs": "^3.2.10",
+    "@storybook/addon-storyshots": "^3.2.11",
     "@storybook/react": "^3.2.11",
+    "prettier-standard": "^7.0.1",
+    "snazzy": "^7.0.0",
+    "standard": "^10.0.3",
     "storybook": "^1.0.0"
   },
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "storybook": "start-storybook -p 6006 -c .storybook"
+    "storybook": "start-storybook -p 6006 -c .storybook",
+    "standard": "standard --verbose | snazzy",
+    "standard-fix": "standard --fix | snazzy",
+    "format": "prettier-standard '**/*.js' | standard --fix | snazzy"
   },
   "jest": {
     "collectCoverageFrom": [

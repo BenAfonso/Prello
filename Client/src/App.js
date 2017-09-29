@@ -5,8 +5,6 @@ class App extends Component {
   render () {
     return (
       <div className='App'>
-        Welcome on Prello
-
         <IndexPage />
       </div>
     )
