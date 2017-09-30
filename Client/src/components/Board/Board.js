@@ -2,10 +2,12 @@ import React from 'react'
 import styles from './Board.styles'
 import List from '../List/List'
 import { connect } from 'react-redux'
-import { addList } from '../../store/actions'
+import { addList, setBoard } from '../../store/actions'
 
 @connect(store => {
   return {
+    error: store.error,
+    fetching: store.fetching,
     board: store.currentBoard
   }
 })
@@ -23,6 +25,10 @@ export default class Board extends React.Component {
     this.clearForm = this.clearForm.bind(this)
   }
 
+  componentDidMount () {
+    setBoard(this.props.dispatch)
+  }
+
   displayNewListForm () {
     this.setState({
       newListFormDisplayed: true
@@ -37,7 +43,7 @@ export default class Board extends React.Component {
 
   addList () {
     if (this.title.value !== '') {
-      addList(this.props.dispatch, this.title.value)
+      addList(this.props.dispatch, this.props.board._id, this.title.value)
       this.clearForm()
       this.undisplayNewListForm()
     } 
@@ -52,7 +58,7 @@ export default class Board extends React.Component {
       <ul>
         {
           this.props.board.lists.map((list, i) => (
-            <li key={i}><List title={list.title} cards={list.cards}/></li>
+            <li key={i}><List title={list.name} cards={list.cards}/></li>
           ))
         }
 

@@ -17,21 +17,17 @@ const enhancer = composeEnhancers(
 )
 
 export const defaultState = {
+  fetching: false,
+  fetched: false,
+  error: null,
   currentBoard: {
-    lists: [
-      {
-        title: 'TODO',
-        cards: []
-      },
-      {
-        title: 'WIP',
-        cards: [
-          {
-            description: 'Work on Prello'
-          }
-        ]
-      }
-    ]
+    _id: '',
+    title: '',
+    lists: [],
+    visibility: '',
+    isArchived: false,
+    background: '',
+    collaborators: []
   }
 }
 
