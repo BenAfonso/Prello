@@ -6,3 +6,12 @@ export function addList (dispatch, title) {
     }
   })
 }
+
+export function addCard (dispatch, content) {
+  dispatch({
+    type: 'ADD_CARD',
+    payload: {
+      content: content
+    }
+  })
+}

@@ -1,7 +1,14 @@
 import React from 'react'
 import Card from '../Card/Card'
 import styles from './List.styles'
+import { connect } from 'react-redux'
+import { addCard } from '../../store/actions'
 
+@connect(store => {
+  return {
+    board: store.currentBoard
+  }
+})
 export default class List extends React.Component {
   constructor (props) {
     super(props)
@@ -33,8 +40,12 @@ export default class List extends React.Component {
   }
 
   addCard () {
+    if (this.newCardTitle !== '') {
+      console.log('text = '+this.newCardTitle.value)
+      addCard(this.props.dispatch, this.newCardTitle.value)
+      this.clearForm()
+    }
     this.undisplayNewCardForm()
-    this.clearForm()
   }
 
   render () {

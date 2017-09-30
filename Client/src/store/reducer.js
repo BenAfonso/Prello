@@ -11,6 +11,24 @@ export default function reducer (state, action) {
         }
       }
     }
+    case 'ADD_CARD': {
+      let newCards = state.currentBoard.lists[1].cards.slice()
+      newCards.push({description: action.payload.content})
+      return {
+        currentBoard: {
+          lists: [
+            {
+              title: 'TODO',
+              cards: []
+            },
+            {
+              title: 'WIP',
+              cards: newCards
+            }
+          ]
+        }
+      }
+    }
     default:
       return state
   }
