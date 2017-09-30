@@ -58,9 +58,13 @@ export default class List extends React.Component {
                 </form>
                 <div className='newCardFormButtons'>
                   <div className='button confirm'
-                    onClick={this.addCard}></div>
+                    onClick={this.addCard}>
+                    Add
+                    </div>
                   <div className='button cancel'
-                    onClick={this.undisplayNewCardForm}></div>
+                    onClick={this.undisplayNewCardForm}>
+                    Cancel
+                  </div>
                 </div>
               </div>
               : <li className='newCardButton' onClick={this.displayNewCardForm}>Add a card...</li>
