@@ -29,10 +29,7 @@ boardController.createBoard = function (board) {
 }
 boardController.addListToBoard = function (boardId, list) {
   return new Promise((resolve, reject) => {
-    console.log(boardId)
     Board.findOneAndUpdate({'_id': boardId}, {$push: {lists: list}}, {new: true}, function (err, res) {
-      console.log(res)
-      console.log(err)
       if (err) {
         reject(err)
       } else {
