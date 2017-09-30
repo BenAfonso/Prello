@@ -1,5 +1,5 @@
-module.exports = function (router, controller) {
-    /**
+module.exports = (router, controller) => {
+  /**
    * @swagger
    * definitions:
    *   NewBoard:
@@ -32,16 +32,18 @@ module.exports = function (router, controller) {
   *             $ref: '#/definitions/NewBoard'
   *     responses:
   *       200:
-  *         description: Message confirming the board has been created
+  *         description: The newly created board
   *       500:
   *         description: Internal error
   */
-  router.post('/boards', function (req, res) {
-    controller.createBoard(req.body).then((data) => {
-      res.status(200).json(data)
-    })
-    .catch((err) => {
-      res.status(500).json(err)
-    })
+  router.post('/boards', (req, res) => {
+    controller
+      .createBoard(req.body)
+      .then(data => {
+        res.status(200).json(data)
+      })
+      .catch(err => {
+        res.status(500).json(err)
+      })
   })
 }

@@ -3,7 +3,9 @@ body {
   height: 100vh;
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'Open Sans', sans-serif;
+  color: #444;
+
 }
 
 ul {
@@ -26,4 +28,8 @@ input {
 
 *:focus {
   outline: none;
+}
+
+a {
+  color: inherit;
 }
