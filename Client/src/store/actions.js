@@ -50,10 +50,18 @@ export function setBoard (dispatch) {
   })
 }
 
-export function addCard (dispatch, content) {
+export function updateLists (dispatch, lists) {
+  dispatch({
+    type: 'UPDATE_LISTS',
+    payload: lists
+  })
+}
+
+export function addCard (dispatch, index, content) {
   dispatch({
     type: 'ADD_CARD',
     payload: {
+      listIndex: index,
       content: content
     }
   })

@@ -13,8 +13,8 @@ export default (props) => (
       <input
         type='password'
         placeholder='Passord' />
-        <div className='button'>Sign in</div>
-        <a href='#' className='forgottenPassword'>Forgotten password?</a>
+      <div className='button'>Sign in</div>
+      <a href='/#' className='forgottenPassword'>Forgotten password?</a>
     </form>
     <style jsx>{`
       .host {
