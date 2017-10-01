@@ -38,5 +38,18 @@ boardController.addListToBoard = function (boardId, list) {
     })
   })
 }
+boardController.removeListFromBoard = function (boardId, listId) {
+  return new Promise((resolve, reject) => {
+    console.log(listId)
+    Board.findOneAndUpdate({'_id': boardId}, {$pull: {'lists': listId}}, {new: true}, function (err, res) {
+      console.log(res)
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
 
 module.exports = boardController
