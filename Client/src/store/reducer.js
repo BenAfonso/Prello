@@ -31,21 +31,23 @@ export default function reducer (state, action) {
         }
       }
     }
-    case 'ADD_CARD': {
-      let newCards = state.currentBoard.lists[1].cards.slice()
-      newCards.push({description: action.payload.content})
+    case 'UPDATE_LISTS': {
       return {
+        ...state,
         currentBoard: {
-          lists: [
-            {
-              title: 'TODO',
-              cards: []
-            },
-            {
-              title: 'WIP',
-              cards: newCards
-            }
-          ]
+          ...state.currentBoard,
+          lists: action.payload
+        }
+      }
+    }
+    case 'ADD_CARD': {
+      let newLists = state.currentBoard.lists.slice()
+      newLists[action.payload.listIndex].cards.push({description: action.payload.content})
+      return {
+        ...state,
+        currentBoard: {
+          ...state.currentBoard,
+          lists: newLists
         }
       }
     }
