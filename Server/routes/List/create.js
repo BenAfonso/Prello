@@ -36,7 +36,7 @@ module.exports = (router, controller) => {
     *       500:
     *         description: Internal error
     */
-  router.post('/boards/:id/lists', function (req, res) {
+  router.post('/boards/:boardid/lists', function (req, res) {
     controller.createList(req).then((data) => {
       res.status(200).json(data)
     })
