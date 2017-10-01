@@ -17,16 +17,16 @@ export default function reducer (state, action) {
       return {
         ...state,
         fetching: false,
-        currentBoard: action.payload
+        board: action.payload
       }
     }
     case 'ADD_LIST': {
-      let newLists = state.currentBoard.lists.slice()
+      let newLists = state.board.lists.slice()
       newLists.push({ name: action.payload.name, cards: [] })
       return {
         ...state,
-        currentBoard: {
-          ...state.currentBoard,
+        board: {
+          ...state.board,
           lists: newLists
         }
       }
@@ -34,19 +34,19 @@ export default function reducer (state, action) {
     case 'UPDATE_LISTS': {
       return {
         ...state,
-        currentBoard: {
-          ...state.currentBoard,
+        board: {
+          ...state.board,
           lists: action.payload
         }
       }
     }
     case 'ADD_CARD': {
-      let newLists = state.currentBoard.lists.slice()
+      let newLists = state.board.lists.slice()
       newLists[action.payload.listIndex].cards.push({description: action.payload.content})
       return {
         ...state,
-        currentBoard: {
-          ...state.currentBoard,
+        board: {
+          ...state.board,
           lists: newLists
         }
       }

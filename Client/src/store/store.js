@@ -20,7 +20,7 @@ export const defaultState = {
   fetching: false,
   fetched: false,
   error: null,
-  currentBoard: {
+  board: {
     _id: '',
     title: '',
     lists: [],
