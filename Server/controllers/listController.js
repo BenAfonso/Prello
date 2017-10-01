@@ -3,7 +3,7 @@ const List = mongoose.model('List')
 const boardController = require('./boardController')
 const listController = {}
 
-listController.createList = function (req) {
+listController.createList = (req) => {
   return new Promise((resolve, reject) => {
     if (req.params.boardid === null) {
       reject(new Error('Missing boardID'))
@@ -25,7 +25,7 @@ listController.createList = function (req) {
     }
   })
 }
-listController.removeList = function (req) {
+listController.removeList = (req) => {
   return new Promise((resolve, reject) => {
     if (req.params.boardid === null) {
       reject(new Error('Missing boardID'))
@@ -40,14 +40,35 @@ listController.removeList = function (req) {
         reject(err)
       } else {
         boardController.removeListFromBoard(req.params.boardid, req.params.listid)
-            .then((data) => {
-              resolve(item)
-            })
-            .catch((err) => {
-              reject(err)
-            })
+          .then((data) => {
+            resolve(item)
+          })
+          .catch((err) => {
+            reject(err)
+          })
       }
     })
   })
 }
+listController.updateList = (req) => {
+  return new Promise((resolve, reject) => {
+    if (req.params.boardId === null) {
+      reject(new Error('Missing boardID'))
+      return
+    }
+    if (req.params.listId === null) {
+      reject(new Error('Missing listID'))
+      return
+    }
+    List.update({ '_id': req.params.listId }, req.body, (err, item) => {
+      if (err) {
+        return reject(err)
+      } else {
+        // TODO: Log update to history
+        return resolve(item)
+      }
+    })
+  })
+}
+
 module.exports = listController
