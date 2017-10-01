@@ -4,28 +4,21 @@ const app = express()
 const mongoose = require('mongoose')
 const swaggerJSDoc = require('swagger-jsdoc')
 
-// swagger definition
 let swaggerDefinition = {
   info: {
     title: 'Prello Swagger API',
-    version: '1.0.0',
-    description: 'Demonstrating how to describe a RESTful API with Swagger'
+    version: '1.0.0'
   },
   host: `localhost:3333`,
   basePath: '/'
 }
 
-// options for the swagger docs
 let options = {
-  // import swaggerDefinitions
   swaggerDefinition: swaggerDefinition,
-  // path to the API docs
   apis: ['./routes/**/*.js']
 }
 
-// initialize swagger-jsdoc
 const swaggerSpec = swaggerJSDoc(options)
-// serve swagger
 app.get('/swagger.json', function (req, res) {
   res.setHeader('Content-Type', 'application/json')
   res.send(swaggerSpec)
