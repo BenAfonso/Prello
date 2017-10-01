@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha ./test/index.js"
+  },
   "dependencies": {
     "body-parser": "^1.18.2",
     "chai": "^4.1.2",
