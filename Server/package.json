@@ -18,6 +18,7 @@
     "express": "^4.15.5",
     "mocha": "^3.5.3",
     "mongoose": "^4.11.13",
+    "socket.io": "^2.0.3",
     "swagger-jsdoc": "^1.9.7"
   },
   "devDependencies": {

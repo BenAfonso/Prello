@@ -7,6 +7,7 @@ import { DragDropContext, DropTarget } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import { ItemTypes } from '../Constants'
 import Button from '../UI/Button/Button'
+import { subscribeToBoard } from '../../services/api'
 
 const listTarget = {
   drop () {
@@ -28,6 +29,8 @@ export default class Board extends React.Component {
     this.state = {
       newListFormDisplayed: false
     }
+
+    subscribeToBoard(1)
 
     this.displayNewListForm = this.displayNewListForm.bind(this)
     this.undisplayNewListForm = this.undisplayNewListForm.bind(this)
