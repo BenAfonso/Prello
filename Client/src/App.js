@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import IndexPage from './pages/index.page'
 import LoginPage from './pages/LoginPage/login.page'
-import RegisterPage from './pages/register.page'
+import RegisterPage from './pages/RegisterPage/register.page'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import Store from './store/store'
