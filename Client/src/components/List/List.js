@@ -6,6 +6,7 @@ import { addCard } from '../../store/actions'
 import { DragSource, DropTarget } from 'react-dnd'
 import { ItemTypes } from '../Constants'
 import { PropTypes } from 'prop-types'
+import Button from '../UI/Button/Button'
 
 const listSource = {
   beginDrag(props) {
@@ -39,7 +40,7 @@ const listTarget = {
 
 @connect(store => {
   return {
-    board: store.currentBoard
+    board: store.board
   }
 })
 @DropTarget(ItemTypes.LIST, listTarget, connect => ({
@@ -65,8 +66,7 @@ export default class List extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      newCardFormDisplayed: false,
-      cards: ['Finish Prello', 'Say Hi']
+      newCardFormDisplayed: false
     }
 
     this.addCard = this.addCard.bind(this)
@@ -125,17 +125,28 @@ export default class List extends React.Component {
                   />
                 </form>
                 <div className='newCardFormButtons'>
-                  <div className='button confirm'
-                    onClick={this.addCard}>
-                    Add
-                    </div>
-                  <div className='button cancel'
-                    onClick={this.undisplayNewCardForm}>
-                    Cancel
+                  <div>
+                    <Button
+                      bgColor={'#5AAC44'}
+                      gradient
+                      bold
+                      shadow
+                      onClick={this.addCard}>
+                      Add
+                    </Button>
+                  </div>
+                 <div>
+                    <Button
+                      bgColor={'#444'}
+                      gradient
+                      shadow
+                      onClick={this.undisplayNewCardForm}>
+                     Cancel
+                    </Button>
                   </div>
                 </div>
               </div>
-              : <div className='newCardButton' onClick={this.displayNewCardForm}>Add a card...</div>
+              : <div className='newCardButton'onClick={this.displayNewCardForm}>Add a card...</div>
             }
           </li>
         </ul>

@@ -45,21 +45,12 @@ export default `
   .newListFormButtons {
     margin-top: 8px;
   }
-
-  .button {
+  
+  .newListFormButtons div {
     display: inline-block;
-    height: 35px;
-    width: 100px;
-    border-radius: 5px;
-    cursor: pointer;
   }
-
-  .confirm {
-    background-color: #5AAC44;
+  
+  .newListFormButtons div:nth-child(1) {
     margin-right: 10px;
-  }
-
-  .cancel {
-    background-color: grey;
   }
 `

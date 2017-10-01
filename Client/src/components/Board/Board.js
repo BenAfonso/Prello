@@ -6,6 +6,7 @@ import { addList, setBoard, updateLists } from '../../store/actions'
 import { DragDropContext, DropTarget } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend';
 import { ItemTypes } from '../Constants'
+import Button from '../UI/Button/Button'
 
 const listTarget = {
   drop() {
@@ -14,9 +15,7 @@ const listTarget = {
 
 @connect(store => {
   return {
-    error: store.error,
-    fetching: store.fetching,
-    board: store.currentBoard
+    board: store.board
   }
 })
 @DragDropContext(HTML5Backend)
@@ -27,8 +26,7 @@ export default class Board extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      newListFormDisplayed: false,
-      lists: ['TODO', 'WIP', 'DONE']
+      newListFormDisplayed: false
     }
 
     this.displayNewListForm = this.displayNewListForm.bind(this)
@@ -79,6 +77,38 @@ export default class Board extends React.Component {
     } 
   }
 
+  renderNewListForm () {
+    return (
+      <div className='newListForm'>
+        <form onSubmit={this.addList}>
+          <input type='text' placeholder='Add a list...' ref={(t) => {this.title = t}}/>
+        </form>
+        <div className='newListFormButtons'>
+        <div>
+        <Button
+          bgColor={'#5AAC44'}
+          gradient
+          bold
+          shadow
+          onClick={this.addList}>
+          Add
+        </Button>
+      </div>
+     <div>
+        <Button
+          bgColor={'#444'}
+          gradient
+          shadow
+          onClick={this.undisplayNewListForm}>
+         Cancel
+        </Button>
+      </div>
+        </div>
+        <style jsx>{styles}</style>
+      </div>
+    )
+  }
+
   clearForm () {
     this.title = ''
   }
@@ -107,17 +137,7 @@ export default class Board extends React.Component {
         <li className='newList'>
           {
             this.state.newListFormDisplayed
-            ? <div className='newListForm'>
-              <form onSubmit={this.addList}>
-                <input type='text' placeholder='Add a list...' ref={(t) => {this.title = t}}/>
-              </form>
-              <div className='newListFormButtons'>
-                <div className='button confirm'
-                  onClick={this.addList}></div>
-                <div className='button cancel'
-                  onClick={this.undisplayNewListForm}></div>
-              </div>
-            </div>
+            ? this.renderNewListForm()
             : <div className='newListButton' onClick={this.displayNewListForm}>Add a list...</div>
           }
         </li>

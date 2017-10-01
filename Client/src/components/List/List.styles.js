@@ -42,35 +42,12 @@ ul li:nth-child(1) {
   margin-top: 5px;
 }
 
-.button {
+.newCardFormButtons div {
   display: inline-block;
-  height: 35px;
-  width: 100px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 1em;
-  text-shadow: 3px 2px #878f9b;
-  color: white;
-  position: relative;
-  text-align: center;
-  line-height: 35px;
- }
+}
 
-.confirm {
-  background-color: #5AAC44;
+.newCardFormButtons div:nth-child(1) {
   margin-right: 10px;
 }
 
-.confirm:hover {
-  background-color: #028e23
-}
-
-.cancel {
-  background-color: grey;
-}
-
-.cancel:hover {
-  background-color: #a4aaa5;
-}
 `
