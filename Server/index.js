@@ -3,6 +3,11 @@ const bodyParser = require('body-parser')
 const app = express()
 const mongoose = require('mongoose')
 const swaggerJSDoc = require('swagger-jsdoc')
+const logger = require('morgan')
+
+if (process.env.NODE_ENV !== 'test') { // Not logging while testing
+  app.use(logger('dev'))
+}
 
 let swaggerDefinition = {
   info: {
@@ -62,5 +67,14 @@ connect()
 
 function connect () {
   var options = { server: { socketOptions: { keepAlive: 1 } } }
-  return mongoose.connect(process.env.MONGODB_URL_DEV, options).connection
+  let MONGO_DB_URL
+  if (process.env.NODE_ENV === 'test') {
+    MONGO_DB_URL = process.env.MONGODB_URL_TEST
+  } else {
+    MONGO_DB_URL = process.env.MONGODB_URL_DEV
+  }
+  console.log(MONGO_DB_URL)
+  return mongoose.connect(MONGO_DB_URL, options).connection
 }
+
+module.exports = app

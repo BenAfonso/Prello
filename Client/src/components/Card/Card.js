@@ -5,7 +5,7 @@ import styles from './Card.styles'
 export default class Card extends React.Component {
   static propTypes = {
     content: PropTypes.string.isRequired,
-    createdAt: PropTypes.string,
+    createdAt: PropTypes.string
   }
 
   static defaultProps = {

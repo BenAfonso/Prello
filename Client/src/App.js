@@ -13,11 +13,11 @@ class App extends Component {
     return (
       <Router>
         <Provider store={store}>
-        <div className='App'>
-          <Route exact path='/' component={IndexPage} />
-          <Route path='/login' component={LoginPage} />
-          <Route path='/register' component={RegisterPage} />
-        </div>
+          <div className='App'>
+            <Route exact path='/' component={IndexPage} />
+            <Route path='/login' component={LoginPage} />
+            <Route path='/register' component={RegisterPage} />
+          </div>
         </Provider>
       </Router>
     )
