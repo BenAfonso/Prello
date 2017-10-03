@@ -4,7 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "./node_modules/.bin/mocha ./test/index.js"
+    "precommit": "npm run test",
+    "test": "./node_modules/.bin/mocha ./test/index.js && standard --fix | snazzy",
+    "standard": "standard --verbose | snazzy",
+    "standard-fix": "standard --fix --parser babel-eslint | snazzy",
+    "format": "prettier-standard '**/*.js' | standard --fix --parser babel-eslint | snazzy"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -17,6 +21,18 @@
     "swagger-jsdoc": "^1.9.7"
   },
   "devDependencies": {
-    "morgan": "^1.9.0"
+    "babel-eslint": "^8.0.1",
+    "husky": "^0.14.3",
+    "morgan": "^1.9.0",
+    "prettier-standard": "^7.0.1",
+    "snazzy": "^7.0.0",
+    "standard": "^10.0.3"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": [
+      "api-doc/"
+    ],
+    "env": [ "mocha" ]
   }
 }

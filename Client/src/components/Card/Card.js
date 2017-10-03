@@ -37,6 +37,7 @@ export default class Card extends React.Component {
     content: PropTypes.string.isRequired,
     createdAt: PropTypes.string,
     isDragging: PropTypes.bool.isRequired
+
   }
 
   static defaultProps = {

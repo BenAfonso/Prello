@@ -5,7 +5,6 @@ import styles from './Button.styles'
 import Color from 'color'
 
 export default class Button extends React.Component {
-
   static propTypes = {
     height: PropTypes.string,
     width: PropTypes.string,
@@ -18,7 +17,7 @@ export default class Button extends React.Component {
     bgColorTo: PropTypes.string,
     onClick: PropTypes.func,
     children: PropTypes.any,
-    bold: PropTypes.bool,
+    bold: PropTypes.bool
   }
 
   static defaultProps = {
@@ -44,7 +43,6 @@ export default class Button extends React.Component {
   }
 
   render () {
-
     const {
       disabled,
       children,
@@ -74,13 +72,12 @@ export default class Button extends React.Component {
       [size]: size
     })
 
-    
     const bgColorObj = Color(bgColor || '#55acf1')
     const bgLuminosity = bgColorObj.luminosity()
     const colorObj = Color(color || (bgLuminosity >= 0.5 ? 'black' : 'white'))
 
     props.style = {
-      color: colorObj.string(), 
+      color: colorObj.string(),
       fontWeight: bold ? 'bold' : '',
       backgroundColor: bgColorObj.string(),
       borderRadius: round
@@ -92,7 +89,7 @@ export default class Button extends React.Component {
       backgroundImage:
         gradient || bgColorTo
           ? `linear-gradient(to right, ${bgColor}, ${bgColorTo ||
-            bgColorObj.lighten(0.2).string()})` 
+            bgColorObj.lighten(0.2).string()})`
           : 'none',
       ...props.style
     }
