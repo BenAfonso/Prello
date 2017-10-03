@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Card = mongoose.model('Card')
-const listController = require('./ListController')
+const listController = require('./listController')
 const cardController = {}
 
 cardController.createCard = (req) => {
