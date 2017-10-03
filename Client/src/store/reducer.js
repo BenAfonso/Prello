@@ -21,6 +21,7 @@ export default function reducer (state, action) {
       }
     }
     case 'ADD_LIST': {
+      console.log('adding list')
       let newLists = state.board.lists.slice()
       newLists.push({ name: action.payload.name, cards: [] })
       return {

@@ -3,7 +3,7 @@ import { addListDistant } from '../services/List.services'
 import { moveCard } from '../services/Card.services'
 
 export function addList (dispatch, boardId, name) {
-  addListDistant(boardId, name)
+  /* addListDistant(boardId, name)
     .then((list) => {
       dispatch({
         type: 'ADD_LIST',
@@ -11,7 +11,13 @@ export function addList (dispatch, boardId, name) {
           name: list.name
         }
       })
-    })
+    }) */
+  dispatch({
+    type: 'ADD_LIST',
+    payload: {
+      name: name
+    }
+  })
 }
 
 export function moveCardAction (dispatch, card, originalListId, newListId) {
