@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 export default class AvatarThumbnail extends React.Component {
-
   static propTypes = {
     thumbnail: PropTypes.string,
     initials: PropTypes.string,
@@ -21,8 +20,7 @@ export default class AvatarThumbnail extends React.Component {
   }
 
   render () {
-
-    const { 
+    const {
       thumbnail,
       initials,
       bgColor,
@@ -32,7 +30,7 @@ export default class AvatarThumbnail extends React.Component {
       ...props } = this.props
 
     props.style = {
-      color: color, 
+      color: color,
       backgroundColor: bgColor,
       backgroundImage:
         thumbnail

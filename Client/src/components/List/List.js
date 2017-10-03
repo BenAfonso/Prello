@@ -9,34 +9,34 @@ import { PropTypes } from 'prop-types'
 import Button from '../UI/Button/Button'
 
 const listSource = {
-  beginDrag(props) {
+  beginDrag (props) {
     return {
       id: props.id,
       originalIndex: props.findList(props.id).index
-    };
-  },
-
-  endDrag(props, monitor) {
-    const { id: droppedId, originalIndex } = monitor.getItem() 
-    console.log(`list ${droppedId}: ${originalIndex} -> ${props.index}`)
-  }
-};
-
-const listTarget = {
-  canDrop() {
-    return false;
-  },
-
-  hover(props, monitor) {
-    const { id: draggedId } = monitor.getItem();
-    const { id: overId } = props;
-
-    if (draggedId !== overId) {
-      const { index: overIndex } = props.findList(overId);
-      props.moveList(draggedId, overIndex);
     }
   },
-};
+
+  endDrag (props, monitor) {
+    const { id: droppedId, originalIndex } = monitor.getItem()
+    console.log(`list ${droppedId}: ${originalIndex} -> ${props.index}`)
+  }
+}
+
+const listTarget = {
+  canDrop () {
+    return false
+  },
+
+  hover (props, monitor) {
+    const { id: draggedId } = monitor.getItem()
+    const { id: overId } = props
+
+    if (draggedId !== overId) {
+      const { index: overIndex } = props.findList(overId)
+      props.moveList(draggedId, overIndex)
+    }
+  }
+}
 
 @connect(store => {
   return {
@@ -44,14 +44,13 @@ const listTarget = {
   }
 })
 @DropTarget(ItemTypes.LIST, listTarget, connect => ({
-  connectDropTarget: connect.dropTarget(),
+  connectDropTarget: connect.dropTarget()
 }))
 @DragSource(ItemTypes.LIST, listSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
-  isDragging: monitor.isDragging(),
+  isDragging: monitor.isDragging()
 }))
 export default class List extends React.Component {
-
   static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
     connectDropTarget: PropTypes.func.isRequired,
@@ -59,9 +58,8 @@ export default class List extends React.Component {
     isDragging: PropTypes.bool.isRequired,
     id: PropTypes.any,
     title: PropTypes.string.isRequired,
-    moveList: PropTypes.func.isRequired,
+    moveList: PropTypes.func.isRequired
   }
-
 
   constructor (props) {
     super(props)
@@ -100,12 +98,12 @@ export default class List extends React.Component {
   }
 
   render () {
-    const { title, isDragging, connectDragSource, connectDropTarget } = this.props;
+    const { title, isDragging, connectDragSource, connectDropTarget } = this.props
 
     return connectDragSource(connectDropTarget(
       <div className='host' style={{
-          opacity: isDragging ? 0.3 : 1
-        }}>
+        opacity: isDragging ? 0.3 : 1
+      }}>
         <div className='title'>{title}</div>
         <ul>
           {
@@ -135,7 +133,7 @@ export default class List extends React.Component {
                       Add
                     </Button>
                   </div>
-                 <div>
+                  <div>
                     <Button
                       bgColor={'#444'}
                       gradient

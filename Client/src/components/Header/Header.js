@@ -3,7 +3,6 @@ import styles from './Header.styles'
 import PropTypes from 'prop-types'
 
 export default class Header extends React.Component {
-
   static propTypes = {
     bgColor: PropTypes.string,
     color: PropTypes.string
@@ -11,13 +10,13 @@ export default class Header extends React.Component {
 
   static defaultProps = {
     bgColor: '#ae4d7b',
-    color: 'white',
+    color: 'white'
   }
   render () {
     return <div className='host' style={{
       backgroundColor: this.props.bgColor,
       color: this.props.color
-      }}>
+    }}>
 
       <span id='title'>Prello</span>
 
