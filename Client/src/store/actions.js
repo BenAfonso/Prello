@@ -1,27 +1,5 @@
-import axios from 'axios'
-// TEMPORARY
-
-function fetchBoard () {
-  return new Promise((resolve, reject) => {
-    axios.get('http://localhost:3333/boards').then((res) => {
-      resolve(res.data)
-    }).catch((err) => {
-      reject(err)
-    })
-  })
-}
-
-function addListDistant (boardId, listName) {
-  return new Promise((resolve, reject) => {
-    axios.post(`http://localhost:3333/boards/${boardId}/lists`, {
-      name: listName
-    }).then((res) => {
-      resolve(res.data)
-    }).catch((err) => {
-      reject(err)
-    })
-  })
-}
+import { fetchBoard } from '../services/Board.services'
+import { addListDistant } from '../services/List.services'
 
 export function addList (dispatch, boardId, name) {
   addListDistant(boardId, name)
