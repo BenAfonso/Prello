@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "precommit": "npm run test",
-    "test": "./node_modules/.bin/mocha ./test/index.js && standard",
+    "test": "./node_modules/.bin/mocha ./test/index.js && standard --fix | snazzy",
     "standard": "standard --verbose | snazzy",
     "standard-fix": "standard --fix --parser babel-eslint | snazzy",
     "format": "prettier-standard '**/*.js' | standard --fix --parser babel-eslint | snazzy"
