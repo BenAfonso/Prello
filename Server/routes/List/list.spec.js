@@ -1,10 +1,6 @@
 const mongoose = require('mongoose')
 const Board = mongoose.model('Board')
 const List = mongoose.model('List')
-const mocha = require('mocha')
-const describe = mocha.describe
-const beforeEach = mocha.beforeEach
-const it = mocha.it
 const mockedBoard = { title: 'Test board', visibility: 'public', background: '' }
 const mockedList = { name: 'Test list' }
 
