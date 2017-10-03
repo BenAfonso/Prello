@@ -70,5 +70,15 @@ listController.updateList = (req) => {
     })
   })
 }
-
+listController.addCardToList = function (listId, card) {
+  return new Promise((resolve, reject) => {
+    List.findOneAndUpdate({'_id': listId}, {$push: {cards: card}}, {new: true}, function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
 module.exports = listController

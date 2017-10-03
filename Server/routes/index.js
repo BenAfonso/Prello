@@ -18,6 +18,7 @@ const controllers = require('../controllers')
      */
 require('./List')(router, controllers.listController)
 require('./Board')(router, controllers.boardController)
+require('./Card')(router, controllers.cardController)
 
 router.get('/', (req, res) => {
   res.status(200).json('Welcome on Prello')
