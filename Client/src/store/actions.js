@@ -1,5 +1,6 @@
 import { fetchBoard } from '../services/Board.services'
 import { addListDistant } from '../services/List.services'
+import { moveCard } from '../services/Card.services'
 
 export function addList (dispatch, boardId, name) {
   addListDistant(boardId, name)
@@ -11,6 +12,19 @@ export function addList (dispatch, boardId, name) {
         }
       })
     })
+}
+
+export function moveCardAction (dispatch, card, originalListId, newListId) {
+  moveCard(card, originalListId, newListId).then((res) => {
+    dispatch({type: 'MOVE_CARD',
+      payload: {
+        id: card.id,
+        content: card.content
+      }
+    })
+  }).catch((err) => {
+    console.log(err) // TODO : Display on the screen a message to the user
+  })
 }
 
 export function setBoard (dispatch) {
