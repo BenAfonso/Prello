@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Board = mongoose.model('Board')
+const Card = mongoose.model('Card')
 
 const boardController = {}
 
@@ -9,7 +10,15 @@ boardController.getAllBoards = function () {
       if (err) {
         reject(err)
       } else {
-        resolve(res)
+        Card.populate(res, {
+          path: 'lists.cards'
+        }, function (err, res) {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(res)
+          }
+        })
       }
     })
   })
