@@ -1,14 +1,12 @@
 import { fetchBoard } from '../services/Board.services'
-import { addListDistant, moveListDistant } from '../services/List.services'
+import { addListDistant, postCard, deleteList, moveListDistant } from '../services/List.services'
 
 export function addList (dispatch, boardId, name) {
   addListDistant(boardId, name)
     .then((list) => {
       dispatch({
         type: 'ADD_LIST',
-        payload: {
-          name: list.name
-        }
+        payload: list
       })
     })
 }
@@ -46,12 +44,27 @@ export function updateLists (dispatch, lists) {
   })
 }
 
-export function addCard (dispatch, index, content) {
-  dispatch({
-    type: 'ADD_CARD',
-    payload: {
-      listIndex: index,
-      content: content
-    }
+export function removeList (dispatch, boardId, list) {
+  deleteList(boardId, list._id).then(res => {
+    dispatch({
+      type: 'REMOVE_LIST',
+      payload: list
+    })
+  }).catch(err => {
+    return err
+  })
+}
+
+export function addCard (dispatch, listIndex, list, content) {
+  postCard(list._id, content).then(card => {
+    dispatch({
+      type: 'ADD_CARD',
+      payload: {
+        listIndex: listIndex,
+        card: card
+      }
+    })
+  }).catch(err => {
+    return err
   })
 }
