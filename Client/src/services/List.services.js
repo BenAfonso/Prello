@@ -12,3 +12,15 @@ export function addListDistant (boardId, listName) {
     })
   })
 }
+export function moveListDistant (boardId, listId, position) {
+  return new Promise((resolve, reject) => {
+    axios.put(`${Config.API_URL}/boards/${boardId}/lists/${listId}/move`, {
+      position: position
+    }).then((res) => {
+      console.log(res)
+      resolve(res.data)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}

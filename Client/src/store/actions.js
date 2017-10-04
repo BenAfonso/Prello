@@ -1,5 +1,5 @@
 import { fetchBoard } from '../services/Board.services'
-import { addListDistant } from '../services/List.services'
+import { addListDistant, moveListDistant } from '../services/List.services'
 
 export function addList (dispatch, boardId, name) {
   addListDistant(boardId, name)
@@ -9,6 +9,17 @@ export function addList (dispatch, boardId, name) {
         payload: {
           name: list.name
         }
+      })
+    })
+}
+
+export function moveList (dispatch, boardId, listId, position) {
+  moveListDistant(boardId, listId, position)
+    .then((lists) => {
+      console.log(lists)
+      dispatch({
+        type: 'MOVE_LIST',
+        payload: lists
       })
     })
 }

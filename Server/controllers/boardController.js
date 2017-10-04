@@ -86,12 +86,19 @@ boardController.moveList = function (req) {
           return
         }
         let newLists = Util.moveInsideAnArray(res.lists, indexList, position)
-        Board.findOneAndUpdate({'_id': boardId}, {'lists': newLists}, {new: true}, function (err, res) {
+        Board.findOneAndUpdate({'_id': boardId}, {'lists': newLists}, {new: true}).populate('lists').exec((err, res) => {
           if (err) {
             reject(err)
-          } else {
-            resolve(res)
           }
+          Card.populate(res, {
+            path: 'lists.cards'
+          }, function (err, res) {
+            if (err) {
+              reject(err)
+            } else {
+              resolve(res.lists)
+            }
+          })
         })
       }
     })
