@@ -71,6 +71,7 @@ export default class List extends React.Component {
     this.displayNewCardForm = this.displayNewCardForm.bind(this)
     this.undisplayNewCardForm = this.undisplayNewCardForm.bind(this)
     this.clearForm = this.clearForm.bind(this)
+    this.removeAction = this.removeAction.bind(this)
   }
 
   displayNewCardForm () {
@@ -91,10 +92,14 @@ export default class List extends React.Component {
 
   addCard () {
     if (this.newCardTitle !== '') {
-      addCard(this.props.dispatch, this.props.index, this.newCardTitle.value)
+      addCard(this.props.dispatch, this.props.index, this.props.board.lists[this.props.index], this.newCardTitle.value)
       this.clearForm()
     }
     this.undisplayNewCardForm()
+  }
+
+  removeAction () {
+    this.props.removeAction(this.props.index)
   }
 
   render () {
@@ -105,11 +110,12 @@ export default class List extends React.Component {
         opacity: isDragging ? 0.3 : 1
       }}>
         <div className='title'>{title}</div>
+        <div className='removeButton' onClick={this.removeAction}> X </div>
         <ul>
           {
             this.props.cards.map((card, i) => (
               <li key={i}>
-                <Card content={card.description} />
+                <Card content={card.text} />
               </li>
             ))
           }
