@@ -49,6 +49,15 @@ export default function reducer (state, action) {
         }
       }
     }
+    case 'MOVE_LIST': {
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: action.payload
+        }
+      }
+    }
     case 'ADD_CARD': {
       let newLists = state.board.lists.slice()
       newLists[action.payload.listIndex].cards.push(action.payload.card)

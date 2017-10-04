@@ -2,7 +2,7 @@ import React from 'react'
 import Card from '../Card/Card'
 import styles from './List.styles'
 import { connect } from 'react-redux'
-import { addCard } from '../../store/actions'
+import { addCard, moveList } from '../../store/actions'
 import { DragSource, DropTarget } from 'react-dnd'
 import { ItemTypes } from '../Constants'
 import { PropTypes } from 'prop-types'
@@ -18,7 +18,7 @@ const listSource = {
 
   endDrag (props, monitor) {
     const { id: droppedId, originalIndex } = monitor.getItem()
-    console.log(`list ${droppedId}: ${originalIndex} -> ${props.index}`)
+    moveList(props.dispatch, props.board._id, droppedId, props.index)
   }
 }
 

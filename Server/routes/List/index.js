@@ -10,4 +10,5 @@ module.exports = (router, controller) => {
   require('./create')(router, controller)
   require('./delete')(router, controller)
   require('./update')(router, controller)
+  require('./moveList')(router, controller)
 }
