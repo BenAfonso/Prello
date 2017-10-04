@@ -16,7 +16,7 @@ const controllers = require('../controllers')
      *         items:
      *           type: number
      */
-require('./List')(router, controllers.listController)
+require('./List')(router, controllers)
 require('./Board')(router, controllers.boardController)
 require('./Card')(router, controllers.cardController)
 

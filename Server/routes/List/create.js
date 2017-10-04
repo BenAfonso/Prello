@@ -1,4 +1,4 @@
-module.exports = (router, controller) => {
+module.exports = (router, controllers) => {
   /**
     * @swagger
     * definitions:
@@ -37,7 +37,7 @@ module.exports = (router, controller) => {
     *         description: Internal error
     */
   router.post('/boards/:boardid/lists', function (req, res) {
-    controller.createList(req).then((data) => {
+    controllers.listController.createList(req).then((data) => {
       res.status(200).json(data)
     })
       .catch((err) => {

@@ -2,17 +2,15 @@ module.exports = (router, controllers) => {
   /**
     * @swagger
     * definitions:
-    *   NewList:
+    *   MoveList:
     *     properties:
-    *       name:
-    *         type: string
-    *       isArchived:
-    *         type: bool
+    *       position:
+    *         type: int
     */
 
   /**
     * @swagger
-    * /boards/{id}/lists/{listId}:
+    * /boards/{boardId}/lists/{listId}/move:
     *   put:
     *     tags:
     *       - Lists
@@ -21,9 +19,9 @@ module.exports = (router, controllers) => {
     *     produces:
     *       - application/json
     *     parameters:
-    *       - name: id
+    *       - name: boardId
     *         type: string
-    *         description: The board id where we want to insert the list
+    *         description: The board id where we want to update the list
     *         in: path
     *         required: true
     *       - name: listId
@@ -32,22 +30,25 @@ module.exports = (router, controllers) => {
     *         in: path
     *         required: true
     *       - name: body
-    *         description: The List object that needs to be added
+    *         description: The position that needs to be added
     *         in: body
     *         required: true
     *         schema:
-    *             $ref: '#/definitions/NewList'
+    *           properties:
+    *            position:
+    *              type: int
     *     responses:
     *       200:
-    *         description: Message confirming the List has been created
+    *         description: Message confirming the List position has been replaced
     *       500:
     *         description: Internal error
     */
-  router.put('/boards/:boardId/lists/:listId', function (req, res) {
-    controllers.listController.updateList(req).then((data) => {
-      res.status(200).json('Successfully updated')
-    }).catch((err) => {
-      res.status(500).json(err)
+  router.put('/boards/:boardId/lists/:listId/move', function (req, res) {
+    controllers.boardController.moveList(req).then((data) => {
+      res.status(200).json(data)
     })
+      .catch((err) => {
+        res.status(500).json(err)
+      })
   })
 }
