@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styles from './Card.styles'
+import CardDetails from '../CardDetails/CardDetails'
 
 export default class Card extends React.Component {
 
@@ -22,6 +23,7 @@ export default class Card extends React.Component {
         <style jsx>
           {styles}
         </style>
+        <CardDetails></CardDetails>
       </div>
     )
   }
