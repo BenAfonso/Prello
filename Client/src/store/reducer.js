@@ -71,27 +71,29 @@ export default function reducer (state, action) {
       }
     }
     case 'MOVE_CARD': {
-      console.log('MOVE_CARD : card_id : ' + action.payload.id+ ' originalListId ' + action.payload.originalListIndex +' newListId' + action.payload.newListIndex)
-      let cardToMove = state.board.lists[action.payload.originalListIndex].cards[action.payload.id]
-      let newCardsOriginalList = state.board.lists[action.payload.originalListIndex].cards
-      let newCardsDestinationList = state.board.lists[action.payload.newListIndex].cards
+      console.log('MOVE_CARD : card_id : ' + action.payload.index + ' originalListId ' + action.payload.originalListIndex +' newListId' + action.payload.newListIndex)
+      let cardToMove = state.board.lists[action.payload.originalListIndex].cards[action.payload.index]
+      let newCardsOriginalList = state.board.lists[action.payload.originalListIndex].cards.slice()
+      let newCardsDestinationList = state.board.lists[action.payload.newListIndex].cards.slice()
 
       newCardsOriginalList.splice(newCardsOriginalList.indexOf(cardToMove), 1)
       newCardsDestinationList.push(cardToMove)
+      let newLists = state.board.lists.slice()
+      newLists[action.payload.originalListIndex] = {
+        ...state.board.lists[action.payload.originalListIndex],
+        cards: newCardsOriginalList
+      }
+
+      newLists[action.payload.newListIndex] = {
+        ...state.board.lists[action.payload.newListIndex],
+        cards: newCardsDestinationList
+      }
+
       return {
         ...state,
         board: {
           ...state.board,
-          lists: [...state.board.lists, {
-            id: state.board.lists[action.payload.originalListIndex].id,
-            name: state.board.lists[action.payload.originalListIndex].name,
-            cards: newCardsOriginalList
-          }, {
-            id: state.board.lists[action.payload.newListIndex].id,
-            name: state.board.lists[action.payload.newListIndex].name,
-            cards: newCardsDestinationList
-          }
-          ]
+          lists: newLists
         }
       }
     }

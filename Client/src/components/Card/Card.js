@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import styles from './Card.styles'
 import { ItemTypes } from '../Constants'
 import { DragSource } from 'react-dnd';
@@ -12,7 +13,7 @@ const cardSource = {
     console.log('props : ')
     console.log(props)
     return {
-      id: props.id
+      index: props.index
     };
   },
 
@@ -21,7 +22,8 @@ const cardSource = {
     if(monitor.didDrop()) {
       const id = monitor.getItem()
       const dropResult = monitor.getDropResult()
-      moveCardAction(props.dispatch, props.id, props.listIndex, dropResult.listIndex)
+      console.log(dropResult)
+      moveCardAction(props.dispatch, props.index, props.listIndex, dropResult.listIndex)
     }
   }
 }
@@ -33,6 +35,11 @@ function collect (connect, monitor) {
   }
 }
 
+@connect(store => {
+  return {
+    board: store.board
+  }
+})
 @DragSource(ItemTypes.CARD, cardSource, collect)
 export default class Card extends React.Component {
 
@@ -40,8 +47,8 @@ export default class Card extends React.Component {
     connectDragSource: PropTypes.func.isRequired,
     content: PropTypes.string.isRequired,
     createdAt: PropTypes.string,
-    isDragging: PropTypes.bool.isRequired
-
+    isDragging: PropTypes.bool.isRequired,
+    index: PropTypes.number.isRequired
   }
 
   static defaultProps = {

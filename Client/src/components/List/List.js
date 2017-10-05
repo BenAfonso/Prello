@@ -24,24 +24,14 @@ const listSource = {
   }
 }
 
-const listTarget = {
+const cardTarget = {
   canDrop () {
     return true
   },
 
-  hover (props, monitor) {
-    const { id: draggedId } = monitor.getItem()
-    const { id: overId } = props
-
-    if (draggedId !== overId) {
-      const { index: overIndex } = props.findList(overId)
-      props.moveList(draggedId, overIndex)
-    }
-  },
-
   drop(props, monitor, component) {
     return {
-      listIndex: props.listIndex
+      listIndex: props.index
     }
   }
 }
@@ -51,7 +41,7 @@ const listTarget = {
     board: store.board
   }
 })
-@DropTarget(ItemTypes.CARD, listTarget, connect => ({
+@DropTarget(ItemTypes.CARD, cardTarget, connect => ({
   connectDropTarget: connect.dropTarget()
 }))
 @DragSource(ItemTypes.LIST, listSource, (connect, monitor) => ({
@@ -114,7 +104,7 @@ export default class List extends React.Component {
     const { title, isDragging, connectDragSource, connectDropTarget } = this.props
     console.log(connectDropTarget)
     console.log('render List id '+this.props.index)
-    return connectDragSource(/*connectDropTarget*/(
+    return connectDragSource(connectDropTarget(
       <div className='host' style={{
         opacity: isDragging ? 0.3 : 1
       }}>
@@ -124,7 +114,7 @@ export default class List extends React.Component {
           {
             this.props.cards.map((card, i) => (
               <li key={i}>
-                <Card listIndex={this.props.index} content={card.text} />
+                <Card index={i} listIndex={this.props.index} content={card.text} />
               </li>
             ))
           }
