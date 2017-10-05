@@ -1,27 +1,30 @@
 import { fetchBoard } from '../services/Board.services'
-import { addListDistant } from '../services/List.services'
+import { addListDistant, postCard, deleteList, moveListDistant } from '../services/List.services'
 import { moveCard } from '../services/Card.services'
 
 export function addList (dispatch, boardId, name) {
-  /* addListDistant(boardId, name)
+  addListDistant(boardId, name)
     .then((list) => {
       dispatch({
         type: 'ADD_LIST',
-        payload: {
-          name: list.name
-        }
+        payload: list
       })
-    }) */
-  dispatch({
-    type: 'ADD_LIST',
-    payload: {
-      name: name
-    }
-  })
+    })
 }
 
-export function moveCardAction (dispatch, card, originalListId, newListId) {
-  moveCard(card, originalListId, newListId).then((res) => {
+export function moveList (dispatch, boardId, listId, position) {
+  moveListDistant(boardId, listId, position)
+    .then((lists) => {
+      console.log(lists)
+      dispatch({
+        type: 'MOVE_LIST',
+        payload: lists
+      })
+    })
+}
+
+export function moveCardAction (dispatch, cardId, content, originalListIndex, newListIndex) {
+  /*moveCard(card, originalListId, newListId).then((res) => {
     dispatch({type: 'MOVE_CARD',
       payload: {
         id: card.id,
@@ -30,6 +33,15 @@ export function moveCardAction (dispatch, card, originalListId, newListId) {
     })
   }).catch((err) => {
     console.log(err) // TODO : Display on the screen a message to the user
+  }) */
+  console.log('moveCardAction')
+  dispatch({type: 'MOVE_CARD',
+    payload: {
+      id: cardId,
+      content: content,
+      originalListIndex: originalListIndex,
+      newListIndex: newListIndex
+    }
   })
 }
 
@@ -55,12 +67,27 @@ export function updateLists (dispatch, lists) {
   })
 }
 
-export function addCard (dispatch, index, content) {
-  dispatch({
-    type: 'ADD_CARD',
-    payload: {
-      listIndex: index,
-      content: content
-    }
+export function removeList (dispatch, boardId, list) {
+  deleteList(boardId, list._id).then(res => {
+    dispatch({
+      type: 'REMOVE_LIST',
+      payload: list
+    })
+  }).catch(err => {
+    return err
+  })
+}
+
+export function addCard (dispatch, listIndex, list, content) {
+  postCard(list._id, content).then(card => {
+    dispatch({
+      type: 'ADD_CARD',
+      payload: {
+        listIndex: listIndex,
+        card: card
+      }
+    })
+  }).catch(err => {
+    return err
   })
 }

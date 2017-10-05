@@ -1,4 +1,4 @@
-module.exports = (router, controller) => {
+module.exports = (router, controllers) => {
   /**
   * @swagger
   * /boards/{boardid}/lists/{listid}:
@@ -30,7 +30,7 @@ module.exports = (router, controller) => {
   *         description: List doesn't exist
   */
   router.delete('/boards/:boardid/lists/:listid', function (req, res) {
-    controller.removeList(req).then((data) => {
+    controllers.listController.removeList(req).then((data) => {
       res.status(200).send('The list has been deleted')
     })
       .catch((err) => {

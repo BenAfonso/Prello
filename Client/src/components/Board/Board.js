@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './Board.styles'
 import List from '../List/List'
 import { connect } from 'react-redux'
-import { addList, setBoard, updateLists } from '../../store/actions'
+import { addList, setBoard, updateLists, removeList } from '../../store/actions'
 import { DragDropContext, DropTarget } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import { ItemTypes } from '../Constants'
@@ -10,6 +10,7 @@ import Button from '../UI/Button/Button'
 
 const listTarget = {
   drop () {
+
   }
 }
 
@@ -35,6 +36,7 @@ export default class Board extends React.Component {
     this.clearForm = this.clearForm.bind(this)
     this.moveList = this.moveList.bind(this)
     this.findList = this.findList.bind(this)
+    this.removeList = this.removeList.bind(this)
   }
 
   componentDidMount () {
@@ -59,6 +61,10 @@ export default class Board extends React.Component {
       list,
       index: this.props.board.lists.indexOf(list)
     }
+  }
+
+  removeList (atIndex) {
+    removeList(this.props.dispatch, this.props.board._id, this.props.board.lists[atIndex])
   }
 
   moveList (id, atIndex) {
@@ -114,8 +120,8 @@ export default class Board extends React.Component {
   }
 
   render () {
+    console.log('render board')
     const {connectDropTarget} = this.props
-
     return connectDropTarget(<div className='host'>
       <ul>
         {
@@ -128,6 +134,7 @@ export default class Board extends React.Component {
                 cards={list.cards}
                 moveList={this.moveList}
                 findList={this.findList}
+                removeAction={this.removeList}
               />
             </li>
           ))

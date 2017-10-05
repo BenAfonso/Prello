@@ -4,9 +4,11 @@ export default `
   padding: 10px;
   border-radius: 3px;
   box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  overflow-y: scroll;
 }
 
 .title {
+  display: inline-block;
   color: #444;
   margin-bottom: 15px;
   font-weight: bold;
@@ -48,6 +50,12 @@ ul li:nth-child(1) {
 
 .newCardFormButtons div:nth-child(1) {
   margin-right: 10px;
+}
+
+.removeButton {
+  display: inline-block;
+  cursor: pointer;
+  float: right;
 }
 
 `

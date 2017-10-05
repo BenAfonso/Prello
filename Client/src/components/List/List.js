@@ -2,7 +2,7 @@ import React from 'react'
 import Card from '../Card/Card'
 import styles from './List.styles'
 import { connect } from 'react-redux'
-import { addCard } from '../../store/actions'
+import { addCard, moveList } from '../../store/actions'
 import { DragSource, DropTarget } from 'react-dnd'
 import { ItemTypes } from '../Constants'
 import { PropTypes } from 'prop-types'
@@ -10,6 +10,7 @@ import Button from '../UI/Button/Button'
 
 const listSource = {
   beginDrag (props) {
+    console.log('beginDrag list')
     return {
       id: props.id,
       originalIndex: props.findList(props.id).index
@@ -17,14 +18,15 @@ const listSource = {
   },
 
   endDrag (props, monitor) {
+    console.log('endDrag')
     const { id: droppedId, originalIndex } = monitor.getItem()
-    console.log(`list ${droppedId}: ${originalIndex} -> ${props.index}`)
+    moveList(props.dispatch, props.board._id, droppedId, props.index)
   }
 }
 
 const listTarget = {
   canDrop () {
-    return false
+    return true
   },
 
   hover (props, monitor) {
@@ -35,6 +37,12 @@ const listTarget = {
       const { index: overIndex } = props.findList(overId)
       props.moveList(draggedId, overIndex)
     }
+  },
+
+  drop(props, monitor, component) {
+    return {
+      listIndex: props.listIndex
+    }
   }
 }
 
@@ -43,7 +51,7 @@ const listTarget = {
     board: store.board
   }
 })
-@DropTarget(ItemTypes.LIST, listTarget, connect => ({
+@DropTarget(ItemTypes.CARD, listTarget, connect => ({
   connectDropTarget: connect.dropTarget()
 }))
 @DragSource(ItemTypes.LIST, listSource, (connect, monitor) => ({
@@ -71,6 +79,7 @@ export default class List extends React.Component {
     this.displayNewCardForm = this.displayNewCardForm.bind(this)
     this.undisplayNewCardForm = this.undisplayNewCardForm.bind(this)
     this.clearForm = this.clearForm.bind(this)
+    this.removeAction = this.removeAction.bind(this)
   }
 
   displayNewCardForm () {
@@ -91,25 +100,31 @@ export default class List extends React.Component {
 
   addCard () {
     if (this.newCardTitle !== '') {
-      addCard(this.props.dispatch, this.props.index, this.newCardTitle.value)
+      addCard(this.props.dispatch, this.props.index, this.props.board.lists[this.props.index], this.newCardTitle.value)
       this.clearForm()
     }
     this.undisplayNewCardForm()
   }
 
+  removeAction () {
+    this.props.removeAction(this.props.index)
+  }
+
   render () {
     const { title, isDragging, connectDragSource, connectDropTarget } = this.props
-
-    return connectDragSource(connectDropTarget(
+    console.log(connectDropTarget)
+    console.log('render List id '+this.props.index)
+    return connectDragSource(/*connectDropTarget*/(
       <div className='host' style={{
         opacity: isDragging ? 0.3 : 1
       }}>
         <div className='title'>{title}</div>
+        <div className='removeButton' onClick={this.removeAction}> X </div>
         <ul>
           {
             this.props.cards.map((card, i) => (
               <li key={i}>
-                <Card content={card.description} />
+                <Card listIndex={this.props.index} content={card.text} />
               </li>
             ))
           }
