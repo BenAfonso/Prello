@@ -29,12 +29,12 @@ function subscribeToBoard (client, boardId) {
   })
 }
 
-function unsubscribeToBoard (client, boardId) {
+/* function unsubscribeToBoard (client, boardId) {
   io.of('/').adapter.removeLeave(client.id, boardId, err => {
     if (err) { return console.error(err) }
     // Process
   })
-}
+} */
 
 function leaveBoards (client) {
   io.of('/').adapter.remoteDisconnect(client.id, true, (err) => {
