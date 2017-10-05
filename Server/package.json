@@ -19,6 +19,7 @@
     "mocha": "^3.5.3",
     "mongoose": "^4.11.13",
     "socket.io": "^2.0.3",
+    "socket.io-redis": "^5.2.0",
     "swagger-jsdoc": "^1.9.7"
   },
   "devDependencies": {
@@ -34,6 +35,8 @@
     "ignore": [
       "api-doc/"
     ],
-    "env": [ "mocha" ]
+    "env": [
+      "mocha"
+    ]
   }
 }
