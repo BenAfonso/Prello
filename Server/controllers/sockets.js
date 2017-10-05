@@ -60,3 +60,11 @@ console.log('Socket.io listening on port ', port)
 function log (message) {
   console.log(`[SOCKETS]: ${message}`)
 }
+
+module.exports.emit = function emit (boardId, event, object) {
+  io.to(boardId).emit(event, object)
+  /* getUsersInBoard(boardId).then(clients => {
+    log('Broadcasting new object')
+    clients.emit(event, object)
+  }) */
+}

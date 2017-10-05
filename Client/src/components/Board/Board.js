@@ -30,8 +30,6 @@ export default class Board extends React.Component {
       newListFormDisplayed: false
     }
 
-    subscribeToBoard(1)
-
     this.displayNewListForm = this.displayNewListForm.bind(this)
     this.undisplayNewListForm = this.undisplayNewListForm.bind(this)
     this.addList = this.addList.bind(this)
@@ -42,7 +40,11 @@ export default class Board extends React.Component {
   }
 
   componentDidMount () {
-    setBoard(this.props.dispatch)
+    setBoard(this.props.dispatch).then(board => {
+      subscribeToBoard(board)
+    }).catch(err => {
+      console.error(err)
+    })
   }
 
   displayNewListForm () {
