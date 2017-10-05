@@ -71,7 +71,6 @@ export default function reducer (state, action) {
       }
     }
     case 'MOVE_CARD': {
-      console.log('MOVE_CARD : card_id : ' + action.payload.index + ' originalListId ' + action.payload.originalListIndex +' newListId' + action.payload.newListIndex)
       let cardToMove = state.board.lists[action.payload.originalListIndex].cards[action.payload.index]
       let newCardsOriginalList = state.board.lists[action.payload.originalListIndex].cards.slice()
       let newCardsDestinationList = state.board.lists[action.payload.newListIndex].cards.slice()

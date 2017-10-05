@@ -120,7 +120,6 @@ export default class Board extends React.Component {
   }
 
   render () {
-    console.log('render board')
     const {connectDropTarget} = this.props
     return connectDropTarget(<div className='host'>
       <ul>

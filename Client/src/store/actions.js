@@ -24,16 +24,15 @@ export function moveList (dispatch, boardId, listId, position) {
 }
 
 export function moveCardAction (dispatch, cardOriginalIndex, originalListIndex, newListIndex) {
-  /*moveCard(card, originalListId, newListId).then((res) => {
+  /*moveCard(cardOriginalIndex, originalListIndex, newListIndex).then((res) => {
     dispatch({type: 'MOVE_CARD',
       payload: {
-        id: card.id,
-        content: card.content
+        index: cardOriginalIndex
       }
     })
   }).catch((err) => {
     console.log(err) // TODO : Display on the screen a message to the user
-  }) */
+  })*/
   dispatch({type: 'MOVE_CARD',
     payload: {
       index: cardOriginalIndex,

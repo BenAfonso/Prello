@@ -9,21 +9,18 @@ import { DragDropContext } from 'react-dnd'
 
 const cardSource = {
   beginDrag(props) {
-    console.log('beginDrag card')
-    console.log('props : ')
-    console.log(props)
     return {
       index: props.index
     };
   },
 
   endDrag(props, monitor, component) {
-    console.log('endDrag card')
     if(monitor.didDrop()) {
       const id = monitor.getItem()
       const dropResult = monitor.getDropResult()
       console.log(dropResult)
-      moveCardAction(props.dispatch, props.index, props.listIndex, dropResult.listIndex)
+      if(props.listIndex !== dropResult.listIndex)
+        moveCardAction(props.dispatch, props.index, props.listIndex, dropResult.listIndex)
     }
   }
 }
