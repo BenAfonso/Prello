@@ -1,3 +1,5 @@
+const {requiresLogin, board} = require('../../config/middlewares/authorization')
+
 module.exports = function (router, controller) {
   /**
   * @swagger
@@ -17,7 +19,7 @@ module.exports = function (router, controller) {
   *       500:
   *         description: Internal error
   */
-  router.get('/boards', function (req, res) {
+  router.get('/boards', [requiresLogin, board.hasAuthorization], function (req, res) {
     controller.getAllBoards().then((data) => {
       res.status(200).json(data)
     })
