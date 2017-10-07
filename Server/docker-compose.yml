@@ -1,0 +1,24 @@
+version: "2"
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+  web:
+    build: .
+    ports:
+      - "3333:3333"
+    links:
+      - mongo
+      - redis
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      - MONGODB_URL_DEV=mongodb://prello:prello@mongo:27017/prello
+      - REDIS_URL=redis
+
