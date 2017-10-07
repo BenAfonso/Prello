@@ -1,24 +1,35 @@
 version: "2"
+
 services:
   mongo:
-    image: mongo
+    image: mongo:latest
+    container_name: mongo
     ports:
       - "27017:27017"
-  redis:
-    image: redis
+  redis_db:
+    image: redis:4-alpine
+    container_name: redis
     ports:
       - "6379:6379"
+  mongoClientTemp:
+    image: mongo:latest
+    container_name: mongoClientTemp
+    links:
+      - mongo:mongo
+    command: mongo --host mongo --eval  "db.getSiblingDB('prello').createUser({user:'prello', pwd:'prello', roles:[{role:'readWrite',db:'prello'}]});db.getSiblingDB('prello_test').createUser({user:'prello', pwd:'prello', roles:[{role:'readWrite',db:'prello_test'}]});"
+    depends_on:
+      - mongo
   web:
     build: .
+    container_name: prelloReact
     ports:
       - "3333:3333"
     links:
-      - mongo
-      - redis
+      - mongo:mongo
+      - redis_db:redis_db
     depends_on:
-      - mongo
-      - redis
+      - mongoClientTemp
+      - redis_db
     environment:
       - MONGODB_URL_DEV=mongodb://prello:prello@mongo:27017/prello
-      - REDIS_URL=redis
-
+      - REDIS_URLr=redis_db
