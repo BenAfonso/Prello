@@ -37,7 +37,7 @@ module.exports = (server, chai) => {
             .post(`/lists/${list._id}/cards`)
             .send({text: ''})
             .end((err, res) => {
-              if (err) throw new Error(err)
+              //if (err) throw new Error(err)
               res.should.have.status(400)
               done()
             })
@@ -52,7 +52,7 @@ module.exports = (server, chai) => {
             .post(`/lists/${list._id}/cards`)
             .send({})
             .end((err, res) => {
-              if (err) throw new Error(err)
+              //if (err) throw new Error(err)
               res.should.have.status(400)
               done()
             })

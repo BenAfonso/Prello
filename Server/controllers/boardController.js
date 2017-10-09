@@ -58,23 +58,29 @@ boardController.removeListFromBoard = function (boardId, listId) {
     })
   })
 }
+boardController.getOneboard = function (boardId) {
+  return new Promise((resolve, reject) => {
+    Board.findOne({ '_id': boardId }).populate('owner lists collaborators').exec(function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        Card.populate(res, {
+          path: 'lists.cards'
+        }, function (err, res) {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(res)
+          }
+        })
+      }
+    })
+  })
+}
 boardController.moveList = function (req) {
   return new Promise((resolve, reject) => {
-    if (req.params.boardId === null) {
-      reject(new Error('Missing boardID'))
-      return
-    }
     let boardId = req.params.boardId
-    if (req.params.listId === null) {
-      reject(new Error('Missing listID'))
-      return
-    }
     let listId = req.params.listId
-
-    if (req.body.position === null) {
-      reject(new Error('Missing Position'))
-      return
-    }
     let position = req.body.position
     Board.findOne({ '_id': boardId }).exec(function (err, res) {
       if (err) {
@@ -82,7 +88,7 @@ boardController.moveList = function (req) {
       } else {
         let indexList = res.lists.indexOf(listId)
         if (indexList === -1) {
-          reject(new Error('List ID not found in the board'))
+          reject(new Error({status: 500, text: 'List ID not found in the board'}))
           return
         }
         let newLists = Util.moveInsideAnArray(res.lists, indexList, position)
@@ -104,5 +110,6 @@ boardController.moveList = function (req) {
     })
   })
 }
+
 
 module.exports = boardController

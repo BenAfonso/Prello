@@ -73,7 +73,7 @@ module.exports = (server, chai) => {
           .post(`/boards`)
           .send({title: ''})
           .end((err, res) => {
-            if (err) throw new Error(err)
+            if (err) {}
             res.should.have.status(400)
             done()
           })
@@ -83,7 +83,7 @@ module.exports = (server, chai) => {
           .post(`/boards`)
           .send({})
           .end((err, res) => {
-            if (err) return err
+            if (err) {}
             res.should.have.status(400)
             done()
           })
