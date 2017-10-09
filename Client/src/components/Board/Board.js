@@ -122,6 +122,7 @@ export default class Board extends React.Component {
     const {connectDropTarget} = this.props
 
     return connectDropTarget(<div className='host'>
+      <h1>{this.props.board.title}</h1>
       <ul>
         {
           this.props.board.lists.map((list, i) => (
@@ -135,7 +136,7 @@ export default class Board extends React.Component {
                 findList={this.findList}
                 removeAction={this.removeList}
               />
-            </li>
+            </li>     
           ))
         }
 

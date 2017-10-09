@@ -68,3 +68,34 @@ export function addCard (dispatch, listIndex, list, content) {
     return err
   })
 }
+
+export function setBoardslist (dispatch) {
+  dispatch({type: 'FETCH_BOARDSLIST_START'})
+  fetchBoard().then((data) => {
+    dispatch({
+      type: 'FETCH_BOARDSLIST_SUCCESS',
+      payload: data
+    })
+  }).catch((err) => {
+    dispatch({
+      type: 'FETCH_BOARDSLIST_ERROR',
+      payload: err
+    })
+  })
+}
+
+export function addBoard (dispatch, name) {
+ 
+}
+
+export function updateBoards (dispatch, boards) {
+
+}
+
+export function removeBoard (dispatch, board) {
+
+}
+
+export function moveBoard (dispatch, boardId, position) {
+
+}
