@@ -17,6 +17,7 @@ export default class Card extends React.Component {
         className='root'
       >
         { this.props.content }
+
         <style jsx>
           {styles}
         </style>

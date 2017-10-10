@@ -1,3 +1,5 @@
+const Util = require('../../controllers/Util')
+
 module.exports = (router, controller) => {
   /**
    * @swagger
@@ -37,10 +39,17 @@ module.exports = (router, controller) => {
   *         description: Internal error
   */
   router.post('/boards', (req, res) => {
+    let requiredBody = ['title']
+    requiredBody = Util.checkRequest(req.body, requiredBody)
+    if (requiredBody.length > 0) {
+      let stringMessage = requiredBody.join(',')
+      res.status(400).json(`Missing ${stringMessage}`)
+      return
+    }
     controller
       .createBoard(req.body)
       .then(data => {
-        res.status(200).json(data)
+        res.status(201).json(data)
       })
       .catch(err => {
         res.status(500).json(err)

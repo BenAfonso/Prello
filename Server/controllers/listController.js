@@ -5,24 +5,20 @@ const listController = {}
 
 listController.createList = (req) => {
   return new Promise((resolve, reject) => {
-    if (req.params.boardid === null) {
-      reject(new Error('Missing boardID'))
-    } else {
-      const listToAdd = new List(req.body)
-      listToAdd.save((err, item) => {
-        if (err) {
-          reject(err)
-        } else {
-          boardController.addListToBoard(req.params.boardid, listToAdd)
+    const listToAdd = new List(req.body)
+    listToAdd.save((err, item) => {
+      if (err) {
+        reject(err)
+      } else {
+        boardController.addListToBoard(req.params.boardid, listToAdd)
             .then((data) => {
               resolve(item)
             })
             .catch((err) => {
               reject(err)
             })
-        }
-      })
-    }
+      }
+    })
   })
 }
 listController.removeList = (req) => {
