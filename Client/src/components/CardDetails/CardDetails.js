@@ -1,29 +1,33 @@
 import React from 'react'
-import Portal from 'react-portal'
 import styles from './CardDetails.styles'
+import Modal from 'react-modal'
+
 
 export default class CardDetails extends React.Component {
-  render () {
-    const button1 = <button>More information</button>
 
-    return (
-      <Portal closeOnEsc="true" closeOnOutsideClick="false" openByClickOn={button1}>
-        <PseudoModal>
-          <h2>{this.props.content}</h2>
-        </PseudoModal>
-      </Portal>
-    )
-  }
+  constructor(){
+    super()
+    this.state = {
+      isActive: false
     }
+  }
 
-export class PseudoModal extends React.Component {
-  render () {
+  toggleModal = () => {
+    this.setState({
+      isActive: !this.state.isActive
+    })
+  }
+
+  render(){
     return (
-      <div className="card-details">
-        {this.props.children}
-        <p><button onClick={this.props.closePortal}>Close this</button></p>
-        <style jsx>{styles}</style>
+      <div onClick={this.toggleModal}>
+      <Modal isOpen={this.state.isActive}>
+        Hello world
+      </Modal>
       </div>
     )
   }
+
+
     }
+

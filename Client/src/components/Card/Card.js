@@ -2,8 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styles from './Card.styles'
 import CardDetails from '../CardDetails/CardDetails'
+import Modal from 'react-modal'
 
 export default class Card extends React.Component {
+
+  constructor(){
+    super()
+    this.state = {
+      isActive: false
+    }
+  }
 
   static propTypes = {
     content: PropTypes.string.isRequired,
@@ -13,9 +21,15 @@ export default class Card extends React.Component {
   static defaultProps = {
   }
 
+  toggleModal = () => {
+    this.setState({
+      isActive: !this.state.isActive
+    })
+  }
+
   render () {
     return (
-      <div
+      <div onClick={this.toggleModal}
         className='root'
       >
         { this.props.content }
@@ -23,7 +37,7 @@ export default class Card extends React.Component {
         <style jsx>
           {styles}
         </style>
-        <CardDetails></CardDetails>
+        <Modal isOpen={this.state.isActive}>{this.props.content}</Modal>
       </div>
     )
   }
