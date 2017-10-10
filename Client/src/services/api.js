@@ -15,7 +15,6 @@ socket.on('REMOVE_LIST', (list) => {
 })
 
 socket.on('LIST_MOVED', (lists) => {
-  console.log(lists)
   moveListLocal(lists)
 })
 
