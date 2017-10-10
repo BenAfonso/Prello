@@ -62,17 +62,25 @@ boardController.getOneboard = function (boardId) {
   return new Promise((resolve, reject) => {
     Board.findOne({ '_id': boardId }).populate('owner lists collaborators').exec(function (err, res) {
       if (err) {
+        err.status = 500
         reject(err)
       } else {
-        Card.populate(res, {
-          path: 'lists.cards'
-        }, function (err, res) {
-          if (err) {
-            reject(err)
-          } else {
-            resolve(res)
-          }
-        })
+        if (res === null) {
+          err = new Error('board id not found')
+          err.status = 404
+          reject(err)
+        } else {
+          Card.populate(res, {
+            path: 'lists.cards'
+          }, function (err, res) {
+            if (err) {
+              err.status = 500
+              reject(err)
+            } else {
+              resolve(res)
+            }
+          })
+        }
       }
     })
   })
@@ -110,6 +118,5 @@ boardController.moveList = function (req) {
     })
   })
 }
-
 
 module.exports = boardController

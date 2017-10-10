@@ -5,7 +5,6 @@ const listController = {}
 
 listController.createList = (req) => {
   return new Promise((resolve, reject) => {
-
     const listToAdd = new List(req.body)
     listToAdd.save((err, item) => {
       if (err) {
