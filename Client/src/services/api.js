@@ -1,5 +1,5 @@
 import openSocket from 'socket.io-client'
-import { addListLocal, removeListLocal } from '../store/actions'
+import { addListLocal, removeListLocal, moveListLocal } from '../store/actions'
 const socket = openSocket('http://localhost:8000')
 
 export function subscribeToBoard (board) {
@@ -15,7 +15,8 @@ socket.on('REMOVE_LIST', (list) => {
 })
 
 socket.on('LIST_MOVED', (lists) => {
-
+  console.log(lists)
+  moveListLocal(lists)
 })
 
 socket.on('CARD_UPDATED', (newCard) => {

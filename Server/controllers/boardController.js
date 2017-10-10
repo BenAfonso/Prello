@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const Board = mongoose.model('Board')
 const Card = mongoose.model('Card')
 const Util = require('./Util')
+const emit = require('../controllers/sockets').emit
 const boardController = {}
 
 boardController.getAllBoards = function () {
@@ -96,6 +97,7 @@ boardController.moveList = function (req) {
             if (err) {
               reject(err)
             } else {
+              emit(boardId, 'LIST_MOVED', res.lists)
               resolve(res.lists)
             }
           })
