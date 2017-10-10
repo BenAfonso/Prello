@@ -14,7 +14,6 @@ export function addList (dispatch, boardId, name) {
 export function moveList (dispatch, boardId, listId, position) {
   moveListDistant(boardId, listId, position)
     .then((lists) => {
-      console.log(lists)
       dispatch({
         type: 'MOVE_LIST',
         payload: lists
