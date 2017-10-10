@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import IndexPage from './pages/index.page'
 import LoginPage from './pages/LoginPage/login.page'
+import BoardsPage from './pages/boards.page'
 import RegisterPage from './pages/RegisterPage/register.page'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { Provider } from 'react-redux'
@@ -15,6 +16,7 @@ class App extends Component {
             <Route exact path='/' component={IndexPage} />
             <Route path='/login' component={LoginPage} />
             <Route path='/register' component={RegisterPage} />
+            <Route path='/boards' component={BoardsPage} />
           </div>
         </Provider>
       </Router>

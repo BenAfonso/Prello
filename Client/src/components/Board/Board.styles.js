@@ -7,6 +7,10 @@ export default `
     overflow-x: scroll;
   }
 
+  h1 {
+    font-size: 25px;
+  }
+
   ul {
     display: flex;
     flex-wrap: nowrap;
