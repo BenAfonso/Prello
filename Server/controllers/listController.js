@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const List = mongoose.model('List')
 const boardController = require('./boardController')
 const listController = {}
+const emit = require('../controllers/sockets').emit
 
 listController.createList = (req) => {
   return new Promise((resolve, reject) => {
@@ -12,6 +13,7 @@ listController.createList = (req) => {
       } else {
         boardController.addListToBoard(req.params.boardid, listToAdd)
             .then((data) => {
+              emit(req.params.boardid, 'NEW_LIST', item)
               resolve(item)
             })
             .catch((err) => {
@@ -37,6 +39,7 @@ listController.removeList = (req) => {
       } else {
         boardController.removeListFromBoard(req.params.boardid, req.params.listid)
           .then((data) => {
+            emit(req.params.boardid, 'REMOVE_LIST', item)
             resolve(item)
           })
           .catch((err) => {

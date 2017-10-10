@@ -39,8 +39,8 @@ module.exports = (router, controllers) => {
     *         description: Internal error
     */
   router.post('/boards/:boardid/lists', function (req, res) {
-    let requiredBody = ['text']
-    let requiredParameter = ['listid']
+    let requiredBody = ['name']
+    let requiredParameter = ['boardid']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
       let stringMessage = requiredParameter.join(',')

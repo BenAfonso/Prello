@@ -30,7 +30,6 @@ export function moveListDistant (boardId, listId, position) {
     axios.put(`${Config.API_URL}/boards/${boardId}/lists/${listId}/move`, {
       position: position
     }).then((res) => {
-      console.log(res)
       resolve(res.data)
     }).catch((err) => {
       reject(err)
