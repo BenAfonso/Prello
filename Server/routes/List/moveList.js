@@ -1,3 +1,4 @@
+const Util = require('../../controllers/Util')
 module.exports = (router, controllers) => {
   /**
     * @swagger
@@ -44,6 +45,20 @@ module.exports = (router, controllers) => {
     *         description: Internal error
     */
   router.put('/boards/:boardId/lists/:listId/move', function (req, res) {
+    let requiredBody = ['position']
+    let requiredParameter = ['listId', 'boardId']
+    requiredParameter = Util.checkRequest(req.params, requiredParameter)
+    if (requiredParameter.length > 0) {
+      let stringMessage = requiredParameter.join(',')
+      res.status(400).json(`Missing ${stringMessage}`)
+      return
+    }
+    requiredBody = Util.checkRequest(req.body, requiredBody)
+    if (requiredBody.length > 0) {
+      let stringMessage = requiredBody.join(',')
+      res.status(400).json(`Missing ${stringMessage}`)
+      return
+    }
     controllers.boardController.moveList(req).then((data) => {
       res.status(200).json(data)
     })
