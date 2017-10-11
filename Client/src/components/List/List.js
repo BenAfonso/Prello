@@ -18,7 +18,9 @@ const listSource = {
 
   endDrag (props, monitor) {
     const { id: droppedId, originalIndex } = monitor.getItem()
-    moveList(props.dispatch, props.board._id, droppedId, props.index)
+    if (originalIndex !== props.index) {
+      moveList(props.dispatch, props.board._id, droppedId, props.index)
+    }
   }
 }
 
