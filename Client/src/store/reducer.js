@@ -43,6 +43,20 @@ export default function reducer (state, action) {
         }
       }
     }
+    case 'RESET_BOARD': {
+      return {
+        ...state,
+        board: {
+          _id: '',
+          title: '',
+          lists: [],
+          visibility: '',
+          isArchived: false,
+          background: '',
+          collaborators: []
+        }
+      }
+    }
     case 'ADD_LIST': {
       let newLists = state.board.lists.slice()
       newLists.push(action.payload)

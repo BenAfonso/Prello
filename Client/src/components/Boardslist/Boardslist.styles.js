@@ -4,23 +4,25 @@ export default `
   width: 100%;
   background-color: #cd5a91;
   padding: 30px 10px;
-  overflow-x: scroll;
+}
+
+h1 {
+  color: white;
+  margin-left: 23px;
 }
 
 ul {
   display: flex;
-  flex-wrap: nowrap;
-  align-items: flex-start;
+  flex-wrap: wrap; 
+  align-items: center;
+  justify-content: center;
+  padding-right: 10px;
 }
 
 ul li {
-  width: 270px;
-  margin-left: 10px;
-  flex-shrink: 0;
-}
 
-ul li:nth-child(1) {
-  margin-left: 0;
+  margin-left: 10px;
+  margin-bottom: 20px;
 }
 
 .newBoardButton {
@@ -52,5 +54,9 @@ ul li:nth-child(1) {
 
 .newBoardFormButtons div:nth-child(1) {
   margin-right: 10px;
+}
+
+ul.boards {
+  margin-top: 20px;
 }
 `
