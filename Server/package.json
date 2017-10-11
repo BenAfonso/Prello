@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "start": "node index.js",
     "precommit": "npm run test",
     "test": "./node_modules/.bin/mocha ./test/index.js && standard --fix | snazzy",
     "standard": "standard --verbose | snazzy",
