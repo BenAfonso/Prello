@@ -13,11 +13,18 @@ const decodeToken = (token) => {
 }
 
 exports.requiresLogin = (req, res, next) => {
-  let token = req.headers['x-access-token']
-  if (token === undefined) {
+  console.log(req.headers)
+  let authorizationHeader = req.headers['authorization'].split(' ')
+  if (authorizationHeader === undefined) {
     return res.status(401).send('No token provided')
   }
-
+  if (authorizationHeader[0] !== 'Bearer') {
+    return res.status(401).send('Bearer token needed')
+  }
+  if (authorizationHeader[1] === undefined) {
+    return res.status(401).send('No token provided')
+  }
+  let token = authorizationHeader[1]
   decodeToken(token).then((decoded) => {
     User.findById(decoded.id, (err, user) => {
       if (err) { return res.status(400).send('No user found') }

@@ -14,15 +14,15 @@ userController.create = (user) => {
   })
 }
 
-userController.login = (email, password) => {
+userController.login = (userToConnect) => {
   return new Promise((resolve, reject) => {
     User.load({
-      where: { email: email },
+      where: { email: userToConnect.email },
       select: 'name username email passwordHash salt'
     }, (err, user) => {
       if (err) reject(new Error('Bad request'))
       if (user) {
-        if (user.authenticate(password)) {
+        if (userToConnect.provider === 'google' || user.authenticate(userToConnect.password)) {
           let payload = {
             id: user._id
           }
