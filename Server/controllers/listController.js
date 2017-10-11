@@ -2,27 +2,25 @@ const mongoose = require('mongoose')
 const List = mongoose.model('List')
 const boardController = require('./boardController')
 const listController = {}
+const emit = require('../controllers/sockets').emit
 
 listController.createList = (req) => {
   return new Promise((resolve, reject) => {
-    if (req.params.boardid === null) {
-      reject(new Error('Missing boardID'))
-    } else {
-      const listToAdd = new List(req.body)
-      listToAdd.save((err, item) => {
-        if (err) {
-          reject(err)
-        } else {
-          boardController.addListToBoard(req.params.boardid, listToAdd)
+    const listToAdd = new List(req.body)
+    listToAdd.save((err, item) => {
+      if (err) {
+        reject(err)
+      } else {
+        boardController.addListToBoard(req.params.boardid, listToAdd)
             .then((data) => {
+              emit(req.params.boardid, 'NEW_LIST', item)
               resolve(item)
             })
             .catch((err) => {
               reject(err)
             })
-        }
-      })
-    }
+      }
+    })
   })
 }
 listController.removeList = (req) => {
@@ -41,6 +39,7 @@ listController.removeList = (req) => {
       } else {
         boardController.removeListFromBoard(req.params.boardid, req.params.listid)
           .then((data) => {
+            emit(req.params.boardid, 'REMOVE_LIST', item)
             resolve(item)
           })
           .catch((err) => {

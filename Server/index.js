@@ -4,6 +4,7 @@ const app = express()
 const mongoose = require('mongoose')
 const swaggerJSDoc = require('swagger-jsdoc')
 const logger = require('morgan')
+require('./controllers/sockets')
 
 if (process.env.NODE_ENV !== 'test') { // Not logging while testing
   app.use(logger('dev'))

@@ -5,9 +5,7 @@ import BoardsPage from './pages/boards.page'
 import RegisterPage from './pages/RegisterPage/register.page'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import Store from './store/store'
-
-const store = Store()
+import store from './store/store'
 
 class App extends Component {
   render () {
