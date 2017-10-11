@@ -4,7 +4,7 @@ import PageLayout from '../layouts/page'
 
 export default (props) => (
     <PageLayout>
-      <Boardslist />
+        <Boardslist />
     </PageLayout>
   )
   

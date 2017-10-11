@@ -40,7 +40,7 @@ export default class Board extends React.Component {
   }
 
   componentDidMount () {
-    setBoard(this.props.dispatch).then(board => {
+    setBoard(this.props.dispatch, this.props._id).then(board => {
       subscribeToBoard(board)
     }).catch(err => {
       console.error(err)

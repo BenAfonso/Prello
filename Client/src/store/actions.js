@@ -39,15 +39,15 @@ export function moveListLocal (list) {
   }
 }
 
-export function setBoard (dispatch) {
+export function setBoard (dispatch, id) {
   return new Promise((resolve, reject) => {
     dispatch({type: 'FETCH_BOARD_START'})
     fetchBoard().then((data) => {
       dispatch({
         type: 'FETCH_BOARD_SUCCESS',
-        payload: data[0]
+        payload: data.filter(x=>x._id===id)[0]
       })
-      resolve(data[0])
+      resolve(data.filter(x=>x._id===id)[0])
     }).catch((err) => {
       dispatch({
         type: 'FETCH_BOARD_ERROR',
@@ -110,20 +110,4 @@ export function setBoardslist (dispatch) {
       payload: err
     })
   })
-}
-
-export function addBoard (dispatch, name) {
- 
-}
-
-export function updateBoards (dispatch, boards) {
-
-}
-
-export function removeBoard (dispatch, board) {
-
-}
-
-export function moveBoard (dispatch, boardId, position) {
-
 }

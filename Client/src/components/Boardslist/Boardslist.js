@@ -1,11 +1,9 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styles from './Boardslist.styles'
 import BoardThumbnail from '../BoardThumbnail/BoardThumbnail'
 import { connect } from 'react-redux'
 import { setBoardslist } from '../../store/actions'
-import HTML5Backend from 'react-dnd-html5-backend'
-import { ItemTypes } from '../Constants'
-import Button from '../UI/Button/Button'
 
 @connect(store => {
   return {
@@ -23,7 +21,7 @@ export default class Boardslist extends React.Component {
   componentDidMount () {
     setBoardslist(this.props.dispatch)
   }
-  
+
   findBoard (id) {
       const board = this.props.boardslist.boards.filter((l) => l._id === id)[0]
       return {
@@ -34,43 +32,47 @@ export default class Boardslist extends React.Component {
   
   render () {
 
-    console.log(this.props.boardslist.boards.map((board, i) => board.createdAt))
-
     return (<div className='host'>
       <h1>Mes boards favoris</h1>
 
       <ul>
         {
-          this.props.boardslist.boards.sort((a,b)=>{new Date(b.createdAt) - new Date(a.createdAt)}).map((board, i) => board.isFavorite ? 
+          this.props.boardslist.boards.map((board, i) => board.isFavorite ? 
+          
             <li key={board._id}>
-              <BoardThumbnail
-                id={board._id}
-                title={board.title}
-                index={i}
-                findBoard={this.findBoard}
-                isFavorite={board.isFavorite}
-                background={board.background}
-              />
+              <Link to={`/boards/${board._id}`}>
+                <BoardThumbnail
+                  id={board._id}
+                  title={board.title}
+                  index={i}
+                  findBoard={this.findBoard}
+                  isFavorite={board.isFavorite}
+                  background={board.background}
+                />
+              </Link>  
             </li>
+          
           : null)
         }
   
       </ul>
 
-
       <h1>Mes boards</h1>
 
       <ul>
         {
-          this.props.boardslist.boards.sort((a,b)=>{new Date(b.createdAt) - new Date(a.createdAt)}).map((board, i) => (
+          this.props.boardslist.boards.map((board, i) => (
+            
             <li key={board._id}>
-              <BoardThumbnail
-                id={board._id}
-                title={board.title}
-                index={i}
-                background={board.background}
-                isFavorite={board.isFavorite}
-              />
+              <Link to={`/boards/${board._id}`}>
+                <BoardThumbnail
+                  id={board._id}
+                  title={board.title}
+                  index={i}
+                  background={board.background}
+                  isFavorite={board.isFavorite}
+                />
+              </Link>
             </li>
           ))
         }
