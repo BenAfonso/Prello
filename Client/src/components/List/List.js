@@ -6,19 +6,18 @@ import { addCard, moveList } from '../../store/actions'
 import { DragSource, DropTarget } from 'react-dnd'
 import { ItemTypes } from '../Constants'
 import { PropTypes } from 'prop-types'
+import { updateLists } from '../../store/actions'
 import Button from '../UI/Button/Button'
 
 const listSource = {
   beginDrag (props) {
-    console.log('beginDrag list')
     return {
       id: props.id,
-      originalIndex: props.findList(props.id).index
+      originalIndex: props.findList(props.id).index,
     }
   },
 
   endDrag (props, monitor) {
-    console.log('endDrag')
     const { id: droppedId, originalIndex } = monitor.getItem()
     moveList(props.dispatch, props.board._id, droppedId, props.index)
   }
@@ -30,8 +29,12 @@ const cardTarget = {
   },
 
   drop(props, monitor, component) {
-    return {
-      listIndex: props.index
+    if (!monitor.didDrop()) {
+      return {
+        listIndex: props.index,
+        isList: true,
+        length: props.cards.length
+      }
     }
   }
 }
@@ -49,7 +52,8 @@ const listTarget = {
       const { index: overIndex } = props.findList(overId)
       props.moveList(draggedId, overIndex)
     }
-  }
+  },
+
 }
 
 @connect(store => {
@@ -57,12 +61,15 @@ const listTarget = {
     board: store.board
   }
 })
+//List can be hovered by another dragged list
 @DropTarget(ItemTypes.LIST, listTarget, connect => ({
   connectListDropTarget: connect.dropTarget()
 }))
+//List can be the target of a card drag and drop
 @DropTarget(ItemTypes.CARD, cardTarget, connect => ({
   connectCardDropTarget: connect.dropTarget()
 }))
+//List are draggable
 @DragSource(ItemTypes.LIST, listSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging()
@@ -103,6 +110,16 @@ export default class List extends React.Component {
     })
   }
 
+  moveCard(card, beforeListIndex, beforePosition, afterListIndex, afterPosition) {
+    //const {card, listIndex} = this.findCard(cardId)
+    //this.props.board.lists.foreach((list => findCard(id))
+    let lists = this.props.board.lists.slice()
+    lists[beforeListIndex].splice(beforePosition, 1)
+    lists[afterListIndex].splice(afterPosition, 0, card)
+    updateLists(this.props.dispatch, lists)
+
+  }
+
   clearForm () {
     this.newCardTitle = ''
   }
@@ -113,6 +130,11 @@ export default class List extends React.Component {
       this.clearForm()
     }
     this.undisplayNewCardForm()
+  }
+  
+  findCard (id) {
+    const card = this.filter((card) => id === card.id)
+    return card.length === 0 ? undefined : {card: card[0], listIndex: this.props.index}
   }
 
   removeAction () {
@@ -131,7 +153,7 @@ export default class List extends React.Component {
           {
             this.props.cards.map((card, i) => (
               <li key={i}>
-                <Card index={i} listIndex={this.props.index} content={card.text} />
+                <Card index={i} id={card._id} moveCard={this.moveCard} listIndex={this.props.index} content={card.text} />
               </li>
             ))
           }

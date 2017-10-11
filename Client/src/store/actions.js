@@ -23,7 +23,7 @@ export function moveList (dispatch, boardId, listId, position) {
     })
 }
 
-export function moveCardAction (dispatch, cardOriginalIndex, originalListIndex, newListIndex) {
+export function moveCardAction (dispatch, cardOriginalIndex, originalListIndex, newListIndex, newPosition) {
   /*moveCard(cardOriginalIndex, originalListIndex, newListIndex).then((res) => {
     dispatch({type: 'MOVE_CARD',
       payload: {
@@ -37,7 +37,8 @@ export function moveCardAction (dispatch, cardOriginalIndex, originalListIndex, 
     payload: {
       index: cardOriginalIndex,
       originalListIndex: originalListIndex,
-      newListIndex: newListIndex
+      newListIndex: newListIndex,
+      newPosition: newPosition
     }
   })
 }
