@@ -28,6 +28,9 @@ export const defaultState = {
     isArchived: false,
     background: '',
     collaborators: []
+  },
+  boardslist: {
+    boards:[]
   }
 }
 
