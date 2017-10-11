@@ -7,10 +7,11 @@ const BoardSchema = new Schema({
   collaborators: [{type: Schema.Types.ObjectId, ref: 'User'}],
   owner: {type: Schema.Types.ObjectId, ref: 'User'},
   team: {type: Schema.Types.ObjectId, ref: 'Team'},
-  background: {type: String, default: ''},
+  background: {type: String, default: '#2666fe'},
   visibility: {type: String, enum: ['public', 'private', 'team']},
   createdAt: {type: Date},
-  isArchived: {type: Boolean, default: false}
+  isArchived: {type: Boolean, default: false},
+  isFavorite: {type: Boolean, default: false}
 })
 
 mongoose.model('Board', BoardSchema)
