@@ -1,4 +1,5 @@
 export const ItemTypes = {
   CARD: 'Card',
-  LIST: 'List'
+  LIST: 'List',
+  BOARD: 'Board'
 }

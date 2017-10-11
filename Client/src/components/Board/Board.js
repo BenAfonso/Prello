@@ -40,7 +40,7 @@ export default class Board extends React.Component {
   }
 
   componentDidMount () {
-    setBoard(this.props.dispatch).then(board => {
+    setBoard(this.props.dispatch, this.props._id).then(board => {
       subscribeToBoard(board)
     }).catch(err => {
       console.error(err)
@@ -127,6 +127,7 @@ export default class Board extends React.Component {
     const {connectDropTarget} = this.props
 
     return connectDropTarget(<div className='host'>
+      <h1>{this.props.board.title}</h1>
       <ul>
         {
           this.props.board.lists.map((list, i) => (
@@ -140,7 +141,7 @@ export default class Board extends React.Component {
                 findList={this.findList}
                 removeAction={this.removeList}
               />
-            </li>
+            </li>     
           ))
         }
 
