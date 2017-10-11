@@ -1,3 +1,4 @@
+const Util = require('../../controllers/Util')
 module.exports = (router, controllers) => {
   /**
   * @swagger
@@ -30,6 +31,13 @@ module.exports = (router, controllers) => {
   *         description: List doesn't exist
   */
   router.delete('/boards/:boardid/lists/:listid', function (req, res) {
+    let requiredParameter = ['listid', 'boardid']
+    requiredParameter = Util.checkRequest(req.params, requiredParameter)
+    if (requiredParameter.length > 0) {
+      let stringMessage = requiredParameter.join(',')
+      res.status(400).json(`Missing ${stringMessage}`)
+      return
+    }
     controllers.listController.removeList(req).then((data) => {
       res.status(200).send('The list has been deleted')
     })

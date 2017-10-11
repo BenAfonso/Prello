@@ -24,11 +24,19 @@ export function addListLocal (list) {
 export function moveList (dispatch, boardId, listId, position) {
   moveListDistant(boardId, listId, position)
     .then((lists) => {
-      dispatch({
+     /* dispatch({
         type: 'MOVE_LIST',
         payload: lists
-      })
+      })*/
     })
+}
+export function moveListLocal (list) {
+  if (list) {
+    store.dispatch({
+      type: 'MOVE_LIST',
+      payload: list
+    })
+  }
 }
 
 export function setBoard (dispatch) {
