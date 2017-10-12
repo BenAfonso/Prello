@@ -5,7 +5,18 @@ let swaggerDefinition = {
     title: 'Prello Swagger API',
     version: '1.0.0'
   },
-  host: `localhost:3333`,
+  produces: ['application/json'],
+  consumes: ['application/json'],
+  securityDefinitions: {
+    JWT: {
+      type: 'apiKey',
+      name: 'Authorization',
+      in: 'header'
+    }
+  },
+  security: [
+    { JWT: [] }
+  ],
   basePath: '/'
 }
 
