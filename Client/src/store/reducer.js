@@ -96,8 +96,12 @@ export default function reducer (state, action) {
       }
     }
     case 'ADD_CARD': {
-      let newLists = state.board.lists.slice()
-      newLists[action.payload.listIndex].cards.push(action.payload.card)
+      let newLists = state.board.lists.map((l) => {
+        if (l._id === action.payload.listId) {
+          l.cards.push(action.payload.card)
+        }
+        return l
+      })
       return {
         ...state,
         board: {

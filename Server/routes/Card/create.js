@@ -11,7 +11,7 @@ module.exports = (router, controller) => {
 
   /**
     * @swagger
-    * /lists/{listid}/cards:
+    * /boards/{boardId}/lists/{listid}/cards:
     *   post:
     *     tags:
     *       - Card
@@ -20,6 +20,11 @@ module.exports = (router, controller) => {
     *     produces:
     *       - application/json
     *     parameters:
+    *       - name: boardId
+    *         type: string
+    *         description: The board id where we want to insert the Card
+    *         in: path
+    *         required: true
     *       - name: listid
     *         type: string
     *         description: The list id where we want to insert the Card
@@ -37,9 +42,9 @@ module.exports = (router, controller) => {
     *       500:
     *         description: Internal error
     */
-  router.post('/lists/:listid/cards', function (req, res) {
+  router.post('/boards/:boardId/lists/:listid/cards', function (req, res) {
     let requiredBody = ['text']
-    let requiredParameter = ['listid']
+    let requiredParameter = ['listid', 'boardId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
       let stringMessage = requiredParameter.join(',')
