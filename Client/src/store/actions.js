@@ -89,17 +89,19 @@ export function removeListLocal (list) {
   })
 }
 
-export function addCard (dispatch, listIndex, list, content) {
-  postCard(list._id, content).then(card => {
-    dispatch({
-      type: 'ADD_CARD',
-      payload: {
-        listIndex: listIndex,
-        card: card
-      }
-    })
+export function addCard (dispatch, boardId, listIndex, list, content) {
+  postCard(boardId, list._id, content).then(card => {
   }).catch(err => {
     return err
+  })
+}
+export function addCardLocal (listId, card) {
+  store.dispatch({
+    type: 'ADD_CARD',
+    payload: {
+      listId: listId,
+      card: card
+    }
   })
 }
 
