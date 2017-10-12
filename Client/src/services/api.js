@@ -1,7 +1,6 @@
 import openSocket from 'socket.io-client'
 import { addListLocal, removeListLocal, moveListLocal, addCardLocal } from '../store/actions'
 import Config from '../config'
-console.log(process.env)
 const socket = openSocket(Config.SOCKET_URL)
 
 export function subscribeToBoard (board) {

@@ -1,7 +1,7 @@
 const io = require('socket.io')()
 const redis = require('socket.io-redis')
 
-io.adapter(redis({ host: process.env.REDIS_URL, port: process.env.REDIS_PORT }))
+io.adapter(redis(process.env.REDIS_URL))
 
 io.on('connection', (client) => {
   // here you can start emitting events to the client
