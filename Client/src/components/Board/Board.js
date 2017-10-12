@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './Board.styles'
 import List from '../List/List'
 import { connect } from 'react-redux'
-import { addList, setBoard, updateLists, removeList } from '../../store/actions'
+import { addList, setBoard, updateLists, removeList, resetBoard } from '../../store/actions'
 import { DragDropContext, DropTarget } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import { ItemTypes } from '../Constants'
@@ -45,6 +45,10 @@ export default class Board extends React.Component {
     }).catch(err => {
       console.error(err)
     })
+  }
+
+  componentWillUnmount () {
+    resetBoard()
   }
 
   displayNewListForm () {

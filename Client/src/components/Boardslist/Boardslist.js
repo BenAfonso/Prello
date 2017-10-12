@@ -14,7 +14,6 @@ import { setBoardslist } from '../../store/actions'
 export default class Boardslist extends React.Component {
   constructor (props) {
     super(props)
-
     this.findBoard = this.findBoard.bind(this)
   }
   
@@ -33,10 +32,10 @@ export default class Boardslist extends React.Component {
   render () {
 
     return (<div className='host'>
-      <h1>Mes boards favoris</h1>
+      { /* <h1>Mes boards favoris</h1>
 
       <ul>
-        {
+        { 
           this.props.boardslist.boards.map((board, i) => board.isFavorite ? 
           
             <li key={board._id}>
@@ -56,10 +55,11 @@ export default class Boardslist extends React.Component {
         }
   
       </ul>
+      */ }
 
       <h1>Mes boards</h1>
 
-      <ul>
+      <ul className='boards'>
         {
           this.props.boardslist.boards.map((board, i) => (
             

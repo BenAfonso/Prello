@@ -58,6 +58,12 @@ export function setBoard (dispatch, id) {
   })
 }
 
+export function resetBoard (dispatch) {
+  store.dispatch({
+    type: 'RESET_BOARD'
+  })
+}
+
 export function updateLists (dispatch, lists) {
   dispatch({
     type: 'UPDATE_LISTS',

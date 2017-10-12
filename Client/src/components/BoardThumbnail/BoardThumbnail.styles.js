@@ -1,31 +1,30 @@
 export default `
 .host {
-  background-color: #808080;
+  position: relative;
+  background-color: #ae4d7b;
   padding: 10px;
   border-radius: 3px;
   box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-}
-
-
-ul li {
-  margin-top: 10px;
-}
-
-ul li:nth-child(1) {
-  margin-top: 0;
+  width: 270px;
 }
 
 .title {
-    display: inline-block;
-    color: #dcdcda;
-    margin-bottom: 15px;
-    font-weight: bold;
-    font-size: 16px;
+  height: 50px;
+  line-height: 50px;
+  color: #dcdcda;
+  font-weight: bold;
+  font-size: 16px;
 }
 
 .favorite {
-  display: inline-block;
-  float: right;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  opacity: 0.5;
+}
+
+.host:hover {
+  transform: translateY(-10px) rotate(-3deg);
 }
 
 `
