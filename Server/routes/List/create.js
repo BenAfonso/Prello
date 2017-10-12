@@ -1,3 +1,5 @@
+const Util = require('../../controllers/Util')
+
 module.exports = (router, controllers) => {
   /**
     * @swagger
@@ -37,8 +39,22 @@ module.exports = (router, controllers) => {
     *         description: Internal error
     */
   router.post('/boards/:boardid/lists', function (req, res) {
+    let requiredBody = ['name']
+    let requiredParameter = ['boardid']
+    requiredParameter = Util.checkRequest(req.params, requiredParameter)
+    if (requiredParameter.length > 0) {
+      let stringMessage = requiredParameter.join(',')
+      res.status(400).json(`Missing ${stringMessage}`)
+      return
+    }
+    requiredBody = Util.checkRequest(req.body, requiredBody)
+    if (requiredBody.length > 0) {
+      let stringMessage = requiredBody.join(',')
+      res.status(400).json(`Missing ${stringMessage}`)
+      return
+    }
     controllers.listController.createList(req).then((data) => {
-      res.status(200).json(data)
+      res.status(201).json(data)
     })
       .catch((err) => {
         res.status(500).json(err)

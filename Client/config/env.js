@@ -14,6 +14,8 @@ if (!NODE_ENV) {
   )
 }
 
+
+
 // https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
 var dotenvFiles = [
   `${paths.dotenv}.${NODE_ENV}.local`,
@@ -66,6 +68,8 @@ function getClientEnvironment (publicUrl) {
         return env
       },
     {
+      API_URL: 'http://localhost:3333',
+      SOCKET_URL: 'http://localhost:8000',
         // Useful for determining whether we’re running in production mode.
         // Most importantly, it switches React into the correct mode.
       NODE_ENV: process.env.NODE_ENV || 'development',

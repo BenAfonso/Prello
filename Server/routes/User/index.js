@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const passport = require('passport')
 module.exports = (router, userController) => {
-
   router.get('/auth/google',
   passport.authenticate('google', { scope: ['email profile'] }))
 

@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "start": "node index.js",
     "precommit": "npm run test",
     "test": "./node_modules/.bin/mocha ./test/index.js && standard --fix | snazzy",
     "standard": "standard --verbose | snazzy",
@@ -22,6 +23,8 @@
     "passport": "^0.4.0",
     "passport-google-oauth": "^1.0.0",
     "passport-jwt": "^3.0.0",
+    "socket.io": "^2.0.3",
+    "socket.io-redis": "^5.2.0",
     "swagger-jsdoc": "^1.9.7"
   },
   "devDependencies": {

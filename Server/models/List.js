@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const ListSchema = new Schema({
-  name: {type: String, default: ''},
+  name: {type: String, default: '', required: true},
   position: {type: Number},
   createdAt: {type: Date},
   isArchived: {type: Boolean, default: false},

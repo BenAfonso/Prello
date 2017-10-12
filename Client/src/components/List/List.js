@@ -18,7 +18,9 @@ const listSource = {
 
   endDrag (props, monitor) {
     const { id: droppedId, originalIndex } = monitor.getItem()
-    moveList(props.dispatch, props.board._id, droppedId, props.index)
+    if (originalIndex !== props.index) {
+      moveList(props.dispatch, props.board._id, droppedId, props.index)
+    }
   }
 }
 
@@ -92,7 +94,7 @@ export default class List extends React.Component {
 
   addCard () {
     if (this.newCardTitle !== '') {
-      addCard(this.props.dispatch, this.props.index, this.props.board.lists[this.props.index], this.newCardTitle.value)
+      addCard(this.props.dispatch, this.props.board._id, this.props.index, this.props.board.lists[this.props.index], this.newCardTitle.value)
       this.clearForm()
     }
     this.undisplayNewCardForm()

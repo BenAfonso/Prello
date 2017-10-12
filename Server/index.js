@@ -6,11 +6,12 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const mongoose = require('mongoose')
-const logger = require('morgan')
 const swaggerSpec = require('./config/swagger')
 const config = require('./config')
 const passport = require('passport')
 const google = require('./config/passport/google')
+const logger = require('morgan')
+require('./controllers/sockets')
 
 if (process.env.NODE_ENV !== 'test') { // Not logging while testing
   app.use(logger('dev'))

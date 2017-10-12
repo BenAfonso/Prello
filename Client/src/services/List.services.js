@@ -13,9 +13,9 @@ export function addListDistant (boardId, listName) {
   })
 }
 
-export function postCard (listId, content) {
+export function postCard (boardId, listId, content) {
   return new Promise((resolve, reject) => {
-    axios.post(`${Config.API_URL}/lists/${listId}/cards`, {
+    axios.post(`${Config.API_URL}/boards/${boardId}/lists/${listId}/cards`, {
       text: content
     }).then(res => {
       resolve(res.data)
@@ -30,7 +30,6 @@ export function moveListDistant (boardId, listId, position) {
     axios.put(`${Config.API_URL}/boards/${boardId}/lists/${listId}/move`, {
       position: position
     }).then((res) => {
-      console.log(res)
       resolve(res.data)
     }).catch((err) => {
       reject(err)

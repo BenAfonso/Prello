@@ -28,9 +28,10 @@ export const defaultState = {
     isArchived: false,
     background: '',
     collaborators: []
+  },
+  boardslist: {
+    boards:[]
   }
 }
 
-export default () => {
-  return createStore(reducer, { ...defaultState }, enhancer)
-}
+export default createStore(reducer, { ...defaultState }, enhancer)
