@@ -1,0 +1,18 @@
+version: 2
+machine:
+  services:
+    - redis
+jobs:
+  build:
+    docker:
+      - image: circleci/node:7.10
+    environment:
+      MONGODB_URL_TEST: "mongodb://localhost:27017/prello_test"
+      MONGODB_URL_DEV: "mongodb://localhost:27017/prello"
+    steps:
+      - checkout
+      - run: 
+        command: |
+          cd Server
+          yarn install
+      - run: yarn test
