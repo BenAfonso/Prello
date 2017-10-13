@@ -1,14 +1,27 @@
 import React from 'react'
 import { login } from '../../services/Authentication.services'
 import axios from 'axios'
+import GoogleLogin from 'react-google-login'
 
 export default (props) => {
-  const loginWithGoogle = () => {
-    axios.get('http://localhost:3333/auth/google').then((res) => {
+  const loginWithGoogle = (response) => {
+    console.log('login with google')
+    console.log(response)
+    
+    axios.post('http://localhost:3333/auth/google/callback', {
+      code: response.code
+    }).then((res) => {
       console.log(res.data)
     })
   }
-
+  const loginWithGoogleFailed = (response) => {
+    console.log('login with google failed')
+    console.log(response)
+    
+    /*axios.get('http://localhost:3333/auth/google').then((res) => {
+      console.log(res.data)
+    })*/
+  }
   const submitLogin = () => {
     login(this.email.value, this.password.value).then(() => {
       alert('LOGGED IN')
@@ -25,24 +38,28 @@ export default (props) => {
         <label>
           E-mail
         </label>
-        <input type='text' placeholder='E-mail' ref={;(e) => {
-                                                       this.email = e}} />
+        <input type='text' placeholder='E-mail' ref={(e) => {
+          this.email = e
+        }} />
         <label>
           Password
         </label>
-        <input type='password' placeholder='Passord' ref={;(p) => {
-                                                            this.password = p}} />
+        <input type='password' placeholder='Passord' ref={(p) => {
+          this.password = p
+        }} />
         <div className='button' onClick={submitLogin}>
           Sign in
         </div>
         <a href='/#' className='forgottenPassword'>Forgotten password?</a>
       </form>
-      <div className='google-auth'>
-        <div>
-          Or you can also log in with Google
-        </div>
-        <a className='google-button' onClick={loginWithGoogle}>Log in with Google</a>
-      </div>
+      <GoogleLogin
+        clientId='970457604836-o50jesfa5lblnger6egce7v32p8pukjq.apps.googleusercontent.com'
+        scope='email profile'
+        buttonText='Login'
+        responseType='code'
+        onSuccess={loginWithGoogle}
+        onFailure={loginWithGoogleFailed}
+    />
       <style jsx>
         {`
       .host {

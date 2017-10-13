@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const passport = require('passport')
+const request = require('request')
 
 /**
   * @swagger
@@ -31,11 +32,18 @@ module.exports = (router, userController) => {
   router.get('/auth/google',
     passport.authenticate('google', { scope: ['email profile'] }))
 
-  router.get('/auth/google/callback',
-    passport.authenticate('google', { session: false }),
+  router.post('/auth/google/callback',
     function (req, res) {
+      console.log(req.body.code)
       // Authenticated successfully
-
+      let requestUrl = `http://accounts.google.com/o/oauth2/token?code=${req.body.code}&redirect_uri=localhost:3333/auth/google/callback&client_id=970457604836-o50jesfa5lblnger6egce7v32p8pukjq.apps.googleusercontent.com&client_secret=7Uk8k3OQ2GKTpQYUo09Jyxif&scope=email&grant_type=authorization_code`
+      request.post(requestUrl, function (error, response, body) {
+        console.log(response)
+        if (!error && response.statusCode === 200) {
+          console.log(body)
+        }
+      })
+      console.log(req.user)
       let user = new User({
         provider: 'google',
         email: req.user.email
@@ -48,6 +56,9 @@ module.exports = (router, userController) => {
         return res.status(400).send(err)
       })
     })
+  router.get('/auth/google/callback', function (req, res) {
+    
+  })
 
   /**
     * @swagger
