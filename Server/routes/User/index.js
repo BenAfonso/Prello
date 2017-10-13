@@ -34,30 +34,44 @@ module.exports = (router, userController) => {
 
   router.post('/auth/google/callback',
     function (req, res) {
-      console.log(req.body.code)
-      // Authenticated successfully
-      let requestUrl = `http://accounts.google.com/o/oauth2/token?code=${req.body.code}&redirect_uri=localhost:3333/auth/google/callback&client_id=970457604836-o50jesfa5lblnger6egce7v32p8pukjq.apps.googleusercontent.com&client_secret=7Uk8k3OQ2GKTpQYUo09Jyxif&scope=email&grant_type=authorization_code`
-      request.post(requestUrl, function (error, response, body) {
-        console.log(response)
-        if (!error && response.statusCode === 200) {
-          console.log(body)
-        }
-      })
-      console.log(req.user)
-      let user = new User({
-        provider: 'google',
-        email: req.user.email
-      })
-      userController.login(user).then(token => {
-        return res.status(200).send({
-          token: token
+      console.log(req)
+      if (req.params.code === undefined) {
+        const data = {
+          code: req.body.code,
+          client_id: '970457604836-o50jesfa5lblnger6egce7v32p8pukjq.apps.googleusercontent.com',
+          client_secret: '7Uk8k3OQ2GKTpQYUo09Jyxif',
+          redirect_uri: req.headers.origin,
+          scope: 'email profile',
+          grant_type: 'authorization_code'}
+        request({method: 'post', url: 'https://accounts.google.com/o/oauth2/token', form: data}, (error, response) => {
+          if (!error && response.statusCode === 200) {
+            request({method: 'get', url: `https://www.googleapis.com/plus/v1/people/me?access_token=${response.body.access_token}`}, (err, profile) => {
+              userController.loginGoogle(profile.body, (err, user) => {
+                if (err) return res.status(400).send(err)
+                let userToLog = new User({
+                  provider: 'google',
+                  email: user.email
+                })
+                userController.login(userToLog).then(token => {
+                  return res.status(200).send({
+                    token: token
+                  })
+                }).catch(err => {
+                  return res.status(400).send(err)
+                })
+              })
+              if (err) {
+                return res.status(400).send(err)
+              }
+            })
+          } else {
+            return res.status(400).send(error)
+          }
         })
-      }).catch(err => {
-        return res.status(400).send(err)
-      })
+      }
     })
   router.get('/auth/google/callback', function (req, res) {
-    
+    console.log(req)
   })
 
   /**

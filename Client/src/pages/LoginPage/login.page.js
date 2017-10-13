@@ -1,30 +1,23 @@
 import React from 'react'
-import { login } from '../../services/Authentication.services'
+import { login, storeToken } from '../../services/Authentication.services'
 import axios from 'axios'
 import GoogleLogin from 'react-google-login'
 
 export default (props) => {
   const loginWithGoogle = (response) => {
-    console.log('login with google')
-    console.log(response)
-    
     axios.post('http://localhost:3333/auth/google/callback', {
       code: response.code
     }).then((res) => {
-      console.log(res.data)
+      storeToken(res.data.token)
+      alert('LOGGED IN')      
     })
   }
-  const loginWithGoogleFailed = (response) => {
-    console.log('login with google failed')
-    console.log(response)
-    
-    /*axios.get('http://localhost:3333/auth/google').then((res) => {
-      console.log(res.data)
-    })*/
-  }
+
   const submitLogin = () => {
-    login(this.email.value, this.password.value).then(() => {
+    login(this.email.value, this.password.value).then((response) => {
+      console.log(response)
       alert('LOGGED IN')
+      storeToken(response.token)
     }).catch((err) => {
       console.error(err)
       alert('ERROR')
@@ -58,72 +51,71 @@ export default (props) => {
         buttonText='Login'
         responseType='code'
         onSuccess={loginWithGoogle}
-        onFailure={loginWithGoogleFailed}
     />
       <style jsx>
         {`
       .host {
-        padding: 10px
-        width: 380px
-        margin-left: calc(50% - 190px)
-        margin-top: 50px
+        padding: 10px;
+        width: 380px;
+        margin-left: calc(50% - 190px);
+        margin-top: 50px;
       }
 
       form {
-        width: 380px
-        margin-top: 30px
+        width: 380px;
+        margin-top: 30px;
       }
 
       label {
-        font-size: 20px
+        font-size: 20px;
       }
 
       input {
-        width: 100%
-        background-color: #eee
-        border: 1px solid rgba(0,0,0,0.2)
-        padding: 8px
-        margin-top: 8px
-        font-size: 20px
-        border-radius: 5px
-        display: block
-        margin-bottom: 20px
-        box-shadow: 1px 1px 3px rgba(0,0,0,0.3)
+        width: 100%;
+        background-color: #eee;
+        border: 1px solid rgba(0,0,0,0.2);
+        padding: 8px;
+        margin-top: 8px;
+        font-size: 20px;
+        border-radius: 5px;
+        display: block;
+        margin-bottom: 20px;
+        box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
       }
 
       .button {
-        cursor: pointer
-        height: 40px
-        font-weight: bold
-        line-height: 40px
-        text-align: center
-        color: white
-        width: 30%
-        border-radius: 5px
-        background-color: #61bd4f
-        box-shadow: 1px 1px 3px rgba(0,0,0,0.3)
+        cursor: pointer;
+        height: 40px;
+        font-weight: bold;
+        line-height: 40px;
+        text-align: center;
+        color: white;
+        width: 30%;
+        border-radius: 5px;
+        background-color: #61bd4f;
+        box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
       }
 
       .button {
-        display: inline-block
+        display: inline-block;
       }
 
       .forgottenPassword {
-        margin-left: 20px
+        margin-left: 20px;
       }
 
       .google-auth {
-        margin-top: 20px
+        margin-top: 20px;
       }
 
       .google-button {
-        background: white
-        box-shadow: 0px 0px 3px rgba(0,0,0,0.3)
-        height: 40px
-        margin-top: 10px
-        line-height: 40px
-        padding: 10px
-        border-radius: 4px
+        background: white;
+        box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+        height: 40px;
+        margin-top: 10px;
+        line-height: 40px;
+        padding: 10px;
+        border-radius: 4px;
 
       }
       `}
