@@ -15,8 +15,6 @@ export default class Card extends React.Component {
     createdAt: PropTypes.string,
     index: PropTypes.number.isRequired,
     listIndex: PropTypes.number.isRequired,
-    findCard: PropTypes.function,
-    moveCard: PropTypes.function,
     id: PropTypes.any
   }
 
@@ -27,11 +25,9 @@ export default class Card extends React.Component {
   return (
     <div style={{...this.props.style}} ref={c => this.card = c} className='root'>
       { this.props.content }
-
       <style jsx>
         {styles}
       </style>
-    </div>//)
-  )
-  }
+    </div>
+  )}
 }

@@ -10,18 +10,6 @@ import { PropTypes } from 'prop-types'
 import { updateLists, moveCardAction, updateCards } from '../../store/actions'
 import Button from '../UI/Button/Button'
 
-function getPlaceholderIndex(y, scrollY) {
-  // shift placeholder if y position more than card height / 2
-  const yPos = y - OFFSET_HEIGHT + scrollY;
-  let placeholderIndex;
-  if (yPos < CARD_HEIGHT / 2) {
-    placeholderIndex = -1; // place at the start
-  } else {
-    placeholderIndex = Math.floor((yPos - CARD_HEIGHT / 2) / (CARD_HEIGHT + CARD_MARGIN));
-  }
-  return placeholderIndex;
-}
-
 const listSource = {
   beginDrag (props) {
     return {
@@ -42,37 +30,23 @@ const cardTarget = {
   },
 
   hover (props, monitor) {
-    const { id: draggedId } = monitor.getItem()
-    //console.log(`Liste survolée: ${props.title}`)
-    
-    //const { id: overId } = props
+    const { id: draggedId, originalIndex, originalListIndex } = monitor.getItem()
+    //TODO REPLACE WITH FINDCARD
+    let originalList = props.board.lists.filter((l, listIndex) => {
+      let cardss = l.cards.filter((c, cIndex) => {
+        return c._id === draggedId
+      })
+      return cardss.length >0
+    })[0]
+    let card = originalList.cards.filter((e, i) => e._id === draggedId)[0]
 
-    //if (draggedId !== overId) {
-    //  const { index: overIndex } = props.findList(overId)
-    //}
-  },
-
-  /* drop(props, monitor, component) {
-    document.getElementById(monitor.getItem().id).style.display = 'block';
-    const { placeholderIndex } = component.state
-    const lastX = monitor.getItem().listIndex
-    const lastY = monitor.getItem().index
-    const nextX = props.index
-    let nextY = placeholderIndex
-
-    if (lastY > nextY) { // move top
-      nextY += 1
-    } else if (lastX !== nextX) { // insert into another list
-      nextY += 1
+    if (props.cards.length === 0) {
+      let newLists = props.board.lists.slice()
+      newLists[props.index].cards.push(card)
+      newLists[originalListIndex].cards.splice(originalIndex, 1)
+      updateLists(props.dispatch, newLists)      
     }
-
-    if (lastX === nextX && lastY === nextY) { // if position equel
-      return
-    }
-
-    console.log('lastX '+lastX+' lastY '+lastY+ 'nextX '+ nextX+ ' nextY '+nextY)
-    moveCardAction(props.dispatch, lastY, lastX, nextX, nextY)
-  } */
+  }
 }
 
 const listTarget = {
@@ -83,13 +57,11 @@ const listTarget = {
   hover (props, monitor) {
     const { id: draggedId } = monitor.getItem()
     const { id: overId } = props
-
     if (draggedId !== overId) {
       const { index: overIndex } = props.findList(overId)
       props.moveList(draggedId, overIndex)
     }
   },
-
 }
 
 @connect(store => {
@@ -101,7 +73,7 @@ const listTarget = {
 @DropTarget(ItemTypes.LIST, listTarget, connect => ({
   connectListDropTarget: connect.dropTarget()
 }))
-//List can be the target of a card drag and drop
+//List can be the target of a card drop
 @DropTarget(ItemTypes.CARD, cardTarget, (connectDragSource, monitor) => ({
   connectCardDropTarget: connectDragSource.dropTarget()
 }))
@@ -112,10 +84,10 @@ const listTarget = {
 }))
 export default class List extends React.Component {
   static propTypes = {
-    connectDragSource: PropTypes.func.isRequired,
-    connectDropTarget: PropTypes.func.isRequired,
+    connectDragSource: PropTypes.func,
+    connectDropTarget: PropTypes.func,
     index: PropTypes.number.isRequired,
-    isDragging: PropTypes.bool.isRequired,
+    isDragging: PropTypes.bool,
     isOver: PropTypes.bool,
     canDrop: PropTypes.bool,
     id: PropTypes.any,
@@ -135,18 +107,7 @@ export default class List extends React.Component {
     this.displayNewCardForm = this.displayNewCardForm.bind(this)
     this.undisplayNewCardForm = this.undisplayNewCardForm.bind(this)
     this.clearForm = this.clearForm.bind(this)
-    this.moveCard = this.moveCard.bind(this)
-    this.findCard = this.findCard.bind(this)
     this.removeAction = this.removeAction.bind(this)
-  }
-
-  moveCard (id, listIndex, atIndex) {
-    //const {card, index} = this.findCard(id)
-    let cards = this.props.board.lists[listIndex].cards.slice()
-    //cards.splice(index, 1)
-    //cards.splice(atIndex, 0, card)
-    //TODO UPDATE AUSSI LA LISTE SOURCE
-    //updateCards(this.props.dispatch, this.props.index,cards)
   }
 
   displayNewCardForm () {
@@ -161,8 +122,6 @@ export default class List extends React.Component {
     })
   }
 
-
-
   clearForm () {
     this.newCardTitle = ''
   }
@@ -174,11 +133,6 @@ export default class List extends React.Component {
     }
     this.undisplayNewCardForm()
   }
-  
-  findCard (id) {
-    let cards = this.props.cards.filter((card) => id === card._id)
-    return cards.length === 0 ? undefined : {card: cards[0], listIndex: this.props.index}
-  }
 
   removeAction () {
     this.props.removeAction(this.props.index)
@@ -187,16 +141,15 @@ export default class List extends React.Component {
   render () {
     const { title, isDragging, connectDragSource, connectListDropTarget, connectCardDropTarget } = this.props
     return connectDragSource(connectListDropTarget(connectCardDropTarget(
-      <div className='host' style={{
-        opacity: isDragging ? 0.3 : 1
-      }}>
+      <div className='host'>
+        <div className='overlay'  style={{ opacity: isDragging ? 1 : 0 }}/>
         <div className='title'>{title}</div>
         <div className='removeButton' onClick={this.removeAction}> X </div>
         <ul>
           {
             this.props.cards.map((card, i) => (
-              <li id={card._id} key={i}>
-                <Card index={i} id={card._id} findCard={this.findCard} moveCard={this.moveCard} listIndex={this.props.index} content={card.text} />
+              <li key={card._id}>
+                <Card key={card._id} index={i} id={card._id} listIndex={this.props.index} content={card.text} />
               </li>
             ))
           }

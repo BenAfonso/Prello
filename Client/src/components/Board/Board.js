@@ -8,21 +8,12 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import { ItemTypes } from '../Constants'
 import Button from '../UI/Button/Button'
 
-const listTarget = {
-  drop () {
-
-  }
-}
-
 @connect(store => {
   return {
     board: store.board
   }
 })
 @DragDropContext(HTML5Backend)
-@DropTarget(ItemTypes.LIST, listTarget, connect => ({
-  connectDropTarget: connect.dropTarget()
-}))
 export default class Board extends React.Component {
   constructor (props) {
     super(props)
@@ -121,14 +112,14 @@ export default class Board extends React.Component {
   }
 
   render () {
-    const {connectDropTarget} = this.props
-    return connectDropTarget(<div className='host'>
+    return <div className='host'>
       <ul>
         {
           this.props.board.lists.map((list, i) => (
             <li key={list._id}>
               <List
                 id={list._id}
+                key={list._id}
                 title={list.name}
                 index={i}
                 cards={list.cards}
@@ -151,6 +142,5 @@ export default class Board extends React.Component {
       </ul>
       <style jsx>{styles}</style>
     </div>
-    )
   }
 }

@@ -17,7 +17,7 @@ function getStyles(isDragging) {
 
 const cardSource = {
 
-  beginDrag(props, monitor, component) {
+  beginDrag(props) {
     return {
       id: props.id,
       originalIndex: props.index,
@@ -25,8 +25,7 @@ const cardSource = {
     }
   },
   endDrag(props, monitor) {
-    // Use monitor.getItem()    
-    console.log("Card dropped") 
+    console.log(`Card dropped`)
   }
 }
 
@@ -48,6 +47,7 @@ const cardTarget = {
       })
       return cardss.length >0
     })[0]
+
     originalListIndex = props.board.lists.indexOf(originalList)
     let lastC = originalList.cards.filter((e, i) => e._id === draggedId)
     originalIndex = props.board.lists[originalListIndex].cards.indexOf(lastC[0])
@@ -55,7 +55,7 @@ const cardTarget = {
       let newLists = props.board.lists.slice()
       let card = props.board.lists[originalListIndex].cards.slice()[originalIndex]
       newLists[originalListIndex].cards.splice(originalIndex, 1)
-      newLists[newListIndex].cards.splice(newIndex, 0, card)
+      newLists[newListIndex].cards.splice(newIndex, 0, card)        
       updateLists(props.dispatch, newLists)
     }
   },
@@ -70,29 +70,38 @@ const cardTarget = {
   connectCardDropTarget: connect.dropTarget()
 }))
 @DragSource(ItemTypes.CARD, cardSource, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  //connectDragPreview: connectDragSource.dragPreview(),  
+  connectCardDragSource: connect.dragSource(),
   isDragging: monitor.isDragging()
 }))
 export default class CardComponent extends React.Component {
   static propTypes = {
     id: PropTypes.any,
     connectDragSource: PropTypes.func.isRequired,
-    connectDragPreview: PropTypes.func.isRequired,
     content: PropTypes.string.isRequired,
     isDragging: PropTypes.bool.isRequired,
     index: PropTypes.number.isRequired,
-    listIndex: PropTypes.number,
-    findCard: PropTypes.func,
-    moveCard: PropTypes.func
+    listIndex: PropTypes.number
   }
 
   render() {
-    const { id, index, listIndex, isDragging, content, connectCardDropTarget, connectDragSource, findCard, moveCard } = this.props;
+    const { id, index, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource } = this.props;
 
-    return connectCardDropTarget(connectDragSource(
-      <div>
-        <Card style={{ opacity: isDragging ? 0.5 : 1 }} id={id} findCard={findCard} moveCard={moveCard} index={index} listIndex={listIndex} content={content} />
+    return connectCardDropTarget(connectCardDragSource(
+      <div className='host' style={{position: 'relative'}} key={id} id={id}>
+        <div className='overlay' style={{
+          opacity: isDragging ? 1 : 0
+        }} />
+        <Card style={{ opacity: isDragging ? 0.3 : 1 }} index={index} listIndex={listIndex} content={content} />
+        <style jsx>{`
+          .overlay {
+            position: absolute;
+            background-color: #ccc;
+            z-index: 10;
+            height: 100%;
+            width: 100%;
+            border-radius: 3px;
+          }
+        `}</style>
       </div>
     ))
   }
