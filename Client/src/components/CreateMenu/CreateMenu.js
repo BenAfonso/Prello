@@ -1,37 +1,37 @@
 import React from 'react'
 import styles from './CreateMenu.styles'
-import { addBoard } from '../../store/actions'
+
 import MenuDropDown from '../MenuDropDown/MenuDropDown'
-import Button from '../UI/Button/Button'
+
+import BoardForm from './Forms/BoardForm/BoardForm'
+import TeamForm from './Forms/TeamForm'
 
 export default class CreateMenu extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       isOpen: false,
-      newBoardFormDisplayed : false
+      newBoardFormDisplayed: false
     }
 
     this.displayNewBoardForm = this.displayNewBoardForm.bind(this)
-    this.undisplayNewBoardForm = this.undisplayNewBoardForm.bind(this)
-    this.toggleMenu = this.toggleMenu.bind(this)
+    this.displayMenu = this.displayMenu.bind(this)
     this.addBoard = this.addBoard.bind(this)
     this.clearForm = this.clearForm.bind(this)
     this.itemActions = this.itemActions.bind(this)
+    this.hideMenu = this.hideMenu.bind(this)
+
+  }
+
+
+  addBoard() {
+      this.clearForm()
+      this.hideMenu()
     
   }
 
-
-  addBoard(title) {
-    if (this.title.value !== '') {
-      addBoard(this.props.dispatch, this.title.value)      
-      this.clearForm()
-      this.undisplayNewBoardForm()
-    }
-  }
-
   itemActions(action) {
-    switch(action) {
+    switch (action) {
       case 'addBoard': {
         this.displayNewBoardForm()
         break
@@ -39,99 +39,66 @@ export default class CreateMenu extends React.Component {
       default: {
 
       }
-        
+
     }
 
 
   }
 
 
-  toggleMenu () {
+  displayMenu() {
     const newState = !this.state.isOpen
-    this.setState({isOpen:newState, newBoardFormDisplayed: false})
+    this.setState({ isOpen: newState, newBoardFormDisplayed: false })
   }
 
-  hideMenu () {
-    this.setState({isOpen:false, newBoardFormDisplayed: false})
+  hideMenu() {
+    this.setState({ isOpen: false, newBoardFormDisplayed: false })
   }
 
-  displayNewBoardForm () {
+  displayNewBoardForm() {
     this.setState({
       newBoardFormDisplayed: true,
-      isOpen:false
+      isOpen: false
     })
   }
 
-  undisplayNewBoardForm () {
-    this.setState({
-      newBoardFormDisplayed: false
-    })
-  }
-
-  clearForm () {
+  clearForm() {
     this.title = ''
   }
 
   displayContent(menuItems) {
-    if (this.state.isOpen) return (<MenuDropDown title='Create' menuItems={menuItems} itemActions={this.itemActions}/>)
-    else if (this.state.newBoardFormDisplayed) return (
-      <div className='newBoardForm'>
-        <form onSubmit={this.addBoard}>
-          <input type='text' placeholder='Add a board...' ref={(t) => { this.title = t }} />
-        </form>
-        <div className='newBoardFormButtons'>
-          <div>
-            <Button
-              bgColor={'#5AAC44'}
-              gradient
-              bold
-              shadow
-              onClick={this.addBoard}>
-          Add
-        </Button>
-          </div>
-          <div>
-            <Button
-              bgColor={'#444'}
-              gradient
-              shadow
-              onClick={this.undisplayNewBoardForm}>
-         Cancel
-        </Button>
-          </div>
-        </div>
-        <style jsx>{styles}</style>
-      </div>
-    )
+    if (this.state.isOpen) return (<MenuDropDown title='Create' menuItems={menuItems} itemActions={this.itemActions} />)
+    else if (this.state.newBoardFormDisplayed) return (<BoardForm onSubmit={this.addBoard} back={this.displayMenu} cancel={this.hideMenu}/> )
   }
 
-  render () {
+  render() {
     const menuItems = [
-      {title:'Create a board', body:'Create a board', action:'addBoard'},
-      {title:'Create a team', body:'Create a team'}
+      { title: 'Create a board', body: 'A board is a set of cards classified in lists. Use it to manage your projects !', action: 'addBoard' },
+      { title: 'Create a team', body: 'A team is a set of boards and users. Use it to keep your business organized' }
     ]
-    
+
     const menuProps = {
-      position:'absolute'
+      position: 'absolute'
     }
 
 
-    
-    return(<div className='host'>
-    
-    <div className='headerButton createBlock' onClick={this.toggleMenu}>
-      <span>+</span>
-    </div>
 
-    <div className='menu'>
-      {
-        this.displayContent(menuItems)
-      }
-    </div>
+    return (<div className='host'>
+
+      <div className='headerButton createBlock' onClick={this.displayMenu}>
+        <span>+</span>
+      </div>
+
+      <div className='menu'>
+        {
+          this.displayContent(menuItems)
+        }
+      </div>
 
       <style jsx>{styles}</style>
     </div>
-  )}
+    )
+  }
 }
 
 

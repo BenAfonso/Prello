@@ -18,7 +18,7 @@ export default `
 }
 
 .menuTitle {
-  color:#aaa;
+  color:#999;
   font-size: 14px;
   height: 80%;
 }
@@ -43,8 +43,8 @@ export default `
 
 
 .menuItemTitle {
-  line-height: 20px;
-  font-size: 14px;
+  line-height: 25px;
+  font-size: 13px;
   font-weight: bold;
   width: 100%;
   color: black;
@@ -52,8 +52,8 @@ export default `
 }
 
 .menuItemBody {
-  line-height: 30px;  
-  font-size: 10px;
+  line-height: 15px;  
+  font-size: 12px;
   color:grey;
   text-align: left;
 }

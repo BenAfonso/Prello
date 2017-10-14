@@ -4,10 +4,9 @@ export default `
 }
 
 .newBoardForm {
-
   display: inline_block;
   position: absolute;
-  z_index: 10;
+  z-index: 10;
   right: 3px;
   top: 50px;
   background: #E2E4E6;
@@ -49,6 +48,13 @@ export default `
 
 .newBoardFormButtons div:nth-child(1) {
   margin-right: 10px;
+}
+
+.menuSeparator {
+  height: 1px;
+  border-top: 1px solid #ccc;
+  display: block;
+  margin: 5px;
 }
 
 `
