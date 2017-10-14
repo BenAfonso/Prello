@@ -149,7 +149,7 @@ export default class List extends React.Component {
           {
             this.props.cards.map((card, i) => (
               <li key={card._id}>
-                <Card key={card._id} index={i} id={card._id} listIndex={this.props.index} content={card.text} />
+                <Card index={i} id={card._id} listIndex={this.props.index} content={card.text} />
               </li>
             ))
           }

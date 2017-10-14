@@ -87,7 +87,7 @@ export default class CardComponent extends React.Component {
     const { id, index, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource } = this.props;
 
     return connectCardDropTarget(connectCardDragSource(
-      <div className='host' style={{position: 'relative'}} key={id} id={id}>
+      <div className='host' style={{position: 'relative'}}>
         <div className='overlay' style={{
           opacity: isDragging ? 1 : 0
         }} />
