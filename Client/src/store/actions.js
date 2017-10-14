@@ -24,15 +24,6 @@ export function moveList (dispatch, boardId, listId, position) {
 }
 
 export function moveCardAction (dispatch, cardOriginalIndex, originalListIndex, newListIndex, newPosition) {
-  /*moveCard(cardOriginalIndex, originalListIndex, newListIndex).then((res) => {
-    dispatch({type: 'MOVE_CARD',
-      payload: {
-        index: cardOriginalIndex
-      }
-    })
-  }).catch((err) => {
-    console.log(err) // TODO : Display on the screen a message to the user
-  })*/
   dispatch({type: 'MOVE_CARD',
     payload: {
       index: cardOriginalIndex,
@@ -62,6 +53,16 @@ export function updateLists (dispatch, lists) {
   dispatch({
     type: 'UPDATE_LISTS',
     payload: lists
+  })
+}
+
+export function updateCards (dispatch, listIndex, cards) {
+  dispatch({
+    type: 'UPDATE_CARDS',
+    payload: {
+      listIndex: listIndex,
+      cards: cards
+    }
   })
 }
 

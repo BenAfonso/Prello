@@ -41,6 +41,17 @@ export default function reducer (state, action) {
         }
       }
     }
+    case 'UPDATE_CARDS': {
+      let newLists = state.board.lists.slice()
+      newLists[action.payload.listIndex].cards = action.payload.cards
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: newLists
+        }
+      }
+    }
     case 'REMOVE_LIST': {
       return {
         ...state,
@@ -71,35 +82,11 @@ export default function reducer (state, action) {
       }
     }
     case 'MOVE_CARD': {
-      let cardToMove = state.board.lists[action.payload.originalListIndex].cards[action.payload.index] //action.payload.index: Index of the card to move in the list
+      const { index, originalListIndex, newListIndex, newPosition } = action.payload
       let newLists = state.board.lists.slice()
-      // Use only one list instance if the old and the new list are the same otherwise we would duplicate the list
-      if (action.payload.originalListIndex === action.payload.newListIndex) {
-        let newCardsOriginalList = state.board.lists[action.payload.originalListIndex].cards.slice()
-        newCardsOriginalList.splice(action.payload.index, 1)
-        newCardsOriginalList.splice(action.payload.newPosition, 0, cardToMove)
-        newLists[action.payload.originalListIndex] = {
-          ...state.board.lists[action.payload.originalListIndex],
-          cards: newCardsOriginalList
-        }
-        // Use the two list if the old and the new list are different
-      } else {
-        let newCardsOriginalList = state.board.lists[action.payload.originalListIndex].cards.slice()
-        let newCardsDestinationList = state.board.lists[action.payload.newListIndex].cards.slice()
-
-        newCardsOriginalList.splice(action.payload.index, 1)
-        newCardsDestinationList.splice(action.payload.newPosition, 0, cardToMove)
-
-        newLists[action.payload.originalListIndex] = {
-          ...state.board.lists[action.payload.originalListIndex],
-          cards: newCardsOriginalList
-        }
-
-        newLists[action.payload.newListIndex] = {
-          ...state.board.lists[action.payload.newListIndex],
-          cards: newCardsDestinationList
-        }
-      }
+      let card = newLists[originalListIndex].cards.slice()[index]
+      newLists[originalListIndex].cards.splice(index, 1)
+      newLists[newListIndex].cards.splice(newListIndex, 0, card)
       return {
         ...state,
         board: {

@@ -1,61 +1,64 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { findDOMNode } from 'react-dom'
-import { DragSource } from 'react-dnd'
+import { DragSource, DropTarget } from 'react-dnd'
 import { getEmptyImage } from 'react-dnd-html5-backend'
 import { ItemTypes } from '../Constants'
 import { connect } from 'react-redux'
-
+import { updateLists } from '../../store/actions'
 import Card from './Card';
 
 
 function getStyles(isDragging) {
   return {
-    display: isDragging ? 0.5 : 1
+    opacity: isDragging ? 0.5 : 1
   }
 }
 
 const cardSource = {
+
   beginDrag(props, monitor, component) {
-    // dispatch to redux store that drag is started
-    const { id, content, listIndex, index } = props
-
-    const { clientWidth, clientHeight } = findDOMNode(component)
-
-    return { id, content, listIndex, index, clientWidth, clientHeight }
+    return {
+      id: props.id,
+      originalIndex: props.index,
+      originalListIndex: props.listIndex
+    }
   },
   endDrag(props, monitor) {
-    document.getElementById(monitor.getItem().id).style.display = 'block'
-    //props.stopScrolling()
+    // Use monitor.getItem()    
+    console.log("Card dropped") 
+  }
+}
+
+const cardTarget = {
+  canDrop () {
+    return false
   },
-  isDragging(props, monitor) {
-    const isDragging = props && props.id === monitor.id
-    return true
-  }
-}
 
-// options: 4rd param to DragSource https://gaearon.github.io/react-dnd/docs-drag-source.html
-const OPTIONS = {
-  arePropsEqual: function arePropsEqual(props, otherProps) {
-    let isEqual = true;
-    if (props.id === otherProps.id &&
-        props.listIndex === otherProps.listIndex &&
-        props.index === otherProps.index
-       ) {
-      isEqual = true
-    } else {
-      isEqual = false
+  hover (props, monitor) {
+    const { id: draggedId } = monitor.getItem()
+    const { id: overId } = props
+    let { originalIndex, originalListIndex } = monitor.getItem()
+    let newListIndex = props.listIndex
+    let newIndex = props.index
+
+    let originalList = props.board.lists.filter((l, listIndex) => {
+      let cardss = l.cards.filter((c, cIndex) => {
+        return c._id === draggedId
+      })
+      return cardss.length >0
+    })[0]
+    originalListIndex = props.board.lists.indexOf(originalList)
+    let lastC = originalList.cards.filter((e, i) => e._id === draggedId)
+    originalIndex = props.board.lists[originalListIndex].cards.indexOf(lastC[0])
+    if (draggedId !== overId) {      
+      let newLists = props.board.lists.slice()
+      let card = props.board.lists[originalListIndex].cards.slice()[originalIndex]
+      newLists[originalListIndex].cards.splice(originalIndex, 1)
+      newLists[newListIndex].cards.splice(newIndex, 0, card)
+      updateLists(props.dispatch, newLists)
     }
-    return isEqual
-  }
-}
-
-function collectDragSource(connectDragSource, monitor) {
-  return {
-    connectDragSource: connectDragSource.dragSource(),
-    connectDragPreview: connectDragSource.dragPreview(),
-    isDragging: monitor.isDragging()
-  }
+  },
 }
 
 @connect(store => {
@@ -63,8 +66,14 @@ function collectDragSource(connectDragSource, monitor) {
     board: store.board
   }
 })
-
-@DragSource(ItemTypes.CARD, cardSource, collectDragSource, OPTIONS)
+@DropTarget(ItemTypes.CARD, cardTarget, connect => ({
+  connectCardDropTarget: connect.dropTarget()
+}))
+@DragSource(ItemTypes.CARD, cardSource, (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  //connectDragPreview: connectDragSource.dragPreview(),  
+  isDragging: monitor.isDragging()
+}))
 export default class CardComponent extends React.Component {
   static propTypes = {
     id: PropTypes.any,
@@ -73,23 +82,18 @@ export default class CardComponent extends React.Component {
     content: PropTypes.string.isRequired,
     isDragging: PropTypes.bool.isRequired,
     index: PropTypes.number.isRequired,
-    listIndex: PropTypes.number
-    //stopScrolling: PropTypes.func
+    listIndex: PropTypes.number,
+    findCard: PropTypes.func,
+    moveCard: PropTypes.func
   }
 
-  /*componentDidMount() {
-    this.props.connectDragPreview(getEmptyImage(), {
-      captureDraggingState: true
-    })
-  }*/
-
   render() {
-    const { id, index, listIndex, isDragging, content, connectDragSource } = this.props;
+    const { id, index, listIndex, isDragging, content, connectCardDropTarget, connectDragSource, findCard, moveCard } = this.props;
 
-    return connectDragSource(
+    return connectCardDropTarget(connectDragSource(
       <div>
-        <Card style={getStyles(isDragging)} id={id} index={index} listIndex={listIndex} content={content}/>
+        <Card style={{ opacity: isDragging ? 0.5 : 1 }} id={id} findCard={findCard} moveCard={moveCard} index={index} listIndex={listIndex} content={content} />
       </div>
-    )
+    ))
   }
 }
