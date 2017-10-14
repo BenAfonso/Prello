@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const controllers = require('../controllers')
+
    /**
      * @swagger
      * definitions:
@@ -19,6 +20,7 @@ const controllers = require('../controllers')
 require('./List')(router, controllers)
 require('./Board')(router, controllers.boardController)
 require('./Card')(router, controllers.cardController)
+require('./User')(router, controllers.userController)
 
 router.get('/', (req, res) => {
   res.status(200).json('Welcome on Prello')

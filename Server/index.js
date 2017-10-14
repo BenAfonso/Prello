@@ -1,8 +1,15 @@
+require('dotenv').config()
+require('./models/index')
+require('./controllers/index')
+
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const mongoose = require('mongoose')
-const swaggerJSDoc = require('swagger-jsdoc')
+const swaggerSpec = require('./config/swagger')
+const config = require('./config')
+const passport = require('passport')
+const google = require('./config/passport/google')
 const logger = require('morgan')
 require('./controllers/sockets')
 
@@ -10,30 +17,10 @@ if (process.env.NODE_ENV !== 'test') { // Not logging while testing
   app.use(logger('dev'))
 }
 
-let swaggerDefinition = {
-  info: {
-    title: 'Prello Swagger API',
-    version: '1.0.0'
-  },
-  host: `localhost:3333`,
-  basePath: '/'
-}
-
-let options = {
-  swaggerDefinition: swaggerDefinition,
-  apis: ['./routes/**/*.js']
-}
-
-const swaggerSpec = swaggerJSDoc(options)
 app.get('/swagger.json', function (req, res) {
   res.setHeader('Content-Type', 'application/json')
   res.send(swaggerSpec)
 })
-
-require('./models/index')
-require('./controllers/index')
-require('dotenv').config()
-
 app.use(bodyParser.json())
 
 app.all('/*', (req, res, next) => {
@@ -41,19 +28,20 @@ app.all('/*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
   // Custom headers
-  res.header('Access-Control-Allow-Headers', 'Content-Type,Accept,X-Access-Token')
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Accept,Authorization')
   if (req.method === 'OPTIONS') {
     res.status(200).end()
   } else {
     next()
   }
 })
+passport.use(google)
+app.use(passport.initialize())
 // Serving doc files
 app.use('/api-docs', express.static('./api-doc'))
 
 app.use('/', require('./routes'))
-
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   res.status(404).send({
     'status': 404,
     'message': 'Not found !'
@@ -68,14 +56,7 @@ connect()
 
 function connect () {
   var options = { server: { socketOptions: { keepAlive: 1 } } }
-  let MONGO_DB_URL
-  if (process.env.NODE_ENV === 'test') {
-    MONGO_DB_URL = process.env.MONGODB_URL_TEST
-  } else {
-    MONGO_DB_URL = process.env.MONGODB_URL_DEV
-  }
-  console.log(MONGO_DB_URL)
-  return mongoose.connect(MONGO_DB_URL, options).connection
+  return mongoose.connect(config.db, options).connection
 }
 
 module.exports = app

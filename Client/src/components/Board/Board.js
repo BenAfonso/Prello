@@ -131,7 +131,7 @@ export default class Board extends React.Component {
     const {connectDropTarget} = this.props
 
     return connectDropTarget(<div className='host'>
-      <h1>{this.props.board.title}</h1>
+      <h1 className='boardTitle'>{this.props.board.title}</h1>
       <ul>
         {
           this.props.board.lists.map((list, i) => (

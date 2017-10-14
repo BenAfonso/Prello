@@ -16,7 +16,16 @@ module.exports = (server, chai) => {
     })
 
     describe('GET /boards', () => {
-      it('it should GET all boards', done => {
+      it('it shouldn\'t GET all boards (not authenticated)', done => {
+        chai.request(server)
+          .get(`/boards`)
+          .end((err, res) => {
+            if (err) {}
+            res.should.have.status(401)
+            done()
+          })
+      })
+      /* it('it should GET all boards', done => {
         chai.request(server)
           .get(`/boards`)
           .end((err, res) => {
@@ -31,7 +40,7 @@ module.exports = (server, chai) => {
             res.body[0].title.should.equal('Test board')
             done()
           })
-      })
+      }) */
       it('it should GET a board', done => {
         chai.request(server)
           .get(`/boards/${board._id}`)
