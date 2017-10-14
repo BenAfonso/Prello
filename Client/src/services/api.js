@@ -1,5 +1,5 @@
 import openSocket from 'socket.io-client'
-import { addListLocal, removeListLocal, moveListLocal, addCardLocal } from '../store/actions'
+import { addBoardLocal, addListLocal, removeListLocal, moveListLocal, addCardLocal } from '../store/actions'
 import Config from '../config'
 console.log(process.env)
 const socket = openSocket(Config.SOCKET_URL)
@@ -7,6 +7,14 @@ const socket = openSocket(Config.SOCKET_URL)
 export function subscribeToBoard (board) {
   socket.emit('subscribeToBoard', board._id)
 }
+
+export function subscribeToBoardslist (userId) {
+  socket.emit('subscribeToBoardslist', userId)
+}
+
+socket.on('NEW_BOARD', (board) => {
+  addBoardLocal(board)
+})
 
 socket.on('NEW_LIST', (list) => {
   addListLocal(list)

@@ -32,7 +32,8 @@ boardController.createBoard = function (board) {
       if (err) {
         reject(err)
       } else {
-        resolve(item)
+          emit('testID', 'NEW_BOARD', item)
+          resolve(item)
       }
     })
   })

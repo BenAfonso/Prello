@@ -4,6 +4,8 @@ import styles from './Boardslist.styles'
 import BoardThumbnail from '../BoardThumbnail/BoardThumbnail'
 import { connect } from 'react-redux'
 import { setBoardslist } from '../../store/actions'
+import { subscribeToBoardslist } from '../../services/api'
+
 
 @connect(store => {
   return {
@@ -18,7 +20,11 @@ export default class Boardslist extends React.Component {
   }
   
   componentDidMount () {
-    setBoardslist(this.props.dispatch)
+    setBoardslist(this.props.dispatch).then(() => {
+      subscribeToBoardslist('testID')
+    }).catch(err => {
+      console.error(err)
+    })
   }
 
   findBoard (id) {
@@ -57,7 +63,7 @@ export default class Boardslist extends React.Component {
       </ul>
       */ }
 
-      <h1>Mes boards</h1>
+      <h1>My boards</h1>
 
       <ul className='boards'>
         {
