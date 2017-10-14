@@ -1,19 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { findDOMNode } from 'react-dom'
 import { DragSource, DropTarget } from 'react-dnd'
-import { getEmptyImage } from 'react-dnd-html5-backend'
 import { ItemTypes } from '../Constants'
 import { connect } from 'react-redux'
 import { updateLists } from '../../store/actions'
-import Card from './Card';
-
-
-function getStyles(isDragging) {
-  return {
-    opacity: isDragging ? 0.5 : 1
-  }
-}
+import Card from './Card'
 
 const cardSource = {
 
@@ -84,7 +75,7 @@ export default class CardComponent extends React.Component {
   }
 
   render() {
-    const { id, index, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource } = this.props;
+    const { index, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource } = this.props;
 
     return connectCardDropTarget(connectCardDragSource(
       <div className='host' style={{position: 'relative'}}>

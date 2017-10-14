@@ -27,6 +27,10 @@ export default `
   font-size: 16px;
 }
 
+ul {
+  overflow-y: scroll;
+}
+
 ul li {
   margin-top: 10px;
 }
@@ -40,6 +44,11 @@ ul li:nth-child(1) {
   opacity: 0.6;
   cursor: pointer;
   font-size: 14px;
+  margin-top: 10px;
+}
+
+.newCardForm {
+  margin-top: 10px;
 }
 
 .newCardForm textarea {

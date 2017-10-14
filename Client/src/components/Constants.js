@@ -1,6 +1,7 @@
 export const ItemTypes = {
   CARD: 'Card',
-  LIST: 'List'
+  LIST: 'List',
+  BOARD: 'Board'
 }
 
 export const CARD_HEIGHT = 161  // height of a single card(excluding marginBottom/paddingBottom)

@@ -5,9 +5,9 @@ import styles from './List.styles'
 import { connect } from 'react-redux'
 import { addCard, moveList } from '../../store/actions'
 import { DragSource, DropTarget } from 'react-dnd'
-import { ItemTypes, OFFSET_HEIGHT, CARD_HEIGHT, CARD_MARGIN } from '../Constants'
+import { ItemTypes } from '../Constants'
 import { PropTypes } from 'prop-types'
-import { updateLists, moveCardAction, updateCards } from '../../store/actions'
+import { updateLists } from '../../store/actions'
 import Button from '../UI/Button/Button'
 
 const listSource = {
@@ -20,7 +20,9 @@ const listSource = {
 
   endDrag (props, monitor) {
     const { id: droppedId, originalIndex } = monitor.getItem()
-    moveList(props.dispatch, props.board._id, droppedId, props.index)
+    if (originalIndex !== props.index) {
+      moveList(props.dispatch, props.board._id, droppedId, props.index)
+    }
   }
 }
 
@@ -128,7 +130,7 @@ export default class List extends React.Component {
 
   addCard () {
     if (this.newCardTitle !== '') {
-      addCard(this.props.dispatch, this.props.index, this.props.board.lists[this.props.index], this.newCardTitle.value)
+      addCard(this.props.dispatch, this.props.board._id, this.props.index, this.props.board.lists[this.props.index], this.newCardTitle.value)
       this.clearForm()
     }
     this.undisplayNewCardForm()
@@ -145,7 +147,11 @@ export default class List extends React.Component {
         <div className='overlay'  style={{ opacity: isDragging ? 1 : 0 }}/>
         <div className='title'>{title}</div>
         <div className='removeButton' onClick={this.removeAction}> X </div>
-        <ul>
+        <ul style={{
+          maxHeight: this.state.newCardFormDisplayed
+            ? 'calc(100vh - 340px)'
+            : 'calc(100vh - 230px)'
+        }}>
           {
             this.props.cards.map((card, i) => (
               <li key={card._id}>
@@ -153,7 +159,7 @@ export default class List extends React.Component {
               </li>
             ))
           }
-          <li>
+        </ul>
             {
               this.state.newCardFormDisplayed
               ? <div className='newCardForm'>
@@ -186,8 +192,6 @@ export default class List extends React.Component {
               </div>
               : <div className='newCardButton'onClick={this.displayNewCardForm}>Add a card...</div>
             }
-          </li>
-        </ul>
         <style jsx>{styles}</style>
       </div>
     )))

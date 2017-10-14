@@ -1,9 +1,9 @@
 import React from 'react'
-import Board from '../components/Board/Board'
+import Boardslist from '../components/Boardslist/Boardslist'
 import PageLayout from '../layouts/page'
 
 export default (props) => (
   <PageLayout>
-    <Board />
+    <Boardslist />
   </PageLayout>
 )

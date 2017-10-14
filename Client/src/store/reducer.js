@@ -20,6 +20,43 @@ export default function reducer (state, action) {
         board: action.payload
       }
     }
+    case 'FETCH_BOARDSLIST_ERROR': {
+      return {
+        ...state,
+        fetching: false,
+        error: action.payload
+      }
+    }
+    case 'FETCH_BOARDSLIST_START': {
+      return {
+        ...state,
+        fetching: true
+      }
+    }
+    case 'FETCH_BOARDSLIST_SUCCESS': {
+      return {
+        ...state,
+        fetching: false,
+        boardslist: {
+          ...state.boardslist,
+          boards: action.payload
+        }
+      }
+    }
+    case 'RESET_BOARD': {
+      return {
+        ...state,
+        board: {
+          _id: '',
+          title: '',
+          lists: [],
+          visibility: '',
+          isArchived: false,
+          background: '',
+          collaborators: []
+        }
+      }
+    }
     case 'ADD_LIST': {
       console.log('adding list')
       let newLists = state.board.lists.slice()
@@ -71,8 +108,12 @@ export default function reducer (state, action) {
       }
     }
     case 'ADD_CARD': {
-      let newLists = state.board.lists.slice()
-      newLists[action.payload.listIndex].cards.push(action.payload.card)
+      let newLists = state.board.lists.map((l) => {
+        if (l._id === action.payload.listId) {
+          l.cards.push(action.payload.card)
+        }
+        return l
+      })
       return {
         ...state,
         board: {
@@ -82,7 +123,7 @@ export default function reducer (state, action) {
       }
     }
     case 'MOVE_CARD': {
-      const { index, originalListIndex, newListIndex, newPosition } = action.payload
+      const { index, originalListIndex, newListIndex } = action.payload
       let newLists = state.board.lists.slice()
       let card = newLists[originalListIndex].cards.slice()[index]
       newLists[originalListIndex].cards.splice(index, 1)

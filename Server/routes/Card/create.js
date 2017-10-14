@@ -1,3 +1,4 @@
+const Util = require('../../controllers/Util')
 module.exports = (router, controller) => {
   /**
     * @swagger
@@ -10,7 +11,7 @@ module.exports = (router, controller) => {
 
   /**
     * @swagger
-    * /lists/{listid}/cards:
+    * /boards/{boardId}/lists/{listid}/cards:
     *   post:
     *     tags:
     *       - Card
@@ -19,6 +20,11 @@ module.exports = (router, controller) => {
     *     produces:
     *       - application/json
     *     parameters:
+    *       - name: boardId
+    *         type: string
+    *         description: The board id where we want to insert the Card
+    *         in: path
+    *         required: true
     *       - name: listid
     *         type: string
     *         description: The list id where we want to insert the Card
@@ -36,12 +42,27 @@ module.exports = (router, controller) => {
     *       500:
     *         description: Internal error
     */
-  router.post('/lists/:listid/cards', function (req, res) {
+  router.post('/boards/:boardId/lists/:listid/cards', function (req, res) {
+    let requiredBody = ['text']
+    let requiredParameter = ['listid', 'boardId']
+    requiredParameter = Util.checkRequest(req.params, requiredParameter)
+    if (requiredParameter.length > 0) {
+      let stringMessage = requiredParameter.join(',')
+      res.status(400).json(`Missing ${stringMessage}`)
+      return
+    }
+    requiredBody = Util.checkRequest(req.body, requiredBody)
+    if (requiredBody.length > 0) {
+      let stringMessage = requiredBody.join(',')
+      res.status(400).json(`Missing ${stringMessage}`)
+      return
+    }
+
     controller.createCard(req).then((data) => {
-      res.status(200).json(data)
+      res.status(201).json(data)
     })
       .catch((err) => {
-        res.status(500).json(err)
+        res.status(err.code).json(err.message)
       })
   })
 }

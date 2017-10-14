@@ -1,8 +1,9 @@
 language: node_js
 node_js:
-    - "8"
+- '8'
 services:
-    - mongodb
+- mongodb
+- redis-server
 before_script:
-    - mongo prello_test --eval 'db.createUser({user:"prello",pwd:"prello",roles:["readWrite"]});'
-script: cd Server && npm install && npm test 
+- mongo prello_test --eval 'db.createUser({user:"prello",pwd:"prello",roles:["readWrite"]});'
+script: cd Server && npm install && npm test

@@ -11,12 +11,13 @@ const Checklist = {
 }
 
 const CardSchema = new Schema({
-  text: {type: String, default: ''},
+  text: {type: String, default: '', required: true},
   dueDate: {type: Date},
   checklists: [Checklist],
   comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
   createdAt: {type: Date},
   isArchived: {type: Boolean, default: false},
+  description: {type: String, default: ''},
   attachments: [{type: Schema.Types.ObjectId, ref: 'Attachment'}]
 })
 

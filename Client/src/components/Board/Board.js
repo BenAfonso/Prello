@@ -2,11 +2,11 @@ import React from 'react'
 import styles from './Board.styles'
 import List from '../List/List'
 import { connect } from 'react-redux'
-import { addList, setBoard, updateLists, removeList } from '../../store/actions'
-import { DragDropContext, DropTarget } from 'react-dnd'
+import { addList, setBoard, updateLists, removeList, resetBoard } from '../../store/actions'
+import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
-import { ItemTypes } from '../Constants'
 import Button from '../UI/Button/Button'
+import { subscribeToBoard } from '../../services/api'
 
 @connect(store => {
   return {
@@ -31,7 +31,15 @@ export default class Board extends React.Component {
   }
 
   componentDidMount () {
-    setBoard(this.props.dispatch)
+    setBoard(this.props.dispatch, this.props._id).then(board => {
+      subscribeToBoard(board)
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  componentWillUnmount () {
+    resetBoard()
   }
 
   displayNewListForm () {
@@ -112,7 +120,10 @@ export default class Board extends React.Component {
   }
 
   render () {
+    
     return <div className='host'>
+
+      <h1 className='boardTitle'>{this.props.board.title}</h1>
       <ul>
         {
           this.props.board.lists.map((list, i) => (
@@ -127,7 +138,7 @@ export default class Board extends React.Component {
                 findList={this.findList}
                 removeAction={this.removeList}
               />
-            </li>
+            </li>     
           ))
         }
 
