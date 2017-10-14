@@ -93,7 +93,7 @@ export function authPut (url, body) {
   return new Promise((resolve, reject) => {
     if (isAuthenticated()) {
       axios.put(url, body, {
-        headers: `Bearer ${extractToken()}`
+        headers: { 'authorization': `Bearer ${extractToken()}` }
       }).then((res) => {
         resolve(res)
       }).catch((err) => {
