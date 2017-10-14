@@ -4,7 +4,6 @@ export default `
     width: 100%;
     background-color: #cd5a91;
     padding: 30px 10px;
-    overflow-x: scroll;
   }
 
   .boardTitle {
@@ -18,9 +17,11 @@ export default `
   }
 
   ul {
+    height: calc(100% - 34px);
     display: flex;
     flex-wrap: nowrap;
     align-items: flex-start;
+    overflow-x: scroll;
   }
 
   ul li {
@@ -43,6 +44,7 @@ export default `
     background-color: rgba(50,50,50,0.3);
     padding: 10px;
     border-radius: 5px;
+    height: auto;
   }
 
   .newListForm input {

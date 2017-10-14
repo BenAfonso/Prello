@@ -113,7 +113,11 @@ export default class List extends React.Component {
       }}>
         <div className='title'>{title}</div>
         <div className='removeButton' onClick={this.removeAction}> X </div>
-        <ul>
+        <ul style={{
+          maxHeight: this.state.newCardFormDisplayed
+            ? 'calc(100vh - 340px)'
+            : 'calc(100vh - 230px)'
+        }}>
           {
             this.props.cards.map((card, i) => (
               <li key={i}>
@@ -121,7 +125,7 @@ export default class List extends React.Component {
               </li>
             ))
           }
-          <li>
+        </ul>
             {
               this.state.newCardFormDisplayed
               ? <div className='newCardForm'>
@@ -154,8 +158,6 @@ export default class List extends React.Component {
               </div>
               : <div className='newCardButton'onClick={this.displayNewCardForm}>Add a card...</div>
             }
-          </li>
-        </ul>
         <style jsx>{styles}</style>
       </div>
     ))
