@@ -34,7 +34,6 @@ module.exports = (router, userController) => {
 
   router.post('/auth/google/callback',
     function (req, res) {
-      console.log(req)
       if (req.params.code === undefined) {
         const data = {
           code: req.body.code,
@@ -71,7 +70,6 @@ module.exports = (router, userController) => {
       }
     })
   router.get('/auth/google/callback', function (req, res) {
-    console.log(req)
   })
 
   /**

@@ -2,15 +2,26 @@ import axios from 'axios'
 import Config from '../config'
 
 export function storeToken (token) {
-  window.localStorage.setItem('token', token)
+  window.localStorage.setItem('prello_access_token', token)
 }
 
 export function extractToken () {
-  window.localStorage.getItem('token')
+  return window.localStorage.getItem('prello_access_token')
 }
 
 export function isAuthenticated () {
-  return window.localStorage.getItem('token') !== undefined
+  return (window.localStorage.getItem('prello_access_token') !== undefined &&
+    window.localStorage.getItem('prello_access_token') !== null)
+}
+
+export function removeToken () {
+  window.localStorage.removeItem('prello_access_token')
+}
+
+// TODO: Use app state to make it??
+export function logout () {
+  removeToken()
+  window.location = '/login'
 }
 
 export function login (email, password) {
@@ -41,5 +52,73 @@ export function register (name, email, password, withLogin) {
     }).catch((err) => {
       reject(err)
     })
+  })
+}
+
+export function authGet (url) {
+  return new Promise((resolve, reject) => {
+    if (isAuthenticated()) {
+      axios.get(url, {
+        headers: { 'authorization': `Bearer ${extractToken()}` }
+      }).then((res) => {
+        resolve(res)
+      }).catch((err) => {
+        reject(err)
+      })
+    } else {
+      logout()
+      reject(new Error('Not logged in'))
+    }
+  })
+}
+
+export function authPost (url, body) {
+  return new Promise((resolve, reject) => {
+    if (isAuthenticated()) {
+      axios.post(url, body, {
+        headers: { 'authorization': `Bearer ${extractToken()}` }
+      }).then((res) => {
+        resolve(res)
+      }).catch((err) => {
+        reject(err)
+      })
+    } else {
+      logout()
+      reject(new Error('Not logged in'))
+    }
+  })
+}
+
+export function authPut (url, body) {
+  return new Promise((resolve, reject) => {
+    if (isAuthenticated()) {
+      axios.put(url, body, {
+        headers: `Bearer ${extractToken()}`
+      }).then((res) => {
+        resolve(res)
+      }).catch((err) => {
+        reject(err)
+      })
+    } else {
+      logout()
+      reject(new Error('Not logged in'))
+    }
+  })
+}
+
+export function authDelete (url) {
+  return new Promise((resolve, reject) => {
+    if (isAuthenticated()) {
+      axios.delete(url, {
+        headers: { 'authorization': `Bearer ${extractToken()}` }
+      }).then((res) => {
+        resolve(res)
+      }).catch((err) => {
+        reject(err)
+      })
+    } else {
+      logout()
+      reject(new Error('Not logged in'))
+    }
   })
 }

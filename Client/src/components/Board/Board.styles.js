@@ -7,6 +7,12 @@ export default `
     overflow-x: scroll;
   }
 
+  .boardTitle {
+    color: white;
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
   h1 {
     font-size: 25px;
   }

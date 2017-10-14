@@ -2,58 +2,74 @@ import React from 'react'
 import { login, storeToken } from '../../services/Authentication.services'
 import axios from 'axios'
 import GoogleLogin from 'react-google-login'
+import { Redirect } from 'react-router-dom'
 
-export default (props) => {
-  const loginWithGoogle = (response) => {
+export default class LoginPage extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      redirectToReferrer: false
+    }
+  }
+
+  loginWithGoogle (response) {
     axios.post('http://localhost:3333/auth/google/callback', {
       code: response.code
     }).then((res) => {
       storeToken(res.data.token)
-      alert('LOGGED IN')      
+      this.setState({ redirectToReferrer: true })
     })
   }
 
-  const submitLogin = () => {
+  submitLogin () {
     login(this.email.value, this.password.value).then((response) => {
-      console.log(response)
-      alert('LOGGED IN')
       storeToken(response.token)
+      this.setState({ redirectToReferrer: true })
     }).catch((err) => {
       console.error(err)
-      alert('ERROR')
     })
   }
 
-  return (
-    <div className='host'>
-      <h1>Login to Prello</h1>
-      <form>
-        <label>
+  render () {
+    const { from } = this.props.location.state || { from: { pathname: '/' } }
+    const { redirectToReferrer } = this.state
+
+    if (redirectToReferrer) {
+      return (
+        <Redirect to={from} />
+      )
+    }
+
+    return (
+      <div className='host'>
+        <h1>Login to Prello</h1>
+        <form>
+          <label>
           E-mail
         </label>
-        <input type='text' placeholder='E-mail' ref={(e) => {
-          this.email = e
-        }} />
-        <label>
+          <input type='text' placeholder='E-mail' ref={(e) => {
+            this.email = e
+          }} />
+          <label>
           Password
         </label>
-        <input type='password' placeholder='Passord' ref={(p) => {
-          this.password = p
-        }} />
-        <div className='button' onClick={submitLogin}>
+          <input type='password' placeholder='Passord' ref={(p) => {
+            this.password = p
+          }} />
+          <div className='button' onClick={this.submitLogin.bind(this)}>
           Sign in
         </div>
-        <a href='/#' className='forgottenPassword'>Forgotten password?</a>
-      </form>
-      <GoogleLogin
-        clientId='970457604836-o50jesfa5lblnger6egce7v32p8pukjq.apps.googleusercontent.com'
-        scope='email profile'
-        buttonText='Login'
-        responseType='code'
-        onSuccess={loginWithGoogle}
+          <a href='/#' className='forgottenPassword'>Forgotten password?</a>
+        </form>
+        <GoogleLogin
+          clientId='970457604836-o50jesfa5lblnger6egce7v32p8pukjq.apps.googleusercontent.com'
+          scope='email profile'
+          buttonText='Sign in with Google'
+          responseType='code'
+          onSuccess={this.loginWithGoogle.bind(this)}
     />
-      <style jsx>
-        {`
+        <style jsx>
+          {`
       .host {
         padding: 10px;
         width: 380px;
@@ -94,6 +110,7 @@ export default (props) => {
         border-radius: 5px;
         background-color: #61bd4f;
         box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        margin-bottom: 15px;
       }
 
       .button {
@@ -119,7 +136,8 @@ export default (props) => {
 
       }
       `}
-      </style>
-    </div>
-  )
+        </style>
+      </div>
+    )
+  }
 }
