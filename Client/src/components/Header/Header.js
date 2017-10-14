@@ -1,8 +1,8 @@
 import React from 'react'
 import styles from './Header.styles'
 import PropTypes from 'prop-types'
-import { addBoard } from '../../store/actions'
 import { Link } from 'react-router-dom'
+import CreateMenu from '../CreateMenu/CreateMenu'
 
 export default class Header extends React.Component {
   static propTypes = {
@@ -17,16 +17,9 @@ export default class Header extends React.Component {
 
   constructor(props) {
     super(props)
-
-    this.toggleCreate = this.toggleCreate.bind(this)
   }
 
 
-  toggleCreate() {
-    if (true) {
-      addBoard(this.props.dispatch, 'New Board')
-    }
-  }
 
 
 
@@ -44,11 +37,11 @@ export default class Header extends React.Component {
 
 
       <div className='headerButtonBar'>
-        <div className='headerButton createBlock' onClick={this.toggleCreate}>
-          <span>+</span>
-        </div>
 
-        <div className='headerButton notificationBlock'>
+
+        <CreateMenu />
+
+        <div className='headerButton createBlock' >
           <span>N</span>
         </div>
       </div>
