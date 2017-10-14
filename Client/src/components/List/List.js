@@ -1,13 +1,26 @@
 import React from 'react'
-import Card from '../Card/Card'
+//import Card from '../Card/Card'
+import Card from '../Card/DraggableCard'
 import styles from './List.styles'
 import { connect } from 'react-redux'
 import { addCard, moveList } from '../../store/actions'
 import { DragSource, DropTarget } from 'react-dnd'
-import { ItemTypes } from '../Constants'
+import { ItemTypes, OFFSET_HEIGHT, CARD_HEIGHT, CARD_MARGIN } from '../Constants'
 import { PropTypes } from 'prop-types'
-import { updateLists } from '../../store/actions'
+import { updateLists, moveCardAction } from '../../store/actions'
 import Button from '../UI/Button/Button'
+
+function getPlaceholderIndex(y, scrollY) {
+  // shift placeholder if y position more than card height / 2
+  const yPos = y - OFFSET_HEIGHT + scrollY;
+  let placeholderIndex;
+  if (yPos < CARD_HEIGHT / 2) {
+    placeholderIndex = -1; // place at the start
+  } else {
+    placeholderIndex = Math.floor((yPos - CARD_HEIGHT / 2) / (CARD_HEIGHT + CARD_MARGIN));
+  }
+  return placeholderIndex;
+}
 
 const listSource = {
   beginDrag (props) {
@@ -29,13 +42,25 @@ const cardTarget = {
   },
 
   drop(props, monitor, component) {
-    if (!monitor.didDrop()) {
-      return {
-        listIndex: props.index,
-        isList: true,
-        length: props.cards.length
-      }
+    document.getElementById(monitor.getItem().id).style.display = 'block';
+    const { placeholderIndex } = component.state
+    const lastX = monitor.getItem().listIndex
+    const lastY = monitor.getItem().index
+    const nextX = props.index
+    let nextY = placeholderIndex
+
+    if (lastY > nextY) { // move top
+      nextY += 1
+    } else if (lastX !== nextX) { // insert into another list
+      nextY += 1
     }
+
+    if (lastX === nextX && lastY === nextY) { // if position equel
+      return
+    }
+
+    console.log('lastX '+lastX+' lastY '+lastY+ 'nextX '+ nextX+ ' nextY '+nextY)
+    moveCardAction(props.dispatch, lastY, lastX, nextX, nextY)
   }
 }
 
@@ -66,8 +91,11 @@ const listTarget = {
   connectListDropTarget: connect.dropTarget()
 }))
 //List can be the target of a card drag and drop
-@DropTarget(ItemTypes.CARD, cardTarget, connect => ({
-  connectCardDropTarget: connect.dropTarget()
+@DropTarget(ItemTypes.CARD, cardTarget, (connectDragSource, monitor) => ({
+  connectCardDropTarget: connectDragSource.dropTarget(),
+  isOver: monitor.isOver(),
+  canDrop: monitor.canDrop(),
+  item: monitor.getItem()
 }))
 //List are draggable
 @DragSource(ItemTypes.LIST, listSource, (connect, monitor) => ({
@@ -80,6 +108,8 @@ export default class List extends React.Component {
     connectDropTarget: PropTypes.func.isRequired,
     index: PropTypes.number.isRequired,
     isDragging: PropTypes.bool.isRequired,
+    isOver: PropTypes.bool,
+    canDrop: PropTypes.bool,
     id: PropTypes.any,
     title: PropTypes.string.isRequired,
     moveList: PropTypes.func.isRequired
@@ -88,6 +118,8 @@ export default class List extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      placeholderIndex: undefined,
+      isScrolling: false,
       newCardFormDisplayed: false
     }
 
@@ -152,7 +184,7 @@ export default class List extends React.Component {
         <ul>
           {
             this.props.cards.map((card, i) => (
-              <li key={i}>
+              <li id={card._id} key={i}>
                 <Card index={i} id={card._id} moveCard={this.moveCard} listIndex={this.props.index} content={card.text} />
               </li>
             ))
