@@ -1,14 +1,16 @@
 export default `
 .newBoardForm {
-  display: inline_block;
+  display: inline-block;
   position: absolute;
   z-index: 10;
   right: 3px;
   top: 50px;
   background: #E2E4E6;
-  border-radius: 3px;  
+  border-radius: 3px;
   border: 1px solid #999;
-  width:300px;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 300px;
 }
 
 .backButton {
@@ -24,7 +26,6 @@ export default `
 .boardFormTitle {
   color: #666;
   font-size: 14px;
-  height: 80%;
 }
 
 
@@ -60,7 +61,7 @@ export default `
 
 .newBoardForm input {
   font-size: 16px;
-  width: 90%;
+  width: 100%;
   padding: 8px;
   border-radius: 3px;
 }

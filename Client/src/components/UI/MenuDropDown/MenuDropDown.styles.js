@@ -16,13 +16,10 @@ export default `
 .menuTitle {
   color: #666;
   font-size: 14px;
-  height: 80%;
 }
 
 .menuItem {
-  padding: 5px;
-  padding-top: 0;
-  padding-bottom: 10px;
+  padding: 15px;
   cursor: pointer;
 }
 
@@ -34,11 +31,11 @@ export default `
   height: 1px;
   border-top: 1px solid #999;
   display: block;
-  margin: 5px;
 }
 
 .menuItemTitle {
-  line-height: 25px;
+  height: 15px;
+  line-height: 15px;
   font-size: 13px;
   font-weight: bold;
   width: 100%;
@@ -47,10 +44,9 @@ export default `
 }
 
 .menuItemBody {
-  line-height: 15px;  
+  line-height: 15px;
   font-size: 12px;
   color: #666;
   text-align: left;
 }
 `
-

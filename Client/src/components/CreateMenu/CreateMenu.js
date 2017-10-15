@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './CreateMenu.styles'
-import MenuDropDown from '../MenuDropDown/MenuDropDown'
+import MenuDropDown from '../UI/MenuDropDown/MenuDropDown'
 import BoardForm from './Forms/BoardForm/BoardForm'
 
 
