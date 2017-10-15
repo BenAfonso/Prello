@@ -1,5 +1,5 @@
 import React from 'react'
-import { login, storeToken } from '../../services/Authentication.services'
+import { login, storeToken, loginGoogle } from '../../services/Authentication.services'
 import axios from 'axios'
 import GoogleLogin from 'react-google-login'
 import { Redirect } from 'react-router-dom'
@@ -12,12 +12,12 @@ export default class LoginPage extends React.Component {
     }
   }
 
-  loginWithGoogle (response) {
-    axios.post('http://localhost:3333/auth/google/callback', {
-      code: response.code
-    }).then((res) => {
-      storeToken(res.data.token)
+  loginWithGoogle (googleResponse) {
+    loginGoogle(googleResponse.code).then((response) => {
+      storeToken(response.token)
       this.setState({ redirectToReferrer: true })
+    }).catch((err) => {
+      console.error(err)
     })
   }
 
