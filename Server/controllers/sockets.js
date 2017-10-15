@@ -16,7 +16,7 @@ io.on('connection', (client) => {
 
   client.on('disconnect', client => {
     log('Client disconnected')
-    leaveBoards(client)
+    //leaveBoards(client)
   })
 })
 
