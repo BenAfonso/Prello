@@ -10,6 +10,10 @@ export default `
   box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
 }
 
+.content {
+  word-wrap: break-word;
+}
+
 input {
   height: 100%;
   width: 100%;

@@ -88,6 +88,17 @@ export default function reducer (state, action) {
         }
       }
     }
+    case 'UPDATE_CARDS': {
+      let newLists = state.board.lists.slice()
+      newLists[action.payload.listIndex].cards = action.payload.cards
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: newLists
+        }
+      }
+    }
     case 'REMOVE_LIST': {
       return {
         ...state,
@@ -106,6 +117,15 @@ export default function reducer (state, action) {
         }
       }
     }
+    case 'MOVE_CARD': {
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: action.payload
+        }
+      }
+    }
     case 'ADD_CARD': {
       let newLists = state.board.lists.map((l) => {
         if (l._id === action.payload.listId) {
@@ -113,6 +133,20 @@ export default function reducer (state, action) {
         }
         return l
       })
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: newLists
+        }
+      }
+    }
+    case 'MOVE_CARD': {
+      const { index, originalListIndex, newListIndex } = action.payload
+      let newLists = state.board.lists.slice()
+      let card = newLists[originalListIndex].cards.slice()[index]
+      newLists[originalListIndex].cards.splice(index, 1)
+      newLists[newListIndex].cards.splice(newListIndex, 0, card)
       return {
         ...state,
         board: {

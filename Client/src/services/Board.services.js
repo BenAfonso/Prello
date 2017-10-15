@@ -1,6 +1,6 @@
-import axios from 'axios'
 import Config from '../config'
 import { authGet } from './Authentication.services'
+import axios from 'axios'
 
 export function addBoardDistant (boardTitle) {
   return new Promise((resolve, reject) => {

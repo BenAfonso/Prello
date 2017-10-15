@@ -3,16 +3,11 @@ import styles from './Board.styles'
 import List from '../List/List'
 import { connect } from 'react-redux'
 import { addList, setBoard, updateLists, removeList, resetBoard } from '../../store/actions'
-import { DragDropContext, DropTarget } from 'react-dnd'
+import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
-import { ItemTypes } from '../Constants'
 import Button from '../UI/Button/Button'
 import { subscribeToBoard } from '../../services/api'
-
-const listTarget = {
-  drop () {
-  }
-}
+import CustomDragLayer from '../CustomDragLayer'
 
 @connect(store => {
   return {
@@ -20,9 +15,6 @@ const listTarget = {
   }
 })
 @DragDropContext(HTML5Backend)
-@DropTarget(ItemTypes.LIST, listTarget, connect => ({
-  connectDropTarget: connect.dropTarget()
-}))
 export default class Board extends React.Component {
   constructor (props) {
     super(props)
@@ -128,16 +120,18 @@ export default class Board extends React.Component {
   }
 
   render () {
-    const {connectDropTarget} = this.props
+    
+    return <div className='host'>
 
-    return connectDropTarget(<div className='host'>
       <h1 className='boardTitle'>{this.props.board.title}</h1>
+      <CustomDragLayer snapToGrid={false} />
       <ul>
         {
           this.props.board.lists.map((list, i) => (
             <li key={list._id}>
               <List
                 id={list._id}
+                key={list._id}
                 title={list.name}
                 index={i}
                 cards={list.cards}
@@ -160,6 +154,5 @@ export default class Board extends React.Component {
       </ul>
       <style jsx>{styles}</style>
     </div>
-    )
   }
 }

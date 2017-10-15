@@ -1,5 +1,7 @@
 import { fetchBoards, addBoardDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant } from '../services/List.services'
+import { moveCard } from '../services/Card.services'
+
 import store from '../store/store'
 
 export function addList (dispatch, boardId, name) {
@@ -24,6 +26,19 @@ export function moveList (dispatch, boardId, listId, position) {
       // <= HANDLED FROM SOCKETS
     })
 }
+
+export function moveCardDistant (boardId, cardId, oldListId, newListId, position) {
+  moveCard(boardId, cardId, oldListId, newListId, position)
+}
+export function moveCardLocal (list) {
+  if (list) {
+    store.dispatch({
+      type: 'MOVE_CARD',
+      payload: list
+    })
+  }
+}
+
 export function moveListLocal (list) {
   if (list) {
     store.dispatch({
@@ -62,6 +77,16 @@ export function updateLists (dispatch, lists) {
   dispatch({
     type: 'UPDATE_LISTS',
     payload: lists
+  })
+}
+
+export function updateCards (dispatch, listIndex, cards) {
+  dispatch({
+    type: 'UPDATE_CARDS',
+    payload: {
+      listIndex: listIndex,
+      cards: cards
+    }
   })
 }
 

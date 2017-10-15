@@ -4,6 +4,19 @@ export default `
   padding: 10px;
   border-radius: 3px;
   box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  overflow-y: scroll;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  background-color: rgb(174, 77, 123);
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  border-radius: 3px;
 }
 
 .title {

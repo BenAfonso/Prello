@@ -8,4 +8,5 @@ module.exports = (router, controller) => {
   *         type: string
   */
   require('./create')(router, controller)
+  require('./moveCard')(router, controller)
 }

@@ -1,50 +1,60 @@
 const Util = require('../../controllers/Util')
-module.exports = (router, controller) => {
+module.exports = (router, controllers) => {
   /**
     * @swagger
     * definitions:
-    *   NewCard:
+    *   MoveCard:
     *     properties:
-    *       text:
+    *       position:
+    *         type: integer
+    *       oldListId:
+    *         type: string
+    *       newListId:
     *         type: string
     */
 
   /**
     * @swagger
-    * /boards/{boardId}/lists/{listid}/cards:
-    *   post:
+    * /boards/{boardId}/cards/{cardId}/move:
+    *   put:
     *     tags:
     *       - Cards
-    *     description: Create a new Card inside a List
-    *     summary: CREATE a new Card inside a List
+    *     description: Move a card inside a board
+    *     summary: Move a  card inside a Board
     *     produces:
     *       - application/json
     *     parameters:
     *       - name: boardId
     *         type: string
-    *         description: The board id where we want to insert the Card
+    *         description: The board id where we want to update the cards
     *         in: path
     *         required: true
-    *       - name: listid
+    *       - name: cardId
     *         type: string
-    *         description: The list id where we want to insert the Card
+    *         description: The card id to update
     *         in: path
     *         required: true
     *       - name: body
-    *         description: The Card object that needs to be added
+    *         description: The position, the old list id and the new list id
     *         in: body
     *         required: true
     *         schema:
-    *             $ref: '#/definitions/NewCard'
+    *           properties:
+    *            position:
+    *              type: integer
+    *            oldListId:
+    *              type: string
+    *            newListId:
+    *              type: string
     *     responses:
     *       200:
-    *         description: Message confirming the Card has been created
+    *         description: Message confirming the card has been moved
     *       500:
     *         description: Internal error
     */
-  router.post('/boards/:boardId/lists/:listid/cards', function (req, res) {
-    let requiredBody = ['text']
-    let requiredParameter = ['listid', 'boardId']
+  router.put('/boards/:boardId/cards/:cardId/move', function (req, res) {
+    let requiredBody = ['oldListId', 'newListId', 'position']
+    let requiredParameter = ['cardId', 'boardId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
       let stringMessage = requiredParameter.join(',')
@@ -57,12 +67,11 @@ module.exports = (router, controller) => {
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-
-    controller.createCard(req).then((data) => {
-      res.status(201).json(data)
+    controllers.moveCard(req).then((data) => {
+      res.status(200).json(data)
     })
       .catch((err) => {
-        res.status(err.code).json(err.message)
+        res.status(500).json(err)
       })
   })
 }
