@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styles from './Card.styles'
 import CardDetails from '../CardDetails/CardDetails'
 
+
 export default class Card extends React.Component {
   constructor(props){
     super(props)
