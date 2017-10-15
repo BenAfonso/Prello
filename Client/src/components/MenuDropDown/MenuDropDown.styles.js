@@ -1,8 +1,4 @@
 export default `
-.host {
- 
-}
-
 .menu {
   display: inline-block;
   position: absolute;
@@ -12,13 +8,13 @@ export default `
   width: 300px;
   background: #E2E4E6;
   border-radius: 5px;
-  border-left: 1px solid grey;
-  border-bottom: 1px solid grey;
-  padding-bottom:10px;
+  border-left: 1px solid #999;
+  border-bottom: 1px solid #999;
+  padding-bottom: 10px;
 }
 
 .menuTitle {
-  color:#999;
+  color: #666;
   font-size: 14px;
   height: 80%;
 }
@@ -31,16 +27,15 @@ export default `
 }
 
 .menuItem:hover {
-  background: pink;
+  background: #bbb;
 }
 
 .menuSeparator {
   height: 1px;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #999;
   display: block;
   margin: 5px;
 }
-
 
 .menuItemTitle {
   line-height: 25px;
@@ -54,9 +49,8 @@ export default `
 .menuItemBody {
   line-height: 15px;  
   font-size: 12px;
-  color:grey;
+  color: #666;
   text-align: left;
 }
-
 `
 

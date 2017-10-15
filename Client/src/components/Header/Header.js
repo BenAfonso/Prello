@@ -15,16 +15,8 @@ export default class Header extends React.Component {
     color: 'white'
   }
 
-  constructor(props) {
-    super(props)
-  }
-
-
-
-
 
   render() {
-
 
     return <div className='host' style={{
       backgroundColor: this.props.bgColor,
@@ -35,15 +27,14 @@ export default class Header extends React.Component {
         <span id='title'>Prello</span>
       </Link>
 
-
       <div className='headerButtonBar'>
-
 
         <CreateMenu />
 
-        <div className='headerButton createBlock' >
+        <div className='headerButton notificationBlock' >
           <span>N</span>
         </div>
+
       </div>
 
       <style jsx>{styles}</style>

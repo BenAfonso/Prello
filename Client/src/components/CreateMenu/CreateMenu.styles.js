@@ -3,18 +3,6 @@ export default `
   display: inline-block;
 }
 
-.newBoardForm {
-  display: inline_block;
-  position: absolute;
-  z-index: 10;
-  right: 3px;
-  top: 50px;
-  background: #E2E4E6;
-  border-radius: 3px;  
-  width:300px;
-}
-
-
 .headerButton {
   margin-top: 5px;
   margin-right : 5px;
@@ -30,31 +18,4 @@ export default `
 .headerButton:hover {
   background: rgba(255,255,255,0.3);
 }
-
-.newBoardForm input {
-  font-size: 16px;
-  width: 90%;
-  padding: 8px;
-  border-radius: 3px;
-}
-
-.newBoardFormButtons {
-  margin-top: 8px;
-}
-
-.newBoardFormButtons div {
-  display: inline-block;
-}
-
-.newBoardFormButtons div:nth-child(1) {
-  margin-right: 10px;
-}
-
-.menuSeparator {
-  height: 1px;
-  border-top: 1px solid #ccc;
-  display: block;
-  margin: 5px;
-}
-
 `

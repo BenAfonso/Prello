@@ -22,7 +22,7 @@ export default `
 }
 
 .boardFormTitle {
-  color:#666;
+  color: #666;
   font-size: 14px;
   height: 80%;
 }
@@ -78,7 +78,4 @@ export default `
 .newBoardFormButtons div:nth-child(1) {
   margin-right: 10px;
 }
-
-
-
 `

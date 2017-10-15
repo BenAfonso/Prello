@@ -6,12 +6,15 @@ import Button from '../../../UI/Button/Button'
 export default class BoardForm extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      shouldRedirect: false
+    }
     this.submit = this.submit.bind(this)
 
   }
 
   submit(title) {
-    if (this.title.value != '') {
+    if (this.title.value !== '') {
       addBoard(this.props.dispatch, this.title.value)
       this.props.onSubmit()
     }
@@ -25,7 +28,7 @@ export default class BoardForm extends React.Component {
         <ul>
           <li className='boardFormTitle'>
             Create a board
-            </li>
+          </li>
           <li className='boardFormSeparator'></li>
           <li className='boardFormItem'>
 

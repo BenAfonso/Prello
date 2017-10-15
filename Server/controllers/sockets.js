@@ -11,7 +11,7 @@ io.on('connection', (client) => {
   })
 
   client.on('subscribeToBoardslist', (userId) => {
-    subscribeToBoardslist(client,userId)
+    subscribeToBoardslist(client, userId)
   })
 
   client.on('disconnect', client => {
@@ -34,7 +34,7 @@ function subscribeToBoard (client, boardId) {
 }
 
 function subscribeToBoardslist (client, userId) {
-  io.of('/').adapter.remoteJoin(client.id,userId, (err) => {
+  io.of('/').adapter.remoteJoin(client.id, userId, (err) => {
     if (err) { return console.error(err) }
     log('User subscribed to REDIS')
     getUsersInBoardslist(userId).then(users => {
