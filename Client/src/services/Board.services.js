@@ -23,3 +23,15 @@ export function fetchBoards () {
     })
   })
 }
+
+export function addCollaborators (board, emails) {
+  return new Promise((resolve, reject) => {
+    // Not implementeted
+  })
+}
+
+export function addCollaborator (board, email) {
+  return new Promise((resolve, reject) => {
+    // Not implementeted
+  })
+}

@@ -5,10 +5,7 @@ import store from '../store/store'
 export function addList (dispatch, boardId, name) {
   addListDistant(boardId, name)
     .then((list) => {
-     // dispatch({
-     //   type: 'ADD_LIST',
-     //   payload: list
-     // })
+      // <= HANDLED FROM SOCKETS
     })
 }
 
@@ -24,10 +21,7 @@ export function addListLocal (list) {
 export function moveList (dispatch, boardId, listId, position) {
   moveListDistant(boardId, listId, position)
     .then((lists) => {
-     /* dispatch({
-        type: 'MOVE_LIST',
-        payload: lists
-      })*/
+      // <= HANDLED FROM SOCKETS
     })
 }
 export function moveListLocal (list) {
@@ -125,6 +119,7 @@ export function setBoardslist (dispatch) {
 
 export function addBoard (dispatch, title) {
   addBoardDistant(title).then((board) => {
+      // <= HANDLED FROM SOCKETS
     }).catch(err => {
       return err
     })
