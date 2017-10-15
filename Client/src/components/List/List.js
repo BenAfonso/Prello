@@ -179,6 +179,7 @@ export default class List extends React.Component {
                 <form onSubmit={this.addCard}>
                   <textarea
                     ref={(t) => { this.newCardTitle = t }}
+                    onKeyPress={(e) => {e.charCode === 13 ? this.addCard() : null}}
                   />
                 </form>
                 <div className='newCardFormButtons'>
