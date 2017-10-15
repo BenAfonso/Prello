@@ -17,9 +17,13 @@ export default class CardDetails extends React.Component{
     }
 
     static PropTypes={
-        cardTitle: PropTypes.string.isRequired
+        cardTitle: PropTypes.string.isRequired,
+        isVisible: PropTypes.bool
     }
 
+    shouldComponentUpdate(nextProps){
+        return this.state.isActive != nextProps.isActive
+    }
 
     openDetails(){
         this.setState({
@@ -27,12 +31,14 @@ export default class CardDetails extends React.Component{
         })
     }
 
-    closeDetails(){
+    closeDetails(e){
+        e.stopPropagation()
         this.setState({
             isActive: !this.state.isActive
         })
-        const boo = this.state.isActive
-        alert("heloo"+boo)
+        this.props.onClose()
+        /*const boo = this.state.isActive
+        alert("heloo"+this.state.isActive)*/
     }
 
     mountCardDetails(){
@@ -40,7 +46,7 @@ export default class CardDetails extends React.Component{
             return(
                 <div className='card-details-frame'>
                     <div className='title'>{this.props.cardTitle}</div>
-                    <div className="close-card-modal" onClick={this.closeDetails}>X</div>
+                    <div className="close-card-modal" onClick={e => this.closeDetails(e)}>X</div>
                     <p className='title'>Add</p>
                     <ul>
                         <li><Button>Members</Button></li>
@@ -56,7 +62,7 @@ export default class CardDetails extends React.Component{
                 </div>
             )
         }
-        else return(<div>Hello baby</div>)
+        else return(<div>Details</div>)
 
             
     }
