@@ -4,8 +4,8 @@ import Card from './Card'
 
 let styles = {
   display: 'inline-block',
-  transform: 'rotate(-7deg)',
-  WebkitTransform: 'rotate(-7deg)',
+  transform: 'rotate(5deg)',
+  WebkitTransform: 'rotate(5deg)',
   width: '250px'
 }
 

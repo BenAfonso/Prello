@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { DragLayer } from 'react-dnd'
 import CardDragPreview from './Card/CardDragPreview'
+import ListDragPreview from './List/ListDragPreview'
 import { ItemTypes } from './Constants'
 
 
@@ -57,6 +58,10 @@ export default class CustomDragLayer extends React.Component {
       case ItemTypes.CARD:
         return (
           <CardDragPreview {...item} />
+        )
+      case ItemTypes.LIST:
+        return (
+          <ListDragPreview {...item} />
         )
       default:
         return null

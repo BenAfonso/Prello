@@ -7,14 +7,20 @@ import { addCard, moveList } from '../../store/actions'
 import { DragSource, DropTarget } from 'react-dnd'
 import { ItemTypes } from '../Constants'
 import { PropTypes } from 'prop-types'
+import { findDOMNode } from 'react-dom'
 import { updateLists } from '../../store/actions'
 import Button from '../UI/Button/Button'
+import { getEmptyImage } from 'react-dnd-html5-backend'
 
 const listSource = {
-  beginDrag (props) {
+  beginDrag (props, monitor, component) {
+    const { clientWidth, clientHeight } = findDOMNode(component)
     return {
       id: props.id,
       originalIndex: props.findList(props.id).index,
+      clientWidth: clientWidth,
+      clientHeight: clientHeight,
+      ...props
     }
   },
 
@@ -82,6 +88,7 @@ const listTarget = {
 //List are draggable
 @DragSource(ItemTypes.LIST, listSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
+  connectDragPreview: connect.dragPreview(),
   isDragging: monitor.isDragging()
 }))
 export default class List extends React.Component {
@@ -141,13 +148,9 @@ export default class List extends React.Component {
   }
 
   componentDidMount () {
-    this.cardContainer.addEventListener('scroll', function(e) {
-      console.log("CARDCONTAINER")
-    })
-      
-    this.host.addEventListener('scroll', function(e) {
-      console.log("HOST")
-    })
+    this.props.connectDragPreview(getEmptyImage(), {
+      captureDraggingState: true
+    });
   }
 
   render () {

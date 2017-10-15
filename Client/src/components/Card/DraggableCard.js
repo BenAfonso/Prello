@@ -11,7 +11,7 @@ import Card from './Card'
 const cardSource = {
 
   beginDrag(props, monitor, component) {
-    const { clientWidth, clientHeight } = findDOMNode(component);
+    const { clientWidth, clientHeight } = findDOMNode(component)
     return {
       id: props.id,
       originalIndex: props.index,
