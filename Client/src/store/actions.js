@@ -1,4 +1,4 @@
-import { fetchBoard } from '../services/Board.services'
+import { fetchBoards, addBoardDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant } from '../services/List.services'
 import store from '../store/store'
 
@@ -42,7 +42,7 @@ export function moveListLocal (list) {
 export function setBoard (dispatch, id) {
   return new Promise((resolve, reject) => {
     dispatch({type: 'FETCH_BOARD_START'})
-    fetchBoard().then((data) => {
+    fetchBoards().then((data) => {
       dispatch({
         type: 'FETCH_BOARD_SUCCESS',
         payload: data.filter(x=>x._id===id)[0]
@@ -106,16 +106,35 @@ export function addCardLocal (listId, card) {
 }
 
 export function setBoardslist (dispatch) {
+  return new Promise((resolve, reject) => {
   dispatch({type: 'FETCH_BOARDSLIST_START'})
-  fetchBoard().then((data) => {
+  fetchBoards().then((data) => {
     dispatch({
       type: 'FETCH_BOARDSLIST_SUCCESS',
       payload: data
     })
+    resolve(data)
   }).catch((err) => {
     dispatch({
       type: 'FETCH_BOARDSLIST_ERROR',
       payload: err
     })
   })
+})
+}
+
+export function addBoard (dispatch, title) {
+  addBoardDistant(title).then((board) => {
+    }).catch(err => {
+      return err
+    })
+}
+
+export function addBoardLocal (board) {
+  if (board) {
+    store.dispatch({
+      type: 'ADD_BOARD',
+      payload: board
+    })
+  }
 }

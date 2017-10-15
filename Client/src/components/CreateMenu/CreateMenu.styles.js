@@ -1,20 +1,9 @@
 export default `
 .host {
-  position: relative;
-  height: 50px;
-  width: 100%;
-  line-height: 50px;
-  text-align: center;
-  font-size: 25px;
-}
-
-.headerButtonBar {
   display: inline-block;
-  float: right;
 }
 
 .headerButton {
-  display: inline-block;
   margin-top: 5px;
   margin-right : 5px;
   height: 40px;
@@ -29,5 +18,4 @@ export default `
 .headerButton:hover {
   background: rgba(255,255,255,0.3);
 }
-
 `
