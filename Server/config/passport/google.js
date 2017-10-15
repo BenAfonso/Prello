@@ -9,7 +9,6 @@ module.exports = new GoogleStrategy({
 },
 (accessToken, refreshToken, profile, done) => {
   User.findOne({'google.id': profile.id}, '_id email provider').exec(function (err, user) {
-    console.log(user)
     if (err) return done(err)
     if (!user) {
       user = new User({

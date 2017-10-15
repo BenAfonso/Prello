@@ -121,4 +121,18 @@ boardController.moveList = function (req) {
   })
 }
 
+boardController.refreshOneboard = function (action, boardId) {
+  Board.findOne({ '_id': boardId }).populate('owner lists collaborators').exec(function (err, res) {
+    if (err) {} else {
+      Card.populate(res, {
+        path: 'lists.cards'
+      }, function (err, res) {
+        if (err) {} else {
+          emit(boardId, action, res.lists)
+        }
+      })
+    }
+  })
+}
+
 module.exports = boardController

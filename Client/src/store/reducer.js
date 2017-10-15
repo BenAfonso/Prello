@@ -58,7 +58,6 @@ export default function reducer (state, action) {
       }
     }
     case 'ADD_LIST': {
-      console.log('adding list')
       let newLists = state.board.lists.slice()
       newLists.push(action.payload)
       return {
@@ -99,6 +98,15 @@ export default function reducer (state, action) {
       }
     }
     case 'MOVE_LIST': {
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: action.payload
+        }
+      }
+    }
+    case 'MOVE_CARD': {
       return {
         ...state,
         board: {

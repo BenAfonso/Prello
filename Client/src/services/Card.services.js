@@ -1,18 +1,10 @@
 import axios from 'axios'
 import Config from '../config'
 
-export function moveCard (card, originalListId, newListId) {
-  return new Promise((resolve, reject) => {
-    axios.post(`${Config.API_URL}/boards/${card.id}`, {
-      name: card.content
-    }).then((res) => {
-      axios.delete(`${Config.API_URL}/boards/${card.id}`).then((res) => {
-        resolve(res)
-      }).catch(err => {
-        reject(err)
-      })
-    }).catch(err => {
-      reject(err)
-    })
+export function moveCard (boardId, cardId, oldListId, newListId, position) {
+  axios.put(`${Config.API_URL}/boards/${boardId}/cards/${cardId}/move`, {
+    oldListId: oldListId,
+    newListId: newListId,
+    position: position
   })
 }

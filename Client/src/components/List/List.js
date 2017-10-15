@@ -3,7 +3,7 @@ import React from 'react'
 import Card from '../Card/DraggableCard'
 import styles from './List.styles'
 import { connect } from 'react-redux'
-import { addCard, moveList } from '../../store/actions'
+import { addCard, moveList,moveCardDistant } from '../../store/actions'
 import { DragSource, DropTarget } from 'react-dnd'
 import { ItemTypes } from '../Constants'
 import { PropTypes } from 'prop-types'
@@ -54,6 +54,11 @@ const cardTarget = {
       newLists[originalListIndex].cards.splice(originalIndex, 1)
       updateLists(props.dispatch, newLists)      
     }
+  },
+  drop (props, monitor) {
+    const { id: draggedId, originalListIndex } = monitor.getItem()
+    let card = props.cards.filter((e, i) => e._id === draggedId)[0]
+    moveCardDistant(props.board._id, card._id, props.board.lists[originalListIndex]._id,props.id, props.cards.indexOf(card))
   }
 }
 

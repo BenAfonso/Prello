@@ -1,5 +1,7 @@
 import { fetchBoard } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant } from '../services/List.services'
+import { moveCard } from '../services/Card.services'
+
 import store from '../store/store'
 
 export function addList (dispatch, boardId, name) {
@@ -31,15 +33,16 @@ export function moveList (dispatch, boardId, listId, position) {
     })
 }
 
-export function moveCardAction (dispatch, cardOriginalIndex, originalListIndex, newListIndex, newPosition) {
-  dispatch({type: 'MOVE_CARD',
-    payload: {
-      index: cardOriginalIndex,
-      originalListIndex: originalListIndex,
-      newListIndex: newListIndex,
-      newPosition: newPosition
-    }
-  })
+export function moveCardDistant (boardId, cardId, oldListId, newListId, position) {
+  moveCard(boardId, cardId, oldListId, newListId, position)
+}
+export function moveCardLocal (list) {
+  if (list) {
+    store.dispatch({
+      type: 'MOVE_CARD',
+      payload: list
+    })
+  }
 }
 
 export function moveListLocal (list) {

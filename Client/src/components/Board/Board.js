@@ -70,7 +70,6 @@ export default class Board extends React.Component {
   moveList (id, atIndex) {
     const {list, index} = this.findList(id)
     let lists = this.props.board.lists.slice()
-    console.log(index, atIndex)
     lists.splice(index, 1)
     lists.splice(atIndex, 0, list)
     updateLists(this.props.dispatch, lists)
