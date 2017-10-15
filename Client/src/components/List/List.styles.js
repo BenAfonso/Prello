@@ -28,7 +28,7 @@ export default `
 }
 
 ul {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 ul li {

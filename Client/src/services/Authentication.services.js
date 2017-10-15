@@ -37,6 +37,17 @@ export function login (email, password) {
     })
   })
 }
+export function loginGoogle (code) {
+  return new Promise((resolve, reject) => {
+    axios.post(`${Config.API_URL}/auth/google/callback`, {
+      code: code
+    }).then((res) => {
+      resolve(res.data)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
 
 export function register (name, email, password, withLogin) {
   return new Promise((resolve, reject) => {

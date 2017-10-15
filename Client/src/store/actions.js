@@ -1,4 +1,4 @@
-import { fetchBoard } from '../services/Board.services'
+import { fetchBoards, addBoardDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant } from '../services/List.services'
 import { moveCard } from '../services/Card.services'
 
@@ -7,10 +7,7 @@ import store from '../store/store'
 export function addList (dispatch, boardId, name) {
   addListDistant(boardId, name)
     .then((list) => {
-     // dispatch({
-     //   type: 'ADD_LIST',
-     //   payload: list
-     // })
+      // <= HANDLED FROM SOCKETS
     })
 }
 
@@ -26,10 +23,7 @@ export function addListLocal (list) {
 export function moveList (dispatch, boardId, listId, position) {
   moveListDistant(boardId, listId, position)
     .then((lists) => {
-     /* dispatch({
-        type: 'MOVE_LIST',
-        payload: lists
-      })*/
+      // <= HANDLED FROM SOCKETS
     })
 }
 
@@ -57,7 +51,7 @@ export function moveListLocal (list) {
 export function setBoard (dispatch, id) {
   return new Promise((resolve, reject) => {
     dispatch({type: 'FETCH_BOARD_START'})
-    fetchBoard().then((data) => {
+    fetchBoards().then((data) => {
       dispatch({
         type: 'FETCH_BOARD_SUCCESS',
         payload: data.filter(x=>x._id===id)[0]
@@ -131,16 +125,36 @@ export function addCardLocal (listId, card) {
 }
 
 export function setBoardslist (dispatch) {
+  return new Promise((resolve, reject) => {
   dispatch({type: 'FETCH_BOARDSLIST_START'})
-  fetchBoard().then((data) => {
+  fetchBoards().then((data) => {
     dispatch({
       type: 'FETCH_BOARDSLIST_SUCCESS',
       payload: data
     })
+    resolve(data)
   }).catch((err) => {
     dispatch({
       type: 'FETCH_BOARDSLIST_ERROR',
       payload: err
     })
   })
+})
+}
+
+export function addBoard (dispatch, title) {
+  addBoardDistant(title).then((board) => {
+      // <= HANDLED FROM SOCKETS
+    }).catch(err => {
+      return err
+    })
+}
+
+export function addBoardLocal (board) {
+  if (board) {
+    store.dispatch({
+      type: 'ADD_BOARD',
+      payload: board
+    })
+  }
 }

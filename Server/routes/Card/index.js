@@ -9,5 +9,4 @@ module.exports = (router, controller) => {
   */
   require('./create')(router, controller)
   require('./moveCard')(router, controller)
-  
 }

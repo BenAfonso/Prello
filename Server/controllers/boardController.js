@@ -5,6 +5,11 @@ const Util = require('./Util')
 const emit = require('../controllers/sockets').emit
 const boardController = {}
 
+/**
+ *
+ *
+ * @returns
+ */
 boardController.getAllBoards = function () {
   return new Promise((resolve, reject) => {
     Board.find().populate('owner lists collaborators').exec(function (err, res) {
@@ -24,7 +29,11 @@ boardController.getAllBoards = function () {
     })
   })
 }
-
+/**
+ *
+ * @param {any} board
+ * @returns
+ */
 boardController.createBoard = function (board) {
   return new Promise((resolve, reject) => {
     const boardToAdd = new Board(board)
@@ -32,11 +41,20 @@ boardController.createBoard = function (board) {
       if (err) {
         reject(err)
       } else {
+        emit('testID', 'NEW_BOARD', item)
         resolve(item)
       }
     })
   })
 }
+
+/**
+ *
+ *
+ * @param {any} boardId
+ * @param {any} list
+ * @returns
+ */
 boardController.addListToBoard = function (boardId, list) {
   return new Promise((resolve, reject) => {
     Board.findOneAndUpdate({'_id': boardId}, {$push: {lists: list}}, {new: true}, function (err, res) {
@@ -48,6 +66,14 @@ boardController.addListToBoard = function (boardId, list) {
     })
   })
 }
+
+/**
+ *
+ *
+ * @param {any} boardId
+ * @param {any} listId
+ * @returns
+ */
 boardController.removeListFromBoard = function (boardId, listId) {
   return new Promise((resolve, reject) => {
     Board.findOneAndUpdate({'_id': boardId}, {$pull: {'lists': listId}}, {new: true}, function (err, res) {
@@ -59,6 +85,13 @@ boardController.removeListFromBoard = function (boardId, listId) {
     })
   })
 }
+
+/**
+ *
+ *
+ * @param {any} boardId
+ * @returns
+ */
 boardController.getOneboard = function (boardId) {
   return new Promise((resolve, reject) => {
     Board.findOne({ '_id': boardId }).populate('owner lists collaborators').exec(function (err, res) {
@@ -86,6 +119,13 @@ boardController.getOneboard = function (boardId) {
     })
   })
 }
+
+/**
+ *
+ * Moves a list in the board
+ * @param {any} req
+ * @returns The new lists
+ */
 boardController.moveList = function (req) {
   return new Promise((resolve, reject) => {
     let boardId = req.params.boardId
@@ -133,6 +173,13 @@ boardController.refreshOneboard = function (action, boardId) {
       })
     }
   })
+}
+boardController.addCollaborator = (board, user) => {
+
+}
+
+boardController.addCollaborators = (board, users) => {
+
 }
 
 module.exports = boardController

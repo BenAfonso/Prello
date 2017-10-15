@@ -10,9 +10,13 @@ io.on('connection', (client) => {
     subscribeToBoard(client, boardId)
   })
 
+  client.on('subscribeToBoardslist', (userId) => {
+    subscribeToBoardslist(client, userId)
+  })
+
   client.on('disconnect', client => {
     log('Client disconnected')
-    leaveBoards(client)
+    // leaveBoards(client)
   })
 })
 
@@ -29,6 +33,19 @@ function subscribeToBoard (client, boardId) {
   })
 }
 
+function subscribeToBoardslist (client, userId) {
+  io.of('/').adapter.remoteJoin(client.id, userId, (err) => {
+    if (err) { return console.error(err) }
+    log('User subscribed to REDIS')
+    getUsersInBoardslist(userId).then(users => {
+      log(`REDIS USERS ON BOARDSLIST ${userId} : ${users}`)
+    }).catch(err => {
+      return console.error(err)
+    })
+    // success
+  })
+}
+
 /* function unsubscribeToBoard (client, boardId) {
   io.of('/').adapter.removeLeave(client.id, boardId, err => {
     if (err) { return console.error(err) }
@@ -36,18 +53,27 @@ function subscribeToBoard (client, boardId) {
   })
 } */
 
-function leaveBoards (client) {
+/* function leaveBoards (client) {
   io.of('/').adapter.remoteDisconnect(client.id, true, (err) => {
     if (err) { return console.error(err) }
     log(`REDIS CLIENT LEFT`)
     // success
   })
-}
+} */
 
 function getUsersInBoard (boardId) {
   return new Promise((resolve, reject) => {
     io.of('/').adapter.clients(boardId, (err, clients) => {
       if (err) { return reject(new Error(`Error getting users in board ${boardId}`)) }
+      return resolve(clients)
+    })
+  })
+}
+
+function getUsersInBoardslist (userId) {
+  return new Promise((resolve, reject) => {
+    io.of('/').adapter.clients(userId, (err, clients) => {
+      if (err) { return reject(new Error(`Error getting users in boardslist of user ${userId}`)) }
       return resolve(clients)
     })
   })
