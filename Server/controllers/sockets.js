@@ -16,7 +16,7 @@ io.on('connection', (client) => {
 
   client.on('disconnect', client => {
     log('Client disconnected')
-    //leaveBoards(client)
+    // leaveBoards(client)
   })
 })
 
@@ -53,13 +53,13 @@ function subscribeToBoardslist (client, userId) {
   })
 } */
 
-function leaveBoards (client) {
+/* function leaveBoards (client) {
   io.of('/').adapter.remoteDisconnect(client.id, true, (err) => {
     if (err) { return console.error(err) }
     log(`REDIS CLIENT LEFT`)
     // success
   })
-}
+} */
 
 function getUsersInBoard (boardId) {
   return new Promise((resolve, reject) => {
