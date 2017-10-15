@@ -1,5 +1,16 @@
 export default function reducer (state, action) {
   switch (action.type) {
+    case 'ADD_BOARD': {
+      let newBoards = state.boardslist.boards.slice()
+      newBoards.push(action.payload)
+      return {
+        ...state,
+        boardslist: {
+          ...state.boardslist,
+          boards: newBoards
+        }
+      }
+    }
     case 'FETCH_BOARD_ERROR': {
       return {
         ...state,
