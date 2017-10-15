@@ -4,19 +4,28 @@ import { DragSource, DropTarget } from 'react-dnd'
 import { ItemTypes } from '../Constants'
 import { connect } from 'react-redux'
 import { updateLists } from '../../store/actions'
+import { findDOMNode } from 'react-dom'
+import { getEmptyImage } from 'react-dnd-html5-backend'
 import Card from './Card'
 
 const cardSource = {
 
-  beginDrag(props) {
+  beginDrag(props, monitor, component) {
+    const { clientWidth, clientHeight } = findDOMNode(component);
     return {
       id: props.id,
       originalIndex: props.index,
-      originalListIndex: props.listIndex
+      originalListIndex: props.listIndex,
+      clientWidth: clientWidth,
+      clientHeight: clientHeight,
+      ...props
     }
   },
   endDrag(props, monitor) {
-    console.log(`Card dropped`)
+  },
+  isDragging(props, monitor) {
+    const isDragging = props.id && props.id === monitor.getItem().id;
+    return isDragging;
   }
 }
 
@@ -49,6 +58,7 @@ const cardTarget = {
       newLists[newListIndex].cards.splice(newIndex, 0, card)        
       updateLists(props.dispatch, newLists)
     }
+    const item = monitor.getItem();
   },
 }
 
@@ -62,27 +72,34 @@ const cardTarget = {
 }))
 @DragSource(ItemTypes.CARD, cardSource, (connect, monitor) => ({
   connectCardDragSource: connect.dragSource(),
+  connectDragPreview: connect.dragPreview(),
   isDragging: monitor.isDragging()
 }))
 export default class CardComponent extends React.Component {
   static propTypes = {
     id: PropTypes.any,
-    connectDragSource: PropTypes.func.isRequired,
+    connectCardDragSource: PropTypes.func.isRequired,
     content: PropTypes.string.isRequired,
     isDragging: PropTypes.bool.isRequired,
     index: PropTypes.number.isRequired,
     listIndex: PropTypes.number
   }
 
+  componentDidMount() {
+    this.props.connectDragPreview(getEmptyImage(), {
+      captureDraggingState: true
+    });
+  }
+
   render() {
-    const { index, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource } = this.props;
+    const { id, index, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource } = this.props;
 
     return connectCardDropTarget(connectCardDragSource(
       <div className='host' style={{position: 'relative'}}>
         <div className='overlay' style={{
           opacity: isDragging ? 1 : 0
         }} />
-        <Card style={{ opacity: isDragging ? 0.3 : 1 }} index={index} listIndex={listIndex} content={content} />
+        <Card id={id} style={{ opacity: isDragging ? 0.3 : 1 }} index={index} listIndex={listIndex} content={content} />
         <style jsx>{`
           .overlay {
             position: absolute;

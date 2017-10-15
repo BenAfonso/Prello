@@ -7,6 +7,7 @@ import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import Button from '../UI/Button/Button'
 import { subscribeToBoard } from '../../services/api'
+import CustomDragLayer from '../CustomDragLayer'
 
 @connect(store => {
   return {
@@ -124,6 +125,7 @@ export default class Board extends React.Component {
     return <div className='host'>
 
       <h1 className='boardTitle'>{this.props.board.title}</h1>
+      <CustomDragLayer snapToGrid={false} />
       <ul>
         {
           this.props.board.lists.map((list, i) => (

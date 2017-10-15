@@ -3,13 +3,15 @@ import PropTypes from 'prop-types'
 import { DragLayer } from 'react-dnd'
 
 import CardDragPreview from './Card/CardDragPreview'
-import snapToGrid from './snapToGrid'
 import { ItemTypes } from './Constants'
+import snapToGrid from './snapToGrid';
 
 
 const layerStyles = {
   position: 'fixed',
   pointerEvents: 'none',
+  top: '0',
+  left: '0',
   zIndex: 100000
 }
 
@@ -18,24 +20,16 @@ function getItemStyles(props) {
   if (!initialOffset || !currentOffset) {
     return {
       display: 'none'
-    }
+    };
   }
 
   let { x, y } = currentOffset;
-
-  if (props.snapToGrid) {
-    x -= initialOffset.x;
-    y -= initialOffset.y;
-    [x, y] = snapToGrid(x, y);
-    x += initialOffset.x;
-    y += initialOffset.y;
-  }
 
   const transform = `translate(${x}px, ${y}px)`;
   return {
     WebkitTransform: transform,
     transform
-  }
+  };
 }
 
 @DragLayer((monitor) => ({
@@ -57,16 +51,14 @@ export default class CustomDragLayer extends React.Component {
       x: PropTypes.number.isRequired,
       y: PropTypes.number.isRequired
     }),
-    isDragging: PropTypes.bool.isRequired,
-    snapToGrid: PropTypes.bool.isRequired
+    isDragging: PropTypes.bool.isRequired
   }
 
   renderItem(type, item) {
-    console.log('AH')
     switch (type) {
       case ItemTypes.CARD:
         return (
-          <CardDragPreview id={item.id} index={item.index} listIndex={item.listIndex} content={item.content} />
+          <CardDragPreview {...item} />
         )
       default:
         return null

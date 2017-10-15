@@ -18,6 +18,7 @@ socket.on('REMOVE_LIST', (list) => {
 socket.on('LIST_MOVED', (lists) => {
   moveListLocal(lists)
 })
+
 socket.on('NEW_CARD', (newCard) => {
   console.log(newCard)
   addCardLocal(newCard.listId, newCard.card)
