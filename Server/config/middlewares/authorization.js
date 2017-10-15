@@ -13,7 +13,6 @@ const decodeToken = (token) => {
 }
 
 exports.requiresLogin = (req, res, next) => {
-  console.log(req.headers)
   let authorizationHeader = req.headers['authorization']
   if (authorizationHeader === undefined) {
     return res.status(401).send('No token provided')
@@ -29,6 +28,7 @@ exports.requiresLogin = (req, res, next) => {
   decodeToken(token).then((decoded) => {
     User.findById(decoded.id, (err, user) => {
       if (err) { return res.status(400).send('No user found') }
+      req.user = user
       next()
     })
   }).catch(err => {
@@ -41,6 +41,9 @@ exports.board = {
     next()
   },
   isCollaborator: (req, res, next) => {
+    next()
+  },
+  canEdit: (req, res, next) => {
     next()
   },
   isAdministrator: (req, res, next) => {
