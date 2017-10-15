@@ -6,11 +6,11 @@ const emit = require('../controllers/sockets').emit
 const boardController = {}
 
 /**
- * 
- * 
- * @returns 
+ *
+ *
+ * @returns
  */
- boardController.getAllBoards = function () {
+boardController.getAllBoards = function () {
   return new Promise((resolve, reject) => {
     Board.find().populate('owner lists collaborators').exec(function (err, res) {
       if (err) {
@@ -30,11 +30,11 @@ const boardController = {}
   })
 }
 /**
- * 
- * @param {any} board 
- * @returns 
+ *
+ * @param {any} board
+ * @returns
  */
- boardController.createBoard = function (board) {
+boardController.createBoard = function (board) {
   return new Promise((resolve, reject) => {
     const boardToAdd = new Board(board)
     boardToAdd.save((err, item) => {
@@ -49,11 +49,11 @@ const boardController = {}
 }
 
 /**
- * 
- * 
- * @param {any} boardId 
- * @param {any} list 
- * @returns 
+ *
+ *
+ * @param {any} boardId
+ * @param {any} list
+ * @returns
  */
 boardController.addListToBoard = function (boardId, list) {
   return new Promise((resolve, reject) => {
@@ -68,11 +68,11 @@ boardController.addListToBoard = function (boardId, list) {
 }
 
 /**
- * 
- * 
- * @param {any} boardId 
- * @param {any} listId 
- * @returns 
+ *
+ *
+ * @param {any} boardId
+ * @param {any} listId
+ * @returns
  */
 boardController.removeListFromBoard = function (boardId, listId) {
   return new Promise((resolve, reject) => {
@@ -87,10 +87,10 @@ boardController.removeListFromBoard = function (boardId, listId) {
 }
 
 /**
- * 
- * 
- * @param {any} boardId 
- * @returns 
+ *
+ *
+ * @param {any} boardId
+ * @returns
  */
 boardController.getOneboard = function (boardId) {
   return new Promise((resolve, reject) => {
@@ -121,9 +121,9 @@ boardController.getOneboard = function (boardId) {
 }
 
 /**
- * 
+ *
  * Moves a list in the board
- * @param {any} req 
+ * @param {any} req
  * @returns The new lists
  */
 boardController.moveList = function (req) {
@@ -161,7 +161,6 @@ boardController.moveList = function (req) {
   })
 }
 
-
 boardController.addCollaborator = (board, user) => {
 
 }
@@ -169,6 +168,5 @@ boardController.addCollaborator = (board, user) => {
 boardController.addCollaborators = (board, users) => {
 
 }
-
 
 module.exports = boardController
