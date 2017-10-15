@@ -58,7 +58,6 @@ const cardTarget = {
       newLists[newListIndex].cards.splice(newIndex, 0, card)        
       updateLists(props.dispatch, newLists)
     }
-    const item = monitor.getItem();
   },
 }
 

@@ -140,14 +140,24 @@ export default class List extends React.Component {
     this.props.removeAction(this.props.index)
   }
 
+  componentDidMount () {
+    this.cardContainer.addEventListener('scroll', function(e) {
+      console.log("CARDCONTAINER")
+    })
+      
+    this.host.addEventListener('scroll', function(e) {
+      console.log("HOST")
+    })
+  }
+
   render () {
     const { title, isDragging, connectDragSource, connectListDropTarget, connectCardDropTarget } = this.props
     return connectDragSource(connectListDropTarget(connectCardDropTarget(
-      <div className='host'>
-        <div className='overlay'  style={{ opacity: isDragging ? 1 : 0 }}/>
+      <div className='host' ref={(l) => { this.host = l }}>
+        { isDragging ? <div className='overlay' /> : null }
         <div className='title'>{title}</div>
         <div className='removeButton' onClick={this.removeAction}> X </div>
-        <ul style={{
+        <ul ref={(l) => { this.cardContainer = l }} style={{
           maxHeight: this.state.newCardFormDisplayed
             ? 'calc(100vh - 340px)'
             : 'calc(100vh - 230px)'
