@@ -14,11 +14,12 @@ function generateToken (user) {
 
 module.exports = (server, chai) => {
   chai.should()
-  let board1 = null
-  let board2 = null
-  let user1 = null
-  let user2 = null
-  let token = null
+  let board1 = null // Board with user1 as owner (no collaborators)
+  let board2 = null // Board with user2 as owner (no collaborators)
+  let board3 = null // Board with user1 as collaborators
+  let user1 = null  // Logged user
+  let user2 = null  // Another user
+  let token = null  // user1 api token
   describe('Boards', () => {
     beforeEach((done) => {
       Board.remove({}).then(() => {
@@ -34,7 +35,11 @@ module.exports = (server, chai) => {
                 mockedBoard.owner = user2._id
                 Board.create(mockedBoard).then(b2 => {
                   board2 = b2
-                  done()
+                  mockedBoard.collaborators = [u1._id]
+                  Board.create(mockedBoard).then(b3 => {
+                    board3 = b3
+                    done()
+                  }) 
                 })
               })
             })
@@ -70,7 +75,7 @@ module.exports = (server, chai) => {
             done()
           })
       })
-      it('it should GET a board', done => {
+      it('it should GET a board (OWNER)', done => {
         chai.request(server)
           .get(`/boards/${board1._id}`)
           .set('authorization', `Bearer ${token}`)
@@ -79,6 +84,21 @@ module.exports = (server, chai) => {
             res.should.have.status(200)
             res.body.should.be.a('object')
             res.body._id.should.equal(`${board1._id}`)
+            res.body.lists.should.be.a('array')
+            res.body.lists.length.should.equal(0)
+            res.body.title.should.equal('Test board')
+            done()
+          })
+      })
+      it('it should GET a board (COLLABORATOR)', done => {
+        chai.request(server)
+          .get(`/boards/${board3._id}`)
+          .set('authorization', `Bearer ${token}`)
+          .end((err, res) => {
+            if (err) {}
+            res.should.have.status(200)
+            res.body.should.be.a('object')
+            res.body._id.should.equal(`${board3._id}`)
             res.body.lists.should.be.a('array')
             res.body.lists.length.should.equal(0)
             res.body.title.should.equal('Test board')
@@ -120,6 +140,16 @@ module.exports = (server, chai) => {
             done()
           })
       })
+      it('it should not CREATE a board (Unauthenticated 401)', done => {
+        chai.request(server)
+          .post(`/boards`)
+          .send({title: 'TestBoard'})
+          .end((err, res) => {
+            if (err) {}
+            res.should.have.status(401)
+            done()
+          })
+      })
       it('it should NOT CREATE a board (Empty title)', done => {
         chai.request(server)
           .post(`/boards`)
@@ -142,6 +172,35 @@ module.exports = (server, chai) => {
             done()
           })
       })
+      it('it should ADD a new collaborator to board (OWNER)', done => {
+        chai.request(server)
+          .post(`/boards/${board1._id}/collaborators`)
+          .send({ userId: user2._id })
+          .set('authorization', `Bearer ${token}`)
+          .end((err, res) => {
+            if (err) {}
+            res.should.have.status(201)
+            done()
+          })
+      })
+      it('it should not ADD a new collaborator to board (NOT BOARD OWNER)', done => {
+        chai.request(server)
+          .post(`/boards/${board2._id}/collaborators`)
+          .send({ userId: user2._id })
+          .set('authorization', `Bearer ${token}`)
+          .end((err, res) => {
+            if (err) {}
+            res.should.have.status(403)
+            done()
+          })
+      })
+      /**
+       * Missing tests:
+       *  It should not add an existing collaborator => 400
+       *  It should delete a collaborator (board owner) => 200
+       *  It should not delete a collaborator (not board owner) => 403
+       *  It should not delete a collaborator (collaborator) => 403
+       */
     })
   })
 }
