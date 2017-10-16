@@ -1,4 +1,5 @@
 const Util = require('../../controllers/Util')
+const {requiresLogin} = require('../../config/middlewares/authorization')
 
 module.exports = (router, controller) => {
   /**
@@ -33,12 +34,12 @@ module.exports = (router, controller) => {
   *         schema:
   *             $ref: '#/definitions/NewBoard'
   *     responses:
-  *       200:
+  *       201:
   *         description: The newly created board
   *       500:
   *         description: Internal error
   */
-  router.post('/boards', (req, res) => {
+  router.post('/boards', [requiresLogin], (req, res) => {
     let requiredBody = ['title']
     requiredBody = Util.checkRequest(req.body, requiredBody)
     if (requiredBody.length > 0) {
@@ -46,8 +47,9 @@ module.exports = (router, controller) => {
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
+    console.log(req.user)
     controller
-      .createBoard(req.body)
+      .createBoard({...req.body, owner: req.user._id})
       .then(data => {
         res.status(201).json(data)
       })

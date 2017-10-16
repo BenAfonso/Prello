@@ -37,7 +37,7 @@ module.exports = (router, controller) => {
     *         schema:
     *             $ref: '#/definitions/NewCard'
     *     responses:
-    *       200:
+    *       201:
     *         description: Message confirming the Card has been created
     *       500:
     *         description: Internal error

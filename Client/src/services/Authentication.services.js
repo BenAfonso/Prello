@@ -10,8 +10,20 @@ export function extractToken () {
 }
 
 export function isAuthenticated () {
-  return (window.localStorage.getItem('prello_access_token') !== undefined &&
-    window.localStorage.getItem('prello_access_token') !== null)
+  if (window.localStorage.getItem('prello_access_token') !== undefined &&
+    window.localStorage.getItem('prello_access_token') !== null) {
+    setTokenHeader()
+    return true
+  } else {
+    unsetTokenHeader()
+    return false
+  }
+}
+export function setTokenHeader () {
+  axios.defaults.headers.common['authorization'] = `Bearer ${extractToken()}`
+}
+export function unsetTokenHeader () {
+  axios.defaults.headers.common['authorization'] = null
 }
 
 export function removeToken () {
