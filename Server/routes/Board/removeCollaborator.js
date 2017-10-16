@@ -28,7 +28,7 @@ module.exports = (router, controller) => {
     *         description: Internal error
     */
   router.delete('/boards/:boardId/collaborators/:userId', function (req, res) {
-    let requiredParameter = ['boardId','userId']
+    let requiredParameter = ['boardId', 'userId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
       let stringMessage = requiredParameter.join(',')
