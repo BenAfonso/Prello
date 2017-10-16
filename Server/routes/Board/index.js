@@ -12,4 +12,6 @@ module.exports = function (router, controller) {
   require('./getAll')(router, controller)
   require('./create')(router, controller)
   require('./getOne')(router, controller)
+  require('./addCollaborator')(router, controller)
+  require('./removeCollaborator')(router, controller)
 }

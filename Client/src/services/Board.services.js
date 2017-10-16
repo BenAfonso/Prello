@@ -1,5 +1,4 @@
 import Config from '../config'
-import { authGet } from './Authentication.services'
 import axios from 'axios'
 
 export function addBoardDistant (boardTitle) {
@@ -16,7 +15,7 @@ export function addBoardDistant (boardTitle) {
 
 export function fetchBoards () {
   return new Promise((resolve, reject) => {
-    authGet(`${Config.API_URL}/boards`).then((res) => {
+    axios.get(`${Config.API_URL}/boards`).then((res) => {
       resolve(res.data)
     }).catch((err) => {
       reject(err)
