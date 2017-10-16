@@ -12,7 +12,7 @@ const boardController = {}
  */
 boardController.getAllBoards = function () {
   return new Promise((resolve, reject) => {
-    Board.find().populate('owner lists collaborators').exec(function (err, res) {
+    Board.find().populate('owner lists collaborators', {'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0}).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
@@ -94,7 +94,7 @@ boardController.removeListFromBoard = function (boardId, listId) {
  */
 boardController.getOneboard = function (boardId) {
   return new Promise((resolve, reject) => {
-    Board.findOne({ '_id': boardId }).populate('owner lists collaborators').exec(function (err, res) {
+    Board.findOne({ '_id': boardId }).populate('owner lists collaborators', {'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0}).exec(function (err, res) {
       if (err) {
         err.status = 500
         reject(err)
@@ -162,7 +162,7 @@ boardController.moveList = function (req) {
 }
 
 boardController.refreshOneboard = function (action, boardId) {
-  Board.findOne({ '_id': boardId }).populate('owner lists collaborators').exec(function (err, res) {
+  Board.findOne({ '_id': boardId }).populate('owner lists collaborators', {'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0}).exec(function (err, res) {
     if (err) {} else {
       Card.populate(res, {
         path: 'lists.cards'
@@ -174,8 +174,28 @@ boardController.refreshOneboard = function (action, boardId) {
     }
   })
 }
-boardController.addCollaborator = (board, user) => {
+boardController.addCollaborator = (boardId, userId) => {
+  return new Promise((resolve, reject) => {
+    Board.findOneAndUpdate({'_id': boardId}, {$push: {collaborators: userId}}, {new: true}, function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
 
+boardController.removeCollaborator = (boardId, userId) => {
+  return new Promise((resolve, reject) => {
+    Board.findOneAndUpdate({'_id': boardId}, {$pull: {collaborators: userId}}, {new: true}, function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
 }
 
 boardController.addCollaborators = (board, users) => {

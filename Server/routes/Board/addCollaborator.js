@@ -1,46 +1,44 @@
 const Util = require('../../controllers/Util')
-
-module.exports = (router, controllers) => {
+module.exports = (router, controller) => {
   /**
     * @swagger
     * definitions:
-    *   NewList:
+    *   NewCollaborator:
     *     properties:
-    *       name:
+    *       userId:
     *         type: string
     */
-
   /**
     * @swagger
-    * /boards/{id}/lists:
+    * /boards/{boardId}/collaborators:
     *   post:
     *     tags:
-    *       - Lists
-    *     description: Create a new List inside a Board
-    *     summary: CREATE a new List inside a Board
+    *       - Boards
+    *     description: Add a collaborator in a board
+    *     summary: Add a collaborator in a Board
     *     produces:
     *       - application/json
     *     parameters:
-    *       - name: id
+    *       - name: boardId
     *         type: string
-    *         description: The board id where we want to insert the list
+    *         description: The board id where we want to add the collaborator
     *         in: path
     *         required: true
     *       - name: body
-    *         description: The List object that needs to be added
+    *         description: The user id that needs to be added
     *         in: body
     *         required: true
     *         schema:
-    *             $ref: '#/definitions/NewList'
+    *             $ref: '#/definitions/NewCollaborator'
     *     responses:
     *       201:
-    *         description: Message confirming the List has been created
+    *         description: Message confirming the collaborator has been created
     *       500:
     *         description: Internal error
     */
-  router.post('/boards/:boardid/lists', function (req, res) {
-    let requiredBody = ['name']
-    let requiredParameter = ['boardid']
+  router.post('/boards/:boardId/collaborators', function (req, res) {
+    let requiredBody = ['userId']
+    let requiredParameter = ['boardId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
       let stringMessage = requiredParameter.join(',')
@@ -53,11 +51,10 @@ module.exports = (router, controllers) => {
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-    controllers.listController.createList(req).then((data) => {
-      res.status(201).json(data)
+    controller.addCollaborator(req.params.boardId, req.body.userId).then((data) => {
+      res.status(201).json('Successfully updated')
+    }).catch((err) => {
+      res.status(500).json(err)
     })
-      .catch((err) => {
-        res.status(500).json(err)
-      })
   })
 }
