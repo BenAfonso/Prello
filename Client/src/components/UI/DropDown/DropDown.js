@@ -27,7 +27,7 @@ export default class DropDown extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      expanded: true
+      expanded: false
     }
     this.toggleDropdown = this.toggleDropdown.bind(this)
   }
