@@ -214,8 +214,6 @@ boardController.addCollaborator = (boardId, userId) => {
         err.status = 404
         reject(err)
       } else {
-        console.log(res.owner)
-        console.log(userId)
         if (res.owner.toString() === userId.toString()) {
           Board.findOneAndUpdate({'_id': boardId}, {$push: {collaborators: userId}}, {new: true}, function (err, res) {
             if (err) {
