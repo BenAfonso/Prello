@@ -47,7 +47,6 @@ module.exports = (router, controller) => {
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-    console.log(req.user)
     controller
       .createBoard({...req.body, owner: req.user._id})
       .then(data => {

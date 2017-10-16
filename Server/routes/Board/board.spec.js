@@ -27,6 +27,7 @@ module.exports = (server, chai) => {
           User.create(mockedUser1).then(u1 => {
             user1 = u1
             token = generateToken(user1)
+            mockedBoard.visibility = 'private'
             mockedBoard.owner = user1._id
             Board.create(mockedBoard).then(b1 => {
               board1 = b1
@@ -39,7 +40,7 @@ module.exports = (server, chai) => {
                   Board.create(mockedBoard).then(b3 => {
                     board3 = b3
                     done()
-                  }) 
+                  })
                 })
               })
             })
@@ -66,7 +67,7 @@ module.exports = (server, chai) => {
             if (err) {}
             res.should.have.status(200)
             res.body.should.be.a('array')
-            res.body.length.should.equal(1)
+            res.body.length.should.equal(2)
             res.body[0].should.be.a('object')
             res.body[0]._id.should.equal(`${board1._id}`)
             res.body[0].lists.should.be.a('array')
@@ -118,6 +119,7 @@ module.exports = (server, chai) => {
       it('it should not GET a board (wrong id) 404', done => {
         chai.request(server)
           .get(`/boards/59d62fd216575b11bb8320a5`)
+          .set('authorization', `Bearer ${token}`)
           .end((err, res) => {
             if (err) {}
             res.should.have.status(404)
@@ -175,7 +177,7 @@ module.exports = (server, chai) => {
       it('it should ADD a new collaborator to board (OWNER)', done => {
         chai.request(server)
           .post(`/boards/${board1._id}/collaborators`)
-          .send({ userId: user2._id })
+          .send({ userId: user1._id })
           .set('authorization', `Bearer ${token}`)
           .end((err, res) => {
             if (err) {}
@@ -185,7 +187,7 @@ module.exports = (server, chai) => {
       })
       it('it should not ADD a new collaborator to board (NOT BOARD OWNER)', done => {
         chai.request(server)
-          .post(`/boards/${board2._id}/collaborators`)
+          .post(`/boards/${board1._id}/collaborators`)
           .send({ userId: user2._id })
           .set('authorization', `Bearer ${token}`)
           .end((err, res) => {

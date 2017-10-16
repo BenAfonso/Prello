@@ -55,7 +55,7 @@ app.listen(process.env.PORT || 3000, () => {
 connect()
 
 function connect () {
-  var options = { server: { socketOptions: { keepAlive: 1 } } }
+  var options = { useMongoClient: true }
   return mongoose.connect(config.db, options).connection
 }
 

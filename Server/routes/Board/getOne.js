@@ -1,4 +1,6 @@
 const Util = require('../../controllers/Util')
+const {requiresLogin, board} = require('../../config/middlewares/authorization')
+
 module.exports = function (router, controller) {
   /**
   * @swagger
@@ -24,7 +26,7 @@ module.exports = function (router, controller) {
   *       500:
   *         description: Internal error
   */
-  router.get('/boards/:boardId', function (req, res) {
+  router.get('/boards/:boardId', [requiresLogin, board.hasAuthorization], function (req, res) {
     let requiredParameter = ['boardId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
@@ -32,7 +34,7 @@ module.exports = function (router, controller) {
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-    controller.getOneboard(req.params.boardId).then((data) => {
+    controller.getOneboard(req.params.boardId, req.user._id).then((data) => {
       res.status(200).json(data)
     })
       .catch((err) => {

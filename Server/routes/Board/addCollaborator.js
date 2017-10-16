@@ -54,7 +54,7 @@ module.exports = (router, controller) => {
     controller.addCollaborator(req.params.boardId, req.body.userId).then((data) => {
       res.status(201).json('Successfully updated')
     }).catch((err) => {
-      res.status(500).json(err)
+      res.status(err.status).json(err)
     })
   })
 }

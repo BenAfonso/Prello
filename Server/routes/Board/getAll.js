@@ -20,7 +20,7 @@ module.exports = function (router, controller) {
   *         description: Internal error
   */
   router.get('/boards', [requiresLogin, board.hasAuthorization], function (req, res) {
-    controller.getAllBoards().then((data) => {
+    controller.getAvailableBoards(req.user._id).then((data) => {
       res.status(200).json(data)
     })
       .catch((err) => {
