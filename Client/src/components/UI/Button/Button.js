@@ -15,6 +15,8 @@ export default class Button extends React.Component {
     gradient: PropTypes.string,
     bgColor: PropTypes.string,
     bgColorTo: PropTypes.string,
+    hoverBgColor: PropTypes.string,
+    hoverColor: PropTypes.string,
     onClick: PropTypes.func,
     children: PropTypes.any,
     bold: PropTypes.bool
@@ -57,6 +59,8 @@ export default class Button extends React.Component {
       shadow,
       bold,
       gradient,
+      hoverBgColor,
+      hoverColor,
       ...props
     } = this.props
 
@@ -97,7 +101,13 @@ export default class Button extends React.Component {
     return (
       <div {...props} className={className}>
         {children}
-        <style jsx>{styles}</style>
+        <style jsx>{`
+          .button:hover {
+            background-color: ${ hoverBgColor ? hoverBgColor : '' } !important;
+            color: ${ hoverColor ? hoverColor : '' } !important;
+          }
+
+          ${styles}`}</style>
       </div>
     )
   }
