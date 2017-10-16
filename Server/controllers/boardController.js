@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 const Board = mongoose.model('Board')
 const Card = mongoose.model('Card')
+const User = mongoose.model('User')
+
 const Util = require('./Util')
 const emit = require('../controllers/sockets').emit
 const boardController = {}
@@ -176,6 +178,18 @@ boardController.refreshOneboard = function (action, boardId) {
 }
 boardController.addCollaborator = (boardId, userId) => {
   return new Promise((resolve, reject) => {
+    User.findOne({'_id': userId}, function (err, user) {
+      if (err) {
+        reject(err)
+        return
+      }
+      if (user == null) {
+        let error = new Error('No user found')
+        error.status = 404
+        reject(error)
+        return
+      }
+    })
     Board.findOneAndUpdate({'_id': boardId}, {$push: {collaborators: userId}}, {new: true}, function (err, res) {
       if (err) {
         reject(err)

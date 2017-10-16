@@ -4,12 +4,12 @@ const mockedBoard = { title: 'Test board', visibility: 'public', background: '' 
 
 module.exports = (server, chai) => {
   chai.should()
-  let board = null
+  // let board = null
   describe('Boards', () => {
     beforeEach((done) => {
       Board.remove({}).then(() => {
         Board.create(mockedBoard).then(b => {
-          board = b
+          // board = b
           done()
         })
       })
@@ -41,7 +41,7 @@ module.exports = (server, chai) => {
             done()
           })
       }) */
-      it('it should GET a board', done => {
+     /* it('it should GET a board', done => {
         chai.request(server)
           .get(`/boards/${board._id}`)
           .end((err, res) => {
@@ -54,7 +54,7 @@ module.exports = (server, chai) => {
             res.body.title.should.equal('Test board')
             done()
           })
-      })
+      }) */
       it('it should not GET a board (wrong id) 404', done => {
         chai.request(server)
           .get(`/boards/59d62fd216575b11bb8320a5`)
@@ -66,7 +66,7 @@ module.exports = (server, chai) => {
       })
     })
     describe('CREATE /boards', () => {
-      it('it should CREATE a board', done => {
+     /* it('it should CREATE a board', done => {
         chai.request(server)
           .post(`/boards`)
           .send({title: 'TestBoard'})
@@ -97,7 +97,7 @@ module.exports = (server, chai) => {
             res.should.have.status(400)
             done()
           })
-      })
+      }) */
     })
   })
 }

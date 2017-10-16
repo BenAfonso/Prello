@@ -5,7 +5,6 @@ const User = mongoose.model('User')
 
 const decodeToken = (token) => {
   return new Promise((resolve, reject) => {
-    
     jwt.verify(token, secretKey, (err, decoded) => {
       if (err) reject(err)
       else resolve(decoded)
@@ -20,7 +19,7 @@ exports.requiresLogin = (req, res, next) => {
     return res.status(401).send('No token provided')
   }
   authorizationHeader = authorizationHeader.split(' ')
-  
+
   if (authorizationHeader[0] !== 'Bearer') {
     return res.status(401).send('Bearer token needed')
   }
