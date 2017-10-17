@@ -202,7 +202,7 @@ boardController.refreshOneboard = function (action, boardId) {
     }
   })
 }
-boardController.addCollaborator = (boardId, userId) => {
+boardController.addCollaborator = (boardId, userId, requesterId) => {
   return new Promise((resolve, reject) => {
     Board.findOne({'_id': boardId}).exec((err, res) => {
       if (err) {
@@ -214,7 +214,7 @@ boardController.addCollaborator = (boardId, userId) => {
         err.status = 404
         reject(err)
       } else {
-        if (res.owner.toString() === userId.toString()) {
+        if (res.owner.toString() === requesterId.toString()) {
           Board.findOneAndUpdate({'_id': boardId}, {$push: {collaborators: userId}}, {new: true}, function (err, res) {
             if (err) {
               err.status = 500
@@ -233,13 +233,32 @@ boardController.addCollaborator = (boardId, userId) => {
   })
 }
 
-boardController.removeCollaborator = (boardId, userId) => {
+boardController.removeCollaborator = (boardId, userId, requesterId) => {
   return new Promise((resolve, reject) => {
-    Board.findOneAndUpdate({'_id': boardId}, {$pull: {collaborators: userId}}, {new: true}, function (err, res) {
+    Board.findOne({'_id': boardId}).exec((err, res) => {
       if (err) {
+        err.status = 404
+        reject(err)
+      }
+      if (res === null) {
+        let err = new Error('Board not found')
+        err.status = 404
         reject(err)
       } else {
-        resolve(res)
+        if (res.owner.toString() === requesterId.toString()) {
+          Board.findOneAndUpdate({'_id': boardId}, {$pull: {collaborators: userId}}, {new: true}, function (err, res) {
+            if (err) {
+              err.status = 500
+              reject(err)
+            } else {
+              resolve(res)
+            }
+          })
+        } else {
+          let err = new Error('User not authorize')
+          err.status = 403
+          reject(err)
+        }
       }
     })
   })
