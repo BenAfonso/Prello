@@ -72,7 +72,6 @@ exports.board = {
     next()
   },
   canRead: (req, res, next) => {
-    
     next()
   },
   isOwner: (req, res, next) => {
