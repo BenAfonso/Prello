@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Input from '../Input/Input'
+import Button from '../Button/Button'
 
 export default class ChecklistItem extends React.Component {
 
@@ -23,8 +25,8 @@ export default class ChecklistItem extends React.Component {
   }
 
   updateText () {
-    if (this.newContentInput.value.length > 0) {
-      this.setState({ isEditable: false, content: this.newContentInput.value})
+    if (this.textInput.input.value.length > 0) {
+      this.setState({ isEditable: false, content: this.textInput.input.value})
     }
   }
 
@@ -42,9 +44,9 @@ export default class ChecklistItem extends React.Component {
           <span onClick={this.setEditable}>{this.state.content}</span>
         </div> : 
         <div className='editMode'>
-          <input type='text' ref={(t) => { this.newContentInput = t }} defaultValue={this.state.content} />
-          <input type='button' onClick={this.updateText} value='Update' />
-          <input type='button' onClick={this.cancelEdit} value='Cancel' /> 
+          <Input ref={(v) => this.textInput = v} placeholder={this.state.content} />
+          <Button onClick={this.updateText} bgColor='#3cb221' color='#FFF' >Update</Button>
+          <Button onClick={this.cancelEdit} bgColor='#F00' color='#FFF' >Cancel</Button>
         </div> }
       </div>
     )
