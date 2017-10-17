@@ -214,33 +214,14 @@ boardController.addCollaborator = (boardId, userId, requesterId) => {
     })
   })
 }
-
 boardController.removeCollaborator = (boardId, userId, requesterId) => {
   return new Promise((resolve, reject) => {
-    Board.findOne({ '_id': boardId }).exec((err, res) => {
+    Board.findOneAndUpdate({ '_id': boardId }, { $pull: { collaborators: userId } }, { new: true }, function (err, res) {
       if (err) {
-        err.status = 404
-        reject(err)
-      }
-      if (res === null) {
-        let err = new Error('Board not found')
-        err.status = 404
+        err.status = 500
         reject(err)
       } else {
-        if (res.owner.toString() === requesterId.toString()) {
-          Board.findOneAndUpdate({ '_id': boardId }, { $pull: { collaborators: userId } }, { new: true }, function (err, res) {
-            if (err) {
-              err.status = 500
-              reject(err)
-            } else {
-              resolve(res)
-            }
-          })
-        } else {
-          let err = new Error('User not authorize')
-          err.status = 403
-          reject(err)
-        }
+        resolve(res)
       }
     })
   })

@@ -34,7 +34,6 @@ exports.requiresLogin = (req, res, next) => {
       next()
     })
   }).catch(err => {
-    console.log(err)
     return res.status(400).send(err)
   })
 }
@@ -65,21 +64,28 @@ exports.board = {
       }
     })
   },
-  canEdit: (req, res, next) => {
-    next()
-  },
-  canDelete: (req, res, next) => {
-    next()
-  },
   canRead: (req, res, next) => {
-    next()
+    Board.findOne({'_id': req.params.boardId}).exec((err, result) => {
+      if (err) {
+        return res.status(500).send(err)
+      }
+      let isPublic = result.visibility === 'public'
+      let collaborator = result.collaborators.filter(c => c.toString() === req.user._id.toString())
+      let isCollaborator = collaborator.length > 0
+      let isOwner = result.owner.toString() === req.user._id.toString()
+
+      if (isPublic || isCollaborator || isOwner) {
+        next()
+      } else {
+        return res.status(403).send('Forbidden: You aren\'t allowed to see this board')
+      }
+    })
   },
   isOwner: (req, res, next) => {
     Board.findOne({'_id': req.params.boardId}).exec((err, result) => {
       if (err) {
         return res.status(500).send(err)
       }
-      console.log(result.owner)
       if (result.owner.toString() === req.user._id.toString()) {
         next()
       } else {
