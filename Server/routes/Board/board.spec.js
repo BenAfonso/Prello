@@ -175,6 +175,26 @@ module.exports = (server, chai) => {
             done()
           })
       })
+      it('it should REMOVE a collaborator to board (OWNER)', done => {
+        chai.request(server)
+          .delete(`/boards/${board1._id}/collaborators/${user1._id}`)
+          .set('authorization', `Bearer ${token}`)
+          .end((err, res) => {
+            if (err) {}
+            res.should.have.status(200)
+            done()
+          })
+      })
+      it('it should not REMOVE a collaborator to board (NOT BOARD OWNER)', done => {
+        chai.request(server)
+          .delete(`/boards/${board3._id}/collaborators/${user1._id}`)
+          .set('authorization', `Bearer ${token}`)
+          .end((err, res) => {
+            if (err) {}
+            res.should.have.status(403)
+            done()
+          })
+      })
       /**
        * Missing tests:
        *  It should not add an existing collaborator => 400
