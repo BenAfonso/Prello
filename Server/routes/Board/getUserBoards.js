@@ -1,4 +1,4 @@
-const {requiresLogin, board} = require('../../config/middlewares/authorization')
+const {requiresLogin} = require('../../config/middlewares/authorization')
 
 module.exports = function (router, controller) {
   /**

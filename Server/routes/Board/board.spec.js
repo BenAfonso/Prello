@@ -60,7 +60,7 @@ module.exports = (server, chai) => {
       })
       it('it should GET all boards', done => {
         chai.request(server)
-          .get(`/boards`)
+          .get(`/users/${user1._id}/boards`)
           .set('authorization', `Bearer ${token}`)
           .end((err, res) => {
             if (err) {}
