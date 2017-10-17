@@ -1,4 +1,6 @@
 const Util = require('../../controllers/Util')
+const {boardExists} = require('../../config/middlewares/boardAuthorizations')
+
 module.exports = (router, controllers) => {
   /**
   * @swagger
@@ -30,7 +32,7 @@ module.exports = (router, controllers) => {
   *       404:
   *         description: List doesn't exist
   */
-  router.delete('/boards/:boardid/lists/:listid', function (req, res) {
+  router.delete('/boards/:boardid/lists/:listid', [boardExists], function (req, res) {
     let requiredParameter = ['listid', 'boardid']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {

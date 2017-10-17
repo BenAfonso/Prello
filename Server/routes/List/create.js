@@ -1,4 +1,5 @@
 const Util = require('../../controllers/Util')
+const {boardExists} = require('../../config/middlewares/boardAuthorizations')
 
 module.exports = (router, controllers) => {
   /**
@@ -38,7 +39,7 @@ module.exports = (router, controllers) => {
     *       500:
     *         description: Internal error
     */
-  router.post('/boards/:boardid/lists', function (req, res) {
+  router.post('/boards/:boardid/lists', [boardExists], function (req, res) {
     let requiredBody = ['name']
     let requiredParameter = ['boardid']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
-const passport = require('passport')
+// const passport = require('passport')
 const request = require('request')
 
 /**
@@ -29,8 +29,8 @@ const request = require('request')
     *         type: string
     */
 module.exports = (router, userController) => {
-  router.get('/auth/google',
-    passport.authenticate('google', { scope: ['email profile'] }))
+//  router.get('/auth/google',
+//    passport.authenticate('google', { scope: ['email profile'] }))
 
   router.post('/auth/google/callback',
     function (req, res) {

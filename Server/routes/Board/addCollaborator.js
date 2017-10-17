@@ -1,6 +1,6 @@
 const Util = require('../../controllers/Util')
 const {requiresLogin} = require('../../config/middlewares/authorization')
-const {board} = require('../../config/middlewares/boardAuthorizations')
+const board = require('../../config/middlewares/boardAuthorizations')
 
 module.exports = (router, controller) => {
   /**
