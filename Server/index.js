@@ -8,8 +8,6 @@ const app = express()
 const mongoose = require('mongoose')
 const swaggerSpec = require('./config/swagger')
 const config = require('./config')
-const passport = require('passport')
-const google = require('./config/passport/google')
 const logger = require('morgan')
 require('./controllers/sockets')
 
@@ -35,8 +33,7 @@ app.all('/*', (req, res, next) => {
     next()
   }
 })
-passport.use(google)
-app.use(passport.initialize())
+
 // Serving doc files
 app.use('/api-docs', express.static('./api-doc'))
 

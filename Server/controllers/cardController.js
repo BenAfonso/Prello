@@ -16,11 +16,11 @@ cardController.createCard = (req) => {
       if (err) {
         reject(err)
       } else {
-        listController.addCardToList(req.params.listid, cardToAdd)
+        listController.addCardToList(req.params.listId, cardToAdd)
             .then((data) => {
               let cardToEmit = {
                 card: item,
-                listId: req.params.listid
+                listId: req.params.listId
               }
               emit(req.params.boardId, 'NEW_CARD', cardToEmit)
               resolve(item)

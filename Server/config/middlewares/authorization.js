@@ -15,6 +15,9 @@ const decodeToken = (token) => {
 exports.requiresLogin = (req, res, next) => {
   let authorizationHeader = req.headers['authorization']
   if (authorizationHeader === undefined) {
+    authorizationHeader = req['authorization']
+  }
+  if (authorizationHeader === undefined) {
     return res.status(401).send('No token provided')
   }
   authorizationHeader = authorizationHeader.split(' ')

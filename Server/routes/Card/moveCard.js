@@ -1,5 +1,9 @@
 const Util = require('../../controllers/Util')
+const {requiresLogin} = require('../../config/middlewares/authorization')
+
 const {cardExists} = require('../../config/middlewares/CardAuthorizations')
+const {isCollaborator} = require('../../config/middlewares/boardAuthorizations')
+
 module.exports = (router, controllers) => {
   /**
     * @swagger
@@ -53,7 +57,7 @@ module.exports = (router, controllers) => {
     *       500:
     *         description: Internal error
     */
-  router.put('/boards/:boardId/cards/:cardId/move', [cardExists], function (req, res) {
+  router.put('/boards/:boardId/cards/:cardId/move', [requiresLogin, cardExists, isCollaborator], function (req, res) {
     let requiredBody = ['oldListId', 'newListId', 'position']
     let requiredParameter = ['cardId', 'boardId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)

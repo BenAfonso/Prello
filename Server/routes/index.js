@@ -18,10 +18,12 @@ const { requiresLogin } = require('../config/middlewares/authorization')
      *           type: number
      */
 
-router.get('/me/*', [requiresLogin], (req, res) => {
+router.get('/me/*', [requiresLogin], (req, res, next) => {
   let request = req.originalUrl.split('/').filter(e => e !== '')
   request[0] = `/users/${req.user._id}`
-  res.redirect(request.join('/'))
+  request = request.join('/')
+  req.url = request
+  next()
 })
 
 require('./List')(router, controllers)

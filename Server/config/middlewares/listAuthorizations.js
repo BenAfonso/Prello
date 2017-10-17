@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 const List = mongoose.model('List')
 
 module.exports.listExists = (req, res, next) => {
-  console.log(req.params.listId)
   List.findOne({'_id': req.params.listId}).exec((err, result) => {
     if (err) {
       return res.status(500).send(err)
