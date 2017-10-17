@@ -1,4 +1,6 @@
 const Util = require('../../controllers/Util')
+const {requiresLogin} = require('../../config/middlewares/authorization')
+
 module.exports = (router, controller) => {
   /**
     * @swagger
@@ -27,7 +29,7 @@ module.exports = (router, controller) => {
     *       500:
     *         description: Internal error
     */
-  router.delete('/boards/:boardId/collaborators/:userId', function (req, res) {
+  router.delete('/boards/:boardId/collaborators/:userId', [requiresLogin], function (req, res) {
     let requiredParameter = ['boardId', 'userId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
@@ -35,10 +37,10 @@ module.exports = (router, controller) => {
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-    controller.removeCollaborator(req.params.boardId, req.params.userId).then((data) => {
+    controller.removeCollaborator(req.params.boardId, req.params.userId, req.user._id).then((data) => {
       res.status(200).json('Successfully updated')
     }).catch((err) => {
-      res.status(500).json(err)
+      res.status(err.status).json(err)
     })
   })
 }

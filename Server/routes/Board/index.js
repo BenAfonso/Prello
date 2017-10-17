@@ -14,4 +14,5 @@ module.exports = function (router, controller) {
   require('./getOne')(router, controller)
   require('./addCollaborator')(router, controller)
   require('./removeCollaborator')(router, controller)
+  require('./getUserBoards')(router, controller)
 }

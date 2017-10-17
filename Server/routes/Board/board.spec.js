@@ -3,7 +3,7 @@ const secretKey = require('../../config').secretKey
 const jwt = require('jsonwebtoken')
 const Board = mongoose.model('Board')
 const User = mongoose.model('User')
-const mockedBoard = { title: 'Test board', visibility: 'public', background: '', owner: '' }
+const mockedBoard = { title: 'Test board', visibility: 'private', background: '', owner: '' }
 const mockedUser1 = { name: 'Test Test', email: 'test@test.com', password: '1234567', username: 'testUser' }
 const mockedUser2 = { name: 'Test2 Test2', email: 'test2@test.com', password: '1234567', username: 'testUser2' }
 
@@ -40,13 +40,13 @@ module.exports = (server, chai) => {
       })
       it('it should GET all boards', done => {
         chai.request(server)
-          .get(`/boards`)
+          .get(`/users/${user1._id}/boards`)
           .set('authorization', `Bearer ${token}`)
           .end((err, res) => {
             if (err) {}
             res.should.have.status(200)
             res.body.should.be.a('array')
-            res.body.length.should.equal(1)
+            res.body.length.should.equal(2)
             res.body[0].should.be.a('object')
             res.body[0]._id.should.equal(`${board1._id}`)
             res.body[0].lists.should.be.a('array')
@@ -98,6 +98,7 @@ module.exports = (server, chai) => {
       it('it should not GET a board (wrong id) 404', done => {
         chai.request(server)
           .get(`/boards/59d62fd216575b11bb8320a5`)
+          .set('authorization', `Bearer ${token}`)
           .end((err, res) => {
             if (err) {}
             res.should.have.status(404)
@@ -187,7 +188,12 @@ module.exports = (server, chai) => {
 
 function initData (mockedUser1, mockedUser2, mockedBoard) {
   return new Promise((resolve, reject) => {
-    let board1, board2, board3, user1, user2 = null
+    let board1 = null
+    let board2 = null
+    let board3 = null
+    let user1 = null
+    let user2 = null
+    let token = null
     // User1 owns board1
     // User2 owns board2
     // User1 is collaborator on board3
@@ -208,7 +214,7 @@ function initData (mockedUser1, mockedUser2, mockedBoard) {
                 Board.create(mockedBoard).then(b3 => {
                   board3 = b3
                   resolve({user1, user2, board1, board2, board3, token})
-                }) 
+                })
               })
             })
           })

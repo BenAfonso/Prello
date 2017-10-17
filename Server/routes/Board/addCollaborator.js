@@ -1,4 +1,5 @@
 const Util = require('../../controllers/Util')
+const {requiresLogin} = require('../../config/middlewares/authorization')
 module.exports = (router, controller) => {
   /**
     * @swagger
@@ -36,7 +37,7 @@ module.exports = (router, controller) => {
     *       500:
     *         description: Internal error
     */
-  router.post('/boards/:boardId/collaborators', function (req, res) {
+  router.post('/boards/:boardId/collaborators', [requiresLogin], function (req, res) {
     let requiredBody = ['userId']
     let requiredParameter = ['boardId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
@@ -51,10 +52,10 @@ module.exports = (router, controller) => {
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-    controller.addCollaborator(req.params.boardId, req.body.userId).then((data) => {
+    controller.addCollaborator(req.params.boardId, req.body.userId, req.user._id).then((data) => {
       res.status(201).json('Successfully updated')
     }).catch((err) => {
-      res.status(500).json(err)
+      res.status(err.status).json(err)
     })
   })
 }

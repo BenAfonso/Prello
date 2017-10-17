@@ -29,6 +29,26 @@ boardController.getAllBoards = function () {
     })
   })
 }
+boardController.getUserBoards = function (userId) {
+  return new Promise((resolve, reject) => {
+    Board.find({$or: [{'owner': userId}, {'collaborators': userId}]}).populate('owner lists collaborators', {'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0}).exec(function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        Card.populate(res, {
+          path: 'lists.cards'
+        }, function (err, res) {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(res)
+          }
+        })
+      }
+    })
+  })
+}
+
 /**
  *
  * @param {any} board
@@ -92,7 +112,7 @@ boardController.removeListFromBoard = function (boardId, listId) {
  * @param {any} boardId
  * @returns
  */
-boardController.getOneboard = function (boardId) {
+boardController.getOneboard = function (boardId, userId) {
   return new Promise((resolve, reject) => {
     Board.findOne({ '_id': boardId }).populate('owner lists collaborators', {'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0}).exec(function (err, res) {
       if (err) {
@@ -104,16 +124,24 @@ boardController.getOneboard = function (boardId) {
           err.status = 404
           reject(err)
         } else {
-          Card.populate(res, {
-            path: 'lists.cards'
-          }, function (err, res) {
-            if (err) {
-              err.status = 500
-              reject(err)
-            } else {
-              resolve(res)
-            }
-          })
+          let collaborators = res.collaborators
+          collaborators = collaborators.filter((x) => (x._id.toString() === userId.toString()))
+          if (res.owner._id.toString() !== userId.toString() && res.visibility !== 'public' && collaborators.length === 0) {
+            err = new Error('Unauthorize user')
+            err.status = 403
+            reject(err)
+          } else {
+            Card.populate(res, {
+              path: 'lists.cards'
+            }, function (err, res) {
+              if (err) {
+                err.status = 500
+                reject(err)
+              } else {
+                resolve(res)
+              }
+            })
+          }
         }
       }
     })
@@ -174,25 +202,63 @@ boardController.refreshOneboard = function (action, boardId) {
     }
   })
 }
-boardController.addCollaborator = (boardId, userId) => {
+boardController.addCollaborator = (boardId, userId, requesterId) => {
   return new Promise((resolve, reject) => {
-    Board.findOneAndUpdate({'_id': boardId}, {$push: {collaborators: userId}}, {new: true}, function (err, res) {
+    Board.findOne({'_id': boardId}).exec((err, res) => {
       if (err) {
+        err.status = 404
+        reject(err)
+      }
+      if (res === null) {
+        let err = new Error('Board not found')
+        err.status = 404
         reject(err)
       } else {
-        resolve(res)
+        if (res.owner.toString() === requesterId.toString()) {
+          Board.findOneAndUpdate({'_id': boardId}, {$push: {collaborators: userId}}, {new: true}, function (err, res) {
+            if (err) {
+              err.status = 500
+              reject(err)
+            } else {
+              resolve(res)
+            }
+          })
+        } else {
+          let err = new Error('User not authorize')
+          err.status = 403
+          reject(err)
+        }
       }
     })
   })
 }
 
-boardController.removeCollaborator = (boardId, userId) => {
+boardController.removeCollaborator = (boardId, userId, requesterId) => {
   return new Promise((resolve, reject) => {
-    Board.findOneAndUpdate({'_id': boardId}, {$pull: {collaborators: userId}}, {new: true}, function (err, res) {
+    Board.findOne({'_id': boardId}).exec((err, res) => {
       if (err) {
+        err.status = 404
+        reject(err)
+      }
+      if (res === null) {
+        let err = new Error('Board not found')
+        err.status = 404
         reject(err)
       } else {
-        resolve(res)
+        if (res.owner.toString() === requesterId.toString()) {
+          Board.findOneAndUpdate({'_id': boardId}, {$pull: {collaborators: userId}}, {new: true}, function (err, res) {
+            if (err) {
+              err.status = 500
+              reject(err)
+            } else {
+              resolve(res)
+            }
+          })
+        } else {
+          let err = new Error('User not authorize')
+          err.status = 403
+          reject(err)
+        }
       }
     })
   })
