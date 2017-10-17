@@ -4,7 +4,6 @@ export default `
   padding: 10px;
   border-radius: 3px;
   box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-  overflow-y: scroll;
   position: relative;
 }
 
