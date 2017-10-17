@@ -102,13 +102,15 @@ export default class DropDown extends React.Component {
           <div onClick={this.toggleDropdown}>{button}</div>
           {
             this.state.expanded
-            ? <div className='dropdown-content'>
-              {
-                title !== undefined
-                  ? <div className='dropdown-title'>Mes boards</div>
-                  : null
-              }
-                {children}
+            ? <div className='dropdown-wrapper'>
+                <div className='dropdown-content'>
+                {
+                  title !== undefined
+                    ? <div className='dropdown-title'>Mes boards</div>
+                    : null
+                }
+                  {children}
+                </div>
               </div>
             : null
           }
