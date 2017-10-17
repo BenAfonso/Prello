@@ -99,15 +99,11 @@ export default class Button extends React.Component {
     }
 
     return (
-      <div {...props} className={className}>
+      <div {...props} className={className} ref={(b) => {this.button = b}}
+        onMouseOver={() => {this.button.style.backgroundColor = hoverBgColor}}
+        onMouseOut={() => {this.button.style.backgroundColor = bgColor}}>
         {children}
-        <style jsx>{`
-          .button:hover {
-            background-color: ${ hoverBgColor ? hoverBgColor : '' } !important;
-            color: ${ hoverColor ? hoverColor : '' } !important;
-          }
-
-          ${styles}`}</style>
+        <style jsx>{styles}</style>
       </div>
     )
   }
