@@ -11,9 +11,9 @@ listController.createList = (req) => {
       if (err) {
         reject(err)
       } else {
-        boardController.addListToBoard(req.params.boardid, listToAdd)
+        boardController.addListToBoard(req.params.boardId, listToAdd)
             .then((data) => {
-              emit(req.params.boardid, 'NEW_LIST', item)
+              emit(req.params.boardId, 'NEW_LIST', item)
               resolve(item)
             })
             .catch((err) => {
@@ -25,21 +25,21 @@ listController.createList = (req) => {
 }
 listController.removeList = (req) => {
   return new Promise((resolve, reject) => {
-    if (req.params.boardid === null) {
+    if (req.params.boardIsd === null) {
       reject(new Error('Missing boardID'))
       return
     }
-    if (req.params.listid === null) {
+    if (req.params.listId === null) {
       reject(new Error('Missing listID'))
       return
     }
-    List.findOneAndRemove({ '_id': req.params.listid }, (err, item) => {
+    List.findOneAndRemove({ '_id': req.params.listId }, (err, item) => {
       if (err) {
         reject(err)
       } else {
-        boardController.removeListFromBoard(req.params.boardid, req.params.listid)
+        boardController.removeListFromBoard(req.params.boardId, req.params.listId)
           .then((data) => {
-            emit(req.params.boardid, 'REMOVE_LIST', item)
+            emit(req.params.boardId, 'REMOVE_LIST', item)
             resolve(item)
           })
           .catch((err) => {
