@@ -1,6 +1,6 @@
 const Util = require('../../controllers/Util')
 const {requiresLogin} = require('../../config/middlewares/authorization')
-const {listExists} = require('../../config/middlewares/ListAuthorizations')
+const {listExists} = require('../../config/middlewares/listAuthorizations')
 const {isCollaborator} = require('../../config/middlewares/boardAuthorizations')
 
 module.exports = (router, controller) => {
