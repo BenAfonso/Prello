@@ -48,7 +48,7 @@ module.exports = (router, controller) => {
       return
     }
     controller
-      .createBoard({...req.body, owner: req.user._id})
+      .createBoard({...req.body, owner: req.user._id, collaborators: [req.user._id]})
       .then(data => {
         res.status(201).json(data)
       })
