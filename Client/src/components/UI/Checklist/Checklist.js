@@ -72,7 +72,7 @@ export default class Checklist extends React.Component {
     return (
       <div className='Checklist'>
         {!this.state.displayEditTitleForm ? 
-        <h2 onClick={this.displayEditTitleForm}>{this.state.title}</h2>
+        <h2 onClick={this.displayEditTitleForm} className='checklistTitle'>{this.state.title}</h2>
         :
         <div className='editTitleForm'>
           <Input ref={(v) => this.titleInput = v} placeholder={this.state.title} />

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Input from '../Input/Input'
 import Button from '../Button/Button'
+import styles from './Checklist.styles'
 
 export default class ChecklistItem extends React.Component {
 
@@ -41,13 +42,14 @@ export default class ChecklistItem extends React.Component {
       <div className='ChecklistItem'>
         {!this.state.isEditable ? <div className='readOnlyMode'>
           <input type='checkbox' />
-          <span onClick={this.setEditable}>{this.state.content}</span>
+          <span className='checklistSpan' onClick={this.setEditable}>{this.state.content}</span>
         </div> : 
         <div className='editMode'>
           <Input ref={(v) => this.textInput = v} placeholder={this.state.content} />
           <Button onClick={this.updateText} bgColor='#3cb221' color='#FFF' >Update</Button>
           <Button onClick={this.cancelEdit} bgColor='#F00' color='#FFF' >Cancel</Button>
         </div> }
+        <style jsx>{styles}</style>
       </div>
     )
   }
