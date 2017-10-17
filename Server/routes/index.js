@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const controllers = require('../controllers')
-
+const { requiresLogin } = require('../config/middlewares/authorization')
    /**
      * @swagger
      * definitions:
@@ -17,6 +17,13 @@ const controllers = require('../controllers')
      *         items:
      *           type: number
      */
+
+router.get('/me/*', [requiresLogin], (req, res) => {
+  let request = req.originalUrl.split('/').filter(e => e !== '')
+  request[0] = `/users/${req.user._id}`
+  res.redirect(request.join('/'))
+})
+
 require('./List')(router, controllers)
 require('./Board')(router, controllers.boardController)
 require('./Card')(router, controllers.cardController)

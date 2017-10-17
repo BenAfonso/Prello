@@ -41,6 +41,7 @@ app.use(passport.initialize())
 app.use('/api-docs', express.static('./api-doc'))
 
 app.use('/', require('./routes'))
+
 app.use((req, res, next) => {
   res.status(404).send({
     'status': 404,
