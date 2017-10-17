@@ -21,7 +21,8 @@ export default `
 .title {
   display: inline-block;
   color: #444;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-top: 7px;
   font-weight: bold;
   font-size: 16px;
 }
