@@ -1,7 +1,7 @@
 const Util = require('../../controllers/Util')
 const {requiresLogin} = require('../../config/middlewares/authorization')
 
-const {cardExists} = require('../../config/middlewares/CardAuthorizations')
+const {cardExists} = require('../../config/middlewares/cardAuthorizations')
 const {isCollaborator} = require('../../config/middlewares/boardAuthorizations')
 
 module.exports = (router, controllers) => {
