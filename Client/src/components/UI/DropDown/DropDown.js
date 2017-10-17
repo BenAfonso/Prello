@@ -24,27 +24,43 @@ export default class DropDown extends React.Component {
     layout: 'auto'
   }
 
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       expanded: false
     }
     this.toggleDropdown = this.toggleDropdown.bind(this)
+    this.handleClickOutside = this.handleClickOutside.bind(this)
   }
 
-  toggleDropdown () {
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  handleClickOutside (event) {
+    if (this.dd && !this.dd.contains(event.target)
+    && this.button && !this.button.contains(event.target)) {
+      this.closeDropdown()
+    }
+  }
+
+  toggleDropdown() {
     this.setState({ expanded: !this.state.expanded })
   }
 
-  closeDropdown () {
+  closeDropdown() {
     this.setState({ expanded: false })
   }
 
-  openDropdown () {
+  openDropdown() {
     this.setState({ expanded: true })
   }
 
-  render () {
+  render() {
     const {
       menuElements,
       orientation,
@@ -69,29 +85,29 @@ export default class DropDown extends React.Component {
     if (layout === 'auto') {
       return (
         <div {...props} className='host'>
-          <div onClick={this.toggleDropdown}>{children}</div>
+          <div onClick={this.toggleDropdown} ref={b => this.button = b}>{children}</div>
           {
             this.state.expanded
-            ? <div className='dropdown-content'>
-              {
-                title !== undefined
-                  ? <div className='dropdown-title'>Mes boards</div>
-                  : null
-              }
-                <ul id='dropdown' style={{...dropDownStyles}}>
+              ? <div className='dropdown-content' ref={e => this.dd = e}>
                 {
-                  this.props.menuElements.map((e, i) => (
+                  title !== undefined
+                    ? <div className='dropdown-title'>Mes boards</div>
+                    : null
+                }
+                <ul id='dropdown' style={{ ...dropDownStyles }}>
+                  {
+                    this.props.menuElements.map((e, i) => (
                       e === 'separator'
                         ? <li key={i} className='separator' />
                         : <li key={i} onClick={e.action}>
                           <div className='element-title'>{e.placeholder}</div>
                           <div className='element-description'>{e.description}</div>
-                      </li>
-                  ))
-                }
+                        </li>
+                    ))
+                  }
                 </ul>
               </div>
-            : null
+              : null
           }
           <style jsx>{styles}</style>
         </div>
@@ -99,24 +115,22 @@ export default class DropDown extends React.Component {
     } else if (layout === 'custom') {
       return (
         <div {...props} className='host'>
-          <div onClick={this.toggleDropdown}>{button}</div>
+          <div onClick={this.toggleDropdown} ref={b => this.button = b}>{button}</div>
           {
             this.state.expanded
-            ? <div className='dropdown-wrapper'>
-                <div className='dropdown-content'>
+              ? <div className='dropdown-content' ref={e => this.dd = e}>
                 {
                   title !== undefined
                     ? <div className='dropdown-title'>Mes boards</div>
                     : null
                 }
-                  {children}
-                </div>
+                {children}
               </div>
-            : null
+              : null
           }
           <style jsx>{styles}</style>
         </div>
-      ) 
+      )
     }
   }
 }
