@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Board = mongoose.model('Board')
 const User = mongoose.model('User')
-const mockedBoard = { title: 'Test board', visibility: 'public', background: '', owner: '' }
+const mockedBoard = { title: 'Test board', visibility: 'private', background: '', owner: '' }
 const mockedUser1 = { name: 'Test Test', email: 'test@test.com', password: '1234567', username: 'testUser' }
 const mockedUser2 = { name: 'Test2 Test2', email: 'test2@test.com', password: '1234567', username: 'testUser2' }
 
@@ -27,7 +27,6 @@ module.exports = (server, chai) => {
           User.create(mockedUser1).then(u1 => {
             user1 = u1
             token = generateToken(user1)
-            mockedBoard.visibility = 'private'
             mockedBoard.owner = user1._id
             Board.create(mockedBoard).then(b1 => {
               board1 = b1
