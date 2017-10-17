@@ -1,6 +1,6 @@
 const Util = require('../../controllers/Util')
 const {requiresLogin} = require('../../config/middlewares/authorization')
-const board = require('../../config/middlewares/boardAuthorizations')
+const {isOwner, boardExists} = require('../../config/middlewares/boardAuthorizations')
 
 module.exports = (router, controller) => {
   /**
@@ -39,7 +39,7 @@ module.exports = (router, controller) => {
     *       500:
     *         description: Internal error
     */
-  router.post('/boards/:boardId/collaborators', [requiresLogin, board.boardExists, board.isOwner], function (req, res) {
+  router.post('/boards/:boardId/collaborators', [requiresLogin, boardExists, isOwner], function (req, res) {
     let requiredBody = ['userId']
     let requiredParameter = ['boardId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)

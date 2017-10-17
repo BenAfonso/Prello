@@ -1,6 +1,5 @@
 const Util = require('../../controllers/Util')
 const {boardExists} = require('../../config/middlewares/boardAuthorizations')
-
 module.exports = (router, controllers) => {
   /**
     * @swagger

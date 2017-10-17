@@ -1,4 +1,5 @@
 const Util = require('../../controllers/Util')
+const {cardExists} = require('../../config/middlewares/CardAuthorizations')
 module.exports = (router, controllers) => {
   /**
     * @swagger
@@ -52,7 +53,7 @@ module.exports = (router, controllers) => {
     *       500:
     *         description: Internal error
     */
-  router.put('/boards/:boardId/cards/:cardId/move', function (req, res) {
+  router.put('/boards/:boardId/cards/:cardId/move', [cardExists], function (req, res) {
     let requiredBody = ['oldListId', 'newListId', 'position']
     let requiredParameter = ['cardId', 'boardId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
@@ -71,7 +72,7 @@ module.exports = (router, controllers) => {
       res.status(200).json(data)
     })
       .catch((err) => {
-        res.status(500).json(err)
+        res.status(err.status).json(err)
       })
   })
 }

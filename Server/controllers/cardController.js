@@ -39,22 +39,38 @@ cardController.moveCard = (req) => {
     let position = req.body.position
     let newListId = req.body.newListId
     let oldListId = req.body.oldListId
-    List.findOneAndUpdate({'_id': oldListId}, {$pull: {'cards': cardId}}, function (err, res) {
+    List.findOne({'_id': oldListId, 'cards': cardId}).exec((err, res) => {
       if (err) {
+        err.status = 500
+        reject(err)
+        return
+      }
+      if (res !== null) {
+        let err = new Error('CardId not inside the oldlist')
+        err.status = 404
         reject(err)
       } else {
-        List.findOne({'_id': newListId}, function (err, res) {
+        List.findOneAndUpdate({'_id': oldListId}, {$pull: {'cards': cardId}}, function (err, res) {
           if (err) {
+            err.status = 500
             reject(err)
           } else {
-            let newCardLists = res.cards
-            newCardLists.splice(position, 0, cardId)
-            List.findOneAndUpdate({'_id': newListId}, {'cards': newCardLists}, function (error, result) {
-              if (error) {
-                reject(error)
+            List.findOne({'_id': newListId}, function (err, res) {
+              if (err) {
+                err.status = 500
+                reject(err)
               } else {
-                boardController.refreshOneboard('CARD_MOVED', boardId)
-                resolve(result.cards)
+                let newCardLists = res.cards
+                newCardLists.splice(position, 0, cardId)
+                List.findOneAndUpdate({'_id': newListId}, {'cards': newCardLists}, function (error, result) {
+                  if (error) {
+                    error.status = 500
+                    reject(error)
+                  } else {
+                    boardController.refreshOneboard('CARD_MOVED', boardId)
+                    resolve(result.cards)
+                  }
+                })
               }
             })
           }

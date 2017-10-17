@@ -1,4 +1,6 @@
 const Util = require('../../controllers/Util')
+const {listExists} = require('../../config/middlewares/ListAuthorizations')
+
 module.exports = (router, controllers) => {
   /**
     * @swagger
@@ -44,7 +46,7 @@ module.exports = (router, controllers) => {
     *       500:
     *         description: Internal error
     */
-  router.put('/boards/:boardId/lists/:listId', function (req, res) {
+  router.put('/boards/:boardId/lists/:listId', [listExists], function (req, res) {
     let requiredParameter = ['listId', 'boardId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {

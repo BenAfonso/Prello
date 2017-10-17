@@ -119,29 +119,23 @@ boardController.getOneboard = function (boardId, userId) {
         err.status = 500
         reject(err)
       } else {
-        if (res === null) {
-          err = new Error('board id not found')
-          err.status = 404
+        let collaborators = res.collaborators
+        collaborators = collaborators.filter((x) => (x._id.toString() === userId.toString()))
+        if (res.owner._id.toString() !== userId.toString() && res.visibility !== 'public' && collaborators.length === 0) {
+          err = new Error('Unauthorize user')
+          err.status = 403
           reject(err)
         } else {
-          let collaborators = res.collaborators
-          collaborators = collaborators.filter((x) => (x._id.toString() === userId.toString()))
-          if (res.owner._id.toString() !== userId.toString() && res.visibility !== 'public' && collaborators.length === 0) {
-            err = new Error('Unauthorize user')
-            err.status = 403
-            reject(err)
-          } else {
-            Card.populate(res, {
-              path: 'lists.cards'
-            }, function (err, res) {
-              if (err) {
-                err.status = 500
-                reject(err)
-              } else {
-                resolve(res)
-              }
-            })
-          }
+          Card.populate(res, {
+            path: 'lists.cards'
+          }, function (err, res) {
+            if (err) {
+              err.status = 500
+              reject(err)
+            } else {
+              resolve(res)
+            }
+          })
         }
       }
     })
@@ -164,10 +158,6 @@ boardController.moveList = function (req) {
         reject(err)
       } else {
         let indexList = res.lists.indexOf(listId)
-        if (indexList === -1) {
-          reject(new Error({ status: 500, text: 'List ID not found in the board' }))
-          return
-        }
         let newLists = Util.moveInsideAnArray(res.lists, indexList, position)
         Board.findOneAndUpdate({ '_id': boardId }, { 'lists': newLists }, { new: true }).populate('lists').exec((err, res) => {
           if (err) {
