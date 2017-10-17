@@ -16,28 +16,18 @@ module.exports = (server, chai) => {
   chai.should()
   let board1 = null
   let board2 = null
-  let user1 = null
-  let user2 = null
-  let user3 = null
   let list1 = null
   let list2 = null
-  let card1 = null
-  let card2 = null
   let tokenU1 = null
   let tokenU2 = null
   let tokenU3 = null
   describe('Card', () => {
     beforeEach((done) => {
       initData().then(res => {
-        user1 = res.user1
-        user2 = res.user2
-        user3 = res.user3
         board1 = res.board1
         board2 = res.board2
         list1 = res.list1
         list2 = res.list2
-        card1 = res.card1
-        card2 = res.card2
         tokenU1 = res.tokenU1
         tokenU2 = res.tokenU2
         tokenU3 = res.tokenU3
@@ -106,9 +96,9 @@ module.exports = (server, chai) => {
       })
       it('it should NOT CREATE a card (Public board)', done => {
         chai.request(server)
-          .post(`/boards/${board1._id}/lists/${list1._id}/cards`)
+          .post(`/boards/${board2._id}/lists/${list2._id}/cards`)
           .send({ text: 'Test' })
-          .set('authorization', `Bearer ${tokenU2}`)
+          .set('authorization', `Bearer ${tokenU1}`)
           .end((err, res) => {
             if (err) { }
             res.should.have.status(403)
@@ -130,7 +120,7 @@ module.exports = (server, chai) => {
   })
 }
 
-function initData() {
+function initData () {
   return new Promise((resolve, reject) => {
     // User 1 owns board1
     // User 2 is collaborator on board1
@@ -163,6 +153,7 @@ function initData() {
                 list1 = l1
                 mockedBoard.owner = user1._id
                 mockedBoard.lists = [list1._id]
+                mockedBoard.collaborators = [user1._id, user2._id]
                 Board.create(mockedBoard).then(b1 => {
                   board1 = b1
                   Card.create(mockedCard).then(c2 => {
@@ -171,6 +162,7 @@ function initData() {
                       list2 = l1
                       mockedBoard.owner = u2._id
                       mockedBoard.lists = [l2._id]
+                      mockedBoard.collaborators = [user2._id]
                       mockedBoard.visibility = 'public'
                       Board.create(mockedBoard).then(b2 => {
                         board2 = b2
@@ -192,6 +184,6 @@ function initData() {
   })
 }
 
-function generateToken(user) {
+function generateToken (user) {
   return jwt.sign({ id: user._id }, secretKey, { expiresIn: '60s' })
 }
