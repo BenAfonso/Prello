@@ -9,6 +9,7 @@ module.exports = function (router, controller) {
    *       background:
    *         type: String
    */
+
   require('./getAll')(router, controller)
   require('./create')(router, controller)
   require('./getOne')(router, controller)

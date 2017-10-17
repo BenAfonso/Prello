@@ -1,5 +1,5 @@
 const Util = require('../../controllers/Util')
-const {requiresLogin, board} = require('../../config/middlewares/authorization')
+const {requiresLogin} = require('../../config/middlewares/authorization')
 
 module.exports = function (router, controller) {
   /**
@@ -26,7 +26,7 @@ module.exports = function (router, controller) {
   *       500:
   *         description: Internal error
   */
-  router.get('/boards/:boardId', [requiresLogin, board.hasAuthorization], function (req, res) {
+  router.get('/boards/:boardId', [requiresLogin], function (req, res) {
     let requiredParameter = ['boardId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {

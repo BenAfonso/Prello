@@ -12,7 +12,7 @@ const boardController = {}
  */
 boardController.getAllBoards = function () {
   return new Promise((resolve, reject) => {
-    Board.find().populate('owner lists collaborators', {'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0}).exec(function (err, res) {
+    Board.find().populate('owner lists collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
@@ -31,7 +31,7 @@ boardController.getAllBoards = function () {
 }
 boardController.getUserBoards = function (userId) {
   return new Promise((resolve, reject) => {
-    Board.find({$or: [{'owner': userId}, {'collaborators': userId}]}).populate('owner lists collaborators', {'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0}).exec(function (err, res) {
+    Board.find({ $or: [{ 'owner': userId }, { 'collaborators': userId }] }).populate('owner lists collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
@@ -77,7 +77,7 @@ boardController.createBoard = function (board) {
  */
 boardController.addListToBoard = function (boardId, list) {
   return new Promise((resolve, reject) => {
-    Board.findOneAndUpdate({'_id': boardId}, {$push: {lists: list}}, {new: true}, function (err, res) {
+    Board.findOneAndUpdate({ '_id': boardId }, { $push: { lists: list } }, { new: true }, function (err, res) {
       if (err) {
         reject(err)
       } else {
@@ -96,7 +96,7 @@ boardController.addListToBoard = function (boardId, list) {
  */
 boardController.removeListFromBoard = function (boardId, listId) {
   return new Promise((resolve, reject) => {
-    Board.findOneAndUpdate({'_id': boardId}, {$pull: {'lists': listId}}, {new: true}, function (err, res) {
+    Board.findOneAndUpdate({ '_id': boardId }, { $pull: { 'lists': listId } }, { new: true }, function (err, res) {
       if (err) {
         reject(err)
       } else {
@@ -114,7 +114,7 @@ boardController.removeListFromBoard = function (boardId, listId) {
  */
 boardController.getOneboard = function (boardId, userId) {
   return new Promise((resolve, reject) => {
-    Board.findOne({ '_id': boardId }).populate('owner lists collaborators', {'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0}).exec(function (err, res) {
+    Board.findOne({ '_id': boardId }).populate('owner lists collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         err.status = 500
         reject(err)
@@ -165,11 +165,11 @@ boardController.moveList = function (req) {
       } else {
         let indexList = res.lists.indexOf(listId)
         if (indexList === -1) {
-          reject(new Error({status: 500, text: 'List ID not found in the board'}))
+          reject(new Error({ status: 500, text: 'List ID not found in the board' }))
           return
         }
         let newLists = Util.moveInsideAnArray(res.lists, indexList, position)
-        Board.findOneAndUpdate({'_id': boardId}, {'lists': newLists}, {new: true}).populate('lists').exec((err, res) => {
+        Board.findOneAndUpdate({ '_id': boardId }, { 'lists': newLists }, { new: true }).populate('lists').exec((err, res) => {
           if (err) {
             reject(err)
           }
@@ -190,12 +190,12 @@ boardController.moveList = function (req) {
 }
 
 boardController.refreshOneboard = function (action, boardId) {
-  Board.findOne({ '_id': boardId }).populate('owner lists collaborators', {'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0}).exec(function (err, res) {
-    if (err) {} else {
+  Board.findOne({ '_id': boardId }).populate('owner lists collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+    if (err) { } else {
       Card.populate(res, {
         path: 'lists.cards'
       }, function (err, res) {
-        if (err) {} else {
+        if (err) { } else {
           emit(boardId, action, res.lists)
         }
       })
@@ -204,30 +204,12 @@ boardController.refreshOneboard = function (action, boardId) {
 }
 boardController.addCollaborator = (boardId, userId, requesterId) => {
   return new Promise((resolve, reject) => {
-    Board.findOne({'_id': boardId}).exec((err, res) => {
+    Board.findOneAndUpdate({ '_id': boardId }, { $push: { collaborators: userId } }, { new: true }, function (err, res) {
       if (err) {
-        err.status = 404
-        reject(err)
-      }
-      if (res === null) {
-        let err = new Error('Board not found')
-        err.status = 404
+        err.status = 500
         reject(err)
       } else {
-        if (res.owner.toString() === requesterId.toString()) {
-          Board.findOneAndUpdate({'_id': boardId}, {$push: {collaborators: userId}}, {new: true}, function (err, res) {
-            if (err) {
-              err.status = 500
-              reject(err)
-            } else {
-              resolve(res)
-            }
-          })
-        } else {
-          let err = new Error('User not authorize')
-          err.status = 403
-          reject(err)
-        }
+        resolve(res)
       }
     })
   })
@@ -235,7 +217,7 @@ boardController.addCollaborator = (boardId, userId, requesterId) => {
 
 boardController.removeCollaborator = (boardId, userId, requesterId) => {
   return new Promise((resolve, reject) => {
-    Board.findOne({'_id': boardId}).exec((err, res) => {
+    Board.findOne({ '_id': boardId }).exec((err, res) => {
       if (err) {
         err.status = 404
         reject(err)
@@ -246,7 +228,7 @@ boardController.removeCollaborator = (boardId, userId, requesterId) => {
         reject(err)
       } else {
         if (res.owner.toString() === requesterId.toString()) {
-          Board.findOneAndUpdate({'_id': boardId}, {$pull: {collaborators: userId}}, {new: true}, function (err, res) {
+          Board.findOneAndUpdate({ '_id': boardId }, { $pull: { collaborators: userId } }, { new: true }, function (err, res) {
             if (err) {
               err.status = 500
               reject(err)
