@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken')
 const secretKey = require('../../config').secretKey
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
-const Board = mongoose.model('Board')
 
 const decodeToken = (token) => {
   return new Promise((resolve, reject) => {
@@ -36,61 +35,4 @@ exports.requiresLogin = (req, res, next) => {
   }).catch(err => {
     return res.status(400).send(err)
   })
-}
-
-exports.board = {
-  boardExists: (req, res, next) => {
-    Board.findOne({'_id': req.params.boardId}).exec((err, result) => {
-      if (err) {
-        return res.status(500).send(err)
-      }
-      if (result === null) {
-        return res.status(404).send('Board not found')
-      }
-      next()
-    })
-  },
-  isCollaborator: (req, res, next) => {
-    Board.findOne({'_id': req.params.boardId}).exec((err, result) => {
-      if (err) {
-        return res.status(500).send(err)
-      }
-      let collaborators = result.collaborators
-      collaborators = collaborators.filter((c) => (c.toString() === req.user._id.toString()))
-      if (collaborators.length > 0) {
-        next()
-      } else {
-        return res.status(403).send('Forbidden: You aren\'t a collaborator of this board')
-      }
-    })
-  },
-  canRead: (req, res, next) => {
-    Board.findOne({'_id': req.params.boardId}).exec((err, result) => {
-      if (err) {
-        return res.status(500).send(err)
-      }
-      let isPublic = result.visibility === 'public'
-      let collaborator = result.collaborators.filter(c => c.toString() === req.user._id.toString())
-      let isCollaborator = collaborator.length > 0
-      let isOwner = result.owner.toString() === req.user._id.toString()
-
-      if (isPublic || isCollaborator || isOwner) {
-        next()
-      } else {
-        return res.status(403).send('Forbidden: You aren\'t allowed to see this board')
-      }
-    })
-  },
-  isOwner: (req, res, next) => {
-    Board.findOne({'_id': req.params.boardId}).exec((err, result) => {
-      if (err) {
-        return res.status(500).send(err)
-      }
-      if (result.owner.toString() === req.user._id.toString()) {
-        next()
-      } else {
-        return res.status(403).send('Forbidden: You aren\'t owner of this board')
-      }
-    })
-  }
 }
