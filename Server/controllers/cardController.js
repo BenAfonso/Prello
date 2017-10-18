@@ -45,7 +45,7 @@ cardController.moveCard = (req) => {
         reject(err)
         return
       }
-      if (res !== null) {
+      if (res === null) {
         let err = new Error('CardId not inside the oldlist')
         err.status = 404
         reject(err)
