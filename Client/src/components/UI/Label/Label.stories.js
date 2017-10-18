@@ -7,9 +7,16 @@ import { withKnobs, text, boolean } from '@storybook/addon-knobs'
 
 storiesOf('Label', module)
 .addDecorator(withKnobs)
-.add('Label', () => (
+.add('Front-end', () => (
   <Label 
     labelText="Front-end"
-    color="#61BD4F"
+    backgroundColor="#61BD4F"
+  />
+))
+
+.add('Back-end', () => (
+  <Label 
+    labelText="Back-end"
+    backgroundColor="#ffe84c"
   />
 ))
