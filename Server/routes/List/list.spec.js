@@ -15,6 +15,7 @@ module.exports = (server, chai) => {
   let board1 = null
   let board2 = null
   let list1 = null
+  let list2 = null
   let tokenU1 = null
   let tokenU2 = null
   let tokenU3 = null
@@ -24,6 +25,7 @@ module.exports = (server, chai) => {
         board1 = res.board1
         board2 = res.board2
         list1 = res.list1
+        list2 = res.list2
         tokenU1 = res.tokenU1
         tokenU2 = res.tokenU2
         tokenU3 = res.tokenU3
@@ -46,6 +48,83 @@ module.exports = (server, chai) => {
               res.name.should.equal('Test list updated')
               done()
             })
+          })
+      })
+      it('it should NOT UPDATE a card  (Not logged in)', done => {
+        chai.request(server)
+          .put(`/boards/${board1._id}/lists/${list1._id}`)
+          .send({ name: 'Test list updated' })
+          .end((err, res) => {
+            if (err) { }
+            res.should.have.status(401)
+            done()
+          })
+      })
+      it('it should NOT UPDATE a card  (Not collaborator)', done => {
+        chai.request(server)
+          .put(`/boards/${board1._id}/lists/${list1._id}`)
+          .send({ name: 'Test list updated' })
+          .set('authorization', `Bearer ${tokenU3}`)
+          .end((err, res) => {
+            if (err) { }
+            res.should.have.status(403)
+            done()
+          })
+      })
+      it('it should NOT UPDATE a list  (Public)', done => {
+        chai.request(server)
+          .put(`/boards/${board2._id}/lists/${list2._id}`)
+          .send({ name: 'Test list updated' })
+          .set('authorization', `Bearer ${tokenU1}`)
+          .end((err, res) => {
+            if (err) { }
+            res.should.have.status(403)
+            done()
+          })
+      })
+    })
+    describe('DELETE /boards/:boardId/lists/:listId', () => {
+      it('it should DELETE a list', done => {
+        chai.request(server)
+          .delete(`/boards/${board1._id}/lists/${list1._id}`)
+          .set('authorization', `Bearer ${tokenU1}`)
+          .end((err, res) => {
+            if (err) return err
+            res.should.have.status(200)
+            List.findById(list1._id, (err, res) => {
+              if (err) return err
+              chai.should().not.exist(res)
+              done()
+            })
+          })
+      })
+      it('it should NOT DELETE a list  (Not logged in)', done => {
+        chai.request(server)
+          .delete(`/boards/${board1._id}/lists/${list1._id}`)
+          .end((err, res) => {
+            if (err) { }
+            res.should.have.status(401)
+            done()
+          })
+      })
+      it('it should NOT DELETE a list  (Not collaborator)', done => {
+        chai.request(server)
+          .delete(`/boards/${board1._id}/lists/${list1._id}`)
+          .set('authorization', `Bearer ${tokenU3}`)
+          .end((err, res) => {
+            if (err) { }
+            res.should.have.status(403)
+            done()
+          })
+      })
+      it('it should NOT DELETE a list  (Public)', done => {
+        chai.request(server)
+          .delete(`/boards/${board2._id}/lists/${list2._id}`)
+          .set('authorization', `Bearer ${tokenU1}`)
+          .end((err, res) => {
+            if (err) { }
+            res.should.have.status(403)
+            done()
           })
       })
     })
@@ -163,10 +242,11 @@ function initData () {
               Board.create(mockedBoard).then(b1 => {
                 board1 = b1
                 List.create(mockedList).then(l2 => {
-                  list2 = l1
+                  list2 = l2
                   mockedBoard.owner = u2._id
                   mockedBoard.lists = [l2._id]
                   mockedBoard.visibility = 'public'
+                  mockedBoard.collaborators = []
                   Board.create(mockedBoard).then(b2 => {
                     board2 = b2
                     User.create(mockedUser3).then(u3 => {

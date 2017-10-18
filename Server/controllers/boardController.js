@@ -55,7 +55,6 @@ boardController.getUserBoards = function (userId) {
  * @returns
  */
 boardController.createBoard = function (board) {
-  console.log(board)
   return new Promise((resolve, reject) => {
     const boardToAdd = new Board(board)
     boardToAdd.save((err, item) => {

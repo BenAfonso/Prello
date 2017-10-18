@@ -9,4 +9,6 @@ module.exports = (router, controller) => {
   */
   require('./create')(router, controller)
   require('./moveCard')(router, controller)
+  require('./delete')(router, controller)
+  require('./update')(router, controller)
 }

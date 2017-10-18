@@ -45,7 +45,7 @@ UserSchema.path('email').validate(function (email) {
   return email.length > 0
 }, 'Email cannot be blank')
 
-UserSchema.path('email').validate(function (email, fn) {
+/* UserSchema.path('email').validate(function (email, fn) {
   const User = mongoose.model('User')
   if (this.skipValidation()) fn(true)
 
@@ -54,7 +54,7 @@ UserSchema.path('email').validate(function (email, fn) {
       fn(!err && users.length === 0)
     })
   } else fn(true)
-}, 'Email already exists')
+}, 'Email already exists') */
 
 UserSchema.path('username').validate(function (username) {
   if (this.skipValidation()) return true

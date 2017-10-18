@@ -18,6 +18,8 @@ module.exports = (server, chai) => {
   let board2 = null
   let list1 = null
   let list2 = null
+  let card1 = null
+  let card2 = null
   let tokenU1 = null
   let tokenU2 = null
   let tokenU3 = null
@@ -28,13 +30,112 @@ module.exports = (server, chai) => {
         board2 = res.board2
         list1 = res.list1
         list2 = res.list2
+        card1 = res.card1
+        card2 = res.card2
         tokenU1 = res.tokenU1
         tokenU2 = res.tokenU2
         tokenU3 = res.tokenU3
         done()
       })
     })
-
+    describe('UPDATE /boards/:boardId/cards/:cardId', () => {
+      it('it should UPDATE a card', done => {
+        chai.request(server)
+          .put(`/boards/${board1._id}/cards/${card1._id}`)
+          .send({ text: 'Test card updated' })
+          .set('authorization', `Bearer ${tokenU1}`)
+          .end((err, res) => {
+            if (err) return err
+            res.should.have.status(200)
+            res.body.should.be.a('string')
+            Card.findById(card1._id, (err, res) => {
+              if (err) return err
+              res.text.should.equal('Test card updated')
+              done()
+            })
+          })
+      })
+      it('it should NOT UPDATE a card  (Not logged in)', done => {
+        chai.request(server)
+          .put(`/boards/${board1._id}/cards/${card1._id}`)
+          .send({ text: 'Test card updated' })
+          .end((err, res) => {
+            if (err) { }
+            res.should.have.status(401)
+            done()
+          })
+      })
+      it('it should NOT UPDATE a card  (Not collaborator)', done => {
+        chai.request(server)
+          .put(`/boards/${board1._id}/cards/${card1._id}`)
+          .send({ text: 'Test card updated' })
+          .set('authorization', `Bearer ${tokenU3}`)
+          .end((err, res) => {
+            if (err) { }
+            res.should.have.status(403)
+            done()
+          })
+      })
+      it('it should NOT UPDATE a card  (Public)', done => {
+        chai.request(server)
+          .put(`/boards/${board2._id}/cards/${card2._id}`)
+          .send({ text: 'Test card updated' })
+          .set('authorization', `Bearer ${tokenU1}`)
+          .end((err, res) => {
+            if (err) { }
+            res.should.have.status(403)
+            done()
+          })
+      })
+    })
+    describe('DELETE /boards/:boardId/lists/:listId/cards/:cardId', () => {
+      it('it should DELETE a card', done => {
+        chai.request(server)
+          .delete(`/boards/${board1._id}/lists/${list1._id}/cards/${card1._id}`)
+          .set('authorization', `Bearer ${tokenU1}`)
+          .end((err, res) => {
+            if (err) return err
+            res.should.have.status(200)
+            Card.findById(card1._id, (err, res) => {
+              if (err) return err
+              chai.should().not.exist(res)
+              done()
+            })
+          })
+      })
+      it('it should NOT DELETE a card  (Not logged in)', done => {
+        chai.request(server)
+          .delete(`/boards/${board1._id}/lists/${list1._id}/cards/${card1._id}`)
+          .send({ text: 'Test card updated' })
+          .end((err, res) => {
+            if (err) { }
+            res.should.have.status(401)
+            done()
+          })
+      })
+      it('it should NOT DELETE a card  (Not collaborator)', done => {
+        chai.request(server)
+          .delete(`/boards/${board1._id}/lists/${list1._id}/cards/${card1._id}`)
+          .send({ text: 'Test card updated' })
+          .set('authorization', `Bearer ${tokenU3}`)
+          .end((err, res) => {
+            if (err) { }
+            res.should.have.status(403)
+            done()
+          })
+      })
+      it('it should NOT DELETE a card  (Public)', done => {
+        chai.request(server)
+          .delete(`/boards/${board2._id}/lists/${list2._id}/cards/${card2._id}`)
+          .send({ text: 'Test card updated' })
+          .set('authorization', `Bearer ${tokenU1}`)
+          .end((err, res) => {
+            if (err) { }
+            res.should.have.status(403)
+            done()
+          })
+      })
+    })
     describe('CREATE /lists/:listId/cards', () => {
       it('it should CREATE a card', done => {
         chai.request(server)
