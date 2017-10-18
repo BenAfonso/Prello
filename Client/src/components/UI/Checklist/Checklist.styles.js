@@ -1,6 +1,10 @@
 export default `
   .progressBar {
     border-style: groove;
+    padding-bottom: 3%;
+    position: absolute;
+    width: 100%;
+    z-index: 1;
   }
 
   .checklistSpan:hover,
@@ -10,7 +14,7 @@ export default `
   }
 
   .checklistTitle {
-    padding-right: 0%;
+    padding-right: 3%;
     display: inline-block;
   }
 `

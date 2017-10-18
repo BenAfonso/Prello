@@ -7,18 +7,31 @@ import styles from './Checklist.styles'
 export default class ChecklistItem extends React.Component {
 
   static propTypes = {
-    content: PropTypes.string.isRequired
+    content: PropTypes.string.isRequired,
+    index: PropTypes.number.isRequired,
+    onToggle: PropTypes.func,
+    onDelete: PropTypes.func,
+    done: PropTypes.bool
+  }
+
+  static defaultProps = {
+    done: false,
+    onToggle: null,
+    onDelete: null
   }
 
   constructor (props) {
     super(props)
     this.state = {
       isEditable: false,
-      content: props.content
+      content: props.content,
+      done: props.done,
     }
     this.setEditable = this.setEditable.bind(this)
     this.updateText = this.updateText.bind(this)
     this.cancelEdit = this.cancelEdit.bind(this)
+    this.onToggle = this.onToggle.bind(this)
+    this.onDelete = this.onDelete.bind(this)
   }
 
   setEditable () {
@@ -31,18 +44,28 @@ export default class ChecklistItem extends React.Component {
     }
   }
 
-  cancelEdit() {
+  cancelEdit () {
     this.setState({ isEditable: false })
+  }
+
+  onToggle () {
+    this.setState({ done: this.checkbox.checked }, () => {
+      if(this.props.onToggle !== null)
+        this.props.onToggle(this.props.index, this.state.done)
+    })
+  }
+
+  onDelete () {
+    this.props.onDelete(this.props.index)
   }
     
   render() {
-    const props = this.props
-
     return (
       <div className='ChecklistItem'>
         {!this.state.isEditable ? <div className='readOnlyMode'>
-          <input type='checkbox' />
+          <input type='checkbox' ref={(t) => this.checkbox = t} checked={this.state.done} onClick={this.onToggle} />
           <span className='checklistSpan' onClick={this.setEditable}>{this.state.content}</span>
+          <Button onClick={this.onDelete} bgColor='#F00' color='#FFF' >X</Button>
         </div> : 
         <div className='editMode'>
           <Input ref={(v) => this.textInput = v} placeholder={this.state.content} />
