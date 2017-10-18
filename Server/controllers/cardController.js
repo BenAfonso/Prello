@@ -32,6 +32,37 @@ cardController.createCard = (req) => {
     })
   })
 }
+cardController.removeCard = (boardId, listId, cardId) => {
+  return new Promise((resolve, reject) => {
+    Card.findOneAndRemove({ '_id': cardId }, (err, item) => {
+      if (err) {
+        reject(err)
+      } else {
+        listController.removeCardFromList(listId, cardId)
+          .then((data) => {
+            boardController.refreshOneboard('CARD_DELETED', boardId)
+            resolve(item)
+          })
+          .catch((err) => {
+            reject(err)
+          })
+      }
+    })
+  })
+}
+cardController.updateCard = (req) => {
+  return new Promise((resolve, reject) => {
+    Card.update({ '_id': req.params.cardId }, req.body, (err, item) => {
+      if (err) {
+        return reject(err)
+      } else {
+        boardController.refreshOneboard('CARD_UPDATED', req.params.boardId)
+        // TODO: Log update to history
+        return resolve(item)
+      }
+    })
+  })
+}
 cardController.moveCard = (req) => {
   return new Promise((resolve, reject) => {
     let boardId = req.params.boardId

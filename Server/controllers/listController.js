@@ -23,23 +23,15 @@ listController.createList = (req) => {
     })
   })
 }
-listController.removeList = (req) => {
+listController.removeList = (boardId, listId) => {
   return new Promise((resolve, reject) => {
-    if (req.params.boardIsd === null) {
-      reject(new Error('Missing boardID'))
-      return
-    }
-    if (req.params.listId === null) {
-      reject(new Error('Missing listID'))
-      return
-    }
-    List.findOneAndRemove({ '_id': req.params.listId }, (err, item) => {
+    List.findOneAndRemove({ '_id': listId }, (err, item) => {
       if (err) {
         reject(err)
       } else {
-        boardController.removeListFromBoard(req.params.boardId, req.params.listId)
+        boardController.removeListFromBoard(boardId, listId)
           .then((data) => {
-            emit(req.params.boardId, 'REMOVE_LIST', item)
+            emit(boardId, 'REMOVE_LIST', item)
             resolve(item)
           })
           .catch((err) => {
@@ -51,18 +43,11 @@ listController.removeList = (req) => {
 }
 listController.updateList = (req) => {
   return new Promise((resolve, reject) => {
-    if (req.params.boardId === null) {
-      reject(new Error('Missing boardID'))
-      return
-    }
-    if (req.params.listId === null) {
-      reject(new Error('Missing listID'))
-      return
-    }
     List.update({ '_id': req.params.listId }, req.body, (err, item) => {
       if (err) {
         return reject(err)
       } else {
+        boardController.refreshOneboard('LIST_UPDATED', req.params.boardId)
         // TODO: Log update to history
         return resolve(item)
       }
@@ -72,6 +57,24 @@ listController.updateList = (req) => {
 listController.addCardToList = function (listId, card) {
   return new Promise((resolve, reject) => {
     List.findOneAndUpdate({'_id': listId}, {$push: {cards: card}}, {new: true}, function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+/**
+ *
+ *
+ * @param {any} boardId
+ * @param {any} listId
+ * @returns
+ */
+listController.removeCardFromList = function (listId, cardId) {
+  return new Promise((resolve, reject) => {
+    List.findOneAndUpdate({ '_id': listId }, { $pull: { 'cards': cardId } }, { new: true }, function (err, res) {
       if (err) {
         reject(err)
       } else {
