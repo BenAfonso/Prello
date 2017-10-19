@@ -6,17 +6,16 @@ export default class Label extends React.Component{
     constructor(){
         super()
         this.state={
-            isExpanded: false
+            isExpanded: false,
+            labelTitle: ''
         }
         this.expandLabel = this.expandLabel.bind(this)
-        this.renderLabel = this.renderLabel.bind(this)
     }
     static propTypes = {
         labelText: PropTypes.string,
         width: PropTypes.string,
         color: PropTypes.string,
         style: PropTypes.object,
-        width: PropTypes.string,
         color: PropTypes.string,
         backgroundColor: PropTypes.string,
         fontWeight: PropTypes.string
@@ -37,13 +36,19 @@ export default class Label extends React.Component{
 
       expandLabel(){
           this.setState({
-              isExpanded: true
+              isExpanded: !this.state.isExpanded
+          }, () =>{
+              if(this.state.isExpanded) {
+                  this.setState({
+                    labelTitle: this.props.labelText
+                  })
+              }
+              else{
+                this.setState({
+                    labelTitle: ''
+                })
+              }
           })
-      }
-
-      renderLabel(){
-          if(this.state.isExpanded) return <div style={props.style}>{this.props.labelText}</div>
-          else return <div style={props.style}></div>
       }
 
       render(){
@@ -73,7 +78,7 @@ export default class Label extends React.Component{
         }
 
         return (
-            <div onClick={this.expandLabel}>{this.renderLabel}</div>
+            <div style={props.style} onClick={this.expandLabel}>{this.state.labelTitle}</div>
         )
       }
 }
