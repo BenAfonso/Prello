@@ -43,7 +43,7 @@ export default class Input extends React.Component {
 
     return (
       <div className='host' style={{...props.style.height}}>
-        <input style={props.style} type='text' placeholder={placeholder} />
+        <input ref={(v) => this.input = v} style={props.style} type='text' placeholder={placeholder} />
         <style jsx>{`
           input {
             outline: none;

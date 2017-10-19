@@ -1,54 +1,47 @@
 const Util = require('../../controllers/Util')
 const {requiresLogin} = require('../../config/middlewares/authorization')
-const {listExists} = require('../../config/middlewares/listAuthorizations')
-const {isCollaborator} = require('../../config/middlewares/boardAuthorizations')
+const {isOwner, boardExists} = require('../../config/middlewares/boardAuthorizations')
 
 module.exports = (router, controller) => {
   /**
     * @swagger
     * definitions:
-    *   NewCard:
+    *   NewCollaborator:
     *     properties:
-    *       text:
+    *       userId:
     *         type: string
     */
-
   /**
     * @swagger
-    * /boards/{boardId}/lists/{listId}/cards:
+    * /boards/{boardId}/collaborators:
     *   post:
     *     tags:
-    *       - Cards
-    *     description: Create a new Card inside a List
-    *     summary: CREATE a new Card inside a List
+    *       - Boards
+    *     description: Add a collaborator in a board
+    *     summary: Add a collaborator in a Board
     *     produces:
     *       - application/json
     *     parameters:
     *       - name: boardId
     *         type: string
-    *         description: The board id where we want to insert the Card
-    *         in: path
-    *         required: true
-    *       - name: listId
-    *         type: string
-    *         description: The list id where we want to insert the Card
+    *         description: The board id where we want to add the collaborator
     *         in: path
     *         required: true
     *       - name: body
-    *         description: The Card object that needs to be added
+    *         description: The user id that needs to be added
     *         in: body
     *         required: true
     *         schema:
-    *             $ref: '#/definitions/NewCard'
+    *             $ref: '#/definitions/NewCollaborator'
     *     responses:
     *       201:
-    *         description: Message confirming the Card has been created
+    *         description: Message confirming the collaborator has been created
     *       500:
     *         description: Internal error
     */
-  router.post('/boards/:boardId/lists/:listId/cards', [requiresLogin, listExists, isCollaborator], function (req, res) {
-    let requiredBody = ['text']
-    let requiredParameter = ['listId', 'boardId']
+  router.post('/boards/:boardId/collaborators', [requiresLogin, boardExists, isOwner], function (req, res) {
+    let requiredBody = ['userId']
+    let requiredParameter = ['boardId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
       let stringMessage = requiredParameter.join(',')
@@ -61,12 +54,10 @@ module.exports = (router, controller) => {
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-
-    controller.createCard(req).then((data) => {
-      res.status(201).json(data)
+    controller.addCollaborator(req.params.boardId, req.body.userId, req.user._id).then((data) => {
+      res.status(201).json('Successfully updated')
+    }).catch((err) => {
+      res.status(err.status).json(err)
     })
-      .catch((err) => {
-        res.status(err.code).json(err.message)
-      })
   })
 }

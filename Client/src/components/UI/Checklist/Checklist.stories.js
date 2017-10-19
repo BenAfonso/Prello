@@ -6,5 +6,5 @@ import { withKnobs } from '@storybook/addon-knobs'
 storiesOf('Checklist', module)
 .addDecorator(withKnobs)
 .add('Checklist', () => (
-  <Checklist />
+  <Checklist title='TODO checklist' />
 ))
