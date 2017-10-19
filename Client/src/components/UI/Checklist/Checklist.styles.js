@@ -7,6 +7,14 @@ export default `
     z-index: 1;
   }
 
+  .actualProgressBar {
+    padding-bottom: 3%;
+    position: 'absolute';
+    border-style: groove;
+    background-color: #0F0;
+    zIndex: 2;
+  }
+
   .checklistSpan:hover,
   .checklistTitle:hover {
     background-color: #cdd2d8;

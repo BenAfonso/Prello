@@ -101,13 +101,9 @@ export default class Checklist extends React.Component {
   }
 
   render () {
-    const actualProgressBarStyles = {
-      paddingBottom: '3%',
+    console.log(this.state.percentageDone)
+    const actualProgressBarStyle = {
       width: this.state.percentageDone+'%',
-      position: 'absolute',
-      borderStyle: 'groove',
-      backgroundColor: '#0F0',
-      zIndex: 2
     }
 
     return (
@@ -124,13 +120,15 @@ export default class Checklist extends React.Component {
           <Button onClick={this.hideEditTitleForm} bgColor='#F00' color='#FFF'>X</Button>
         </div> }
         <div className='progressBar' />
-        <div className='actualProgressBar' style={actualProgressBarStyles}/>
+        <div className='actualProgressBar' style={actualProgressBarStyle}/>
         <br /><br /><br /><br />
         {this.state.items.map((item, index) => (<ChecklistItem key={item.index} index={index} content={item.content} onContentChange={this.updateItemContent} onToggle={this.updateItemStatus} onDelete={this.deleteItem} />))}
-        {!this.state.displayNewItemForm ? <div>
+        {!this.state.displayNewItemForm ? 
+        <div>
           <br /><br /><br /><br />
           <Button onClick={this.displayNewItemForm} >Add an item</Button>
-        </div> : <div className='addItemDiv'>
+        </div> : 
+        <div className='addItemDiv'>
           <br /><br /><br /><br />
           <Input ref={(v) => this.textInput = v} placeholder='Describe your item...' />
           <Button onClick={this.addItem} >Confirm</Button>
