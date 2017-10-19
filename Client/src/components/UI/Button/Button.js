@@ -19,7 +19,8 @@ export default class Button extends React.Component {
     hoverColor: PropTypes.string,
     onClick: PropTypes.func,
     children: PropTypes.any,
-    bold: PropTypes.bool
+    bold: PropTypes.bool,
+    block: PropTypes.bool
   }
 
   static defaultProps = {
@@ -49,6 +50,7 @@ export default class Button extends React.Component {
       disabled,
       children,
       color,
+      block,
       round,
       size,
       width,
@@ -95,6 +97,7 @@ export default class Button extends React.Component {
           ? `linear-gradient(to right, ${bgColor}, ${bgColorTo ||
             bgColorObj.lighten(0.2).string()})`
           : 'none',
+      display: block ? 'block' : '',
       ...props.style
     }
 
