@@ -1,5 +1,7 @@
 const Util = require('../../controllers/Util')
+const {requiresLogin} = require('../../config/middlewares/authorization')
 
+const {boardExists, isCollaborator} = require('../../config/middlewares/boardAuthorizations')
 module.exports = (router, controllers) => {
   /**
     * @swagger
@@ -12,7 +14,7 @@ module.exports = (router, controllers) => {
 
   /**
     * @swagger
-    * /boards/{id}/lists:
+    * /boards/{boardId}/lists:
     *   post:
     *     tags:
     *       - Lists
@@ -21,7 +23,7 @@ module.exports = (router, controllers) => {
     *     produces:
     *       - application/json
     *     parameters:
-    *       - name: id
+    *       - name: boardId
     *         type: string
     *         description: The board id where we want to insert the list
     *         in: path
@@ -33,14 +35,14 @@ module.exports = (router, controllers) => {
     *         schema:
     *             $ref: '#/definitions/NewList'
     *     responses:
-    *       200:
+    *       201:
     *         description: Message confirming the List has been created
     *       500:
     *         description: Internal error
     */
-  router.post('/boards/:boardid/lists', function (req, res) {
+  router.post('/boards/:boardId/lists', [requiresLogin, boardExists, isCollaborator], function (req, res) {
     let requiredBody = ['name']
-    let requiredParameter = ['boardid']
+    let requiredParameter = ['boardId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
       let stringMessage = requiredParameter.join(',')
