@@ -1,9 +1,10 @@
 const Util = require('../../controllers/Util')
 const {requiresLogin} = require('../../config/middlewares/authorization')
-const {listExists} = require('../../config/middlewares/listAuthorizations')
+
+const {cardExists} = require('../../config/middlewares/cardAuthorizations')
 const {isCollaborator} = require('../../config/middlewares/boardAuthorizations')
 
-module.exports = (router, controller) => {
+module.exports = (router, controllers) => {
   /**
     * @swagger
     * definitions:
@@ -11,27 +12,29 @@ module.exports = (router, controller) => {
     *     properties:
     *       text:
     *         type: string
+    *       isArchived:
+    *         type: bool
     */
 
   /**
     * @swagger
-    * /boards/{boardId}/lists/{listId}/cards:
-    *   post:
+    * /boards/{id}/cards/{cardId}:
+    *   put:
     *     tags:
     *       - Cards
-    *     description: Create a new Card inside a List
-    *     summary: CREATE a new Card inside a List
+    *     description: Update a card inside a board
+    *     summary: UPDATE a card inside a Board
     *     produces:
     *       - application/json
     *     parameters:
-    *       - name: boardId
+    *       - name: id
     *         type: string
-    *         description: The board id where we want to insert the Card
+    *         description: The board id where we want to update the card
     *         in: path
     *         required: true
-    *       - name: listId
+    *       - name: cardId
     *         type: string
-    *         description: The list id where we want to insert the Card
+    *         description: The card id to update
     *         in: path
     *         required: true
     *       - name: body
@@ -41,32 +44,23 @@ module.exports = (router, controller) => {
     *         schema:
     *             $ref: '#/definitions/NewCard'
     *     responses:
-    *       201:
-    *         description: Message confirming the Card has been created
+    *       200:
+    *         description: Message confirming the Card has been updated
     *       500:
     *         description: Internal error
     */
-  router.post('/boards/:boardId/lists/:listId/cards', [requiresLogin, listExists, isCollaborator], function (req, res) {
-    let requiredBody = ['text']
-    let requiredParameter = ['listId', 'boardId']
+  router.put('/boards/:boardId/cards/:cardId', [requiresLogin, cardExists, isCollaborator], function (req, res) {
+    let requiredParameter = ['cardId', 'boardId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
       let stringMessage = requiredParameter.join(',')
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-    requiredBody = Util.checkRequest(req.body, requiredBody)
-    if (requiredBody.length > 0) {
-      let stringMessage = requiredBody.join(',')
-      res.status(400).json(`Missing ${stringMessage}`)
-      return
-    }
-
-    controller.createCard(req).then((data) => {
-      res.status(201).json(data)
+    controllers.updateCard(req).then((data) => {
+      res.status(200).json('Successfully updated')
+    }).catch((err) => {
+      res.status(500).json(err)
     })
-      .catch((err) => {
-        res.status(err.code).json(err.message)
-      })
   })
 }

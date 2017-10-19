@@ -15,9 +15,13 @@ const decodeToken = (token) => {
 exports.requiresLogin = (req, res, next) => {
   let authorizationHeader = req.headers['authorization']
   if (authorizationHeader === undefined) {
+    authorizationHeader = req['authorization']
+  }
+  if (authorizationHeader === undefined) {
     return res.status(401).send('No token provided')
   }
   authorizationHeader = authorizationHeader.split(' ')
+
   if (authorizationHeader[0] !== 'Bearer') {
     return res.status(401).send('Bearer token needed')
   }
@@ -34,19 +38,4 @@ exports.requiresLogin = (req, res, next) => {
   }).catch(err => {
     return res.status(400).send(err)
   })
-}
-
-exports.board = {
-  hasAuthorization: (req, res, next) => {
-    next()
-  },
-  isCollaborator: (req, res, next) => {
-    next()
-  },
-  canEdit: (req, res, next) => {
-    next()
-  },
-  isAdministrator: (req, res, next) => {
-    next()
-  }
 }

@@ -3,14 +3,20 @@ const {requiresLogin} = require('../../config/middlewares/authorization')
 module.exports = function (router, controller) {
   /**
   * @swagger
-  * /boards:
+  * /users/{userId}/boards:
   *   get:
   *     tags:
   *       - Boards
-  *     description: Get all boards
-  *     summary: GET ALL Boards
+  *     description: Get all my boards
+  *     summary: GET ALL my Boards
   *     produces:
   *       - application/json
+  *     parameters:
+  *       - name: userId
+  *         type: string
+  *         description: The user id we want to retrieve his boards
+  *         in: path
+  *         required: true
   *     responses:
   *       200:
   *         description: An array of Boards
@@ -19,8 +25,8 @@ module.exports = function (router, controller) {
   *       500:
   *         description: Internal error
   */
-  router.get('/boards', [requiresLogin], function (req, res) {
-    controller.getAllBoards().then((data) => {
+  router.get('/users/:userId/boards', [requiresLogin], function (req, res) {
+    controller.getUserBoards(req.params.userId).then((data) => {
       res.status(200).json(data)
     })
       .catch((err) => {

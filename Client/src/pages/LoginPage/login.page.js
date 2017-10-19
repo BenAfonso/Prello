@@ -1,6 +1,5 @@
 import React from 'react'
 import { login, storeToken, loginGoogle } from '../../services/Authentication.services'
-import axios from 'axios'
 import GoogleLogin from 'react-google-login'
 import { Redirect } from 'react-router-dom'
 
