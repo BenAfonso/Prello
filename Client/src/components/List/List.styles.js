@@ -21,7 +21,8 @@ export default `
 .title {
   display: inline-block;
   color: #444;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+  margin-top: 7px;
   font-weight: bold;
   font-size: 16px;
 }
@@ -72,8 +73,11 @@ ul li:nth-child(1) {
   margin-right: 10px;
 }
 
-.removeButton {
+.button {
+  position: absolute;
   display: inline-block;
+  right: 8px;
+  top: 8px;
   cursor: pointer;
   float: right;
 }

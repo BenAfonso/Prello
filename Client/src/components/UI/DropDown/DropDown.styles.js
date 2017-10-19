@@ -37,9 +37,8 @@ button:hover {
   width: 90%;
 }
 
-
 .dropdown-content {
-  position: relative;
+  position: absolute;
   background-color: #f9f9f9;
   min-width: 160px;
   max-width: 340px;

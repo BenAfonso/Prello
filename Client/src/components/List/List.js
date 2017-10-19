@@ -11,6 +11,7 @@ import { findDOMNode } from 'react-dom'
 import { updateLists } from '../../store/actions'
 import Button from '../UI/Button/Button'
 import { getEmptyImage } from 'react-dnd-html5-backend'
+import ListMenu from './ListMenu/ListMenu'
 
 const listSource = {
   beginDrag (props, monitor, component) {
@@ -164,7 +165,9 @@ export default class List extends React.Component {
       <div className='host' ref={(l) => { this.host = l }}>
         { isDragging ? <div className='overlay' /> : null }
         <div className='title'>{title}</div>
-        <div className='removeButton' onClick={this.removeAction}> X </div>
+        <div className='button'>
+          <ListMenu />
+        </div>
         <ul ref={(l) => { this.cardContainer = l }} style={{
           maxHeight: this.state.newCardFormDisplayed
             ? 'calc(100vh - 340px)'
