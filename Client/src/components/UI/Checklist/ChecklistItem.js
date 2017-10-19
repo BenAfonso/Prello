@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Input from '../Input/Input'
 import Button from '../Button/Button'
 import styles from './Checklist.styles'
+import Icon from '../Icon/Icon'
 
 export default class ChecklistItem extends React.Component {
 
@@ -67,16 +68,16 @@ export default class ChecklistItem extends React.Component {
     
   render() {
     return (
-      <div className='ChecklistItem'>
+      <div className='checklistItem'>
         {!this.state.isEditable ? <div className='readOnlyMode'>
-          <input type='checkbox' ref={(t) => this.checkbox = t} checked={this.state.done} onClick={this.onToggle} />
-          <span className='checklistSpan' onClick={this.setEditable}>{this.state.content}</span>
-          <Button onClick={this.onDelete} bgColor='#F00' color='#FFF' >X</Button>
+          <input type='checkbox' className='checkbox' ref={(t) => this.checkbox = t} checked={this.state.done} onClick={this.onToggle} />
+          <span className='itemContent' onClick={this.setEditable}>{this.state.content}</span>
+          <Button onClick={this.onDelete} bgColor='#cbcfdb' color='#70727c' hoverBgColor='#b0b2b7'><Icon name='times' color='#70727c' /></Button>
         </div> : 
         <div className='editMode'>
           <Input ref={(v) => this.textInput = v} placeholder={this.state.content} />
           <Button onClick={this.updateText} bgColor='#3cb221' color='#FFF' >Update</Button>
-          <Button onClick={this.cancelEdit} bgColor='#F00' color='#FFF' >Cancel</Button>
+          <Button onClick={this.cancelEdit} bgColor='#4DB6AC' color='#FFF' >Cancel</Button>
         </div> }
         <style jsx>{styles}</style>
       </div>

@@ -1,18 +1,25 @@
 export default `
   .progressBar {
-    border-style: groove;
-    padding-bottom: 3%;
+    border-style: none;
+    padding-bottom: 10px;
     position: absolute;
-    width: 100%;
+    width: 80%;
+    border-radius: 10px;
+    background-color: #b1b6bf;
     z-index: 1;
   }
 
   .actualProgressBar {
-    padding-bottom: 3%;
-    position: 'absolute';
-    border-style: groove;
-    background-color: #0F0;
-    zIndex: 2;
+    padding-bottom: 10px;
+    position: absolute;
+    margin-right: 20%;
+    background-color: #1aa31c;
+    border-radius: 10px;
+    z-index: 2;
+  }
+
+  .checklistItem {
+    margin-bottom: 2%;
   }
 
   .checklistSpan:hover,
@@ -24,5 +31,14 @@ export default `
   .checklistTitle {
     padding-right: 3%;
     display: inline-block;
+  }
+
+  .checkbox {
+    margin-right: 10px;
+  }
+
+  .itemContent {
+    font-size: 150%;
+    margin-right: 50%;
   }
 `

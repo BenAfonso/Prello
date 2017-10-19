@@ -101,9 +101,8 @@ export default class Checklist extends React.Component {
   }
 
   render () {
-    console.log(this.state.percentageDone)
     const actualProgressBarStyle = {
-      width: this.state.percentageDone+'%',
+      width: this.state.percentageDone * 0.8 +'%' //80% width for the total progress bar in the CSS
     }
 
     return (
@@ -122,7 +121,7 @@ export default class Checklist extends React.Component {
         <div className='progressBar' />
         <div className='actualProgressBar' style={actualProgressBarStyle}/>
         <br /><br /><br /><br />
-        {this.state.items.map((item, index) => (<ChecklistItem key={item.index} index={index} content={item.content} onContentChange={this.updateItemContent} onToggle={this.updateItemStatus} onDelete={this.deleteItem} />))}
+        {this.state.items.map((item, index) => (<ChecklistItem key={item.index} index={parseInt(index, 10)} content={item.content} onContentChange={this.updateItemContent} onToggle={this.updateItemStatus} onDelete={this.deleteItem} />))}
         {!this.state.displayNewItemForm ? 
         <div>
           <br /><br /><br /><br />
