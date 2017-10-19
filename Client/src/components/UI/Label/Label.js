@@ -1,14 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
-import Color from 'color'
 
 export default class Label extends React.Component{
+    constructor(){
+        super()
+        this.state={
+            isExpanded: false
+        }
+        this.expandLabel = this.expandLabel.bind(this)
+        this.renderLabel = this.renderLabel.bind(this)
+    }
     static propTypes = {
         labelText: PropTypes.string,
         width: PropTypes.string,
         color: PropTypes.string,
         style: PropTypes.object,
+        width: PropTypes.string,
+        color: PropTypes.string,
+        backgroundColor: PropTypes.string,
+        fontWeight: PropTypes.string
       }
 
 
@@ -22,6 +33,17 @@ export default class Label extends React.Component{
         borderRadius: "3px",
         fontSize: '12px',
         centeredText: true
+      }
+
+      expandLabel(){
+          this.setState({
+              isExpanded: true
+          })
+      }
+
+      renderLabel(){
+          if(this.state.isExpanded) return <div style={props.style}>{this.props.labelText}</div>
+          else return <div style={props.style}></div>
       }
 
       render(){
@@ -46,12 +68,12 @@ export default class Label extends React.Component{
             backgroundColor,
             borderRadius,
             color,
-            textAligned: centeredText ? 'center' : 'left',
+            textAlign: centeredText ? 'center' : 'left',
             ...props.style
         }
 
         return (
-            <div style={props.style}>{this.props.labelText}</div>
+            <div onClick={this.expandLabel}>{this.renderLabel}</div>
         )
       }
 }

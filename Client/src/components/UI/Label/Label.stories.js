@@ -13,10 +13,3 @@ storiesOf('Label', module)
     backgroundColor="#61BD4F"
   />
 ))
-
-.add('Back-end', () => (
-  <Label 
-    labelText="Back-end"
-    backgroundColor="#ffe84c"
-  />
-))
