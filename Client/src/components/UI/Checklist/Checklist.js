@@ -35,6 +35,7 @@ export default class Checklist extends React.Component {
     this.deleteItem = this.deleteItem.bind(this)
     this.updateTitle = this.updateTitle.bind(this)
     this.updateItemStatus = this.updateItemStatus.bind(this)
+    this.updateItemContent = this.updateItemContent.bind(this)
     this.recalculatePercentageDone=this.recalculatePercentageDone.bind(this)
   }
 
@@ -58,7 +59,7 @@ export default class Checklist extends React.Component {
   addItem () {
     if(this.textInput.input.value.length > 0) {
       let newItemsList = this.state.items.slice()
-      newItemsList.push({content: this.textInput.input.value, done: false})
+      newItemsList.push({index: newItemsList.length, content: this.textInput.input.value, done: false})
       this.setState({items: newItemsList}, () => {
         this.setState({percentageDone: this.recalculatePercentageDone(newItemsList)})
       })
@@ -67,17 +68,20 @@ export default class Checklist extends React.Component {
   }
 
   deleteItem (index) {
-    console.log('index '+index)
     let newItemsList = this.state.items.slice()
     newItemsList.splice(index, 1)
-    newItemsList.forEach(item => console.log(item.content))
     this.setState({items: newItemsList}, () => {
       this.setState({percentageDone: this.recalculatePercentageDone(newItemsList)})
     })
   }
 
+  updateItemContent (index, newContent) {
+    let newItemsList = this.state.items.slice()
+    newItemsList[index].content = newContent
+    this.setState({items: newItemsList})
+  }
+
   updateItemStatus (index, done) {
-    console.log('toggle checkbox '+index+' new status '+done)
     let newItemsList = this.state.items.slice()
     newItemsList[index].done = done
     this.setState({items: newItemsList}, () => {
@@ -97,9 +101,8 @@ export default class Checklist extends React.Component {
   }
 
   render () {
-    console.log(`newPercentageDone ${this.state.percentageDone}`)
     const actualProgressBarStyles = {
-      paddingBottom: 30,
+      paddingBottom: '3%',
       width: this.state.percentageDone+'%',
       position: 'absolute',
       borderStyle: 'groove',
@@ -123,9 +126,7 @@ export default class Checklist extends React.Component {
         <div className='progressBar' />
         <div className='actualProgressBar' style={actualProgressBarStyles}/>
         <br /><br /><br /><br />
-        {this.state.items.map((item, key) => (<div>
-          <ChecklistItem index={key} content={item.content} onToggle={this.updateItemStatus} onDelete={this.deleteItem} />
-          </div>))}
+        {this.state.items.map((item, index) => (<ChecklistItem key={item.index} index={index} content={item.content} onContentChange={this.updateItemContent} onToggle={this.updateItemStatus} onDelete={this.deleteItem} />))}
         {!this.state.displayNewItemForm ? <div>
           <br /><br /><br /><br />
           <Button onClick={this.displayNewItemForm} >Add an item</Button>

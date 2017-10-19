@@ -11,13 +11,15 @@ export default class ChecklistItem extends React.Component {
     index: PropTypes.number.isRequired,
     onToggle: PropTypes.func,
     onDelete: PropTypes.func,
+    onContentChange: PropTypes.func,
     done: PropTypes.bool
   }
 
   static defaultProps = {
     done: false,
     onToggle: null,
-    onDelete: null
+    onDelete: null,
+    onContentChange: null
   }
 
   constructor (props) {
@@ -40,7 +42,10 @@ export default class ChecklistItem extends React.Component {
 
   updateText () {
     if (this.textInput.input.value.length > 0) {
-      this.setState({ isEditable: false, content: this.textInput.input.value})
+      this.setState({ isEditable: false, content: this.textInput.input.value}, () => {
+        if(this.props.onContentChange !== null)
+          this.props.onContentChange(this.props.index, this.state.content)
+      })
     }
   }
 
@@ -56,7 +61,8 @@ export default class ChecklistItem extends React.Component {
   }
 
   onDelete () {
-    this.props.onDelete(this.props.index)
+    if(this.props.onDelete !== null)
+      this.props.onDelete(this.props.index)
   }
     
   render() {
