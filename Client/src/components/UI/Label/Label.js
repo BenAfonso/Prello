@@ -7,7 +7,7 @@ export default class Label extends React.Component{
         super()
         this.state={
             isExpanded: false,
-            labelTitle: ''
+            labelTitle: '',
         }
         this.expandLabel = this.expandLabel.bind(this)
     }
@@ -41,6 +41,7 @@ export default class Label extends React.Component{
               if(this.state.isExpanded) {
                   this.setState({
                     labelTitle: this.props.labelText
+                    
                   })
               }
               else{
@@ -67,7 +68,7 @@ export default class Label extends React.Component{
 
         props.style={
             width,
-            height,
+            height: this.state.isExpanded ? '1pc' : '8px' ,
             fontSize,
             fontWeight,
             backgroundColor,
