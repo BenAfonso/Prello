@@ -40,6 +40,11 @@ export default `
     margin-right: 20%;
   }
 
+  .buttonWithMargin {
+    margin-right: 10px;
+    display: inline-block;
+  }
+
   .checkbox {
     margin-right: 10px;
     display: inline-block;

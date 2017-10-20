@@ -28,6 +28,7 @@ export default class Checklist extends React.Component {
       title: props.title,
       percentageDone: props.percentageDone
     }
+
     this.displayNewItemForm = this.displayNewItemForm.bind(this)
     this.addItem = this.addItem.bind(this)
     this.hideNewItemForm = this.hideNewItemForm.bind(this)
@@ -38,6 +39,12 @@ export default class Checklist extends React.Component {
     this.updateItemStatus = this.updateItemStatus.bind(this)
     this.updateItemContent = this.updateItemContent.bind(this)
     this.recalculatePercentageDone=this.recalculatePercentageDone.bind(this)
+  }
+
+  componentDidMount () {
+    //Make sure to calculate the percentage done with given items at creation
+    if(this.state.items.length > 0)
+      this.setState({percentageDone: this.recalculatePercentageDone(this.state.items)})
   }
 
   displayNewItemForm () {
@@ -117,14 +124,15 @@ export default class Checklist extends React.Component {
         //Form in order to edit the title of the checklist
         <div className='editTitleForm'>
           <Input ref={(v) => this.titleInput = v} placeholder={this.state.title} />
-          <Button 
-            onClick={this.updateTitle} 
-            bgColor='#3cb221'
-            hoverBgColor='#148407'
-            color='#FFF'
-            style={{marginRight: '10px'}}>
-            <Icon name='check' color='#FFF'/>
-          </Button>
+          <div className='buttonWithMargin'>
+            <Button 
+              onClick={this.updateTitle} 
+              bgColor='#3cb221'
+              hoverBgColor='#148407'
+              color='#FFF'>
+              <Icon name='check' color='#FFF'/>
+            </Button>
+          </div>
           <Button
             onClick={this.hideEditTitleForm}
             bgColor='#cbcfdb'
@@ -140,24 +148,23 @@ export default class Checklist extends React.Component {
           <div className='actualProgressBar' style={actualProgressBarStyle}/>
         </div>
         {/* Display checklist items */}
-        {this.state.items.map((item, index) => (<ChecklistItem key={item.index} index={parseInt(index, 10)} content={item.content} onContentChange={this.updateItemContent} onToggle={this.updateItemStatus} onDelete={this.deleteItem} />))}
+        {this.state.items.map((item, index) => (<ChecklistItem key={item.index} done={item.done} index={parseInt(index, 10)} content={item.content} onContentChange={this.updateItemContent} onToggle={this.updateItemStatus} onDelete={this.deleteItem} />))}
 
         {!this.state.displayNewItemForm ? 
-        <div>
-          <Button onClick={this.displayNewItemForm} >Add an item</Button>
-        </div> 
+          <Button onClick={this.displayNewItemForm} color='#FFF'><Icon name='plus' color='#FFF'/></Button>
         :
         //Form in order to add a new item 
         <div className='addItemDiv'>
           <Input ref={(v) => this.textInput = v} placeholder='Describe your item...' />
-          <Button 
-            onClick={this.addItem} 
-            bgColor='#3cb221' 
-            hoverBgColor='#148407' 
-            color='#FFF' 
-            style={{marginRight: '10px'}}>
-            <Icon name='check' color='#FFF'/>
-          </Button>
+          <div className='buttonWithMargin'>
+            <Button 
+              onClick={this.addItem} 
+              bgColor='#3cb221' 
+              hoverBgColor='#148407' 
+              color='#FFF'>
+              <Icon name='check' color='#FFF'/>
+            </Button>
+          </div>
           <Button
             onClick={this.hideNewItemForm}
             bgColor='#cbcfdb'
