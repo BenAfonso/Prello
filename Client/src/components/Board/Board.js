@@ -4,19 +4,22 @@ import List from '../List/List'
 import { connect } from 'react-redux'
 import { addList, setBoard, updateLists, removeList, resetBoard } from '../../store/actions'
 import { DragDropContext } from 'react-dnd'
-import TouchBackend from 'react-dnd-touch-backend'
+import HTML5Backend from 'react-dnd-html5-backend'
+import HTML5toTouch from 'react-dnd-multi-backend/lib/HTML5toTouch'
+
 import Button from '../UI/Button/Button'
 import { subscribeToBoard } from '../../services/api'
 import CustomDragLayer from '../CustomDragLayer'
 import Color from 'color'
 import PropTypes from 'prop-types'
+import MultiBackend from 'react-dnd-multi-backend'
 
 @connect(store => {
   return {
     board: store.board
   }
 })
-@DragDropContext(TouchBackend({ enableMouseEvents: true }))
+@DragDropContext(MultiBackend(HTML5toTouch))
 export default class Board extends React.Component {
 
 
