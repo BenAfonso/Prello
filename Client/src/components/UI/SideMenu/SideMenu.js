@@ -1,11 +1,54 @@
 import React from 'react'
 import styles from './SideMenu.styles'
 import Icon from '../Icon/Icon'
+import PropTypes from 'prop-types'
+import UsersMenu from '../../MenuElements/UsersMenu/UsersMenu'
+import ActivityMenu from '../../MenuElements/ActivityMenu/ActivityMenu'
+
+const SideMenuItem = (props) => {
+
+} 
+
+const elements = [
+  {
+    icon: 'user-o',
+    description: 'People',
+    component: <UsersMenu />
+  },
+  {
+    icon: 'hashtag',
+    description: 'Activity',
+    component: <ActivityMenu />
+  }
+]
 
 export default class SideMenu extends React.Component {
+
+
+
   constructor(props) {
     super(props)
+    this.state = {
+      displayedIndex: 0,
+      displayedElement: {
+        icon: '',
+        description: '',
+        component: null
+      }
+    }
+  }
 
+  selectMenuItem (index) {
+    if (elements.length > index) {
+      this.setState({
+        displayedIndex: index,
+        displayedElement: elements[index]
+      })
+    }
+  }
+
+  componentDidMount () {
+    this.selectMenuItem(0)
   }
 
   render() {
@@ -17,28 +60,30 @@ export default class SideMenu extends React.Component {
           <li onClick={this.props.handleCloseAction}>
             <Icon name='times' />
           </li>
-          <li>
-            <div className='icon'>
-              <Icon name='user-o' />
-            </div>
-            <div className='description'>People</div>
-          </li>
-          <li>
-            <div className='icon'>
-              <Icon name='hashtag' />
-            </div>
-            <div className='description'>Activity</div>
-          </li>
+          {
+            elements.map((e,i) => (
+              <li 
+                key={i}
+                style={{backgroundColor: this.state.displayedIndex === i ? '#eee' : ''}}
+                onClick={this.selectMenuItem.bind(this, i)}>
+              <div className='icon'>
+                <Icon name={e.icon} />
+              </div>
+              <div className='description'>{e.description}</div>
+            </li>
+            ))
+          }
         </ul>
       </div>
       <div className='content'>
         <div className='title'>
           <span className='title-icon'>
-            <Icon name='user-o' color='#999'/>
+            <Icon name={this.state.displayedElement.icon} color='#999'/>
           </span>
-          Collaborators
+          {this.state.displayedElement.description}
         </div>
         <div className='informations'>
+          {this.state.displayedElement.component}
         </div>
       </div>
 
