@@ -8090,6 +8090,12 @@ react-onclickoutside@^5.9.0:
   dependencies:
     create-react-class "^15.5.x"
 
+react-portal@next:
+  version "4.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/react-portal/-/react-portal-4.0.0-beta.2.tgz#c25112a87fa209cc14776c739664101e3e9d3732"
+  dependencies:
+    prop-types "^15.5.8"
+
 react-redux@^5.0.6:
   version "5.0.6"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-5.0.6.tgz#23ed3a4f986359d68b5212eaaa681e60d6574946"

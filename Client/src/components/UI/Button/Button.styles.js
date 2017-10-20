@@ -58,4 +58,21 @@ export default `
 .disabled {
   filter: grayscale();
 }
+.x-small {
+  font-size: 10px;
+  padding: 8px 8px 3px;
+}
+.small {
+  font-size: 12px;
+  padding: 10px 10px 6px;
+}
+.large {
+  font-size: 24px;
+  padding: 10px 12px 5px;
+}
+.x-large {
+  font-size: 28px;
+  padding: 10px 12px 5px;
+}
+
 `
