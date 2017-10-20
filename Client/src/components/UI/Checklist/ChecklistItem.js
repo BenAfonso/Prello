@@ -69,15 +69,38 @@ export default class ChecklistItem extends React.Component {
   render() {
     return (
       <div className='checklistItem'>
-        {!this.state.isEditable ? <div className='readOnlyMode'>
+        {!this.state.isEditable ? 
+        <div className='readOnlyMode'>
           <input type='checkbox' className='checkbox' ref={(t) => this.checkbox = t} checked={this.state.done} onClick={this.onToggle} />
           <span className='itemContent' onClick={this.setEditable}>{this.state.content}</span>
-          <Button onClick={this.onDelete} bgColor='#cbcfdb' color='#70727c' hoverBgColor='#b0b2b7'><Icon name='times' color='#70727c' /></Button>
-        </div> : 
+          <div className='deleteItemButton'>
+            <Button
+              onClick={this.onDelete}
+              bgColor='#cbcfdb'
+              color='#70727c'
+              hoverBgColor='#b0b2b7'>
+              <Icon name='times' color='#70727c' />
+            </Button>
+          </div>
+        </div>
+        : 
         <div className='editMode'>
           <Input ref={(v) => this.textInput = v} placeholder={this.state.content} />
-          <Button onClick={this.updateText} bgColor='#3cb221' hoverBgColor='#148407' color='#FFF' style={{marginRight: '10px'}}><Icon name='check' color='#FFF'/></Button>
-          <Button onClick={this.cancelEdit} bgColor='#cbcfdb' color='#70727c' hoverBgColor='#b0b2b7'><Icon name='times' color='#70727c' /></Button>
+          <Button 
+            onClick={this.updateText} 
+            bgColor='#3cb221' 
+            hoverBgColor='#148407' 
+            color='#FFF' 
+            style={{marginRight: '10px'}}>
+            <Icon name='check' color='#FFF'/>
+          </Button>
+          <Button 
+            onClick={this.cancelEdit}
+            bgColor='#cbcfdb'
+            color='#70727c'
+            hoverBgColor='#b0b2b7'>
+            <Icon name='times' color='#70727c' />
+          </Button>
         </div> }
         <style jsx>{styles}</style>
       </div>

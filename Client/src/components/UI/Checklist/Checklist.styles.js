@@ -12,7 +12,7 @@ export default `
   .actualProgressBar {
     padding-bottom: 10px;
     position: absolute;
-    margin-right: 20%;
+    margin-bottom: 5%;
     background-color: #1aa31c;
     border-radius: 10px;
     z-index: 2;
@@ -30,20 +30,33 @@ export default `
   }
 
   .checklistTitle {
-    padding-right: 3%;
-    display: inline-block;
+    font-size: 200%;
+    margin-bottom: 2%;
+    margin-right: 20%;
+  }
+
+  .deleteItemButton {
+    float: right;
+    margin-right: 20%;
   }
 
   .checkbox {
     margin-right: 10px;
+    display: inline-block;
   }
 
   .percentageDone {
     margin-bottom: 300px;
+    font-size: 150%;
   }
 
   .itemContent {
     font-size: 150%;
-    margin-right: 50%;
+    display: inline-block;
+    margin-right: 20%;
+  }
+
+  .progressPart {
+    margin-bottom: 30px;
   }
 `

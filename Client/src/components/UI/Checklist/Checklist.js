@@ -109,30 +109,62 @@ export default class Checklist extends React.Component {
     return (
       <div className='Checklist'>
         {!this.state.displayEditTitleForm ?
+        //Title
         <div> 
           <h2 onClick={this.displayEditTitleForm} className='checklistTitle'>{this.state.title}</h2>
         </div>
         :
+        //Form in order to edit the title of the checklist
         <div className='editTitleForm'>
           <Input ref={(v) => this.titleInput = v} placeholder={this.state.title} />
-          <Button onClick={this.updateTitle} bgColor='#3cb221' hoverBgColor='#148407' color='#FFF' style={{marginRight: '10px'}}><Icon name='check' color='#FFF'/></Button>
-          <Button onClick={this.hideEditTitleForm} bgColor='#cbcfdb' hoverBgColor='#b0b2b7' color='#70727c'><Icon name='times' color='#70727c'/></Button>
+          <Button 
+            onClick={this.updateTitle} 
+            bgColor='#3cb221'
+            hoverBgColor='#148407'
+            color='#FFF'
+            style={{marginRight: '10px'}}>
+            <Icon name='check' color='#FFF'/>
+          </Button>
+          <Button
+            onClick={this.hideEditTitleForm}
+            bgColor='#cbcfdb'
+            hoverBgColor='#b0b2b7'
+            color='#70727c'>
+            <Icon name='times' color='#70727c'/>
+          </Button>
         </div> }
-        <span className='percentageDone'>{this.state.percentageDone}%</span>
-        <div className='progressBar' />
-        <div className='actualProgressBar' style={actualProgressBarStyle}/>
-        <br /><br /><br /><br />
+        {/* Display progression in any case */}
+        <div className='progressPart'>  
+          <span className='percentageDone'>{this.state.percentageDone}%</span>
+          <div className='progressBar' />
+          <div className='actualProgressBar' style={actualProgressBarStyle}/>
+        </div>
+        {/* Display checklist items */}
         {this.state.items.map((item, index) => (<ChecklistItem key={item.index} index={parseInt(index, 10)} content={item.content} onContentChange={this.updateItemContent} onToggle={this.updateItemStatus} onDelete={this.deleteItem} />))}
+
         {!this.state.displayNewItemForm ? 
         <div>
-          <br /><br /><br /><br />
           <Button onClick={this.displayNewItemForm} >Add an item</Button>
-        </div> : 
+        </div> 
+        :
+        //Form in order to add a new item 
         <div className='addItemDiv'>
-          <br /><br /><br /><br />
           <Input ref={(v) => this.textInput = v} placeholder='Describe your item...' />
-          <Button onClick={this.addItem} bgColor='#3cb221' hoverBgColor='#148407' color='#FFF' style={{marginRight: '10px'}}><Icon name='check' color='#FFF'/></Button>
-          <Button onClick={this.hideNewItemForm} bgColor='#cbcfdb' hoverBgColor='#b0b2b7' color='#70727c'><Icon name='times' color='#70727c'/></Button>
+          <Button 
+            onClick={this.addItem} 
+            bgColor='#3cb221' 
+            hoverBgColor='#148407' 
+            color='#FFF' 
+            style={{marginRight: '10px'}}>
+            <Icon name='check' color='#FFF'/>
+          </Button>
+          <Button
+            onClick={this.hideNewItemForm}
+            bgColor='#cbcfdb'
+            hoverBgColor='#b0b2b7'
+            color='#70727c'>
+            <Icon name='times' color='#70727c'/>
+          </Button>
         </div>}
         <style jsx>{styles}</style>
       </div>
