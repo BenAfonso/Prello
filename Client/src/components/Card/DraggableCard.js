@@ -90,7 +90,7 @@ export default class CardComponent extends React.Component {
     super(props)
 
     this.state = {
-      cardDetailsDisplayed: true
+      cardDetailsDisplayed: false
     }
     this.renderDetails = this.renderDetails.bind(this)
   }
