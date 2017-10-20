@@ -1,9 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import cn from 'classnames'
 import styles from './DropDown.styles'
-import Color from 'color'
-import Button from '../Button/Button'
 
 export default class DropDown extends React.Component {
   static propTypes = {

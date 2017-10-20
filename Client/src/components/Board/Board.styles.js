@@ -3,13 +3,14 @@ export default `
     height: 100%;
     width: 100%;
     background-color: #cd5a91;
-    padding: 30px 10px;
+    padding: 30px 0px;
   }
 
   .boardTitle {
     color: white;
     font-size: 18px;
     margin-bottom: 15px;
+    padding-left: 10px;
   }
 
   h1 {
@@ -22,6 +23,8 @@ export default `
     flex-wrap: nowrap;
     align-items: flex-start;
     overflow-x: auto;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
   ul li {

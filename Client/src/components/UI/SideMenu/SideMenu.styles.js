@@ -64,4 +64,8 @@ export default `
     background-color: #ddd;
     height: 1px;
   }
+
+  .content .informations {
+    padding: 20px;
+  }
 `
