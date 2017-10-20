@@ -76,8 +76,8 @@ export default class ChecklistItem extends React.Component {
         </div> : 
         <div className='editMode'>
           <Input ref={(v) => this.textInput = v} placeholder={this.state.content} />
-          <Button onClick={this.updateText} bgColor='#3cb221' color='#FFF' >Update</Button>
-          <Button onClick={this.cancelEdit} bgColor='#4DB6AC' color='#FFF' >Cancel</Button>
+          <Button onClick={this.updateText} bgColor='#3cb221' hoverBgColor='#148407' color='#FFF' style={{marginRight: '10px'}}><Icon name='check' color='#FFF'/></Button>
+          <Button onClick={this.cancelEdit} bgColor='#cbcfdb' color='#70727c' hoverBgColor='#b0b2b7'><Icon name='times' color='#70727c' /></Button>
         </div> }
         <style jsx>{styles}</style>
       </div>

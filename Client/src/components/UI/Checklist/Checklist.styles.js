@@ -23,7 +23,8 @@ export default `
   }
 
   .checklistSpan:hover,
-  .checklistTitle:hover {
+  .checklistTitle:hover,
+  .itemContent:hover {
     background-color: #cdd2d8;
     cursor: pointer;
   }
@@ -35,6 +36,10 @@ export default `
 
   .checkbox {
     margin-right: 10px;
+  }
+
+  .percentageDone {
+    margin-bottom: 300px;
   }
 
   .itemContent {
