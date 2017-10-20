@@ -2,7 +2,6 @@ export default `
   .host {
     height: 100%;
     width: 100%;
-    background-color: #cd5a91;
     padding: 30px 0px;
   }
 
@@ -44,7 +43,6 @@ export default `
   }
 
   .newList {
-    background-color: rgba(50,50,50,0.3);
     padding: 10px;
     border-radius: 5px;
     height: auto;

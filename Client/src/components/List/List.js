@@ -107,7 +107,9 @@ export default class List extends React.Component {
     canDrop: PropTypes.bool,
     id: PropTypes.any,
     title: PropTypes.string.isRequired,
-    moveList: PropTypes.func.isRequired
+    moveList: PropTypes.func.isRequired,
+    primaryColor: PropTypes.any,
+    secondaryColor: PropTypes.any
   }
 
   constructor (props) {
@@ -160,9 +162,11 @@ export default class List extends React.Component {
   }
 
   render () {
-    const { title, isDragging, connectDragSource, connectListDropTarget, connectCardDropTarget } = this.props
+    const { title, primaryColor, secondaryColor, isDragging, connectDragSource, connectListDropTarget, connectCardDropTarget } = this.props
     return connectDragSource(connectListDropTarget(connectCardDropTarget(
-      <div className='host' ref={(l) => { this.host = l }}>
+      <div className='host'
+        style={{backgroundColor: secondaryColor}}
+        ref={(l) => { this.host = l }}>
         { isDragging ? <div className='overlay' /> : null }
         <div className='title'>{title}</div>
         <div className='button'>
@@ -176,7 +180,7 @@ export default class List extends React.Component {
           {
             this.props.cards.map((card, i) => (
               <li key={card._id}>
-                <Card index={i} id={card._id} listIndex={this.props.index} content={card.text} />
+                <Card index={i} id={card._id} bgColor={this.props.primaryColor} listIndex={this.props.index} content={card.text} />
               </li>
             ))
           }
