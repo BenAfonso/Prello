@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Input from '../Input/Input'
 import Button from '../Button/Button'
 import styles from './Checklist.styles'
+import Icon from '../Icon/Icon'
 
 export default class ChecklistItem extends React.Component {
 
@@ -67,16 +68,39 @@ export default class ChecklistItem extends React.Component {
     
   render() {
     return (
-      <div className='ChecklistItem'>
-        {!this.state.isEditable ? <div className='readOnlyMode'>
-          <input type='checkbox' ref={(t) => this.checkbox = t} checked={this.state.done} onClick={this.onToggle} />
-          <span className='checklistSpan' onClick={this.setEditable}>{this.state.content}</span>
-          <Button onClick={this.onDelete} bgColor='#F00' color='#FFF' >X</Button>
-        </div> : 
+      <div className='checklistItem'>
+        {!this.state.isEditable ? 
+        <div className='readOnlyMode'>
+          <input type='checkbox' className='checkbox' ref={(t) => this.checkbox = t} checked={this.state.done} onClick={this.onToggle} />
+          <span className='itemContent' onClick={this.setEditable}>{this.state.content}</span>
+          <div className='deleteItemButton'>
+            <Button
+              onClick={this.onDelete}
+              bgColor='#cbcfdb'
+              color='#70727c'
+              hoverBgColor='#b0b2b7'>
+              <Icon name='times' color='#70727c' />
+            </Button>
+          </div>
+        </div>
+        : 
         <div className='editMode'>
           <Input ref={(v) => this.textInput = v} placeholder={this.state.content} />
-          <Button onClick={this.updateText} bgColor='#3cb221' color='#FFF' >Update</Button>
-          <Button onClick={this.cancelEdit} bgColor='#F00' color='#FFF' >Cancel</Button>
+          <Button 
+            onClick={this.updateText} 
+            bgColor='#3cb221' 
+            hoverBgColor='#148407' 
+            color='#FFF' 
+            style={{marginRight: '10px'}}>
+            <Icon name='check' color='#FFF'/>
+          </Button>
+          <Button 
+            onClick={this.cancelEdit}
+            bgColor='#cbcfdb'
+            color='#70727c'
+            hoverBgColor='#b0b2b7'>
+            <Icon name='times' color='#70727c' />
+          </Button>
         </div> }
         <style jsx>{styles}</style>
       </div>
