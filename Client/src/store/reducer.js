@@ -1,4 +1,6 @@
-export default function reducer (state, action) {
+import { defaultState } from './store'
+
+export default function reducer (state = defaultState, action) {
   switch (action.type) {
     case 'ADD_BOARD': {
       let newBoards = state.boardslist.boards.slice()

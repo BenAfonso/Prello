@@ -21,7 +21,7 @@ export default class DropDown extends React.Component {
     layout: 'auto'
   }
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       expanded: false
@@ -30,34 +30,34 @@ export default class DropDown extends React.Component {
     this.handleClickOutside = this.handleClickOutside.bind(this)
   }
 
-  componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutside);
+  componentDidMount () {
+    document.addEventListener('mousedown', this.handleClickOutside)
   }
 
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
+  componentWillUnmount () {
+    document.removeEventListener('mousedown', this.handleClickOutside)
   }
 
   handleClickOutside (event) {
-    if (this.dd && !this.dd.contains(event.target)
-    && this.button && !this.button.contains(event.target)) {
+    if (this.dd && !this.dd.contains(event.target) &&
+    this.button && !this.button.contains(event.target)) {
       this.closeDropdown()
     }
   }
 
-  toggleDropdown() {
+  toggleDropdown () {
     this.setState({ expanded: !this.state.expanded })
   }
 
-  closeDropdown() {
+  closeDropdown () {
     this.setState({ expanded: false })
   }
 
-  openDropdown() {
+  openDropdown () {
     this.setState({ expanded: true })
   }
 
-  render() {
+  render () {
     const {
       menuElements,
       orientation,
@@ -76,8 +76,6 @@ export default class DropDown extends React.Component {
       left: orientation === 'left' ? 0 : '',
       right: orientation === 'right' ? 0 : ''
     }
-
-
 
     if (layout === 'auto') {
       return (

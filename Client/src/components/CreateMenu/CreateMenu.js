@@ -3,9 +3,8 @@ import styles from './CreateMenu.styles'
 import MenuDropDown from '../UI/MenuDropDown/MenuDropDown'
 import BoardForm from './Forms/BoardForm/BoardForm'
 
-
 export default class CreateMenu extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       isOpen: false,
@@ -35,16 +34,16 @@ export default class CreateMenu extends React.Component {
     }
   }
 
-  displayMenu() {
+  displayMenu () {
     const newState = !this.state.isOpen
     this.setState({ isOpen: newState, newBoardFormDisplayed: false })
   }
 
-  hideMenu() {
+  hideMenu () {
     this.setState({ isOpen: false, newBoardFormDisplayed: false })
   }
 
-  displayNewBoardForm() {
+  displayNewBoardForm () {
     this.setState({
       newBoardFormDisplayed: true,
       isOpen: false
@@ -83,10 +82,3 @@ export default class CreateMenu extends React.Component {
     )
   }
 }
-
-
-
-
-
-
-

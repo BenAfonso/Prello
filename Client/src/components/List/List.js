@@ -1,9 +1,9 @@
 import React from 'react'
-//import Card from '../Card/Card'
+// import Card from '../Card/Card'
 import Card from '../Card/DraggableCard'
 import styles from './List.styles'
 import { connect } from 'react-redux'
-import { addCard, moveList,moveCardDistant } from '../../store/actions'
+import { addCard, moveList, moveCardDistant } from '../../store/actions'
 import { DragSource, DropTarget } from 'react-dnd'
 import { ItemTypes } from '../Constants'
 import { PropTypes } from 'prop-types'
@@ -40,12 +40,12 @@ const cardTarget = {
 
   hover (props, monitor) {
     const { id: draggedId, originalIndex, originalListIndex } = monitor.getItem()
-    //TODO REPLACE WITH FINDCARD
+    // TODO REPLACE WITH FINDCARD
     let originalList = props.board.lists.filter((l, listIndex) => {
       let cardss = l.cards.filter((c, cIndex) => {
         return c._id === draggedId
       })
-      return cardss.length >0
+      return cardss.length > 0
     })[0]
     let card = originalList.cards.filter((e, i) => e._id === draggedId)[0]
 
@@ -53,13 +53,13 @@ const cardTarget = {
       let newLists = props.board.lists.slice()
       newLists[props.index].cards.push(card)
       newLists[originalListIndex].cards.splice(originalIndex, 1)
-      updateLists(props.dispatch, newLists)      
+      updateLists(props.dispatch, newLists)
     }
   },
   drop (props, monitor) {
     const { id: draggedId, originalListIndex } = monitor.getItem()
     let card = props.cards.filter((e, i) => e._id === draggedId)[0]
-    moveCardDistant(props.board._id, card._id, props.board.lists[originalListIndex]._id,props.id, props.cards.indexOf(card))
+    moveCardDistant(props.board._id, card._id, props.board.lists[originalListIndex]._id, props.id, props.cards.indexOf(card))
   }
 }
 
@@ -75,7 +75,7 @@ const listTarget = {
       const { index: overIndex } = props.findList(overId)
       props.moveList(draggedId, overIndex)
     }
-  },
+  }
 }
 
 @connect(store => {
@@ -83,15 +83,15 @@ const listTarget = {
     board: store.board
   }
 })
-//List can be hovered by another dragged list
+// List can be hovered by another dragged list
 @DropTarget(ItemTypes.LIST, listTarget, connect => ({
   connectListDropTarget: connect.dropTarget()
 }))
-//List can be the target of a card drop
+// List can be the target of a card drop
 @DropTarget(ItemTypes.CARD, cardTarget, (connectDragSource, monitor) => ({
   connectCardDropTarget: connectDragSource.dropTarget()
 }))
-//List are draggable
+// List are draggable
 @DragSource(ItemTypes.LIST, listSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   connectDragPreview: connect.dragPreview(),
@@ -158,7 +158,7 @@ export default class List extends React.Component {
   componentDidMount () {
     this.props.connectDragPreview(getEmptyImage(), {
       captureDraggingState: true
-    });
+    })
   }
 
   render () {
@@ -185,13 +185,13 @@ export default class List extends React.Component {
             ))
           }
         </ul>
-            {
+        {
               this.state.newCardFormDisplayed
               ? <div className='newCardForm'>
                 <form onSubmit={this.addCard}>
                   <textarea
                     ref={(t) => { this.newCardTitle = t }}
-                    onKeyPress={(e) => {return e.charCode === 13 ? this.addCard() : null}}
+                    onKeyPress={(e) => { return e.charCode === 13 ? this.addCard() : null }}
                   />
                 </form>
                 <div className='newCardFormButtons'>

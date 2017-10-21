@@ -7,18 +7,18 @@ export default (props) => (
   <DropDown
     orientation='right'
     menuElements={[
-    {
-      action: null,
-      placeholder: 'Rename list'
-    },
-    {
-      action: null,
-      placeholder: 'Move list'
-    },
-    {
-      action: null,
-      placeholder: 'Archive list'
-    }]}>
+      {
+        action: null,
+        placeholder: 'Rename list'
+      },
+      {
+        action: null,
+        placeholder: 'Move list'
+      },
+      {
+        action: null,
+        placeholder: 'Archive list'
+      }]}>
     <Button
       bgColor='rgba(0,0,0,0)'
       color='#444'

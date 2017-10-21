@@ -21,12 +21,13 @@ export default class Card extends React.Component {
   }
 
   render () {
-  return (
-    <div style={{...this.props.style}} ref={c => this.card = c} className='root'>
-      <div className='content'>{ this.props.content }</div>
-      <style jsx>
-        {styles}
-      </style>
-    </div>
-  )}
+    return (
+      <div style={{...this.props.style}} ref={c => this.card = c} className='root'>
+        <div className='content'>{ this.props.content }</div>
+        <style jsx>
+          {styles}
+        </style>
+      </div>
+    )
+  }
 }

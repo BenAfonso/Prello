@@ -22,7 +22,7 @@ storiesOf('DropDown', module)
       action: null,
       placeholder: 'Menu item 3'
     }
-  ] }><Button>Open</Button></DropDown>
+  ]}><Button>Open</Button></DropDown>
 ))
 .add('Simple DropDown', () => (
   <DropDown menuElements={[
@@ -38,17 +38,17 @@ storiesOf('DropDown', module)
       action: null,
       placeholder: 'Menu item 3'
     }
-  ] }><Button>Open</Button></DropDown>
+  ]}><Button>Open</Button></DropDown>
 ))
 .add('Custom layout', () => (
   <DropDown title={'Custom dropdown'} layout={'custom'} button={<Button>ButtonInProps</Button>}>
     <div style={{ width: '340px' }}>
-    <ul>
-      <li>
-        <label>This is a textbox example: </label>
-        <input type='text' style={{ width: '100%', height: '30px', fontSize: '14px' }}/>
-      </li>
-    </ul>
+      <ul>
+        <li>
+          <label>This is a textbox example: </label>
+          <input type='text' style={{ width: '100%', height: '30px', fontSize: '14px' }} />
+        </li>
+      </ul>
     </div>
   </DropDown>
 ))

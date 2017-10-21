@@ -12,7 +12,7 @@ import CardDetails from './CardDetails/CardDetails'
 
 const cardSource = {
 
-  beginDrag(props, monitor, component) {
+  beginDrag (props, monitor, component) {
     const { clientWidth, clientHeight } = findDOMNode(component)
     return {
       id: props.id,
@@ -23,11 +23,11 @@ const cardSource = {
       ...props
     }
   },
-  endDrag(props, monitor) {
+  endDrag (props, monitor) {
   },
-  isDragging(props, monitor) {
-    const isDragging = props.id && props.id === monitor.getItem().id;
-    return isDragging;
+  isDragging (props, monitor) {
+    const isDragging = props.id && props.id === monitor.getItem().id
+    return isDragging
   }
 }
 
@@ -47,20 +47,20 @@ const cardTarget = {
       let cardss = l.cards.filter((c, cIndex) => {
         return c._id === draggedId
       })
-      return cardss.length >0
+      return cardss.length > 0
     })[0]
 
     originalListIndex = props.board.lists.indexOf(originalList)
     let lastC = originalList.cards.filter((e, i) => e._id === draggedId)
     originalIndex = props.board.lists[originalListIndex].cards.indexOf(lastC[0])
-    if (draggedId !== overId) {      
+    if (draggedId !== overId) {
       let newLists = props.board.lists.slice()
       let card = props.board.lists[originalListIndex].cards.slice()[originalIndex]
       newLists[originalListIndex].cards.splice(originalIndex, 1)
-      newLists[newListIndex].cards.splice(newIndex, 0, card)        
+      newLists[newListIndex].cards.splice(newIndex, 0, card)
       updateLists(props.dispatch, newLists)
     }
-  },
+  }
 }
 
 @connect(store => {
@@ -107,29 +107,29 @@ export default class CardComponent extends React.Component {
   renderDetails () {
     return (
       <PortalWithState defaultOpen closeOnOutsideClick closeOnEsc onClose={this.dismissCardDetails.bind(this)}>
-      {({ openPortal, closePortal, isOpen, portal }) => [
-        portal(
-          <div style={{
-            position: 'absolute',
-            left: '5vw',
-            top: '5vh'
-          }}>
-            <CardDetails title='Title' handleClick={closePortal} />
-          </div>
+        {({ openPortal, closePortal, isOpen, portal }) => [
+          portal(
+            <div style={{
+              position: 'absolute',
+              left: '5vw',
+              top: '5vh'
+            }}>
+              <CardDetails title='Title' handleClick={closePortal} />
+            </div>
         )
-      ]}
+        ]}
       </PortalWithState>
     )
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.connectDragPreview(getEmptyImage(), {
       captureDraggingState: true
-    });
+    })
   }
 
-  render() {
-    const { id, index, bgColor, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource } = this.props;
+  render () {
+    const { id, index, bgColor, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource } = this.props
 
     return connectCardDropTarget(connectCardDragSource(
       <div className='host' style={{position: 'relative'}} onClick={this.displayCardDetails.bind(this)}>
