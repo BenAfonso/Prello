@@ -40,7 +40,7 @@ module.exports = (router, controller) => {
     *         description: Internal error
     */
   router.post('/boards/:boardId/collaborators', [requiresLogin, boardExists, isOwner], function (req, res) {
-    let requiredBody = ['userId']
+    let requiredBody = ['email']
     let requiredParameter = ['boardId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
@@ -54,7 +54,7 @@ module.exports = (router, controller) => {
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-    controller.addCollaborator(req.params.boardId, req.body.userId, req.user._id).then((data) => {
+    controller.addCollaboratorEmail(req.params.boardId, req.body.email, req.user._id).then((data) => {
       res.status(201).json('Successfully updated')
     }).catch((err) => {
       res.status(err.status).json(err)
