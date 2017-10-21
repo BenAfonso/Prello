@@ -156,7 +156,7 @@ module.exports = (server, chai) => {
       it('it should ADD a new collaborator to board (OWNER)', done => {
         chai.request(server)
           .post(`/boards/${board1._id}/collaborators`)
-          .send({ userId: user2._id })
+          .send({ email: user2.email })
           .set('authorization', `Bearer ${token}`)
           .end((err, res) => {
             if (err) {}
@@ -167,7 +167,7 @@ module.exports = (server, chai) => {
       it('it should not ADD a new collaborator to board (NOT BOARD OWNER)', done => {
         chai.request(server)
           .post(`/boards/${board2._id}/collaborators`)
-          .send({ userId: user2._id })
+          .send({ email: user2.email })
           .set('authorization', `Bearer ${token}`)
           .end((err, res) => {
             if (err) {}

@@ -211,7 +211,7 @@ boardController.addCollaboratorEmail = (boardId, email, requesterId) => {
   return new Promise((resolve, reject) => {
     User.findOne({ email: email }).then((res) => {
       if (res) {
-        boardController.addCollaborator(boardId, res._id, requesterId).then(err => {
+        boardController.addCollaborator(boardId, res._id, requesterId).then(res => {
           resolve(res)
         }).catch(err => {
           err.status = 500
@@ -219,10 +219,9 @@ boardController.addCollaboratorEmail = (boardId, email, requesterId) => {
         })
       } else {
         // TODO create new temp user??
-        let err = new Error("Not found")
+        let err = new Error('Not found')
         reject(err)
       }
-      
     })
   })
 }
