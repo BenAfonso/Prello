@@ -7,6 +7,7 @@ import Button from '../Button/Button'
 import Icon from '../Icon/Icon'
 
 export default class Checklist extends React.Component {
+
   static propTypes = {
     items: PropTypes.array,
     title: PropTypes.string.isRequired,
@@ -19,7 +20,6 @@ export default class Checklist extends React.Component {
   }
 
   constructor (props) {
-    console.log('ah')
     super(props)
     this.state = {
       items: props.items,
@@ -112,9 +112,9 @@ export default class Checklist extends React.Component {
 
     return (
       <div className='Checklist'>
-        {!this.state.displayEditTitleForm
+        {!this.state.displayEditTitleForm ?
         // Title
-        ? <div className='title'>
+        <div className='title'>
           <span><Icon name='check-square-o' color='#888' /></span>
           <h2 onClick={this.displayEditTitleForm} className='checklistTitle'>{this.state.title}</h2>
         </div>
@@ -149,38 +149,38 @@ export default class Checklist extends React.Component {
         {/* Display checklist items */}
         {this.state.items.map((item, index) => (<ChecklistItem key={item.index} done={item.done} index={parseInt(index, 10)} content={item.content} onContentChange={this.updateItemContent} onToggle={this.updateItemStatus} onDelete={this.deleteItem} />))}
 
-        {!this.state.displayNewItemForm
-          ? <Button onClick={this.displayNewItemForm}
-            color='#444'
-            size='x-small'
-            bgColor='rgba(0,0,0,0)'
-            hoverBgColor='#ddd'
-            block>Add an item...</Button>
+        {!this.state.displayNewItemForm ? 
+          <Button onClick={this.displayNewItemForm}
+          color='#444'
+          size='x-small'
+          bgColor='rgba(0,0,0,0)'
+          hoverBgColor='#ddd'
+          block>Add an item...</Button>
         :
-        // Form in order to add a new item
-          <div className='addItemDiv'>
-            <Input ref={(v) => this.textInput = v} placeholder='Describe your item...' />
-            <div className='button'>
-              <Button
-                onClick={this.addItem}
-                bgColor='#3cb221'
-                hoverBgColor='#148407'
-                color='#FFF'
-                size='small'>
+        //Form in order to add a new item 
+        <div className='addItemDiv'>
+          <Input ref={(v) => this.textInput = v} placeholder='Describe your item...' />
+          <div className='button'>
+            <Button 
+              onClick={this.addItem} 
+              bgColor='#3cb221' 
+              hoverBgColor='#148407' 
+              color='#FFF'
+              size='small'>
               Save
             </Button>
-            </div>
-            <div className='button'>
-              <Button
-                onClick={this.hideNewItemForm}
-                bgColor='rgba(0,0,0,0)'
-                hoverBgColor='#ddd'
-                color='#70727c'
-                size='small'>
-                <Icon name='times' color='#70727c' />
-              </Button>
-            </div>
-          </div>}
+          </div>
+          <div className='button'>
+          <Button
+            onClick={this.hideNewItemForm}
+            bgColor='rgba(0,0,0,0)'
+            hoverBgColor='#ddd'
+            color='#70727c'
+            size='small'>
+            <Icon name='times' color='#70727c'/>
+          </Button>
+          </div>
+        </div>}
         <style jsx>{styles}</style>
       </div>
     )
