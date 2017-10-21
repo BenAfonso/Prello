@@ -165,8 +165,7 @@ export default class Board extends React.Component {
           {
             this.state.newListFormDisplayed
             ? this.renderNewListForm()
-            : <div className='newListButton' style={{
-                // color: this.props.secondaryColor.light() ? '#444' : '#fff'} onClick={this.displayNewListForm}>Add a list...</div>
+            : <div className='newListButton'>Add a list...</div>
           }
         </li>
 
