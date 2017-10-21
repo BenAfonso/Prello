@@ -1,4 +1,4 @@
-import { fetchBoards, addBoardDistant } from '../services/Board.services'
+import { fetchBoards, addBoardDistant, addCollaboratorDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant } from '../services/List.services'
 import { moveCard } from '../services/Card.services'
 
@@ -54,9 +54,9 @@ export function setBoard (dispatch, id) {
     fetchBoards().then((data) => {
       dispatch({
         type: 'FETCH_BOARD_SUCCESS',
-        payload: data.filter(x=>x._id===id)[0]
+        payload: data.filter(x => x._id === id)[0]
       })
-      resolve(data.filter(x=>x._id===id)[0])
+      resolve(data.filter(x => x._id === id)[0])
     }).catch((err) => {
       dispatch({
         type: 'FETCH_BOARD_ERROR',
@@ -126,31 +126,48 @@ export function addCardLocal (listId, card) {
 
 export function setBoardslist (dispatch) {
   return new Promise((resolve, reject) => {
-  dispatch({type: 'FETCH_BOARDSLIST_START'})
-  fetchBoards().then((data) => {
-    dispatch({
-      type: 'FETCH_BOARDSLIST_SUCCESS',
-      payload: data
-    })
-    resolve(data)
-  }).catch((err) => {
-    dispatch({
-      type: 'FETCH_BOARDSLIST_ERROR',
-      payload: err
+    dispatch({type: 'FETCH_BOARDSLIST_START'})
+    fetchBoards().then((data) => {
+      dispatch({
+        type: 'FETCH_BOARDSLIST_SUCCESS',
+        payload: data
+      })
+      resolve(data)
+    }).catch((err) => {
+      dispatch({
+        type: 'FETCH_BOARDSLIST_ERROR',
+        payload: err
+      })
     })
   })
-})
 }
 
 export function addBoard (dispatch, title) {
   addBoardDistant(title).then((board) => {
       // <= HANDLED FROM SOCKETS
-    }).catch(err => {
-      return err
-    })
+  }).catch(err => {
+    return err
+  })
 }
 
 export function addBoardLocal (board) {
+  if (board) {
+    store.dispatch({
+      type: 'ADD_BOARD',
+      payload: board
+    })
+  }
+}
+
+export function addCollaborator (dispatch, boardId, title) {
+  addCollaboratorDistant(boardId, title).then((collaborator) => {
+      // <= HANDLED FROM SOCKETS
+  }).catch(err => {
+    return err
+  })
+}
+
+export function addCollaboratorLocal (board) {
   if (board) {
     store.dispatch({
       type: 'ADD_BOARD',

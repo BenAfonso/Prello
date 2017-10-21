@@ -88,7 +88,7 @@ export default class DropDown extends React.Component {
               ? <div className='dropdown-content' ref={e => this.dd = e}>
                 {
                   title !== undefined
-                    ? <div className='dropdown-title'>Mes boards</div>
+                    ? <div className='dropdown-title'>{title}</div>
                     : null
                 }
                 <ul id='dropdown' style={{ ...dropDownStyles }}>
@@ -118,7 +118,7 @@ export default class DropDown extends React.Component {
               ? <div className='dropdown-content' ref={e => this.dd = e}>
                 {
                   title !== undefined
-                    ? <div className='dropdown-title'>Mes boards</div>
+                    ? <div className='dropdown-title'>{title}</div>
                     : null
                 }
                 {children}

@@ -62,7 +62,7 @@ export default class BoardLayout extends React.Component {
             })}
             </div>
           <div name='sidebar' className='sideMenu'>
-            <SideMenu handleCloseAction={this.closeDrawer} />
+            <SideMenu handleCloseAction={this.closeDrawer} collaborators={this.props.children.props.collaborators} boardId={this.props.children.props._id} />
           </div>
         </div>
         <style jsx>{`
