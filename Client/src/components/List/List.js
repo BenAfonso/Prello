@@ -3,12 +3,11 @@ import React from 'react'
 import Card from '../Card/DraggableCard'
 import styles from './List.styles'
 import { connect } from 'react-redux'
-import { addCard, moveList, moveCardDistant } from '../../store/actions'
+import { addCard, moveList, moveCardDistant, updateLists } from '../../store/actions'
 import { DragSource, DropTarget } from 'react-dnd'
 import { ItemTypes } from '../Constants'
 import { PropTypes } from 'prop-types'
 import { findDOMNode } from 'react-dom'
-import { updateLists } from '../../store/actions'
 import Button from '../UI/Button/Button'
 import { getEmptyImage } from 'react-dnd-html5-backend'
 import ListMenu from './ListMenu/ListMenu'
@@ -162,7 +161,7 @@ export default class List extends React.Component {
   }
 
   render () {
-    const { title, primaryColor, secondaryColor, isDragging, connectDragSource, connectListDropTarget, connectCardDropTarget } = this.props
+    const { title, secondaryColor, isDragging, connectDragSource, connectListDropTarget, connectCardDropTarget } = this.props
     return connectDragSource(connectListDropTarget(connectCardDropTarget(
       <div className='host'
         style={{backgroundColor: secondaryColor}}

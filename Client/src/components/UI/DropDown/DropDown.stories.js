@@ -1,7 +1,7 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import DropDown from './DropDown'
-import { withKnobs, text, color, boolean } from '@storybook/addon-knobs'
+import { withKnobs } from '@storybook/addon-knobs'
 import Button from '../Button/Button'
 
 storiesOf('DropDown', module)

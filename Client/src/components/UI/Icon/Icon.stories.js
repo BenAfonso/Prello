@@ -1,7 +1,7 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import Icon from './Icon'
-import { withKnobs, text, color, boolean } from '@storybook/addon-knobs'
+import { withKnobs, text, color } from '@storybook/addon-knobs'
 
 storiesOf('Icon', module)
 .addDecorator(withKnobs)

@@ -25,23 +25,23 @@ export default class BoardLayout extends React.Component {
     let content = target.find({ name: 'boardContainer' })
     if (this.state.sideMenuExpanded) {
       return new TimelineMax()
-        .to(sidebar, 0.5, {right: '0px' }, 0)
-        .to(content, 0.5, {width: '-=400' }, 0)
+        .to(sidebar, 0.5, {right: '0px'}, 0)
+        .to(content, 0.5, {width: '-=400'}, 0)
     } else {
       return new TimelineMax()
-        .to(sidebar, 0.5, {right: '-400px' }, 0)
-        .to(content, 0.5, {width: '100%' }, 0)
+        .to(sidebar, 0.5, {right: '-400px'}, 0)
+        .to(content, 0.5, {width: '100%'}, 0)
     }
   }
 
   closeDrawer () {
     this.addAnimation(this.toggleSidebarAnimation)
-    this.setState({ sideMenuExpanded: false })
+    this.setState({sideMenuExpanded: false})
   }
 
   openDrawer () {
     this.addAnimation(this.toggleSidebarAnimation)
-    this.setState({ sideMenuExpanded: true })
+    this.setState({sideMenuExpanded: true})
   }
 
   render () {

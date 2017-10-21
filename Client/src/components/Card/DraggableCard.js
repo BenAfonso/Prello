@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import { DragSource, DropTarget } from 'react-dnd'
 import { ItemTypes } from '../Constants'
 import { connect } from 'react-redux'
-import { updateLists } from '../../store/actions'
+import {updateLists} from '../../store/actions'
 import { findDOMNode } from 'react-dom'
 import { getEmptyImage } from 'react-dnd-html5-backend'
 import Card from './Card'
-import { PortalWithState } from 'react-portal'
+import {PortalWithState} from 'react-portal'
 import CardDetails from './CardDetails/CardDetails'
 
 const cardSource = {
@@ -137,7 +137,7 @@ export default class CardComponent extends React.Component {
           opacity: isDragging ? 1 : 0
         }} />
 
-        { this.state.cardDetailsDisplayed ? this.renderDetails() : null }
+        {this.state.cardDetailsDisplayed ? this.renderDetails() : null}
 
         <Card id={id} style={{ opacity: isDragging ? 0.3 : 1, backgroundColor: bgColor }} index={index} listIndex={listIndex} content={content} />
         <style jsx>{`

@@ -1,13 +1,8 @@
 import React from 'react'
 import styles from './SideMenu.styles'
 import Icon from '../Icon/Icon'
-import PropTypes from 'prop-types'
 import UsersMenu from '../../MenuElements/UsersMenu/UsersMenu'
 import ActivityMenu from '../../MenuElements/ActivityMenu/ActivityMenu'
-
-const SideMenuItem = (props) => {
-
-}
 
 const elements = [
   {

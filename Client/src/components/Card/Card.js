@@ -17,9 +17,6 @@ export default class Card extends React.Component {
     id: PropTypes.any
   }
 
-  static defaultProps = {
-  }
-
   render () {
     return (
       <div style={{...this.props.style}} ref={c => this.card = c} className='root'>

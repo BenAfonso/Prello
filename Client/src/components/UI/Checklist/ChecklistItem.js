@@ -37,12 +37,12 @@ export default class ChecklistItem extends React.Component {
   }
 
   setEditable () {
-    this.setState({ isEditable: true})
+    this.setState({isEditable: true})
   }
 
   updateText () {
     if (this.textInput.input.value.length > 0) {
-      this.setState({ isEditable: false, content: this.textInput.input.value}, () => {
+      this.setState({isEditable: false, content: this.textInput.input.value}, () => {
         if (this.props.onContentChange !== null) { this.props.onContentChange(this.props.index, this.state.content) }
       })
     }
