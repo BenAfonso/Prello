@@ -141,20 +141,6 @@ export default function reducer (state, action) {
         }
       }
     }
-    case 'MOVE_CARD': {
-      const { index, originalListIndex, newListIndex } = action.payload
-      let newLists = state.board.lists.slice()
-      let card = newLists[originalListIndex].cards.slice()[index]
-      newLists[originalListIndex].cards.splice(index, 1)
-      newLists[newListIndex].cards.splice(newListIndex, 0, card)
-      return {
-        ...state,
-        board: {
-          ...state.board,
-          lists: newLists
-        }
-      }
-    }
     default:
       return state
   }

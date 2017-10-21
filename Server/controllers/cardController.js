@@ -16,11 +16,11 @@ cardController.createCard = (req) => {
       if (err) {
         reject(err)
       } else {
-        listController.addCardToList(req.params.listid, cardToAdd)
+        listController.addCardToList(req.params.listId, cardToAdd)
             .then((data) => {
               let cardToEmit = {
                 card: item,
-                listId: req.params.listid
+                listId: req.params.listId
               }
               emit(req.params.boardId, 'NEW_CARD', cardToEmit)
               resolve(item)
@@ -32,6 +32,37 @@ cardController.createCard = (req) => {
     })
   })
 }
+cardController.removeCard = (boardId, listId, cardId) => {
+  return new Promise((resolve, reject) => {
+    Card.findOneAndRemove({ '_id': cardId }, (err, item) => {
+      if (err) {
+        reject(err)
+      } else {
+        listController.removeCardFromList(listId, cardId)
+          .then((data) => {
+            boardController.refreshOneboard('CARD_DELETED', boardId)
+            resolve(item)
+          })
+          .catch((err) => {
+            reject(err)
+          })
+      }
+    })
+  })
+}
+cardController.updateCard = (req) => {
+  return new Promise((resolve, reject) => {
+    Card.update({ '_id': req.params.cardId }, req.body, (err, item) => {
+      if (err) {
+        return reject(err)
+      } else {
+        boardController.refreshOneboard('CARD_UPDATED', req.params.boardId)
+        // TODO: Log update to history
+        return resolve(item)
+      }
+    })
+  })
+}
 cardController.moveCard = (req) => {
   return new Promise((resolve, reject) => {
     let boardId = req.params.boardId
@@ -39,22 +70,38 @@ cardController.moveCard = (req) => {
     let position = req.body.position
     let newListId = req.body.newListId
     let oldListId = req.body.oldListId
-    List.findOneAndUpdate({'_id': oldListId}, {$pull: {'cards': cardId}}, function (err, res) {
+    List.findOne({'_id': oldListId, 'cards': cardId}).exec((err, res) => {
       if (err) {
+        err.status = 500
+        reject(err)
+        return
+      }
+      if (res === null) {
+        let err = new Error('CardId not inside the oldlist')
+        err.status = 404
         reject(err)
       } else {
-        List.findOne({'_id': newListId}, function (err, res) {
+        List.findOneAndUpdate({'_id': oldListId}, {$pull: {'cards': cardId}}, function (err, res) {
           if (err) {
+            err.status = 500
             reject(err)
           } else {
-            let newCardLists = res.cards
-            newCardLists.splice(position, 0, cardId)
-            List.findOneAndUpdate({'_id': newListId}, {'cards': newCardLists}, function (error, result) {
-              if (error) {
-                reject(error)
+            List.findOne({'_id': newListId}, function (err, res) {
+              if (err) {
+                err.status = 500
+                reject(err)
               } else {
-                boardController.refreshOneboard('CARD_MOVED', boardId)
-                resolve(result.cards)
+                let newCardLists = res.cards
+                newCardLists.splice(position, 0, cardId)
+                List.findOneAndUpdate({'_id': newListId}, {'cards': newCardLists}, function (error, result) {
+                  if (error) {
+                    error.status = 500
+                    reject(error)
+                  } else {
+                    boardController.refreshOneboard('CARD_MOVED', boardId)
+                    resolve(result.cards)
+                  }
+                })
               }
             })
           }

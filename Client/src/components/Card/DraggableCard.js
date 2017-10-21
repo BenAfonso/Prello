@@ -7,6 +7,8 @@ import { updateLists } from '../../store/actions'
 import { findDOMNode } from 'react-dom'
 import { getEmptyImage } from 'react-dnd-html5-backend'
 import Card from './Card'
+import { PortalWithState } from 'react-portal'
+import CardDetails from './CardDetails/CardDetails'
 
 const cardSource = {
 
@@ -81,7 +83,43 @@ export default class CardComponent extends React.Component {
     content: PropTypes.string.isRequired,
     isDragging: PropTypes.bool.isRequired,
     index: PropTypes.number.isRequired,
+    bgColor: PropTypes.any,
     listIndex: PropTypes.number
+  }
+
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      cardDetailsDisplayed: false
+    }
+    this.renderDetails = this.renderDetails.bind(this)
+  }
+
+  dismissCardDetails () {
+    this.setState({ cardDetailsDisplayed: false })
+  }
+
+  displayCardDetails () {
+    this.setState({ cardDetailsDisplayed: true })
+  }
+
+  renderDetails () {
+    return (
+      <PortalWithState defaultOpen closeOnOutsideClick closeOnEsc onClose={this.dismissCardDetails.bind(this)}>
+      {({ openPortal, closePortal, isOpen, portal }) => [
+        portal(
+          <div style={{
+            position: 'absolute',
+            left: '5vw',
+            top: '5vh'
+          }}>
+            <CardDetails title='Title' handleClick={closePortal} />
+          </div>
+        )
+      ]}
+      </PortalWithState>
+    )
   }
 
   componentDidMount() {
@@ -91,14 +129,17 @@ export default class CardComponent extends React.Component {
   }
 
   render() {
-    const { id, index, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource } = this.props;
+    const { id, index, bgColor, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource } = this.props;
 
     return connectCardDropTarget(connectCardDragSource(
-      <div className='host' style={{position: 'relative'}}>
+      <div className='host' style={{position: 'relative'}} onClick={this.displayCardDetails.bind(this)}>
         <div className='overlay' style={{
           opacity: isDragging ? 1 : 0
         }} />
-        <Card id={id} style={{ opacity: isDragging ? 0.3 : 1 }} index={index} listIndex={listIndex} content={content} />
+
+        { this.state.cardDetailsDisplayed ? this.renderDetails() : null }
+
+        <Card id={id} style={{ opacity: isDragging ? 0.3 : 1, backgroundColor: bgColor }} index={index} listIndex={listIndex} content={content} />
         <style jsx>{`
           .overlay {
             position: absolute;

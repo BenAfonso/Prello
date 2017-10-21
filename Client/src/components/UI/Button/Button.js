@@ -19,29 +19,26 @@ export default class Button extends React.Component {
     hoverColor: PropTypes.string,
     onClick: PropTypes.func,
     children: PropTypes.any,
-    bold: PropTypes.bool
+    bold: PropTypes.bool,
+    block: PropTypes.bool
   }
 
   static defaultProps = {
   }
 
-  constructor (props) {
-    super(props)
-    this.handleClick = this.handleClick.bind(this)
-  }
-
-  handleClick (event) {
+  handleClick (e) {
     const { disabled, onClick } = this.props
 
     if (disabled) {
-      event.preventDefault()
-      event.stopPropagation()
+      e.preventdefault()
+      e.stoppropagation()
       return
     }
 
     if (onClick) {
-      onClick(event)
+      onClick()
     }
+
   }
 
   render () {
@@ -49,6 +46,7 @@ export default class Button extends React.Component {
       disabled,
       children,
       color,
+      block,
       round,
       size,
       width,
@@ -95,13 +93,15 @@ export default class Button extends React.Component {
           ? `linear-gradient(to right, ${bgColor}, ${bgColorTo ||
             bgColorObj.lighten(0.2).string()})`
           : 'none',
+      display: block ? 'block' : '',
       ...props.style
     }
 
     return (
-      <div {...props} className={className} ref={(b) => {this.button = b}}
+      <div id='button' {...props} className={className} ref={(b) => {this.button = b}}
         onMouseOver={() => {this.button.style.backgroundColor = hoverBgColor}}
-        onMouseOut={() => {this.button.style.backgroundColor = bgColor}}>
+        onMouseOut={() => {this.button.style.backgroundColor = bgColor}}
+        onClick={this.handleClick.bind(this)}>
         {children}
         <style jsx>{styles}</style>
       </div>

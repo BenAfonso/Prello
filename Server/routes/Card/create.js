@@ -1,4 +1,8 @@
 const Util = require('../../controllers/Util')
+const {requiresLogin} = require('../../config/middlewares/authorization')
+const {listExists} = require('../../config/middlewares/listAuthorizations')
+const {isCollaborator} = require('../../config/middlewares/boardAuthorizations')
+
 module.exports = (router, controller) => {
   /**
     * @swagger
@@ -11,7 +15,7 @@ module.exports = (router, controller) => {
 
   /**
     * @swagger
-    * /boards/{boardId}/lists/{listid}/cards:
+    * /boards/{boardId}/lists/{listId}/cards:
     *   post:
     *     tags:
     *       - Cards
@@ -25,7 +29,7 @@ module.exports = (router, controller) => {
     *         description: The board id where we want to insert the Card
     *         in: path
     *         required: true
-    *       - name: listid
+    *       - name: listId
     *         type: string
     *         description: The list id where we want to insert the Card
     *         in: path
@@ -37,14 +41,14 @@ module.exports = (router, controller) => {
     *         schema:
     *             $ref: '#/definitions/NewCard'
     *     responses:
-    *       200:
+    *       201:
     *         description: Message confirming the Card has been created
     *       500:
     *         description: Internal error
     */
-  router.post('/boards/:boardId/lists/:listid/cards', function (req, res) {
+  router.post('/boards/:boardId/lists/:listId/cards', [requiresLogin, listExists, isCollaborator], function (req, res) {
     let requiredBody = ['text']
-    let requiredParameter = ['listid', 'boardId']
+    let requiredParameter = ['listId', 'boardId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
       let stringMessage = requiredParameter.join(',')

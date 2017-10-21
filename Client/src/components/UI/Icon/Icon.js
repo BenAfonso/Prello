@@ -1,7 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import cn from 'classnames'
-import Color from 'color'
 
 export default class Icon extends React.Component {
   static propTypes = {

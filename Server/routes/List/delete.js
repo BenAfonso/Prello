@@ -1,8 +1,13 @@
 const Util = require('../../controllers/Util')
+const {requiresLogin} = require('../../config/middlewares/authorization')
+
+const {boardExists, isCollaborator} = require('../../config/middlewares/boardAuthorizations')
+const {listExists} = require('../../config/middlewares/listAuthorizations')
+
 module.exports = (router, controllers) => {
   /**
   * @swagger
-  * /boards/{boardid}/lists/{listid}:
+  * /boards/{boardId}/lists/{listId}:
   *   delete:
   *     tags:
   *       - Lists
@@ -10,13 +15,13 @@ module.exports = (router, controllers) => {
   *     produces:
   *       - application/json
   *     parameters:
-  *       - name: boardid
+  *       - name: boardId
   *         description: The id of the board object where the list is
   *         in: path
   *         required: true
   *         schema:
   *           type: integer
-  *       - name: listid
+  *       - name: listId
   *         description: The id of the list object that needs to be deleted
   *         in: path
   *         required: true
@@ -30,15 +35,15 @@ module.exports = (router, controllers) => {
   *       404:
   *         description: List doesn't exist
   */
-  router.delete('/boards/:boardid/lists/:listid', function (req, res) {
-    let requiredParameter = ['listid', 'boardid']
+  router.delete('/boards/:boardId/lists/:listId', [requiresLogin, boardExists, isCollaborator, listExists], function (req, res) {
+    let requiredParameter = ['listId', 'boardId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
       let stringMessage = requiredParameter.join(',')
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-    controllers.listController.removeList(req).then((data) => {
+    controllers.listController.removeList(req.params.boardId, req.params.listId).then((data) => {
       res.status(200).send('The list has been deleted')
     })
       .catch((err) => {

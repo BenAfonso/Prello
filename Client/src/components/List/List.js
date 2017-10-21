@@ -11,6 +11,7 @@ import { findDOMNode } from 'react-dom'
 import { updateLists } from '../../store/actions'
 import Button from '../UI/Button/Button'
 import { getEmptyImage } from 'react-dnd-html5-backend'
+import ListMenu from './ListMenu/ListMenu'
 
 const listSource = {
   beginDrag (props, monitor, component) {
@@ -106,7 +107,9 @@ export default class List extends React.Component {
     canDrop: PropTypes.bool,
     id: PropTypes.any,
     title: PropTypes.string.isRequired,
-    moveList: PropTypes.func.isRequired
+    moveList: PropTypes.func.isRequired,
+    primaryColor: PropTypes.any,
+    secondaryColor: PropTypes.any
   }
 
   constructor (props) {
@@ -159,12 +162,16 @@ export default class List extends React.Component {
   }
 
   render () {
-    const { title, isDragging, connectDragSource, connectListDropTarget, connectCardDropTarget } = this.props
+    const { title, primaryColor, secondaryColor, isDragging, connectDragSource, connectListDropTarget, connectCardDropTarget } = this.props
     return connectDragSource(connectListDropTarget(connectCardDropTarget(
-      <div className='host' ref={(l) => { this.host = l }}>
+      <div className='host'
+        style={{backgroundColor: secondaryColor}}
+        ref={(l) => { this.host = l }}>
         { isDragging ? <div className='overlay' /> : null }
         <div className='title'>{title}</div>
-        <div className='removeButton' onClick={this.removeAction}> X </div>
+        <div className='button'>
+          <ListMenu />
+        </div>
         <ul ref={(l) => { this.cardContainer = l }} style={{
           maxHeight: this.state.newCardFormDisplayed
             ? 'calc(100vh - 340px)'
@@ -173,7 +180,7 @@ export default class List extends React.Component {
           {
             this.props.cards.map((card, i) => (
               <li key={card._id}>
-                <Card index={i} id={card._id} listIndex={this.props.index} content={card.text} />
+                <Card index={i} id={card._id} bgColor={this.props.primaryColor} listIndex={this.props.index} content={card.text} />
               </li>
             ))
           }
@@ -184,7 +191,7 @@ export default class List extends React.Component {
                 <form onSubmit={this.addCard}>
                   <textarea
                     ref={(t) => { this.newCardTitle = t }}
-                    onKeyPress={(e) => {e.charCode === 13 ? this.addCard() : null}}
+                    onKeyPress={(e) => {return e.charCode === 13 ? this.addCard() : null}}
                   />
                 </form>
                 <div className='newCardFormButtons'>

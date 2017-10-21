@@ -1,11 +1,11 @@
 import React from 'react'
 import Board from '../components/Board/Board'
-import PageLayout from '../layouts/page'
+import BoardLayout from '../layouts/board'
 
 export default (props) => (
-  <PageLayout>
+  <BoardLayout>
     <Board 
       _id={props.match.params.id}
     />
-  </PageLayout>
+  </BoardLayout>
 )
