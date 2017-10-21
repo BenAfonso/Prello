@@ -12,9 +12,7 @@ export default (props) => (
     </div>
     <div>
 
-      <div className='content'>
-
-      </div>
+      <div className='content' />
       <div className='buttons'>
         <ul>
           <li><Button

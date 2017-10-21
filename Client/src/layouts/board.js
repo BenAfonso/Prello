@@ -8,7 +8,6 @@ import Color from 'color'
 
 @GSAP()
 export default class BoardLayout extends React.Component {
-
   constructor (props) {
     super(props)
     this.state = {
@@ -26,29 +25,29 @@ export default class BoardLayout extends React.Component {
     let content = target.find({ name: 'boardContainer' })
     if (this.state.sideMenuExpanded) {
       return new TimelineMax()
-        .to(sidebar, .5, {right: '0px' }, 0)
-        .to(content, .5, {width: '-=400' }, 0)
+        .to(sidebar, 0.5, {right: '0px'}, 0)
+        .to(content, 0.5, {width: '-=400'}, 0)
     } else {
       return new TimelineMax()
-        .to(sidebar, .5, {right: '-400px' }, 0)
-        .to(content, .5, {width: '100%' }, 0)
+        .to(sidebar, 0.5, {right: '-400px'}, 0)
+        .to(content, 0.5, {width: '100%'}, 0)
     }
   }
 
   closeDrawer () {
     this.addAnimation(this.toggleSidebarAnimation)
-    this.setState({ sideMenuExpanded: false })
+    this.setState({sideMenuExpanded: false})
   }
 
-  openDrawer() {
+  openDrawer () {
     this.addAnimation(this.toggleSidebarAnimation)
-    this.setState({ sideMenuExpanded: true })
+    this.setState({sideMenuExpanded: true})
   }
 
-  render() {
+  render () {
     return (
       <div style={{ position: 'relative', height: '100%' }}>
-        <Header bgColor={this.secondaryColor}/>
+        <Header bgColor={this.secondaryColor} />
 
         <div className='content' style={{ display: 'flex', height: 'calc(100% - 50px)' }}>
 
@@ -56,11 +55,11 @@ export default class BoardLayout extends React.Component {
             <div className='drawerButton' style={{display: this.state.sideMenuExpanded ? 'none' : ''}} onClick={this.openDrawer}>
               <Button bgColor='rgba(0,0,0,0)' size='x-small' hoverBgColor='rgba(0,0,0,0.1)'>Open menu...</Button>
             </div>
-            {React.cloneElement(this.props.children, { 
+            {React.cloneElement(this.props.children, {
               primaryColor: this.primaryColor,
               secondaryColor: this.secondaryColor
             })}
-            </div>
+          </div>
           <div name='sidebar' className='sideMenu'>
             <SideMenu handleCloseAction={this.closeDrawer} />
           </div>

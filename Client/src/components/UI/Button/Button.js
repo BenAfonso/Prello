@@ -38,7 +38,6 @@ export default class Button extends React.Component {
     if (onClick) {
       onClick()
     }
-
   }
 
   render () {
@@ -98,9 +97,9 @@ export default class Button extends React.Component {
     }
 
     return (
-      <div id='button' {...props} className={className} ref={(b) => {this.button = b}}
-        onMouseOver={() => {this.button.style.backgroundColor = hoverBgColor}}
-        onMouseOut={() => {this.button.style.backgroundColor = bgColor}}
+      <div id='button' {...props} className={className} ref={(b) => { this.button = b }}
+        onMouseOver={() => { this.button.style.backgroundColor = hoverBgColor }}
+        onMouseOut={() => { this.button.style.backgroundColor = bgColor }}
         onClick={this.handleClick.bind(this)}>
         {children}
         <style jsx>{styles}</style>

@@ -21,8 +21,6 @@ import MultiBackend from 'react-dnd-multi-backend'
 })
 @DragDropContext(MultiBackend(HTML5toTouch))
 export default class Board extends React.Component {
-
-
   static propTypes = {
     primaryColor: PropTypes.any,
     secondaryColor: PropTypes.any
@@ -135,7 +133,6 @@ export default class Board extends React.Component {
   }
 
   render () {
-    
     const boardStyle = {
       backgroundColor: this.props.primaryColor
     }
@@ -158,19 +155,18 @@ export default class Board extends React.Component {
                 findList={this.findList}
                 removeAction={this.removeList}
               />
-            </li>     
+            </li>
           ))
         }
 
         <li className='newList' style={{
-              backgroundColor: this.props.secondaryColor
+          backgroundColor: this.props.secondaryColor
         }}>
           {
             this.state.newListFormDisplayed
             ? this.renderNewListForm()
             : <div className='newListButton' style={{
-                // color: this.props.secondaryColor.light() ? '#444' : '#fff'
-              }} onClick={this.displayNewListForm}>Add a list...</div>
+                // color: this.props.secondaryColor.light() ? '#444' : '#fff'} onClick={this.displayNewListForm}>Add a list...</div>
           }
         </li>
 

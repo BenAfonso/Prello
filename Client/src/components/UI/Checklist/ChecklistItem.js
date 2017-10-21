@@ -6,7 +6,6 @@ import styles from './Checklist.styles'
 import Icon from '../Icon/Icon'
 
 export default class ChecklistItem extends React.Component {
-
   static propTypes = {
     content: PropTypes.string.isRequired,
     index: PropTypes.number.isRequired,
@@ -28,7 +27,7 @@ export default class ChecklistItem extends React.Component {
     this.state = {
       isEditable: false,
       content: props.content,
-      done: props.done,
+      done: props.done
     }
     this.setEditable = this.setEditable.bind(this)
     this.updateText = this.updateText.bind(this)
@@ -38,14 +37,13 @@ export default class ChecklistItem extends React.Component {
   }
 
   setEditable () {
-    this.setState({ isEditable: true})
+    this.setState({isEditable: true})
   }
 
   updateText () {
     if (this.textInput.input.value.length > 0) {
-      this.setState({ isEditable: false, content: this.textInput.input.value}, () => {
-        if(this.props.onContentChange !== null)
-          this.props.onContentChange(this.props.index, this.state.content)
+      this.setState({isEditable: false, content: this.textInput.input.value}, () => {
+        if (this.props.onContentChange !== null) { this.props.onContentChange(this.props.index, this.state.content) }
       })
     }
   }
@@ -56,21 +54,19 @@ export default class ChecklistItem extends React.Component {
 
   onToggle () {
     this.setState({ done: this.checkbox.checked }, () => {
-      if(this.props.onToggle !== null)
-        this.props.onToggle(this.props.index, this.state.done)
+      if (this.props.onToggle !== null) { this.props.onToggle(this.props.index, this.state.done) }
     })
   }
 
   onDelete () {
-    if(this.props.onDelete !== null)
-      this.props.onDelete(this.props.index)
+    if (this.props.onDelete !== null) { this.props.onDelete(this.props.index) }
   }
-    
-  render() {
+
+  render () {
     return (
       <div className='checklistItem'>
-        {!this.state.isEditable ? 
-        <div className='readOnlyMode'>
+        {!this.state.isEditable
+        ? <div className='readOnlyMode'>
           <input type='checkbox' className='checkbox' ref={(t) => this.checkbox = t} checked={this.state.done} onClick={this.onToggle} />
           <span className='itemContent' onClick={this.setEditable}>{this.state.content}</span>
           <div className='deleteItemButton'>
@@ -84,19 +80,18 @@ export default class ChecklistItem extends React.Component {
             </Button>
           </div>
         </div>
-        : 
-        <div className='editMode'>
+        : <div className='editMode'>
           <Input ref={(v) => this.textInput = v} placeholder={this.state.content} />
-          <Button 
-            onClick={this.updateText} 
-            bgColor='#3cb221' 
-            hoverBgColor='#148407' 
+          <Button
+            onClick={this.updateText}
+            bgColor='#3cb221'
+            hoverBgColor='#148407'
             color='#FFF'
             size='x-small'
           >
-            <Icon name='check' color='#FFF'/>
+            <Icon name='check' color='#FFF' />
           </Button>
-          <Button 
+          <Button
             onClick={this.cancelEdit}
             bgColor='rgba(0,0,0,0)'
             color='#444'
@@ -110,8 +105,3 @@ export default class ChecklistItem extends React.Component {
     )
   }
 }
-
-
-
-
-

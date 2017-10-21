@@ -4,7 +4,7 @@ import BoardLayout from '../layouts/board'
 
 export default (props) => (
   <BoardLayout>
-    <Board 
+    <Board
       _id={props.match.params.id}
     />
   </BoardLayout>

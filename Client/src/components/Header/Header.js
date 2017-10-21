@@ -15,9 +15,7 @@ export default class Header extends React.Component {
     color: 'white'
   }
 
-
-  render() {
-
+  render () {
     return <div className='host' style={{
       backgroundColor: this.props.bgColor,
       color: this.props.color
