@@ -1,10 +1,12 @@
 import Config from '../config'
 import axios from 'axios'
 
-export function addBoardDistant (boardTitle) {
+export function addBoardDistant (payload) {
   return new Promise((resolve, reject) => {
+    console.log(payload.color)
     axios.post(`${Config.API_URL}/boards`, {
-      title: boardTitle
+      title: payload.title,
+      background: payload.color
     }).then(res => {
       resolve(res.data)
     }).catch(err => {
