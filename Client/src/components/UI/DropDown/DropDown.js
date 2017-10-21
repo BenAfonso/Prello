@@ -24,7 +24,7 @@ export default class DropDown extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      expanded: false
+      expanded: this.props.openManually
     }
     this.toggleDropdown = this.toggleDropdown.bind(this)
     this.handleClickOutside = this.handleClickOutside.bind(this)
@@ -67,6 +67,7 @@ export default class DropDown extends React.Component {
       button,
       ...props
     } = this.props
+    
 
     props.style = {
       ...props.style
@@ -82,7 +83,10 @@ export default class DropDown extends React.Component {
     if (layout === 'auto') {
       return (
         <div {...props} className='host'>
-          <div onClick={this.toggleDropdown} ref={b => this.button = b}>{children}</div>
+          
+        <div onClick={this.toggleDropdown} ref={b => this.button = b}>{children}</div>
+          
+          
           {
             this.state.expanded
               ? <div className='dropdown-content' ref={e => this.dd = e}>

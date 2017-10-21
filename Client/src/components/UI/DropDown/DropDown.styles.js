@@ -16,6 +16,7 @@ button:hover {
   font-family: 'Open sans', sans-serif;
   position: relative;
   display: inline-block;
+  width: 100%;
 }
 
 .dropdown-title {

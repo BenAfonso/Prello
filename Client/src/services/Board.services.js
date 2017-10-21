@@ -28,10 +28,10 @@ export function addCollaborators (board, emails) {
   })
 }
 
-export function addCollaboratorDistant (board, userId) {
+export function addCollaboratorDistant (board, email) {
   return new Promise((resolve, reject) => {
     axios.post(`${Config.API_URL}/boards/${board}/collaborators`, {
-      userId: userId
+      email: email
     }).then(res => {
       resolve(res.data)
     }).catch(err => {

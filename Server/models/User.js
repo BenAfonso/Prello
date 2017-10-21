@@ -11,6 +11,7 @@ const UserSchema = new Schema({
   authToken: { type: String, default: '' },
   enabled: { type: Boolean, default: false },
   email: { type: String, default: '' },
+  picture: { type: String, default: '' },
   google: {}
 })
 

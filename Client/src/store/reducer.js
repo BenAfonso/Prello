@@ -141,6 +141,16 @@ export default function reducer (state, action) {
         }
       }
     }
+    case 'ADD_COLLABORATOR': {
+      let newCollaborators = state.board.collaborators.push(action.payload.user)
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          collaborators: newCollaborators
+        }
+      }
+    }
     default:
       return state
   }
