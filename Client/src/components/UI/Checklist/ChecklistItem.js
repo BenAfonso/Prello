@@ -6,7 +6,6 @@ import styles from './Checklist.styles'
 import Icon from '../Icon/Icon'
 
 export default class ChecklistItem extends React.Component {
-
   static propTypes = {
     content: PropTypes.string.isRequired,
     index: PropTypes.number.isRequired,
@@ -81,19 +80,18 @@ export default class ChecklistItem extends React.Component {
             </Button>
           </div>
         </div>
-        : 
-        <div className='editMode'>
+        : <div className='editMode'>
           <Input ref={(v) => this.textInput = v} placeholder={this.state.content} />
-          <Button 
-            onClick={this.updateText} 
-            bgColor='#3cb221' 
-            hoverBgColor='#148407' 
+          <Button
+            onClick={this.updateText}
+            bgColor='#3cb221'
+            hoverBgColor='#148407'
             color='#FFF'
             size='x-small'
           >
-            <Icon name='check' color='#FFF'/>
+            <Icon name='check' color='#FFF' />
           </Button>
-          <Button 
+          <Button
             onClick={this.cancelEdit}
             bgColor='rgba(0,0,0,0)'
             color='#444'
