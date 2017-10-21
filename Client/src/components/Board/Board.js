@@ -5,17 +5,32 @@ import { connect } from 'react-redux'
 import { addList, setBoard, updateLists, removeList, resetBoard } from '../../store/actions'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
+import HTML5toTouch from 'react-dnd-multi-backend/lib/HTML5toTouch'
+
 import Button from '../UI/Button/Button'
 import { subscribeToBoard } from '../../services/api'
 import CustomDragLayer from '../CustomDragLayer'
+import Color from 'color'
+import PropTypes from 'prop-types'
+import MultiBackend from 'react-dnd-multi-backend'
 
 @connect(store => {
   return {
     board: store.board
   }
 })
-@DragDropContext(HTML5Backend)
+@DragDropContext(MultiBackend(HTML5toTouch))
 export default class Board extends React.Component {
+
+
+  static propTypes = {
+    primaryColor: PropTypes.any,
+    secondaryColor: PropTypes.any
+  }
+
+  static defaultProps = {
+  }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -121,7 +136,11 @@ export default class Board extends React.Component {
 
   render () {
     
-    return <div className='host'>
+    const boardStyle = {
+      backgroundColor: this.props.primaryColor
+    }
+
+    return <div className='host' style={boardStyle}>
 
       <h1 className='boardTitle'>{this.props.board.title}</h1>
       <CustomDragLayer snapToGrid={false} />
@@ -143,11 +162,15 @@ export default class Board extends React.Component {
           ))
         }
 
-        <li className='newList'>
+        <li className='newList' style={{
+              backgroundColor: this.props.secondaryColor
+        }}>
           {
             this.state.newListFormDisplayed
             ? this.renderNewListForm()
-            : <div className='newListButton' onClick={this.displayNewListForm}>Add a list...</div>
+            : <div className='newListButton' style={{
+                // color: this.props.secondaryColor.light() ? '#444' : '#fff'
+              }} onClick={this.displayNewListForm}>Add a list...</div>
           }
         </li>
 
