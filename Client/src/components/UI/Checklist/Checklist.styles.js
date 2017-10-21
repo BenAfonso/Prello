@@ -1,67 +1,83 @@
 export default `
   .progressBar {
+    position: relative;
+    display: inline-block;
     border-style: none;
-    padding-bottom: 10px;
     position: absolute;
-    width: 80%;
+    width: calc(100% - 40px);
+    margin-top: 5px;
+    height: 8px;
     border-radius: 10px;
-    background-color: #b1b6bf;
+    background-color: #eee;
     z-index: 1;
   }
 
+  .title span {
+    font-size: 20px;
+  }
+
+  .title h2 {
+    display: inline-block;
+    font-size: 15px;
+    margin-left: 20px;
+  }
+
   .actualProgressBar {
-    padding-bottom: 10px;
     position: absolute;
-    margin-bottom: 5%;
+    top: 0;
+    left: 0;
+    height: 100%;
     background-color: #1aa31c;
     border-radius: 10px;
     z-index: 2;
   }
 
   .checklistItem {
-    margin-bottom: 2%;
+    margin-bottom: 5px;
   }
 
   .checklistSpan:hover,
   .checklistTitle:hover,
   .itemContent:hover {
-    background-color: #cdd2d8;
+    background-color: #ddd;
     cursor: pointer;
   }
 
   .checklistTitle {
-    font-size: 200%;
-    margin-bottom: 2%;
-    margin-right: 20%;
+    font-size: 18px;
+    margin-bottom: 15px;
   }
 
   .deleteItemButton {
     float: right;
-    margin-right: 20%;
-  }
-
-  .buttonWithMargin {
-    margin-right: 10px;
-    display: inline-block;
   }
 
   .checkbox {
-    margin-right: 10px;
     display: inline-block;
   }
 
   .percentageDone {
-    margin-bottom: 300px;
-    font-size: 150%;
+    font-size: 13px;
+    height: 15px;
+    width: 40px;
+    color: #999;
+    display: inline-block;
+  }
+
+  .textarea {
+    width: 100%;
+    display: block;
   }
 
   .itemContent {
-    font-size: 150%;
     display: inline-block;
-    margin-right: 20%;
+    margin-left: 30px;
+    padding: 6px;
+    border-radius: 3px;
+    width: calc(100% - 90px);
   }
 
   .progressPart {
-    margin-bottom: 30px;
+    margin-bottom: 15px;
   }
 `

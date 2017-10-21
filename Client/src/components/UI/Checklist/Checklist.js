@@ -110,68 +110,79 @@ export default class Checklist extends React.Component {
 
   render () {
     const actualProgressBarStyle = {
-      width: this.state.percentageDone * 0.8 +'%' //80% width for the total progress bar in the CSS
+      width: this.state.percentageDone+'%' //80% width for the total progress bar in the CSS
     }
 
     return (
       <div className='Checklist'>
         {!this.state.displayEditTitleForm ?
         //Title
-        <div> 
+        <div className='title'>
+          <span><Icon name='check-square-o' color='#888'/></span>
           <h2 onClick={this.displayEditTitleForm} className='checklistTitle'>{this.state.title}</h2>
         </div>
         :
         //Form in order to edit the title of the checklist
         <div className='editTitleForm'>
-          <Input ref={(v) => this.titleInput = v} placeholder={this.state.title} />
-          <div className='buttonWithMargin'>
+          <div className='textarea'><Input ref={(v) => this.titleInput = v} placeholder={this.state.title} /></div>
             <Button 
               onClick={this.updateTitle} 
               bgColor='#3cb221'
               hoverBgColor='#148407'
-              color='#FFF'>
+              color='#FFF'
+              size='x-small'>
               <Icon name='check' color='#FFF'/>
             </Button>
-          </div>
           <Button
             onClick={this.hideEditTitleForm}
-            bgColor='#cbcfdb'
-            hoverBgColor='#b0b2b7'
-            color='#70727c'>
+            bgColor='rgba(0,0,0,0)'
+            hoverBgColor='#ddd'
+            color='#70727c'
+            size='x-small'>
             <Icon name='times' color='#70727c'/>
           </Button>
         </div> }
         {/* Display progression in any case */}
         <div className='progressPart'>  
           <span className='percentageDone'>{this.state.percentageDone}%</span>
-          <div className='progressBar' />
-          <div className='actualProgressBar' style={actualProgressBarStyle}/>
+          <div className='progressBar'>
+            <div className='actualProgressBar' style={actualProgressBarStyle}/>
+          </div>
         </div>
         {/* Display checklist items */}
         {this.state.items.map((item, index) => (<ChecklistItem key={item.index} done={item.done} index={parseInt(index, 10)} content={item.content} onContentChange={this.updateItemContent} onToggle={this.updateItemStatus} onDelete={this.deleteItem} />))}
 
         {!this.state.displayNewItemForm ? 
-          <Button onClick={this.displayNewItemForm} color='#FFF'><Icon name='plus' color='#FFF'/></Button>
+          <Button onClick={this.displayNewItemForm}
+          color='#444'
+          size='x-small'
+          bgColor='rgba(0,0,0,0)'
+          hoverBgColor='#ddd'
+          block>Add an item...</Button>
         :
         //Form in order to add a new item 
         <div className='addItemDiv'>
           <Input ref={(v) => this.textInput = v} placeholder='Describe your item...' />
-          <div className='buttonWithMargin'>
+          <div className='button'>
             <Button 
               onClick={this.addItem} 
               bgColor='#3cb221' 
               hoverBgColor='#148407' 
-              color='#FFF'>
-              <Icon name='check' color='#FFF'/>
+              color='#FFF'
+              size='small'>
+              Save
             </Button>
           </div>
+          <div className='button'>
           <Button
             onClick={this.hideNewItemForm}
-            bgColor='#cbcfdb'
-            hoverBgColor='#b0b2b7'
-            color='#70727c'>
+            bgColor='rgba(0,0,0,0)'
+            hoverBgColor='#ddd'
+            color='#70727c'
+            size='small'>
             <Icon name='times' color='#70727c'/>
           </Button>
+          </div>
         </div>}
         <style jsx>{styles}</style>
       </div>

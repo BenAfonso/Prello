@@ -76,9 +76,10 @@ export default class ChecklistItem extends React.Component {
           <div className='deleteItemButton'>
             <Button
               onClick={this.onDelete}
-              bgColor='#cbcfdb'
+              bgColor='rgba(0,0,0,0)'
               color='#70727c'
-              hoverBgColor='#b0b2b7'>
+              hoverBgColor='#ddd'
+              size='small'>
               <Icon name='times' color='#70727c' />
             </Button>
           </div>
@@ -90,15 +91,17 @@ export default class ChecklistItem extends React.Component {
             onClick={this.updateText} 
             bgColor='#3cb221' 
             hoverBgColor='#148407' 
-            color='#FFF' 
-            style={{marginRight: '10px'}}>
+            color='#FFF'
+            size='x-small'
+          >
             <Icon name='check' color='#FFF'/>
           </Button>
           <Button 
             onClick={this.cancelEdit}
-            bgColor='#cbcfdb'
-            color='#70727c'
-            hoverBgColor='#b0b2b7'>
+            bgColor='rgba(0,0,0,0)'
+            color='#444'
+            size='x-small'
+            hoverBgColor='#ddd'>
             <Icon name='times' color='#70727c' />
           </Button>
         </div> }
