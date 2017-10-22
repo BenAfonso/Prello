@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store/store'
 import { isAuthenticated } from './services/Authentication.services'
+import CardDetailsPage from './pages/popup.page'
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
@@ -32,7 +33,7 @@ class App extends Component {
             <Route path='/login' component={LoginPage} />
             <Route path='/register' component={RegisterPage} />
             <PrivateRoute exact path='/boards' component={BoardsPage} />
-            <PrivateRoute path='/boards/:id' component={BoardPage} />
+            <PrivateRoute exact path='/boards/:id' component={BoardPage} />
           </div>
         </Provider>
       </Router>

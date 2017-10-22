@@ -6,6 +6,8 @@ import { TimelineMax } from 'gsap'
 import GSAP from 'react-gsap-enhancer'
 import Color from 'color'
 import { connect } from 'react-redux'
+import { PortalWithState } from 'react-portal'
+import PopoverPage from '../pages/popup.page'
 
 @connect(store => {
   return {
@@ -23,6 +25,7 @@ export default class BoardLayout extends React.Component {
     this.openDrawer = this.openDrawer.bind(this)
     this.toggleSidebarAnimation = this.toggleSidebarAnimation.bind(this)
   }
+
 
   toggleSidebarAnimation ({ target }) {
     let sidebar = target.find({ name: 'sidebar' })
@@ -57,7 +60,6 @@ export default class BoardLayout extends React.Component {
     return (
       <div style={{ position: 'relative', height: '100%' }}>
         <Header bgColor={secondaryColor} />
-
         <div className='content' style={{ display: 'flex', height: 'calc(100% - 50px)' }}>
 
           <div name='boardContainer' className='boardContainer'>
@@ -66,7 +68,12 @@ export default class BoardLayout extends React.Component {
             </div>
             {React.cloneElement(this.props.children, {
               primaryColor: primaryColor,
-              secondaryColor: secondaryColor 
+              secondaryColor: secondaryColor,
+              popoverManager: {
+                setRenderedComponent: this.props.setRenderedComponent,
+                displayPopover: this.props.displayPopover,
+                dismissPopover: this.props.dismissPopover
+              }
             })}
           </div>
           <div name='sidebar' className='sideMenu'>

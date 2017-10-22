@@ -22,7 +22,7 @@ export default class Header extends React.Component {
     }}>
 
       <Link to='/'>
-        <span id='title'>Prello</span>
+        <div className='brand' />
       </Link>
 
       <div className='headerButtonBar'>

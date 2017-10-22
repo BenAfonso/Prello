@@ -179,7 +179,13 @@ export default class List extends React.Component {
           {
             this.props.cards.map((card, i) => (
               <li key={card._id}>
-                <Card index={i} id={card._id} bgColor={this.props.primaryColor} listIndex={this.props.index} content={card.text} />
+                <Card 
+                  index={i}
+                  id={card._id}
+                  bgColor={this.props.primaryColor}
+                  listIndex={this.props.index}
+                  content={card.text}
+                  popoverManager={this.props.popoverManager}/>
               </li>
             ))
           }
