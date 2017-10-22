@@ -154,6 +154,7 @@ export default class Board extends React.Component {
                 moveList={this.moveList}
                 findList={this.findList}
                 removeAction={this.removeList}
+                popoverManager={this.props.popoverManager}
               />
             </li>
           ))
@@ -165,8 +166,7 @@ export default class Board extends React.Component {
           {
             this.state.newListFormDisplayed
             ? this.renderNewListForm()
-            : <div className='newListButton' style={{
-                // color: this.props.secondaryColor.light() ? '#444' : '#fff'} onClick={this.displayNewListForm}>Add a list...</div>
+            : <div className='newListButton' onClick={this.displayNewListForm}>Add a list...</div>
           }
         </li>
 
