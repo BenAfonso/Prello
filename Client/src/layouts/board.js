@@ -54,7 +54,7 @@ export default class BoardLayout extends React.Component {
   render () {
 
     const primaryColor = new Color(this.props.board.background)
-    const secondaryColor = primaryColor.light
+    const secondaryColor = primaryColor.light()
       ? primaryColor.darken(0.2)
       : primaryColor.lighten(0.2)
     return (
