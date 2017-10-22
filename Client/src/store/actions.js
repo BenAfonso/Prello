@@ -160,6 +160,7 @@ export function addBoardLocal (board) {
 }
 
 export function addChecklist (cardId, title) {
+  console.log('action')
   if (cardId && title.length > 0) {
     store.dispatch({
       type: 'ADD_CHECKLIST',
