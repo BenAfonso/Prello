@@ -46,6 +46,7 @@
     "react-dom": "^16.0.0",
     "react-google-login": "^2.11.3",
     "react-gsap-enhancer": "^0.3.0",
+    "react-markdown": "^2.5.0",
     "react-portal": "next",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",

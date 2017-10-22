@@ -14,7 +14,6 @@ export default (props) => (
       <Button bgColor='rgba(0,0,0,0)' hoverBgColor='rgba(0,0,0,0.1)'><Icon name='times' /></Button>
     </div>
     <div>
-
       <div className='content' />
       <div className='buttons'>
         <ul>
@@ -30,7 +29,6 @@ export default (props) => (
             bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>Attachment</Button></li>
         </ul>
       </div>
-
     </div>
     <style jsx>{`
     .host {
