@@ -32,8 +32,8 @@ export default (props) => (
     <style jsx>{`
     .host {
       position: relative;
-      width: 90vw;
-      height: 90vh;
+      width: 100%;
+      height: 140vh;
       background-color: white;
       borderRadius: 8px;
       padding: 20px;

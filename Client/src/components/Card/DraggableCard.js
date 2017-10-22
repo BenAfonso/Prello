@@ -89,43 +89,19 @@ export default class CardComponent extends React.Component {
 
   constructor (props) {
     super(props)
-
-    this.state = {
-      cardDetailsDisplayed: false
-    }
-    this.renderDetails = this.renderDetails.bind(this)
-  }
-
-  dismissCardDetails () {
-    this.setState({ cardDetailsDisplayed: false })
-  }
-
-  displayCardDetails () {
-    this.setState({ cardDetailsDisplayed: true })
-  }
-
-  renderDetails () {
-    return (
-      <PortalWithState defaultOpen closeOnOutsideClick closeOnEsc onClose={this.dismissCardDetails.bind(this)}>
-        {({ openPortal, closePortal, isOpen, portal }) => [
-          portal(
-            <div style={{
-              position: 'absolute',
-              left: '5vw',
-              top: '5vh'
-            }}>
-              <CardDetails title='Title' handleClick={closePortal} />
-            </div>
-        )
-        ]}
-      </PortalWithState>
-    )
   }
 
   componentDidMount () {
     this.props.connectDragPreview(getEmptyImage(), {
       captureDraggingState: true
     })
+  }
+
+  displayCardDetails () {
+    this.props.popoverManager.setRenderedComponent(
+      <CardDetails handleClick={this.props.popoverManager.dismissPopover}/>
+    )
+    this.props.popoverManager.displayPopover()
   }
 
   render () {
@@ -136,8 +112,6 @@ export default class CardComponent extends React.Component {
         <div className='overlay' style={{
           opacity: isDragging ? 1 : 0
         }} />
-
-        {this.state.cardDetailsDisplayed ? this.renderDetails() : null}
 
         <Card id={id} style={{ opacity: isDragging ? 0.3 : 1, backgroundColor: bgColor }} index={index} listIndex={listIndex} content={content} />
         <style jsx>{`
