@@ -22,7 +22,7 @@ describe('Board actions reducer', () => {
         lists: [],
         visibility: '',
         isArchived: false,
-        background: '',
+        background: '#FFF',
         collaborators: []
       },
       boardslist: {
