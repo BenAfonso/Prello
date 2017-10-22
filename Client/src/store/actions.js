@@ -158,3 +158,15 @@ export function addBoardLocal (board) {
     })
   }
 }
+
+export function addChecklist (cardId, title) {
+  if (cardId && title.length > 0) {
+    store.dispatch({
+      type: 'ADD_CHECKLIST',
+      payload: {
+        cardId: cardId,
+        title: title
+      }
+    })
+  }
+}

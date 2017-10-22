@@ -143,6 +143,25 @@ export default function reducer (state = defaultState, action) {
         }
       }
     }
+    case 'ADD_CHECKLIST': {
+      console.log('truc ' + action.payload.cardId + ' ' + action.payload.title)
+      let newLists = state.board.lists.map((list) => {
+        list.cards.map((card) => {
+          if (card._id === action.payload.cardId) {
+            card.checklists.push({title: action.payload.title, items: []})
+          }
+          return card
+        })
+        return list
+      })
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: newLists
+        }
+      }
+    }
     default:
       return state
   }
