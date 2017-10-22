@@ -1,7 +1,7 @@
 import { defaultState } from '../../../store/store'
 import reducer from '../../../store/reducer'
 
-describe('todos reducer', () => {
+describe('Board actions reducer', () => {
   it('should add a board to the state', () => {
     const action = {
       type: 'ADD_BOARD',
