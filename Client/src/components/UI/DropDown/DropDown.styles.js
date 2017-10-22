@@ -51,7 +51,7 @@ button:hover {
 .dropdown-content ul li {
   padding: 12px 16px;
   text-decoration: none;
-  display: block;
+  display: flex;
   user-select: none;
   cursor: pointer;
 }

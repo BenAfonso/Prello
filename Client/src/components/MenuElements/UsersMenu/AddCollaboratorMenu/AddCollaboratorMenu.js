@@ -3,6 +3,7 @@ import React from 'react'
 import Button from '../../../UI/Button/Button'
 import DropDown from '../../../UI/DropDown/DropDown'
 import Icon from '../../../UI/Icon/Icon'
+import AvatarThumbnail from '../../../UI/AvatarThumbnail/AvatarThumbnail'
 
 import { addCollaborator, fetchMatchingUsers } from '../../../../store/actions'
 
@@ -41,17 +42,75 @@ export default class AddCollaboratorMenu extends React.Component {
       enableAdd: true})
   }
 
+  renderUserinMenu () {
+    return (
+      <div className='user'>
+        <div className='user-thumbnail'>
+          <AvatarThumbnail
+            size='30px'
+            fontSize=''
+            thumbnail=''
+            initials='BB'
+            bgColor='pink'
+            color='black'
+          />
+        </div>
+        <div className='user-infos'>
+        <div className='user-username'>Bob</div>
+        <div className='user-email'>bobbydu91@gmail.comeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</div>
+        </div>
+        <style jsx>{`
+
+    .user-infos {
+      float: right;
+      display: inline-block;
+      padding: 0 10px;
+      overflow: hidden;
+      width: 200px;
+      text-overflow: ellipsis;    
+    }
+
+    .user-thumbnail {
+      float: left;  
+    }
+
+    .user-username {
+      font-weight: bold;
+      text-align: left;
+      color: #000;
+    }
+
+    .user-email {
+      font-style: italic;
+      padding: 5px 0;
+      font-size: 10px;
+      color: #999;        
+    }
+    `}
+        </style>
+      </div>
+    )
+  }
+
   render () {
 
     let menuElements = [{
-      action: () => this.setInputValue('tamer'),
-      placeholder: 'tamer'
-    }]
+      action: () => this.setInputValue('Bob1'),
+      placeholder: this.renderUserinMenu()
+    },
+    {
+      action: () => this.setInputValue('Bob2'),
+      placeholder: this.renderUserinMenu()
+    },
+    {
+      action: () => this.setInputValue('Bob3'),
+      placeholder: this.renderUserinMenu()
+    }
+  ]
     this.state.matchingUsers.map(user =>
       menuElements.push({
-        action: null,
-        placeholder: user.username,
-        description: user.email
+        action: () => this.setInputValue(user.email),
+        placeholder: this.renderUserinMenu()
       })
     )
 
