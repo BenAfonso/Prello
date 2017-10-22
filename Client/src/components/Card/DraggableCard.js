@@ -92,6 +92,7 @@ export default class CardComponent extends React.Component {
   }
 
   componentDidMount () {
+    this.displayCardDetails()
     this.props.connectDragPreview(getEmptyImage(), {
       captureDraggingState: true
     })
