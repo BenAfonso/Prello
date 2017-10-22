@@ -3,13 +3,12 @@ import { connect } from 'react-redux'
 import Icon from '../../UI/Icon/Icon'
 import AvatarThumbnail from '../../UI/AvatarThumbnail/AvatarThumbnail'
 import AddCollaboratorMenu from './AddCollaboratorMenu/AddCollaboratorMenu'
+import { subscribeToBoard } from '../../../services/api'
 
 
 @connect(store => {
   return {
-    boardId: store.board._id,
-    collaborators: store.board.collaborators,
-    owner: store.board.owner
+    board: store.board
   }
 })
 
@@ -18,6 +17,12 @@ export default class UsersMenu extends React.Component {
   constructor (props) {
     super(props)
     this.getInitials = this.getInitials.bind(this)
+    this.renderUserAvatar = this.renderUserAvatar.bind(this)
+    this.onAvatarClick = this.onAvatarClick.bind(this)
+  }
+
+  componentDidMount () {
+    //subscribeToBoard(this.props.board)    
   }
 
   getInitials (username) {
@@ -26,34 +31,61 @@ export default class UsersMenu extends React.Component {
     return initials
   }
 
+  onAvatarClick () {
+
+  }
+
+  renderUserAvatar (user) {
+    return (
+      <div className='avatar' onClick={this.onAvatarClick}>
+         <AvatarThumbnail
+          size='30px'
+          fontSize=''
+          thumbnail={user.picture}
+          initials={this.getInitials(user.username)}
+          bgColor='pink'
+          color='black'
+        />  
+        <style jsx>
+          {`
+
+          .avatar {
+            display: inline-block;
+            padding: 5px 5px;
+            cursor: pointer;            
+          }
+
+          .avatar:hover {
+            
+          }          
+        `}
+        </style>        
+      </div>
+    )
+  }
+
   render () {
 
-    const { collaborators, owner, boardId } = this.props
+    const { collaborators, owner } = this.props.board
+    const boardId = this.props.board._id
+    //console.log(collaborators)
 
     return (
       <div className='host'>
         <div className='usermenu-title'>
           List of collaborators
         </div>
-        <div className='usermenu-separator' />
         <div className='usermenu-collaborators'>
           <ul className='collaborators-content'>
           <li className='collaborators'>
             {
-              collaborators.map((user, i)=>(
+              collaborators.map((user, i)=>(              
                 <div className='collaborator' key={i}>
                   {
-                    user.id===owner.id ? <div className='ownerIcon'><Icon  color='#ffff00' name='star' fontSize='20px' /></div> : null
-                  }
-                  <AvatarThumbnail
-                  size='30px'
-                  fontSize=''
-                  //thumbnail={user.picture}
-                  initials={this.getInitials(user.username)}
-                  bgColor='pink'
-                  color='black' >  </AvatarThumbnail>
-                </div>
-              
+                    user.id===owner.id ? <div className='ownerIcon'><Icon  color='#ffff00' name='star' fontSize='20px' /></div> : null                    
+                  }                  
+                  {this.renderUserAvatar(user)}
+                </div>              
               ))
             }
           </li>
@@ -66,8 +98,19 @@ export default class UsersMenu extends React.Component {
         <style jsx>
           {`
 
+          .usermenu-separator {
+            content: '';
+            height: 1px;
+            padding: 0;
+            background-color: #aaa;
+            width: 90%;
+            margin: 8px 0 8px 5%;
+          }
+
           .collaborators {
             padding: 10px 5px
+            max-height: 100px;
+            overflow-y: auto;
           }
 
           .collaborator {
@@ -80,7 +123,7 @@ export default class UsersMenu extends React.Component {
 
           .ownerIcon {
             position: absolute;
-            right: -5px;
+            right: 0px;
             top: -5px;
           }
 

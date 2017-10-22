@@ -30,7 +30,7 @@ export const defaultState = {
     collaborators: []
   },
   boardslist: {
-    boards:[]
+    boards: []
   }
 }
 

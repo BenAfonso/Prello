@@ -142,7 +142,8 @@ export default function reducer (state, action) {
       }
     }
     case 'ADD_COLLABORATOR': {
-      let newCollaborators = state.board.collaborators.push(action.payload.user)
+      let newCollaborators = state.board.collaborators.slice()
+      newCollaborators.push(action.payload)
       return {
         ...state,
         board: {

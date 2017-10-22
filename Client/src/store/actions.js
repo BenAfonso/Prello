@@ -161,7 +161,9 @@ export function addBoardLocal (board) {
 }
 
 export function addCollaborator (dispatch, boardId, email) {
-  addCollaboratorDistant(boardId, email).then((collaborator) => {
+  addCollaboratorDistant(boardId, email).then((board) => {
+    const user = board.collaborators[board.collaborators.length - 1]
+    //addCollaboratorLocal(user)
       // <= HANDLED FROM SOCKETS
   }).catch(err => {
     return err
@@ -178,9 +180,11 @@ export function addCollaboratorLocal (user) {
 }
 
 export function fetchMatchingUsers (email) {
-  fetchMatchingUsersEmail(email).then((users) => {
-    return 'fdp'
-  }).catch(err => {
-    return err
+  return new Promise((resolve, reject) => {
+    fetchMatchingUsersEmail(email).then((users) => {      
+      resolve(users)
+    }).catch(err => {
+      reject(err)
+    })
   })
 }

@@ -55,7 +55,7 @@ module.exports = (router, controller) => {
       return
     }
     controller.addCollaboratorEmail(req.params.boardId, req.body.email, req.user._id).then((data) => {
-      res.status(201).json('Successfully updated')
+      res.status(201).json(data)
     }).catch((err) => {
       res.status(err.status).json(err)
     })

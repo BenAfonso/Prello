@@ -18,6 +18,7 @@ export default class AddCollaboratorMenu extends React.Component {
     this.addCollaborator = this.addCollaborator.bind(this)
     this.onChange = this.onChange.bind(this)
     this.setInputValue = this.setInputValue.bind(this)
+    this.getInitials = this.getInitials.bind(this)
   }
 
   addCollaborator () {
@@ -27,13 +28,16 @@ export default class AddCollaboratorMenu extends React.Component {
   }
 
   onChange () {
-
-    const newMatchingUsers = fetchMatchingUsers(this.email.value)
-    console.log(newMatchingUsers)
     this.setState({
       inputValue: this.email.value,
       enableAdd: false})
-    //this.setState({matchingUsers: newMatchingUsers})
+    let newMatchingUsers = []
+    fetchMatchingUsers(this.email.value).then(users => {
+      users.map(user => {
+        newMatchingUsers.push(user)
+      })
+      this.setState({matchingUsers: newMatchingUsers})
+    })
   }
 
   setInputValue (email) {
@@ -42,7 +46,64 @@ export default class AddCollaboratorMenu extends React.Component {
       enableAdd: true})
   }
 
-  renderUserinMenu () {
+  getInitials (username) {
+    const matches = username.match(/\b(\w)/g)
+    const initials = matches.join('')
+    return initials
+  }
+
+  renderUserinMenu (user) {
+    return (
+      <div className='user'>
+        <div className='user-thumbnail'>
+          <AvatarThumbnail
+            size='30px'
+            fontSize=''
+            thumbnail={user.picture}
+            initials={this.getInitials(user.username)}
+            bgColor='pink'
+            color='black'
+          />
+        </div>
+        <div className='user-infos'>
+        <div className='user-username'>{user.username}</div>
+        <div className='user-email'>{user.email}</div>
+        </div>
+        <style jsx>{`
+
+    .user-infos {
+      float: right;
+      display: inline-block;
+      padding: 0 10px;
+      overflow: hidden;
+      width: 200px;
+      text-overflow: ellipsis;    
+    }
+
+    .user-thumbnail {
+      float: left;  
+    }
+
+    .user-username {
+      font-weight: bold;
+      text-align: left;
+      color: #000;
+    }
+
+    .user-email {
+      font-style: italic;
+      padding: 5px 0;
+      font-size: 10px;
+      color: #999;        
+    }
+    `}
+        </style>
+      </div>
+    )
+  }
+
+  //TO DELETE
+  renderFakeUserinMenu () {
     return (
       <div className='user'>
         <div className='user-thumbnail'>
@@ -94,23 +155,11 @@ export default class AddCollaboratorMenu extends React.Component {
 
   render () {
 
-    let menuElements = [{
-      action: () => this.setInputValue('Bob1'),
-      placeholder: this.renderUserinMenu()
-    },
-    {
-      action: () => this.setInputValue('Bob2'),
-      placeholder: this.renderUserinMenu()
-    },
-    {
-      action: () => this.setInputValue('Bob3'),
-      placeholder: this.renderUserinMenu()
-    }
-  ]
+    let menuElements = []
     this.state.matchingUsers.map(user =>
       menuElements.push({
         action: () => this.setInputValue(user.email),
-        placeholder: this.renderUserinMenu()
+        placeholder: this.renderUserinMenu(user)
       })
     )
 
