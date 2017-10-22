@@ -14,7 +14,7 @@ export default class BoardForm extends React.Component {
 
   submit (title) {
     if (this.title.value !== '') {
-      addBoard(this.props.dispatch, this.title.value)
+      addBoard(this.props.dispatch, {title: this.title.value, color: this.color.value})
       this.props.onSubmit()
     }
   }
@@ -33,6 +33,7 @@ export default class BoardForm extends React.Component {
             <p className='boardFormItemTitle'>Title</p>
             <form onSubmit={this.submit}>
               <input type='text' placeholder='Add a board...' ref={(t) => { this.title = t }} />
+              <input type='color' defaultValue='#cd5a91' ref={(input) => { this.color = input }} />
             </form>
           </li>
 

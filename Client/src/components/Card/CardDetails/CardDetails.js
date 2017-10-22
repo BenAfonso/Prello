@@ -5,7 +5,10 @@ import Icon from '../../UI/Icon/Icon'
 export default (props) => (
   <div className='host'>
     <div className='cardTitle'>
-      <h1> Card {props.content} </h1>
+      <span className='cardIcon'>
+        <Icon name='list-alt' color='#888' />
+      </span>
+      <h2> {props.content} </h2>
     </div>
     <div style={{ position: 'absolute', top: '10px', right: '10px' }} onClick={props.handleClick}>
       <Button bgColor='rgba(0,0,0,0)' hoverBgColor='rgba(0,0,0,0.1)'><Icon name='times' /></Button>
@@ -16,15 +19,15 @@ export default (props) => (
       <div className='buttons'>
         <ul>
           <li><Button
-            bgColor='#eee' hoverBgColor='#ddd' block shadow size='x-small'>Members</Button></li>
+            bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>Members</Button></li>
           <li><Button
-            bgColor='#eee' hoverBgColor='#ddd' block shadow size='x-small'>Labels</Button></li>
+            bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>Labels</Button></li>
           <li><Button
-            bgColor='#eee' hoverBgColor='#ddd' block shadow size='x-small'>Checklist</Button></li>
+            bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>Checklist</Button></li>
           <li><Button
-            bgColor='#eee' hoverBgColor='#ddd' block shadow size='x-small'>Due Date</Button></li>
+            bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>Due Date</Button></li>
           <li><Button
-            bgColor='#eee' hoverBgColor='#ddd' block shadow size='x-small'>Attachment</Button></li>
+            bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>Attachment</Button></li>
         </ul>
       </div>
 
@@ -32,8 +35,8 @@ export default (props) => (
     <style jsx>{`
     .host {
       position: relative;
-      width: 90vw;
-      height: 90vh;
+      width: 100%;
+      height: 140vh;
       background-color: white;
       borderRadius: 8px;
       padding: 20px;
@@ -42,10 +45,20 @@ export default (props) => (
     }
 
     .cardTitle {
-      height: 30px;
-      line-height: 30px;
+      height: 24px;
+      line-height: 24px;
       width: 100%;
-      text-align: center;
+    }
+
+    .cardTitle .cardIcon {
+      font-size: 20px;
+      color: '#888';
+    }
+
+    .cardTitle h2 {
+      display: inline-block;
+      background-color: '#444';
+      margin-left: 20px;
     }
 
     .content {
@@ -62,7 +75,7 @@ export default (props) => (
     
     li {
       width: 100%;
-      margin-bottom: 12px;
+      margin-bottom: 5px;
     }
 
 

@@ -5,7 +5,15 @@ import Button from '../components/UI/Button/Button'
 import { TimelineMax } from 'gsap'
 import GSAP from 'react-gsap-enhancer'
 import Color from 'color'
+import { connect } from 'react-redux'
+import { PortalWithState } from 'react-portal'
+import PopoverPage from '../pages/popup.page'
 
+@connect(store => {
+  return {
+    board: store.board
+  }
+})
 @GSAP()
 export default class BoardLayout extends React.Component {
   constructor (props) {
@@ -13,12 +21,11 @@ export default class BoardLayout extends React.Component {
     this.state = {
       sideMenuExpanded: false
     }
-    this.primaryColor = new Color('#8E24AA')
-    this.secondaryColor = this.primaryColor.light() ? this.primaryColor.darken(0.3) : this.primaryColor.lighten(0.3)
     this.closeDrawer = this.closeDrawer.bind(this)
     this.openDrawer = this.openDrawer.bind(this)
     this.toggleSidebarAnimation = this.toggleSidebarAnimation.bind(this)
   }
+
 
   toggleSidebarAnimation ({ target }) {
     let sidebar = target.find({ name: 'sidebar' })
@@ -45,10 +52,14 @@ export default class BoardLayout extends React.Component {
   }
 
   render () {
+
+    const primaryColor = new Color(this.props.board.background)
+    const secondaryColor = primaryColor.light
+      ? primaryColor.darken(0.2)
+      : primaryColor.lighten(0.2)
     return (
       <div style={{ position: 'relative', height: '100%' }}>
-        <Header bgColor={this.secondaryColor} />
-
+        <Header bgColor={secondaryColor} />
         <div className='content' style={{ display: 'flex', height: 'calc(100% - 50px)' }}>
 
           <div name='boardContainer' className='boardContainer'>
@@ -56,8 +67,13 @@ export default class BoardLayout extends React.Component {
               <Button bgColor='rgba(0,0,0,0)' size='x-small' hoverBgColor='rgba(0,0,0,0.1)'>Open menu...</Button>
             </div>
             {React.cloneElement(this.props.children, {
-              primaryColor: this.primaryColor,
-              secondaryColor: this.secondaryColor
+              primaryColor: primaryColor,
+              secondaryColor: secondaryColor,
+              popoverManager: {
+                setRenderedComponent: this.props.setRenderedComponent,
+                displayPopover: this.props.displayPopover,
+                dismissPopover: this.props.dismissPopover
+              }
             })}
           </div>
           <div name='sidebar' className='sideMenu'>

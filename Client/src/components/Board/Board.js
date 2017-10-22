@@ -153,6 +153,7 @@ export default class Board extends React.Component {
                 moveList={this.moveList}
                 findList={this.findList}
                 removeAction={this.removeList}
+                popoverManager={this.props.popoverManager}
               />
             </li>
           ))
