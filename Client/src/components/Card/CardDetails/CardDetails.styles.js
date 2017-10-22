@@ -12,89 +12,10 @@ export default `
   overflow-y: auto;
 }
 
-h1 {
-  font-size: 20px;
-}
-
-.section .title {
-  height: 24px;
-  line-height: 24px;
-  width: 100%;
-}
-
-.section .title h2 {
-  font-size: 16px;
-}
-
-.section .icon {
+.cancelButton {
   position: absolute;
-  left: 10px;
-  font-size: 20px;
-}
-
-.section {
-  margin-left: 40px;
-  display: inline-block;
-  width: calc(100% - 140px);
-  margin-bottom: 40px;
-}
-
-.listInformations {
-  font-size: 13px;
-  color: #999;
-}
-
-.sections {
-  margin-top: 20px;
-  display: flex;
-}
-
-.members {
-  margin-right: 20px;
-}
-
-.labels {
-}
-
-.labels ul,
-.members ul {
-  list-style-type: none;
-  display: flex;
-}
-
-.labels ul li,
-.members ul li {
-  margin-right: 5px;
-}
-
-.label {
-  height: 30px;
-  width: 40px;
-  border-radius: 3px;
-}
-
-.subsectionTitle {
-  font-size: 14px;
-  color: #999;
-}
-
-.addButton {
-  height: 30px;
-  width: 30px;
-  background-color: #eee;
-  border-radius: 3px;
-  text-align: center;
-}
-
-.addButton:hover {
-  background-color: #ddd;
-}
-
-.edit {
-  margin-top: 20px;
-  font-size: 14px;
-  color: #999;
-  cursor: pointer;
+  top: 10px;
+  right: 10px;
 }
 
 .content {
