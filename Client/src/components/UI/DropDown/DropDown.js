@@ -23,7 +23,7 @@ export default class DropDown extends React.Component {
     layout: 'auto'
   }
 
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       expanded: this.props.openManually
@@ -35,12 +35,12 @@ export default class DropDown extends React.Component {
     
   }
 
-  componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutside);
+  componentDidMount () {
+    document.addEventListener('mousedown', this.handleClickOutside)
   }
 
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
+  componentWillUnmount () {
+    document.removeEventListener('mousedown', this.handleClickOutside)
   }
 
   handleClickOutside (event) {
@@ -50,15 +50,15 @@ export default class DropDown extends React.Component {
     }
   }
 
-  toggleDropdown() {
+  toggleDropdown () {
     this.setState({ expanded: !this.state.expanded })
   }
 
-  closeDropdown() {
+  closeDropdown () {
     this.setState({ expanded: false })
   }
 
-  openDropdown() {
+  openDropdown () {
     this.setState({ expanded: true })
   }
 
@@ -89,8 +89,6 @@ export default class DropDown extends React.Component {
       left: orientation === 'left' ? 0 : '',
       right: orientation === 'right' ? 0 : ''
     }
-
-
 
     if (layout === 'auto') {
       return (

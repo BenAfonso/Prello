@@ -4,24 +4,22 @@ import { addBoard } from '../../../../store/actions'
 import Button from '../../../UI/Button/Button'
 
 export default class BoardForm extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       shouldRedirect: false
     }
     this.submit = this.submit.bind(this)
-
   }
 
-  submit(title) {
+  submit (title) {
     if (this.title.value !== '') {
-      addBoard(this.props.dispatch, this.title.value)
+      addBoard(this.props.dispatch, {title: this.title.value, color: this.color.value})
       this.props.onSubmit()
     }
   }
 
-  render() {
-
+  render () {
     return (
       <div className='newBoardForm'>
         <span className='backButton' onClick={this.props.back}>Back</span>
@@ -29,16 +27,17 @@ export default class BoardForm extends React.Component {
           <li className='boardFormTitle'>
             Create a board
           </li>
-          <li className='boardFormSeparator'></li>
+          <li className='boardFormSeparator' />
           <li className='boardFormItem'>
 
             <p className='boardFormItemTitle'>Title</p>
             <form onSubmit={this.submit}>
               <input type='text' placeholder='Add a board...' ref={(t) => { this.title = t }} />
+              <input type='color' defaultValue='#cd5a91' ref={(input) => { this.color = input }} />
             </form>
           </li>
 
-          <li className='boardFormSeparator'></li>
+          <li className='boardFormSeparator' />
           <li className='boardFormItem'>
             <p className='boardFormItemTitle'>Team</p>
             <p className='boardFormItemBody'>Team are useful to share and work together in a easier way. Add a team.</p>
@@ -46,7 +45,7 @@ export default class BoardForm extends React.Component {
           <li className='boardFormItem'>
             <p className='boardFormItemBody'>This board will be Public</p>
           </li>
-          <li className='boardFormSeparator'></li>
+          <li className='boardFormSeparator' />
           <li>
             <div className='newBoardFormButtons'>
               <div>

@@ -5,7 +5,6 @@ import CardDragPreview from './Card/CardDragPreview'
 import ListDragPreview from './List/ListDragPreview'
 import { ItemTypes } from './Constants'
 
-
 const layerStyles = {
   position: 'fixed',
   pointerEvents: 'none',
@@ -14,21 +13,21 @@ const layerStyles = {
   zIndex: 100000
 }
 
-function getItemStyles(props) {
-  const { initialOffset, currentOffset } = props;
+function getItemStyles (props) {
+  const { initialOffset, currentOffset } = props
   if (!initialOffset || !currentOffset) {
     return {
       display: 'none'
-    };
+    }
   }
 
-  let { x, y } = currentOffset;
+  let { x, y } = currentOffset
 
-  const transform = `translate(${x}px, ${y}px)`;
+  const transform = `translate(${x}px, ${y}px)`
   return {
     WebkitTransform: transform,
     transform
-  };
+  }
 }
 
 @DragLayer((monitor) => ({
@@ -53,7 +52,7 @@ export default class CustomDragLayer extends React.Component {
     isDragging: PropTypes.bool.isRequired
   }
 
-  renderItem(type, item) {
+  renderItem (type, item) {
     switch (type) {
       case ItemTypes.CARD:
         return (
@@ -68,7 +67,7 @@ export default class CustomDragLayer extends React.Component {
     }
   }
 
-  render() {
+  render () {
     const { item, itemType, isDragging } = this.props
 
     if (!isDragging) {

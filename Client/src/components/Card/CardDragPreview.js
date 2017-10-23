@@ -17,7 +17,6 @@ const propTypes = {
 }
 
 const CardDragPreview = (props) => {
-  
   return (
     <div style={styles}>
       <Card {...props} />

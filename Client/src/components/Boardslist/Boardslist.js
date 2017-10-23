@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 import { setBoardslist } from '../../store/actions'
 import { subscribeToBoardslist } from '../../services/api'
 
-
 @connect(store => {
   return {
     boardslist: store.boardslist
@@ -18,7 +17,7 @@ export default class Boardslist extends React.Component {
     super(props)
     this.findBoard = this.findBoard.bind(this)
   }
-  
+
   componentDidMount () {
     setBoardslist(this.props.dispatch).then(() => {
       subscribeToBoardslist('testID')
@@ -28,22 +27,21 @@ export default class Boardslist extends React.Component {
   }
 
   findBoard (id) {
-      const board = this.props.boardslist.boards.filter((l) => l._id === id)[0]
-      return {
-        board,
-        index: this.props.boardslist.boards.indexOf(board)
-      }
+    const board = this.props.boardslist.boards.filter((l) => l._id === id)[0]
+    return {
+      board,
+      index: this.props.boardslist.boards.indexOf(board)
+    }
   }
-  
-  render () {
 
+  render () {
     return (<div className='host'>
       { /* <h1>Mes boards favoris</h1>
 
       <ul>
-        { 
-          this.props.boardslist.boards.map((board, i) => board.isFavorite ? 
-          
+        {
+          this.props.boardslist.boards.map((board, i) => board.isFavorite ?
+
             <li key={board._id}>
               <Link to={`/boards/${board._id}`}>
                 <BoardThumbnail
@@ -54,12 +52,12 @@ export default class Boardslist extends React.Component {
                   isFavorite={board.isFavorite}
                   background={board.background}
                 />
-              </Link>  
+              </Link>
             </li>
-          
+
           : null)
         }
-  
+
       </ul>
       */ }
 
@@ -68,7 +66,7 @@ export default class Boardslist extends React.Component {
       <ul className='boards'>
         {
           this.props.boardslist.boards.map((board, i) => (
-            
+
             <li key={board._id}>
               <Link to={`/boards/${board._id}`}>
                 <BoardThumbnail

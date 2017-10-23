@@ -46,6 +46,7 @@
     "react-dom": "^16.0.0",
     "react-google-login": "^2.11.3",
     "react-gsap-enhancer": "^0.3.0",
+    "react-markdown": "^2.5.0",
     "react-portal": "next",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
@@ -77,10 +78,10 @@
     "storybook": "^1.0.0"
   },
   "scripts": {
-    "precommit": "standard --fix | snazzy",
+    "precommit": "jest --verbose",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom && standard",
+    "test": "node scripts/test.js --env=jsdom",
     "storybook": "start-storybook -p 6006 -c .storybook",
     "standard": "standard --verbose | snazzy",
     "standard-fix": "standard --fix --parser babel-eslint | snazzy",
@@ -89,6 +90,7 @@
   "standard": {
     "parser": "babel-eslint",
     "ignore": [
+      "build/",
       "config/",
       "src/registerServiceWorker.js"
     ]

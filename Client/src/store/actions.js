@@ -143,8 +143,8 @@ export function setBoardslist (dispatch) {
   })
 }
 
-export function addBoard (dispatch, title) {
-  addBoardDistant(title).then((board) => {
+export function addBoard (dispatch, payload) {
+  addBoardDistant(payload).then((board) => {
       // <= HANDLED FROM SOCKETS
   }).catch(err => {
     return err
@@ -178,7 +178,7 @@ export function replaceCollaboratorLocal (users) {
 
 export function fetchMatchingUsers (email) {
   return new Promise((resolve, reject) => {
-    fetchMatchingUsersEmail(email).then((users) => {      
+    fetchMatchingUsersEmail(email).then((users) => {
       resolve(users)
     }).catch(err => {
       reject(err)

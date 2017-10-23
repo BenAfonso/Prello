@@ -20,7 +20,6 @@ const propTypes = {
 }
 
 const ListDragPreview = (props) => {
-  
   return (
     <div style={styles}>
       <List {...props} />
