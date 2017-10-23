@@ -71,7 +71,7 @@ export default class UsersMenu extends React.Component {
               collaborators.map((user, i)=>(              
                 <div className='collaborator' key={i}>
                   {
-                    user.id===owner.id ? <div className='ownerIcon'><Icon  color='#ffff00' name='star' fontSize='20px' /></div> : null                    
+                    user._id===owner._id ? <div className='ownerIcon'><Icon  color='#ffff00' name='star' fontSize='20px' /></div> : null                    
                   }                  
                   {this.renderUserAvatar(user)}
                 </div>))

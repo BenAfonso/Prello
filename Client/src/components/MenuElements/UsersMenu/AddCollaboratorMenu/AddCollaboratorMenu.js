@@ -79,8 +79,8 @@ export default class AddCollaboratorMenu extends React.Component {
           />
         </div>
         <div className='user-infos'>
-        <div className='user-username'>{user.username}</div>
-        <div className='user-email'>{user.email}</div>
+          <div className='user-username'>{user.username}</div>
+          <div className='user-email'>{user.email}</div>
         </div>
         <style jsx>{`
 
