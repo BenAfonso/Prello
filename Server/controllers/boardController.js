@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Board = mongoose.model('Board')
+const User = mongoose.model('User')
 const Card = mongoose.model('Card')
 const Util = require('./Util')
 const emit = require('../controllers/sockets').emit
@@ -29,6 +30,7 @@ boardController.getAllBoards = function () {
     })
   })
 }
+
 boardController.getUserBoards = function (userId) {
   return new Promise((resolve, reject) => {
     Board.find({ $or: [{ 'owner': userId }, { 'collaborators': userId }] }).populate('owner lists collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
@@ -194,23 +196,45 @@ boardController.refreshOneboard = function (action, boardId) {
 }
 boardController.addCollaborator = (boardId, userId, requesterId) => {
   return new Promise((resolve, reject) => {
-    Board.findOneAndUpdate({ '_id': boardId }, { $push: { collaborators: userId } }, { new: true }, function (err, res) {
+    Board.findOneAndUpdate({ '_id': boardId }, { $push: { collaborators: userId } }, { new: true }).populate('collaborators').exec((err, res) => {
       if (err) {
         err.status = 500
         reject(err)
       } else {
+        emit(boardId, 'UPDATE_COLLABORATORS', res.collaborators)
         resolve(res)
       }
     })
   })
 }
+
+boardController.addCollaboratorEmail = (boardId, email, requesterId) => {
+  return new Promise((resolve, reject) => {
+    User.findOne({ email: email }).then((res) => {
+      if (res) {
+        boardController.addCollaborator(boardId, res._id, requesterId).then(res => {
+          resolve(res)
+        }).catch(err => {
+          err.status = 500
+          reject(err)
+        })
+      } else {
+        // TODO create new temp user??
+        let err = new Error('Not found')
+        reject(err)
+      }
+    })
+  })
+}
+
 boardController.removeCollaborator = (boardId, userId, requesterId) => {
   return new Promise((resolve, reject) => {
-    Board.findOneAndUpdate({ '_id': boardId }, { $pull: { collaborators: userId } }, { new: true }, function (err, res) {
+    Board.findOneAndUpdate({ '_id': boardId }, { $pull: { collaborators: userId } }, { new: true }).populate('collaborators').exec((err, res) => {
       if (err) {
         err.status = 500
         reject(err)
       } else {
+        emit(boardId, 'UPDATE_COLLABORATORS', res.collaborators)
         resolve(res)
       }
     })
