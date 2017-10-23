@@ -144,7 +144,7 @@ export default function reducer (state = defaultState, action) {
       }
     }
     case 'UPDATE_CARD': {
-      let newLists = state.boards.lists.slice()
+      let newLists = state.board.lists.slice()
       let updatedList = newLists.filter(l => l._id === action.payload.listId)
       let updatedCard = updatedList[0].cards.filter(c => c._id === action.payload.card._id)
       let listIndex = newLists.indexOf(updatedList[0])

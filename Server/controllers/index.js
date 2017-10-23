@@ -4,7 +4,6 @@ const cardController = require('./cardController')
 const userController = require('./userController')
 const commentController = require('./commentController')
 
-
 module.exports = {
   boardController: boardController,
   listController: listController,
