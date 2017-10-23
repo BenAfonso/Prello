@@ -76,8 +76,10 @@ export default class Checklist extends React.Component {
       this.setState({items: newItemsList}, () => {
         this.setState({percentageDone: this.recalculatePercentageDone(newItemsList)})
       })
+      this.props.onItemAdd(this.props.index, this.textInput.input.value)
       this.textInput.input.value = ''
     }
+    
   }
 
   deleteItem (index) {
@@ -86,6 +88,7 @@ export default class Checklist extends React.Component {
     this.setState({items: newItemsList}, () => {
       this.setState({percentageDone: this.recalculatePercentageDone(newItemsList)})
     })
+    this.props.onItemDelete(this.props.index, index)
   }
 
   onDelete () {
@@ -98,12 +101,13 @@ export default class Checklist extends React.Component {
     this.setState({items: newItemsList})
   }
 
-  updateItemStatus (index, done) {
+  updateItemStatus (index, done, doneDate = null) {
     let newItemsList = this.state.items.slice()
     newItemsList[index].done = done
     this.setState({items: newItemsList}, () => {
       this.setState({percentageDone: this.recalculatePercentageDone(newItemsList)})
     })
+    this.props.onItemStatusChange(this.props.index, index, )
   }
 
   recalculatePercentageDone (list) {
@@ -156,7 +160,16 @@ export default class Checklist extends React.Component {
           </div>
         </div>
         {/* Display checklist items */}
-        {this.state.items.map((item, index) => (<ChecklistItem key={item.index} done={item.done} index={parseInt(index, 10)} content={item.content} onContentChange={this.updateItemContent} onToggle={this.updateItemStatus} onDelete={this.deleteItem} />))}
+        {this.state.items.map((item, index) => (
+          <ChecklistItem 
+          key={item.index} 
+          done={item.done} 
+          index={parseInt(index, 10)} 
+          content={item.content} 
+          onContentChange={this.updateItemContent} 
+          onToggle={this.updateItemStatus} 
+          onDelete={this.deleteItem} />
+        ))}
 
         {!this.state.displayNewItemForm
           ? <Button onClick={this.displayNewItemForm}

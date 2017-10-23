@@ -41,11 +41,9 @@ export default class CardDetails extends React.Component {
   }
 
   deleteChecklist (index) {
-    console.log('deleteChecklist cardDetails '+index)
     const newChecklistsList = this.props.checklists.slice()
     newChecklistsList.splice(index, 1)
     removeChecklist(this.props.id, index)
-    // this.forceUpdate()
   }
 
   render () {
@@ -53,7 +51,7 @@ export default class CardDetails extends React.Component {
       <div className='host'>
         <div className='content'>
           <CardDetailsInformations {...this.props} />
-          <CardDetailsChecklists checklists={this.props.checklists} onDelete={this.deleteChecklist}/>
+          <CardDetailsChecklists cardId={this.props.id} checklists={this.props.checklists} onDelete={this.deleteChecklist}/>
           <CardDetailsComments />
           <CardDetailsActivity />
         </div>

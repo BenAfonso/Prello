@@ -183,6 +183,42 @@ export default function reducer (state = defaultState, action) {
         }
       }
     }
+    case 'ADD_CHECKLIST_ITEM': {
+      let newLists = state.board.lists.map((list) => {
+        list.cards.map((card) => {
+          if (card._id === action.payload.cardId) {
+            card.checklists[action.payload.checklistIndex].items.push({ index: card.checklists[action.payload.checklistIndex].length, done: false, doneDate: null, content: action.payload.content })
+          }
+          return card
+        })
+        return list
+      })
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: newLists
+        }
+      }
+    }
+    case 'DELETE_CHECKLIST_ITEM': {
+      let newLists = state.board.lists.map((list) => {
+        list.cards.map((card) => {
+          if (card._id === action.payload.cardId) {
+            card.checklists[action.payload.checklistIndex].items.splice(action.payload.itemIndex, 1)
+          }
+          return card
+        })
+        return list
+      })
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: newLists
+        }
+      }
+    }
     default:
       return state
   }

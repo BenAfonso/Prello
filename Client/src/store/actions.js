@@ -172,13 +172,42 @@ export function addChecklist (cardId, title) {
 }
 
 export function removeChecklist (cardId, checklistIndex) {
-  console.log('removeChecklist action' +cardId+' '+checklistIndex)
   if (cardId && checklistIndex > -1) {
     store.dispatch({
       type: 'DELETE_CHECKLIST',
       payload: {
         cardId: cardId,
         checklistIndex: checklistIndex
+      }
+    })
+  }
+}
+
+export function addChecklistItem (cardId, checklistIndex, content) {
+  if (cardId && checklistIndex > -1 && content.length > 0) {
+    store.dispatch({
+      type: 'ADD_CHECKLIST_ITEM',
+      payload: {
+        cardId: cardId,
+        checklistIndex: checklistIndex,
+        content: content
+      }
+    })
+  }
+}
+
+export function updateChecklistItem (cardId, checklistIndex, itemIndex, doneDate = null) {
+  return null
+}
+
+export function deleteChecklistItem (cardId, checklistIndex, itemIndex) {
+  if (cardId && checklistIndex > -1 && itemIndex > -1) {
+    store.dispatch({
+      type: 'DELETE_CHECKLIST_ITEM',
+      payload: {
+        cardId: cardId,
+        checklistIndex: checklistIndex,
+        itemIndex: itemIndex
       }
     })
   }

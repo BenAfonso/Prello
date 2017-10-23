@@ -12,11 +12,12 @@ export default class ChecklistItem extends React.Component {
     onToggle: PropTypes.func,
     onDelete: PropTypes.func,
     onContentChange: PropTypes.func,
-    done: PropTypes.bool
+    doneDate: PropTypes.instanceOf(Date)
   }
 
   static defaultProps = {
     done: false,
+    doneDate: null,
     onToggle: null,
     onDelete: null,
     onContentChange: null
@@ -27,7 +28,8 @@ export default class ChecklistItem extends React.Component {
     this.state = {
       isEditable: false,
       content: props.content,
-      done: props.done
+      done: props.done,
+      doneDate: props.doneDate
     }
     this.setEditable = this.setEditable.bind(this)
     this.updateText = this.updateText.bind(this)
@@ -54,7 +56,13 @@ export default class ChecklistItem extends React.Component {
 
   onToggle () {
     this.setState({ done: this.checkbox.checked }, () => {
-      if (this.props.onToggle !== null) { this.props.onToggle(this.props.index, this.state.done) }
+      if (this.state.done) {
+        this.setState({ doneDate: new Date() })
+        if (this.props.onToggle !== null) { this.props.onToggle(this.props.index, this.state.done, this.state.doneDate) }
+      } else {
+        this.setState({ doneDate: null })
+        if (this.props.onToggle !== null) { this.props.onToggle(this.props.index, this.state.done) }
+      }
     })
   }
 
