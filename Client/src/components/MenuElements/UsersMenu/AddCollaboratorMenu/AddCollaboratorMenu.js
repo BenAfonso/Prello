@@ -24,6 +24,11 @@ export default class AddCollaboratorMenu extends React.Component {
   addCollaborator () {
     if (this.email.value !== '') {
       addCollaborator(this.props.dispatch, this.props.boardId, this.email.value)
+      this.setState({
+        inputValue: '',
+        enableAdd: false,
+        matchingUsers: []
+      })
     }
   }
 
@@ -48,7 +53,7 @@ export default class AddCollaboratorMenu extends React.Component {
 
   getInitials (username) {
     const matches = username.match(/\b(\w)/g)
-    const initials = matches.join('')
+    const initials = matches.join('').toUpperCase()
     return initials
   }
 
@@ -61,7 +66,7 @@ export default class AddCollaboratorMenu extends React.Component {
             fontSize=''
             thumbnail={user.picture}
             initials={this.getInitials(user.username)}
-            bgColor='pink'
+            bgColor={user.bgColor}
             color='black'
           />
         </div>
@@ -102,68 +107,16 @@ export default class AddCollaboratorMenu extends React.Component {
     )
   }
 
-  //TO DELETE
-  renderFakeUserinMenu () {
-    return (
-      <div className='user'>
-        <div className='user-thumbnail'>
-          <AvatarThumbnail
-            size='30px'
-            fontSize=''
-            thumbnail=''
-            initials='BB'
-            bgColor='pink'
-            color='black'
-          />
-        </div>
-        <div className='user-infos'>
-        <div className='user-username'>Bob</div>
-        <div className='user-email'>bobbydu91@gmail.comeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</div>
-        </div>
-        <style jsx>{`
-
-    .user-infos {
-      float: right;
-      display: inline-block;
-      padding: 0 10px;
-      overflow: hidden;
-      width: 200px;
-      text-overflow: ellipsis;    
-    }
-
-    .user-thumbnail {
-      float: left;  
-    }
-
-    .user-username {
-      font-weight: bold;
-      text-align: left;
-      color: #000;
-    }
-
-    .user-email {
-      font-style: italic;
-      padding: 5px 0;
-      font-size: 10px;
-      color: #999;        
-    }
-    `}
-        </style>
-      </div>
-    )
-  }
-
   render () {
 
     let menuElements = []
     this.state.matchingUsers.map(user =>
       menuElements.push({
         action: () => this.setInputValue(user.email),
-        placeholder: this.renderUserinMenu(user)
+        placeholder: this.renderUserinMenu(user),
+        closer: true
       })
     )
-
-    //console.log(menuElements)
 
     return (
     <div className='host'>

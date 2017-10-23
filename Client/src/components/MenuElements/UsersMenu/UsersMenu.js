@@ -3,8 +3,6 @@ import { connect } from 'react-redux'
 import Icon from '../../UI/Icon/Icon'
 import AvatarThumbnail from '../../UI/AvatarThumbnail/AvatarThumbnail'
 import AddCollaboratorMenu from './AddCollaboratorMenu/AddCollaboratorMenu'
-import { subscribeToBoard } from '../../../services/api'
-
 
 @connect(store => {
   return {
@@ -21,21 +19,20 @@ export default class UsersMenu extends React.Component {
     this.onAvatarClick = this.onAvatarClick.bind(this)
   }
 
-  componentDidMount () {
-    //subscribeToBoard(this.props.board)    
-  }
 
   getInitials (username) {
     const matches = username.match(/\b(\w)/g)
-    const initials = matches.join('')
+    const initials = matches.join('').toUpperCase()
     return initials
   }
 
   onAvatarClick () {
-
+    //Not Implemented Yet
   }
 
   renderUserAvatar (user) {
+    console.log(user.bgColor)
+
     return (
       <div className='avatar' onClick={this.onAvatarClick}>
          <AvatarThumbnail
@@ -43,7 +40,7 @@ export default class UsersMenu extends React.Component {
           fontSize=''
           thumbnail={user.picture}
           initials={this.getInitials(user.username)}
-          bgColor='pink'
+          bgColor={user.bgColor}
           color='black'
         />  
         <style jsx>
@@ -68,7 +65,6 @@ export default class UsersMenu extends React.Component {
 
     const { collaborators, owner } = this.props.board
     const boardId = this.props.board._id
-    //console.log(collaborators)
 
     return (
       <div className='host'>

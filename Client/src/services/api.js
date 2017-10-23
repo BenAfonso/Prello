@@ -38,6 +38,6 @@ socket.on('CARD_UPDATED', (newCard) => {
 
 })
 
-socket.on('ADD_COLLABORATOR', (user) => {
+/* socket.on('ADD_COLLABORATOR', (user) => {
   addCollaboratorLocal(user)
-})
+}) */
