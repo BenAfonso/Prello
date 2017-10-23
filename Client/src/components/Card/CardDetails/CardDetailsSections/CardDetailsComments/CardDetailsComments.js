@@ -5,6 +5,7 @@ import Comment from '../../../../UI/Comment/Comment'
 import NewComment from '../../../../UI/NewComment/NewComment'
 import { connect } from 'react-redux'
 import { addComment } from '../../../../../services/Card.services'
+import { getCompleteCard } from '../../../../../services/Card.services'
 
 @connect(store => {
   return {
@@ -16,26 +17,40 @@ export default class CardDetailsComments extends React.Component {
   constructor (props) {
     super(props)
     this.onCommentSubmit = this.onCommentSubmit.bind(this)
+    this.listId = ''
   }
 
   onCommentSubmit (text) {
+    addComment(this.props.board._id, this.listId, this.props.id, text)
+  }
+
+  componentDidMount () {
     let list = this.props.board.lists.filter(l => {
       let cards = l.cards.filter(c => c._id === this.props.id)
       return cards.length > 0
     })
-    addComment(this.props.board._id, list[0]._id, this.props.id, text)
+    this.listId = list[0]._id
+    getCompleteCard(this.props.board._id, this.listId, this.props.id)
   }
 
   render () {
+
+    const list = this.props.board.lists.filter(l => l.cards.filter(c => c._id === this.props.id).length > 0)[0]
+    const card = list.cards.filter(c => c._id === this.props.id)[0] 
+    const comments = card.comments
     return (
       <div className='host'>
         <CardDetailsSection title='Add comment' icon='comment-o'>
           {
-            this.props.comments ? this.props.comments.map(c => (
+            comments ? comments.map(c => (
               <Comment
                 content={c.content}
                 username={c.author.username}
-                initials={c.author.initials}
+                initials={
+                  c.author.name.split(' ').length > 1
+                  ? `${c.author.name.split(' ')[0][0]}${c.author.name.split(' ')[0][0]}`
+                  : `${c.author.name[0]}`
+                }
                 thumbnail={c.author.thumbnail}
                 timestamp={c.timestamp}
               />
