@@ -201,6 +201,7 @@ boardController.addCollaborator = (boardId, userId, requesterId) => {
         err.status = 500
         reject(err)
       } else {
+        emit(boardId, 'UPDATE_COLLABORATORS', res.collaborators)
         resolve(res)
       }
     })
@@ -212,7 +213,7 @@ boardController.addCollaboratorEmail = (boardId, email, requesterId) => {
     User.findOne({ email: email }).then((res) => {
       if (res) {
         boardController.addCollaborator(boardId, res._id, requesterId).then(res => {
-          //emit(boardId, 'ADD_COLLABORATOR', res)
+          // emit(boardId, 'ADD_COLLABORATOR', res)
           resolve(res)
         }).catch(err => {
           err.status = 500
@@ -234,6 +235,7 @@ boardController.removeCollaborator = (boardId, userId, requesterId) => {
         err.status = 500
         reject(err)
       } else {
+        emit(boardId, 'UPDATE_COLLABORATORS', res.collaborators)
         resolve(res)
       }
     })

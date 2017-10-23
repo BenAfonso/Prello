@@ -143,7 +143,7 @@ module.exports = (router, userController) => {
       return res.status(400).send(err)
     })
   })
-  
+
   router.get('/users', function (req, res) {
     // TODO: ADD Pagination
     userController.getUsers(req.query.email).then(users => {
