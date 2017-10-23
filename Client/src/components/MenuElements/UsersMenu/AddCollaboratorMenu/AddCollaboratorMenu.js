@@ -52,9 +52,9 @@ export default class AddCollaboratorMenu extends React.Component {
     }
   }
 
-  setInputValue (user) {
+  setInputValue (email) {
     this.setState({
-      inputValue: user,
+      inputValue: email,
       enableAdd: true
     })
   }
@@ -119,7 +119,7 @@ export default class AddCollaboratorMenu extends React.Component {
     let menuElements = []
     this.state.matchingUsers.filter(user =>
       menuElements.push({
-        action: () => this.setInputValue(user),
+        action: () => this.setInputValue(user.email),
         placeholder: this.renderUserinMenu(user),
         closer: true,
         disabled: this.isCollaborator(user)
