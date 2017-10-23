@@ -5,8 +5,14 @@ import styles from './CardDetails.styles'
 import CardDetailsComments from './CardDetailsSections/CardDetailsComments/CardDetailsComments'
 import CardDetailsActivity from './CardDetailsSections/CardDetailsActivity/CardDetailsActivity'
 import CardDetailsInformations from './CardDetailsSections/CardDetailsInformations/CardDetailsInformations'
+import { getCompleteCard } from '../../../services/Card.services'
 
 export default class CardDetails extends React.Component {
+
+  componentDidMount () {
+    getCompleteCard(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.id)
+  }
+
   render () {
     return (
       <div className='host'>

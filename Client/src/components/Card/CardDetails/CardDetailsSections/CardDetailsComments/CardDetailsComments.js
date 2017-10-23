@@ -5,7 +5,6 @@ import Comment from '../../../../UI/Comment/Comment'
 import NewComment from '../../../../UI/NewComment/NewComment'
 import { connect } from 'react-redux'
 import { addComment } from '../../../../../services/Card.services'
-import { getCompleteCard } from '../../../../../services/Card.services'
 import { dateFormatter } from '../../../../../util/dateFormatter'
 
 @connect(store => {
@@ -22,21 +21,12 @@ export default class CardDetailsComments extends React.Component {
   }
 
   onCommentSubmit (text) {
-    addComment(this.props.board._id, this.listId, this.props.id, text)
-  }
-
-  componentDidMount () {
-    let list = this.props.board.lists.filter(l => {
-      let cards = l.cards.filter(c => c._id === this.props.id)
-      return cards.length > 0
-    })
-    this.listId = list[0]._id
-    getCompleteCard(this.props.board._id, this.listId, this.props.id)
+    addComment(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.id, text)
   }
 
   render () {
 
-    const list = this.props.board.lists.filter(l => l.cards.filter(c => c._id === this.props.id).length > 0)[0]
+    const list = this.props.board.lists[this.props.listIndex]
     const card = list.cards.filter(c => c._id === this.props.id)[0] 
     const comments = card.comments
     return (
