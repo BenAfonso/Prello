@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Card = mongoose.model('Card')
 const List = mongoose.model('List')
+const User = mongoose.model('User')
 
 const listController = require('./listController')
 const boardController = require('./boardController')
@@ -124,11 +125,19 @@ cardController.addCommentToCard = (cardId, commentToAdd) => {
 cardController.getOneCard = (cardId) => {
   return new Promise((resolve, reject) => {
     console.log(cardId)
-    Card.findOne({ '_id': cardId }).populate('owner comments responsible', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+    Card.findOne({ '_id': cardId }).populate('comments responsible', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
-        resolve(res)
+        User.populate(res, {
+          path: 'comments.author'
+        }, function (err, res) {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(res)
+          }
+        })
       }
     })
   })

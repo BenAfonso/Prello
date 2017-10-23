@@ -7,7 +7,7 @@ const commentController = {}
 
 commentController.createComment = (req) => {
   return new Promise((resolve, reject) => {
-    req.body.owner = req.user._id
+    req.body.author = req.user._id
     const commentToAdd = new Comment(req.body)
     commentToAdd.save((err, item) => {
       if (err) {

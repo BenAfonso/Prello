@@ -44,14 +44,16 @@ export default class CardDetailsComments extends React.Component {
           {
             comments ? comments.map(c => (
               <Comment
-                content={c.content}
-                username={c.author.username}
+                content={c.text}
+                username={c.author ? c.author.username : ''}
                 initials={
-                  c.author.name.split(' ').length > 1
-                  ? `${c.author.name.split(' ')[0][0]}${c.author.name.split(' ')[0][0]}`
-                  : `${c.author.name[0]}`
+                  c.author 
+                    ? c.author.name.split(' ').length > 1
+                      ? `${c.author.name.split(' ')[0][0]}${c.author.name.split(' ')[0][0]}`
+                      : `${c.author.name[0]}`
+                    : ''
                 }
-                thumbnail={c.author.thumbnail}
+                thumbnail={c.author ? c.author.thumbnail : ''}
                 timestamp={c.timestamp}
               />
             )) : null
