@@ -7,15 +7,6 @@ const {isCollaborator} = require('../../config/middlewares/boardAuthorizations')
 module.exports = (router, controller) => {
   /**
     * @swagger
-    * definitions:
-    *   NewComment:
-    *     properties:
-    *       text:
-    *         type: string
-    */
-
-  /**
-    * @swagger
     * /boards/{boardId}/lists/{listId}/cards/{cardId}/comments:
     *   post:
     *     tags:

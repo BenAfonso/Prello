@@ -122,15 +122,27 @@ cardController.addCommentToCard = (cardId, commentToAdd) => {
     })
   })
 }
+
+cardController.removeCommentFromCard = (cardId, commentId) => {
+  return new Promise((resolve, reject) => {
+    Card.findOneAndUpdate({'_id': cardId}, {$pull: {comments: commentId}}, {new: true}, function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
 cardController.getOneCard = (cardId) => {
   return new Promise((resolve, reject) => {
-    console.log(cardId)
     Card.findOne({ '_id': cardId }).populate('comments responsible', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
         User.populate(res, {
-          path: 'comments.author'
+          path: 'comments.author',
+          select: { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }
         }, function (err, res) {
           if (err) {
             reject(err)
