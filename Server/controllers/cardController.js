@@ -110,4 +110,27 @@ cardController.moveCard = (req) => {
     })
   })
 }
+cardController.addCommentToCard = (cardId, commentToAdd) => {
+  return new Promise((resolve, reject) => {
+    Card.findOneAndUpdate({'_id': cardId}, {$push: {comments: commentToAdd}}, {new: true}, function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+cardController.getOneCard = (cardId) => {
+  return new Promise((resolve, reject) => {
+    console.log(cardId)
+    Card.findOne({ '_id': cardId }).populate('owner comments responsible', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
 module.exports = cardController

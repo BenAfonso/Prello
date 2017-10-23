@@ -30,6 +30,8 @@ require('./List')(router, controllers)
 require('./Board')(router, controllers.boardController)
 require('./Card')(router, controllers.cardController)
 require('./User')(router, controllers.userController)
+require('./Comment')(router, controllers.commentController)
+
 
 router.get('/', (req, res) => {
   res.status(200).json('Welcome on Prello')
