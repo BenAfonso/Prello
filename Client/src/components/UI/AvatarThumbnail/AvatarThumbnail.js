@@ -58,6 +58,7 @@ export default class AvatarThumbnail extends React.Component {
             text-align: center;
             font-family: 'Open Sans', sans-serif;
             font-weight: bold;
+            text-transform: uppercase;
           }  
         `}</style>
       </div>

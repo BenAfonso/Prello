@@ -4,6 +4,11 @@ import styles from './NewComment.styles'
 import PropTypes from 'prop-types'
 
 const NewComment = (props) => {
+  const handleSubmit = (text) => {
+    props.handleSubmit(text)
+    this.text.innerHTML = ''
+  }
+
   return (
     <div className='NewComment'>
       <div className='author'>
@@ -13,7 +18,7 @@ const NewComment = (props) => {
       </div>
       <div className='content'>
         <div className='card' contentEditable ref={c => this.text = c} />
-        <div className='saveButton' onClick={() => { props.handleSubmit(this.text.innerHTML) }}>
+        <div className='saveButton' onClick={() => { handleSubmit(this.text.innerHTML) }}>
           Save
         </div>
       </div>

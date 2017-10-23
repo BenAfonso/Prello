@@ -6,6 +6,7 @@ import NewComment from '../../../../UI/NewComment/NewComment'
 import { connect } from 'react-redux'
 import { addComment } from '../../../../../services/Card.services'
 import { getCompleteCard } from '../../../../../services/Card.services'
+import { dateFormatter } from '../../../../../util/dateFormatter'
 
 @connect(store => {
   return {
@@ -41,26 +42,37 @@ export default class CardDetailsComments extends React.Component {
     return (
       <div className='host'>
         <CardDetailsSection title='Add comment' icon='comment-o'>
-          {
-            comments ? comments.map(c => (
-              <Comment
-                content={c.text}
-                username={c.author ? c.author.username : ''}
-                initials={
-                  c.author 
-                    ? c.author.name.split(' ').length > 1
-                      ? `${c.author.name.split(' ')[0][0]}${c.author.name.split(' ')[0][0]}`
-                      : `${c.author.name[0]}`
-                    : ''
-                }
-                thumbnail={c.author ? c.author.thumbnail : ''}
-                timestamp={c.timestamp}
-              />
-            )) : null
-          }
-          <NewComment handleSubmit={this.onCommentSubmit} />
+          <div className='comments'>
+            {
+              comments ? comments.map(c => (
+                <div className='comment'>
+                  <Comment
+                    content={c.text}
+                    username={c.author ? c.author.username : ''}
+                    initials={
+                      c.author 
+                        ? c.author.name.split(' ').length > 1
+                          ? `${c.author.name.split(' ')[0][0]}${c.author.name.split(' ')[0][0]}`
+                          : `${c.author.name[0]}`
+                        : ''
+                    }
+                    thumbnail={c.author ? c.author.thumbnail : ''}
+                    timestamp={dateFormatter(c.createdAt)}
+                  />
+                </div>
+              )) : null
+            }
+          </div>
+          <NewComment handleSubmit={this.onCommentSubmit} ref={n => this.newComment = n} />
         </CardDetailsSection>
         <style jsx>{`
+          .comments {
+            margin: 20px 0px;
+          }
+
+          .comment {
+            margin: 10px 0px;
+          }
         `}</style>
       </div>
     )

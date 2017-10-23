@@ -4,7 +4,6 @@ export default `
   position: relative;
   display: flex;
   width: 100%;
-  height: 140vh;
   background-color: white;
   borderradius: 8px;
   padding: 20px;
