@@ -158,6 +158,16 @@ export default function reducer (state = defaultState, action) {
         }
       }
     }
+    case 'UPDATE_COLLABORATORS': {
+      const newCollaborators = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          collaborators: newCollaborators
+        }
+      }
+    }
     default:
       return state
   }

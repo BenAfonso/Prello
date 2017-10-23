@@ -1,6 +1,7 @@
-import { fetchBoards, addBoardDistant } from '../services/Board.services'
+import { fetchBoards, addBoardDistant, addCollaboratorDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant } from '../services/List.services'
 import { moveCard } from '../services/Card.services'
+import { fetchMatchingUsersEmail } from '../services/User.services'
 
 import store from '../store/store'
 
@@ -167,4 +168,30 @@ export function addBoardLocal (board) {
       payload: board
     })
   }
+}
+
+export function addCollaborator (dispatch, boardId, email) {
+  addCollaboratorDistant(boardId, email).then((board) => {
+  }).catch(err => {
+    return err
+  })
+}
+
+export function replaceCollaboratorLocal (users) {
+  if (users) {
+    store.dispatch({
+      type: 'UPDATE_COLLABORATORS',
+      payload: users
+    })
+  }
+}
+
+export function fetchMatchingUsers (email) {
+  return new Promise((resolve, reject) => {
+    fetchMatchingUsersEmail(email).then((users) => {
+      resolve(users)
+    }).catch(err => {
+      reject(err)
+    })
+  })
 }
