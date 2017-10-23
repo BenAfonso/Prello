@@ -182,6 +182,7 @@ export default class List extends React.Component {
                 <Card 
                   index={i}
                   id={card._id}
+                  checklists={card.checklists}
                   bgColor={this.props.primaryColor}
                   listIndex={this.props.index}
                   content={card.text}

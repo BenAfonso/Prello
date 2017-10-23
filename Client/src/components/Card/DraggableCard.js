@@ -80,11 +80,23 @@ export default class CardComponent extends React.Component {
   static propTypes = {
     id: PropTypes.any,
     connectCardDragSource: PropTypes.func.isRequired,
+    checklists: PropTypes.arrayOf(PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      items: PropTypes.arrayOf(PropTypes.shape({
+        index: PropTypes.number,
+        title: PropTypes.string.isRequired,
+        items: PropTypes.array
+      }))
+    })),
     content: PropTypes.string.isRequired,
     isDragging: PropTypes.bool.isRequired,
     index: PropTypes.number.isRequired,
     bgColor: PropTypes.any,
     listIndex: PropTypes.number
+  }
+
+  static defaultProps = {
+    checklists: []
   }
 
   constructor (props) {

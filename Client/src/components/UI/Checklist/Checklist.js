@@ -8,7 +8,13 @@ import Icon from '../Icon/Icon'
 
 export default class Checklist extends React.Component {
   static propTypes = {
-    items: PropTypes.array,
+    id: PropTypes.string,
+    items: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string,
+      index: PropTypes.number,
+      content: PropTypes.string,
+      done: PropTypes.bool
+    })),
     title: PropTypes.string.isRequired,
     percentageDone: PropTypes.number
   }

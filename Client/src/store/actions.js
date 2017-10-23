@@ -160,13 +160,24 @@ export function addBoardLocal (board) {
 }
 
 export function addChecklist (cardId, title) {
-  console.log('action')
   if (cardId && title.length > 0) {
     store.dispatch({
       type: 'ADD_CHECKLIST',
       payload: {
         cardId: cardId,
         title: title
+      }
+    })
+  }
+}
+
+export function removeChecklist (cardId, checklistId) {
+  if (cardId && checklistId) {
+    store.dispatch({
+      type: 'DELETE_CHECKLIST',
+      payload: {
+        cardId: cardId,
+        checklistId: checklistId
       }
     })
   }
