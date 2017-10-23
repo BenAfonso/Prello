@@ -82,6 +82,7 @@ export default class CardComponent extends React.Component {
     connectCardDragSource: PropTypes.func.isRequired,
     checklists: PropTypes.arrayOf(PropTypes.shape({
       title: PropTypes.string.isRequired,
+      index: PropTypes.number,
       items: PropTypes.arrayOf(PropTypes.shape({
         index: PropTypes.number,
         title: PropTypes.string.isRequired,

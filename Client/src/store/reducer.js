@@ -147,7 +147,26 @@ export default function reducer (state = defaultState, action) {
       let newLists = state.board.lists.map((list) => {
         list.cards.map((card) => {
           if (card._id === action.payload.cardId) {
-            card.checklists.push({title: action.payload.title, items: []})
+            card.checklists.push({title: action.payload.title, index: card.checklists.length, items: []})
+          }
+          return card
+        })
+        return list
+      })
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: newLists
+        }
+      }
+    }
+    case 'DELETE_CHECKLIST': {
+      console.log('reducer '+action.payload.cardId+' '+action.payload.checklistIndex)
+      let newLists = state.board.lists.map((list) => {
+        list.cards.map((card) => {
+          if (card._id === action.payload.cardId) {
+            card.checklists.splice(action.payload.checklistIndex, 1)
           }
           return card
         })

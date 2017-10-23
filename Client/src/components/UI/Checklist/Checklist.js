@@ -9,6 +9,7 @@ import Icon from '../Icon/Icon'
 export default class Checklist extends React.Component {
   static propTypes = {
     id: PropTypes.string,
+    index: PropTypes.number,
     items: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string,
       index: PropTypes.number,
@@ -41,6 +42,7 @@ export default class Checklist extends React.Component {
     this.hideEditTitleForm = this.hideEditTitleForm.bind(this)
     this.deleteItem = this.deleteItem.bind(this)
     this.updateTitle = this.updateTitle.bind(this)
+    this.onDelete = this.onDelete.bind(this)
     this.updateItemStatus = this.updateItemStatus.bind(this)
     this.updateItemContent = this.updateItemContent.bind(this)
     this.recalculatePercentageDone = this.recalculatePercentageDone.bind(this)
@@ -84,6 +86,10 @@ export default class Checklist extends React.Component {
     this.setState({items: newItemsList}, () => {
       this.setState({percentageDone: this.recalculatePercentageDone(newItemsList)})
     })
+  }
+
+  onDelete () {
+    this.props.onDelete(this.props.index)
   }
 
   updateItemContent (index, newContent) {
@@ -182,8 +188,14 @@ export default class Checklist extends React.Component {
               <Icon name='times' color='#70727c' />
             </Button>
           </div>
-        </div>}
-        <style jsx>{styles}</style>
+        </div>
+      }
+      <Button
+        onClick={this.onDelete}
+        size='small'>
+        <Icon name='trash-o' color='#70727c' />
+      </Button>
+      <style jsx>{styles}</style>
       </div>
     )
   }

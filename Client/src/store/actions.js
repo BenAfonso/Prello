@@ -171,13 +171,14 @@ export function addChecklist (cardId, title) {
   }
 }
 
-export function removeChecklist (cardId, checklistId) {
-  if (cardId && checklistId) {
+export function removeChecklist (cardId, checklistIndex) {
+  console.log('removeChecklist action' +cardId+' '+checklistIndex)
+  if (cardId && checklistIndex > -1) {
     store.dispatch({
       type: 'DELETE_CHECKLIST',
       payload: {
         cardId: cardId,
-        checklistId: checklistId
+        checklistIndex: checklistIndex
       }
     })
   }
