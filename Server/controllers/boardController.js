@@ -213,7 +213,6 @@ boardController.addCollaboratorEmail = (boardId, email, requesterId) => {
     User.findOne({ email: email }).then((res) => {
       if (res) {
         boardController.addCollaborator(boardId, res._id, requesterId).then(res => {
-          // emit(boardId, 'ADD_COLLABORATOR', res)
           resolve(res)
         }).catch(err => {
           err.status = 500

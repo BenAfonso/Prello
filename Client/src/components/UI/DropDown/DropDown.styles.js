@@ -48,12 +48,19 @@ button:hover {
   z-index: 10000;
 }
 
+
+
 .dropdown-content ul li {
   padding: 12px 16px;
   text-decoration: none;
   display: flex;
   user-select: none;
   cursor: pointer;
+}
+
+.dropdown-content ul li.disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
 .dropdown-content ul li .element-title {
@@ -78,5 +85,5 @@ button:hover {
   margin: 8px 0 8px 5%;
 }
 
-.dropdown-content ul li:hover {background-color: #f1f1f1}
+.dropdown-content ul li:hover {background-color: #ff3399}
 `

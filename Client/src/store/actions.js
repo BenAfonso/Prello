@@ -162,18 +162,16 @@ export function addBoardLocal (board) {
 
 export function addCollaborator (dispatch, boardId, email) {
   addCollaboratorDistant(boardId, email).then((board) => {
-    const user = board.collaborators[board.collaborators.length - 1]
-    addCollaboratorLocal(user)
   }).catch(err => {
     return err
   })
 }
 
-export function addCollaboratorLocal (user) {
-  if (user) {
+export function replaceCollaboratorLocal (users) {
+  if (users) {
     store.dispatch({
-      type: 'ADD_COLLABORATOR',
-      payload: user
+      type: 'UPDATE_COLLABORATORS',
+      payload: users
     })
   }
 }

@@ -16,7 +16,6 @@ export function addBoardDistant (boardTitle) {
 export function fetchBoards () {
   return new Promise((resolve, reject) => {
     axios.get(`${Config.API_URL}/me/boards`).then((res) => {
-      console.log(res.data)
       resolve(res.data)
     }).catch((err) => {
       reject(err)

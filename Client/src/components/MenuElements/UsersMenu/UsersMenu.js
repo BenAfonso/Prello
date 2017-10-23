@@ -19,9 +19,8 @@ export default class UsersMenu extends React.Component {
     this.onAvatarClick = this.onAvatarClick.bind(this)
   }
 
-
-  getInitials (username) {
-    const matches = username.match(/\b(\w)/g)
+  getInitials (name) {
+    const matches = name.match(/\b(\w)/g)
     const initials = matches.join('').toUpperCase()
     return initials
   }
@@ -31,7 +30,6 @@ export default class UsersMenu extends React.Component {
   }
 
   renderUserAvatar (user) {
-    console.log(user.bgColor)
 
     return (
       <div className='avatar' onClick={this.onAvatarClick}>
@@ -39,22 +37,17 @@ export default class UsersMenu extends React.Component {
           size='30px'
           fontSize=''
           thumbnail={user.picture}
-          initials={this.getInitials(user.username)}
+          initials={this.getInitials(user.name)}
           bgColor={user.bgColor}
           color='black'
         />  
         <style jsx>
           {`
-
           .avatar {
             display: inline-block;
             padding: 5px 5px;
             cursor: pointer;            
-          }
-
-          .avatar:hover {
-            
-          }          
+          }        
         `}
         </style>        
       </div>
@@ -81,8 +74,7 @@ export default class UsersMenu extends React.Component {
                     user.id===owner.id ? <div className='ownerIcon'><Icon  color='#ffff00' name='star' fontSize='20px' /></div> : null                    
                   }                  
                   {this.renderUserAvatar(user)}
-                </div>              
-              ))
+                </div>))
             }
           </li>
             
@@ -90,7 +82,7 @@ export default class UsersMenu extends React.Component {
         </div>
         <div className='usermenu-separator' />
 
-        <AddCollaboratorMenu boardId={boardId}/>
+        <AddCollaboratorMenu boardId={boardId} collaborators={collaborators}/>
         <style jsx>
           {`
 

@@ -19,40 +19,48 @@ export default class AddCollaboratorMenu extends React.Component {
     this.onChange = this.onChange.bind(this)
     this.setInputValue = this.setInputValue.bind(this)
     this.getInitials = this.getInitials.bind(this)
+    this.isCollaborator = this.isCollaborator.bind(this)
+  }
+
+  isCollaborator (user) {
+    return (this.props.collaborators.find(collaborator => collaborator._id === user._id) !== undefined)
   }
 
   addCollaborator () {
-    if (this.email.value !== '') {
-      addCollaborator(this.props.dispatch, this.props.boardId, this.email.value)
-      this.setState({
-        inputValue: '',
-        enableAdd: false,
-        matchingUsers: []
-      })
-    }
+    addCollaborator(this.props.dispatch, this.props.boardId, this.email.value)
+    this.setState({
+      inputValue: '',
+      enableAdd: false,
+      matchingUsers: []
+    })
   }
 
   onChange () {
     this.setState({
       inputValue: this.email.value,
       enableAdd: false})
-    let newMatchingUsers = []
-    fetchMatchingUsers(this.email.value).then(users => {
-      users.map(user => {
-        newMatchingUsers.push(user)
+    if (this.email.value !== '') {
+      let newMatchingUsers = []
+      fetchMatchingUsers(this.email.value).then(users => {
+        users.map(user =>
+          newMatchingUsers.push(user)
+        )
+        this.setState({matchingUsers: newMatchingUsers})
       })
-      this.setState({matchingUsers: newMatchingUsers})
+    } else {
+      this.setState({matchingUsers: []})
+    }
+  }
+
+  setInputValue (user) {
+    this.setState({
+      inputValue: user,
+      enableAdd: true
     })
   }
 
-  setInputValue (email) {
-    this.setState({
-      inputValue: email,
-      enableAdd: true})
-  }
-
-  getInitials (username) {
-    const matches = username.match(/\b(\w)/g)
+  getInitials (name) {
+    const matches = name.match(/\b(\w)/g)
     const initials = matches.join('').toUpperCase()
     return initials
   }
@@ -65,7 +73,7 @@ export default class AddCollaboratorMenu extends React.Component {
             size='30px'
             fontSize=''
             thumbnail={user.picture}
-            initials={this.getInitials(user.username)}
+            initials={this.getInitials(user.name)}
             bgColor={user.bgColor}
             color='black'
           />
@@ -108,13 +116,13 @@ export default class AddCollaboratorMenu extends React.Component {
   }
 
   render () {
-
     let menuElements = []
-    this.state.matchingUsers.map(user =>
+    this.state.matchingUsers.filter(user =>
       menuElements.push({
-        action: () => this.setInputValue(user.email),
+        action: () => this.setInputValue(user),
         placeholder: this.renderUserinMenu(user),
-        closer: true
+        closer: true,
+        disabled: this.isCollaborator(user)
       })
     )
 
@@ -141,9 +149,8 @@ export default class AddCollaboratorMenu extends React.Component {
                 <form onSubmit={this.addCollaborator}>
                   <DropDown
                     menuElements={menuElements}
-                  >
-                    <input type='text' height='20px' value={this.state.inputValue} placeholder='georges.abitbol@mondedem.fr' onChange={this.onChange} ref={(t) => { this.email = t }} />
-                  </DropDown>
+                    input={<input type='text' height='20px' value={this.state.inputValue} placeholder='georges.abitbol@mondedem.fr' onChange={this.onChange} ref={(t) => { this.email = t }} />}
+                  />
                 </form>
               </div>
               <div className='element-button'>
