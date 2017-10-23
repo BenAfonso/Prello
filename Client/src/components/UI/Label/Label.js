@@ -56,7 +56,7 @@ export default class Label extends React.Component {
 
     props.style = {
       width,
-      height: this.state.isExpanded ? '1pc' : '8px',
+      height: this.state.isExpanded ? '16px' : '8px',
       fontSize,
       fontWeight,
       backgroundColor,
