@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames'
 
 export default class Label extends React.Component {
-  constructor() {
+  constructor () {
     super()
     this.state = {
       isExpanded: false,
@@ -34,13 +34,13 @@ export default class Label extends React.Component {
     centeredText: true
   }
 
-  expandLabel() {
+  expandLabel  () {
     this.setState({
       isExpanded: !this.state.isExpanded
     })
   }
 
-  render() {
+  render () {
     const {
             labelText,
       width,
@@ -65,7 +65,7 @@ export default class Label extends React.Component {
       textAlign: centeredText ? 'center' : 'left',
       ...props.style
     }
-    if (this.state.isExpanded) return <div style={props.style} onClick={this.expandLabel}>{this.props.labelText}</div>
+    if (this.state.isExpanded) return <div style={props.style} onClick={this.expandLabel} checked>{this.props.labelText}</div>
     else return <div style={props.style} onClick={this.expandLabel}></div>
   }
 }
