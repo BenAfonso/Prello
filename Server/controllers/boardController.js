@@ -196,7 +196,7 @@ boardController.refreshOneboard = function (action, boardId) {
 }
 boardController.addCollaborator = (boardId, userId, requesterId) => {
   return new Promise((resolve, reject) => {
-    Board.findOneAndUpdate({ '_id': boardId }, { $push: { collaborators: userId } }, { new: true }, function (err, res) {
+    Board.findOneAndUpdate({ '_id': boardId }, { $push: { collaborators: userId } }, { new: true }).populate('collaborators').exec((err, res) => {
       if (err) {
         err.status = 500
         reject(err)
@@ -229,7 +229,7 @@ boardController.addCollaboratorEmail = (boardId, email, requesterId) => {
 
 boardController.removeCollaborator = (boardId, userId, requesterId) => {
   return new Promise((resolve, reject) => {
-    Board.findOneAndUpdate({ '_id': boardId }, { $pull: { collaborators: userId } }, { new: true }, function (err, res) {
+    Board.findOneAndUpdate({ '_id': boardId }, { $pull: { collaborators: userId } }, { new: true }).populate('collaborators').exec((err, res) => {
       if (err) {
         err.status = 500
         reject(err)
