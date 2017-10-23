@@ -20,6 +20,16 @@ export function addListLocal (list) {
   }
 }
 
+export function updateCard (listId, card) {
+  store.dispatch({
+    type: 'UPDATE_CARD',
+    payload: {
+      listId: listId,
+      card: card
+    }
+  })
+}
+
 export function moveList (dispatch, boardId, listId, position) {
   moveListDistant(boardId, listId, position)
     .then((lists) => {

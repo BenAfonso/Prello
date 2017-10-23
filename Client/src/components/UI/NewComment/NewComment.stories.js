@@ -14,6 +14,7 @@ storiesOf('NewComment', module)
       username={text('username', 'BenAfonso')}
       initials={text('initials', 'BA')}
       thumbnail={text('thumbnail', '')}
+      handleSubmit={(c) => { console.log(c) }}
     />
   </div>
 ))

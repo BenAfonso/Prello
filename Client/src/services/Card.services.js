@@ -8,3 +8,10 @@ export function moveCard (boardId, cardId, oldListId, newListId, position) {
     position: position
   })
 }
+
+export function addComment (boardId, listId, cardId, content) {
+  axios.post(`${Config.API_URL}/boards/${boardId}/cards/${cardId}/comments`, {
+    text: content,
+    createdAt: new Date()
+  })
+}

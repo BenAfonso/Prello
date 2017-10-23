@@ -12,7 +12,7 @@ export default class CardDetails extends React.Component {
       <div className='host'>
         <div className='content'>
           <CardDetailsInformations {...this.props} />
-          <CardDetailsComments />
+          <CardDetailsComments {...this.props} />
           <CardDetailsActivity />
         </div>
 
