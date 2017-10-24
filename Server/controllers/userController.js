@@ -14,8 +14,7 @@ userController.create = (user) => {
   })
 }
 userController.loginGoogle = (profile, done) => {
-  console.log(profile)
-  User.findOne({'google.id': profile.id}, '_id email provider').exec(function (err, user) {
+  User.findOne({'email': profile.emails[0].value}, '_id email provider').exec(function (err, user) {
     if (err) return done(err)
     if (!user) {
       user = new User({
