@@ -159,4 +159,42 @@ cardController.getOneCard = (cardId) => {
     })
   })
 }
+cardController.addCollaborator = (boardId, cardId, listId, userId, requesterId) => {
+  return new Promise((resolve, reject) => {
+    Card.findOneAndUpdate({ '_id': cardId }, { $push: { collaborators: userId } }, { new: true }).populate('collaborators').exec((err, res) => {
+      if (err) {
+        err.status = 500
+        reject(err)
+      } else {
+        cardController.getOneCard(cardId).then((cardToEmit) => {
+          let payload = {
+            listId: listId,
+            card: cardToEmit
+          }
+          emit(boardId, 'CARD_UPDATED', payload)
+          return resolve(cardToEmit)
+        })
+      }
+    })
+  })
+}
+
+cardController.addCollaboratorEmail = (boardId, cardId, listId, email, requesterId) => {
+  return new Promise((resolve, reject) => {
+    User.findOne({ email: email }).then((res) => {
+      if (res) {
+        cardController.addCollaborator(boardId, cardId, listId, res._id, requesterId).then(res => {
+          resolve(res)
+        }).catch(err => {
+          err.status = 500
+          reject(err)
+        })
+      } else {
+        // TODO create new temp user??
+        let err = new Error('Not found')
+        reject(err)
+      }
+    })
+  })
+}
 module.exports = cardController
