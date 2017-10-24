@@ -192,6 +192,7 @@ cardController.addCollaboratorEmail = (boardId, cardId, listId, email, requester
       } else {
         // TODO create new temp user??
         let err = new Error('Not found')
+        err.status = 404
         reject(err)
       }
     })
