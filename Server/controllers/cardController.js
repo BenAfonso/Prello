@@ -172,7 +172,11 @@ cardController.addCollaborator = (boardId, cardId, listId, userId, requesterId) 
             card: cardToEmit
           }
           emit(boardId, 'CARD_UPDATED', payload)
-          return resolve(cardToEmit)
+          resolve(cardToEmit)
+        })
+        .catch((err) => {
+          err.status = 500
+          reject(err)
         })
       }
     })
