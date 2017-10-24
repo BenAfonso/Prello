@@ -18,9 +18,9 @@ module.exports = (router, controller) => {
     * /boards/{boardId}/lists/{listId}/cards/{cardId}/collaborator:
     *   post:
     *     tags:
-    *       - Comments
-    *     description: Create a new Comment inside a Card
-    *     summary: CREATE a new Comment inside a Card
+    *       - Cards
+    *     description: Add a collaborator inside a Card
+    *     summary: Add a collaborator inside a Card
     *     produces:
     *       - application/json
     *     parameters:
