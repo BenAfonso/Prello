@@ -18,7 +18,7 @@ export function addComment (boardId, listId, cardId, content) {
 }
 
 export function updateCardDescription (boardId, listId, cardId, card) {
-  axios.put(`${Config.API_URL}/boards/${boardId}/cards/${cardId}`, {description: card.description}).then(res => {
+  axios.put(`${Config.API_URL}/boards/${boardId}/lists/${listId}/cards/${cardId}`, {description: card.description}).then(res => {
     updateCard(listId, card)
   })
 }

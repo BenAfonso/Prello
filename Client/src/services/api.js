@@ -34,8 +34,8 @@ socket.on('NEW_CARD', (newCard) => {
   addCardLocal(newCard.listId, newCard.card)
 })
 
-socket.on('CARD_UPDATED', (newCard) => {
-
+socket.on('CARD_UPDATED', payload => {
+  updateCard(payload.listId, payload.card)
 })
 
 socket.on('NEW_COMMENT', payload => {

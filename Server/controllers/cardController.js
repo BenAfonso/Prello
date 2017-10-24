@@ -57,9 +57,14 @@ cardController.updateCard = (req) => {
       if (err) {
         return reject(err)
       } else {
-        boardController.refreshOneboard('CARD_UPDATED', req.params.boardId)
-        // TODO: Log update to history
-        return resolve(item)
+        cardController.getOneCard(req.params.cardId).then((cardToEmit) => {
+          let payload = {
+            listId: req.params.listId,
+            card: cardToEmit
+          }
+          emit(req.params.boardId, 'CARD_UPDATED', payload)
+          return resolve(item)
+        })
       }
     })
   })
