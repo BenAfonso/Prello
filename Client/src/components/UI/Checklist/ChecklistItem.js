@@ -58,11 +58,11 @@ export default class ChecklistItem extends React.Component {
     this.setState({ done: this.checkbox.checked }, () => {
       if (this.state.done) {
         this.setState({ doneDate: new Date() }, () => {
-          if (this.props.onToggle !== null) { this.props.onChange(this.props.index, this.state.content, this.state.done, this.state.doneDate) }
+          if (this.props.onChange !== null) { this.props.onChange(this.props.index, this.state.content, this.state.done, this.state.doneDate) }
         })
       } else {
         this.setState({ doneDate: null }, () => {
-          if (this.props.onToggle !== null) { this.props.onToggle(this.props.index, this.state.content, this.state.done, this.state.doneDate) }
+          if (this.props.onChange !== null) { this.props.onChange(this.props.index, this.state.content, this.state.done, this.state.doneDate) }
         })
         
       }
