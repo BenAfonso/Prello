@@ -1,5 +1,5 @@
 import openSocket from 'socket.io-client'
-import {addBoardLocal, addListLocal, removeListLocal, moveListLocal, addCardLocal, moveCardLocal, replaceCollaboratorLocal} from '../store/actions'
+import {addBoardLocal, addListLocal, removeListLocal, moveListLocal, addCardLocal, moveCardLocal, replaceCollaboratorsLocal, replaceMembersLocal} from '../store/actions'
 import Config from '../config'
 const socket = openSocket(Config.SOCKET_URL)
 
@@ -38,6 +38,10 @@ socket.on('CARD_UPDATED', (newCard) => {
 
 })
 
-socket.on('UPDATE_COLLABORATORS', (users) => {
-  replaceCollaboratorLocal(users)
+socket.on('UPDATE_MEMBERS', (members) => {
+  replaceMembersLocal(members)
+})
+
+socket.on('UPDATE_COLLABORATORS', (collaborators) => {
+  replaceCollaboratorsLocal(collaborators)
 })

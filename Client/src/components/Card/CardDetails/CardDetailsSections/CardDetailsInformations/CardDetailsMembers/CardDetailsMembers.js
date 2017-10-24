@@ -1,17 +1,20 @@
 import React from 'react'
 import Icon from '../../../../../UI/Icon/Icon'
 import AvatarThumbnail from '../../../../../UI/AvatarThumbnail/AvatarThumbnail'
+import MembersMenu from '../../../CardDetailsMenu/MembersMenu/MembersMenu'
 
 const CardDetailsMembers = props => (
   <ul className='host'>
     {
-      <li>
-        <AvatarThumbnail initials='BA' size='30px' fontSize='16px' />
-      </li>
+      
+        <li>
+          <AvatarThumbnail initials='BA' size='30px' fontSize='16px' />
+        </li>
+      
     }
     <li>
       <div className='addButton'>
-        <Icon name='plus' fontSize='15px' color='#aaa' />
+        <MembersMenu boardId={props.boardId} collaborators={props.collaborators} members={props.members} cardId={props.cardId} button={<Icon name='plus' fontSize='15px' color='#aaa' />} orientation='left' />
       </div>
     </li>
     <style jsx>

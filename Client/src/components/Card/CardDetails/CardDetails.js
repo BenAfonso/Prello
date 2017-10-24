@@ -1,17 +1,31 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import Button from '../../UI/Button/Button'
 import Icon from '../../UI/Icon/Icon'
 import styles from './CardDetails.styles'
 import CardDetailsComments from './CardDetailsSections/CardDetailsComments/CardDetailsComments'
 import CardDetailsActivity from './CardDetailsSections/CardDetailsActivity/CardDetailsActivity'
 import CardDetailsInformations from './CardDetailsSections/CardDetailsInformations/CardDetailsInformations'
+import MembersMenu from './CardDetailsMenu/MembersMenu/MembersMenu'
+
+
+@connect(store => {
+  return {
+    boardId: store.board._id,
+    collaborators: store.board.collaborators,
+    lists: store.board.lists
+  }
+})
 
 export default class CardDetails extends React.Component {
   render () {
+    const { boardId, collaborators } = this.props
+    const card = this.props.lists[this.props.listIndex].cards[this.props.index]
+    
     return (
       <div className='host'>
         <div className='content'>
-          <CardDetailsInformations {...this.props} />
+          <CardDetailsInformations {...this.props} boardId={boardId} collaborators={collaborators} members={card.collaborators} cardId={card.cardId}/>
           <CardDetailsComments />
           <CardDetailsActivity />
         </div>
@@ -25,9 +39,15 @@ export default class CardDetails extends React.Component {
         <div className='buttons'>
           <ul>
             <li>
-              <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>
-                Members
-              </Button>
+              <MembersMenu boardId={boardId} collaborators={collaborators} members={card.collaborators} cardId={card.cardId} orientation='right' button={<Button
+                bgColor='#eee'
+                hoverBgColor='#ddd'
+                size='x-small'
+                block
+              >
+                <Icon color='#000' name='user-plus' fontSize='12px' />
+                  Members
+              </Button>} />
             </li>
             <li>
               <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>

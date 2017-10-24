@@ -100,13 +100,13 @@ export default class DropDown extends React.Component {
           }
           {
             this.state.expanded
-              ? <div className='dropdown-content' ref={e => this.dd = e}>
+              ? <div className='dropdown-content' ref={e => this.dd = e} style={{...dropDownStyles }} >
                 {
                   title !== undefined
                     ? <div className='dropdown-title'>{title}</div>
                     : null
                 }
-                <ul id='dropdown' style={{ ...dropDownStyles }}>
+                <ul id='dropdown' >
                   {
                     this.props.menuElements.map((e, i) => (
                       e === 'separator'
@@ -135,7 +135,7 @@ export default class DropDown extends React.Component {
         <div onClick={this.toggleDropdown} ref={b => this.button = b}>{button}</div>
           {
             this.state.expanded
-              ? <div className='dropdown-content' ref={e => this.dd = e}>
+              ? <div className='dropdown-content' ref={e => this.dd = e} style={{ ...dropDownStyles }}>
                 {
                   title !== undefined
                     ? <div className='dropdown-title'>{title}</div>

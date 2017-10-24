@@ -8,3 +8,8 @@ export function moveCard (boardId, cardId, oldListId, newListId, position) {
     position: position
   })
 }
+
+export function addMemberDistant (cardId, userId) {
+  axios.put(`${Config.API_URL}/`, {
+  })
+}

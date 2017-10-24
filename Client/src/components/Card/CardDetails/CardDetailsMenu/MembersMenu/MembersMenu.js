@@ -1,38 +1,43 @@
 import React from 'react'
-
-import Button from '../../../UI/Button/Button'
-import DropDown from '../../../UI/DropDown/DropDown'
-import Icon from '../../../UI/Icon/Icon'
-import AvatarThumbnail from '../../../UI/AvatarThumbnail/AvatarThumbnail'
-
-import { addCollaborator, fetchMatchingUsers } from '../../../../store/actions'
+import { addMember } from '../../../../../store/actions'
+import Button from '../../../../UI/Button/Button'
+import DropDown from '../../../../UI/DropDown/DropDown'
+import Icon from '../../../../UI/Icon/Icon'
+import AvatarThumbnail from '../../../../UI/AvatarThumbnail/AvatarThumbnail'
 
 export default class AddCollaboratorMenu extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      matchingUsers: [],
+      matchingBoardCollaborators: this.props.collaborators,
       enableAdd: false,
       inputValue: ''
     }
-    this.addCollaborator = this.addCollaborator.bind(this)
+    this.addMember = this.addMember.bind(this)
     this.onChange = this.onChange.bind(this)
     this.setInputValue = this.setInputValue.bind(this)
     this.getInitials = this.getInitials.bind(this)
-    this.isCollaborator = this.isCollaborator.bind(this)
+    this.isCardMember = this.isCardMember.bind(this)
   }
 
-  isCollaborator (user) {
-    return (this.props.collaborators.find(collaborator => collaborator._id === user._id) !== undefined)
+  isCardMember (collaborator) {
+    return (this.props.members.find(member => member._id === collaborator._id) !== undefined)
   }
 
-  addCollaborator () {
-    addCollaborator(this.props.dispatch, this.props.boardId, this.email.value)
+  addMember () {
+    //addMember(this.props.dispatch, this.props.cardId, this.email.value)
     this.setState({
       inputValue: '',
       enableAdd: false,
-      matchingUsers: []
+      matchingBoardCollaborators: this.props.collaborators
     })
+  }
+
+  getMatchingCollaborators (email) {
+    const reg = new RegExp(email, 'i')
+    let matchingCollaborators = []
+    this.props.collaborators.map(collaborator => collaborator.email.match(reg) ? matchingCollaborators.push(collaborator) : null)
+    return matchingCollaborators
   }
 
   onChange () {
@@ -40,15 +45,10 @@ export default class AddCollaboratorMenu extends React.Component {
       inputValue: this.email.value,
       enableAdd: false})
     if (this.email.value !== '') {
-      let newMatchingUsers = []
-      fetchMatchingUsers(this.email.value).then(users => {
-        users.map(user =>
-          newMatchingUsers.push(user)
-        )
-        this.setState({matchingUsers: newMatchingUsers})
-      })
+      const newmatchingBoardCollaborators = this.getMatchingCollaborators(this.email.value)      
+      this.setState({matchingBoardCollaborators: newmatchingBoardCollaborators})
     } else {
-      this.setState({matchingUsers: []})
+      this.setState({matchingBoardCollaborators: this.props.collaborators})
     }
   }
 
@@ -117,12 +117,12 @@ export default class AddCollaboratorMenu extends React.Component {
 
   render () {
     let menuElements = []
-    this.state.matchingUsers.filter(user =>
+    this.state.matchingBoardCollaborators.filter(collaborator =>
       menuElements.push({
-        action: () => this.setInputValue(user.email),
-        placeholder: this.renderUserinMenu(user),
+        action: () => this.setInputValue(collaborator.email),
+        placeholder: this.renderUserinMenu(collaborator),
         closer: true,
-        disabled: this.isCollaborator(user)
+        disabled: this.isCardMember(collaborator)
       })
     )
 
@@ -130,21 +130,12 @@ export default class AddCollaboratorMenu extends React.Component {
     <div className='host'>
       <DropDown
         layout='custom'
-        orientation='right'
-        button={<Button
-          bgColor='rgba(0,0,0,0)'
-          color='#444'
-          hoverBgColor='rgba(0,0,0,0.1)'
-          block
-        >
-          <Icon color='#000' name='user-plus' fontSize='20px' />
-            Add a collaborator
-        </Button>}
-        title='Collaborators'>
+        orientation={this.props.orientation}
+        button={this.props.button}
+        title='Members'>
         <div style={{ width: '300px' }}>
           <ul>
             <li className='element'>
-              <div className='element-text'>Enter a name or an e-mail address to invite someone new !</div>
               <div className='element-input'>
                 <form onSubmit={this.addCollaborator}>
                   <DropDown
@@ -157,16 +148,12 @@ export default class AddCollaboratorMenu extends React.Component {
                 <Button
                   bgColor='#5AAC44'
                   block
-                  onClick={this.addCollaborator}
+                  onClick={this.addMember}
                   disabled={!this.state.enableAdd}
                 >
                   Add
                 </Button>
               </div>
-            </li>
-            <li className='separator' />
-            <li className='element'>
-              <div className='element-text'>Invite people by giving them a link</div>
             </li>
           </ul>
         </div>
@@ -176,6 +163,7 @@ export default class AddCollaboratorMenu extends React.Component {
     .host {
       width: 100%;
     }
+
     .element {
       padding: 15px;
     }

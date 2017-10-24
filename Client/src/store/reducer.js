@@ -153,6 +153,12 @@ export default function reducer (state = defaultState, action) {
         }
       }
     }
+    case 'UPDATE_MEMBERS': {
+      const newMembers = action.payload
+      return {
+        ...state
+      }
+    }
     default:
       return state
   }

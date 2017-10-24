@@ -12,7 +12,7 @@ const CardDetailsInformations = props => (
           <div className='subsectionTitle'>
             Members
           </div>
-          <CardDetailsMembers />
+          <CardDetailsMembers boardId={props.boardId} collaborators={props.collaborators} members={props.members} cardId={props.cardId} />
         </div>
         <div className='labels'>
           <div className='subsectionTitle'>
