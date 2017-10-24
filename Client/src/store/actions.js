@@ -1,6 +1,7 @@
-import { fetchBoards, addBoardDistant } from '../services/Board.services'
+import { fetchBoards, addBoardDistant, addCollaboratorDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant } from '../services/List.services'
 import { moveCard } from '../services/Card.services'
+import { fetchMatchingUsersEmail } from '../services/User.services'
 
 import store from '../store/store'
 
@@ -54,9 +55,9 @@ export function setBoard (dispatch, id) {
     fetchBoards().then((data) => {
       dispatch({
         type: 'FETCH_BOARD_SUCCESS',
-        payload: data.filter(x=>x._id===id)[0]
+        payload: data.filter(x => x._id === id)[0]
       })
-      resolve(data.filter(x=>x._id===id)[0])
+      resolve(data.filter(x => x._id === id)[0])
     }).catch((err) => {
       dispatch({
         type: 'FETCH_BOARD_ERROR',
@@ -126,28 +127,28 @@ export function addCardLocal (listId, card) {
 
 export function setBoardslist (dispatch) {
   return new Promise((resolve, reject) => {
-  dispatch({type: 'FETCH_BOARDSLIST_START'})
-  fetchBoards().then((data) => {
-    dispatch({
-      type: 'FETCH_BOARDSLIST_SUCCESS',
-      payload: data
-    })
-    resolve(data)
-  }).catch((err) => {
-    dispatch({
-      type: 'FETCH_BOARDSLIST_ERROR',
-      payload: err
+    dispatch({type: 'FETCH_BOARDSLIST_START'})
+    fetchBoards().then((data) => {
+      dispatch({
+        type: 'FETCH_BOARDSLIST_SUCCESS',
+        payload: data
+      })
+      resolve(data)
+    }).catch((err) => {
+      dispatch({
+        type: 'FETCH_BOARDSLIST_ERROR',
+        payload: err
+      })
     })
   })
-})
 }
 
-export function addBoard (dispatch, title) {
-  addBoardDistant(title).then((board) => {
+export function addBoard (dispatch, payload) {
+  addBoardDistant(payload).then((board) => {
       // <= HANDLED FROM SOCKETS
-    }).catch(err => {
-      return err
-    })
+  }).catch(err => {
+    return err
+  })
 }
 
 export function addBoardLocal (board) {
@@ -157,4 +158,30 @@ export function addBoardLocal (board) {
       payload: board
     })
   }
+}
+
+export function addCollaborator (dispatch, boardId, email) {
+  addCollaboratorDistant(boardId, email).then((board) => {
+  }).catch(err => {
+    return err
+  })
+}
+
+export function replaceCollaboratorLocal (users) {
+  if (users) {
+    store.dispatch({
+      type: 'UPDATE_COLLABORATORS',
+      payload: users
+    })
+  }
+}
+
+export function fetchMatchingUsers (email) {
+  return new Promise((resolve, reject) => {
+    fetchMatchingUsersEmail(email).then((users) => {
+      resolve(users)
+    }).catch(err => {
+      reject(err)
+    })
+  })
 }

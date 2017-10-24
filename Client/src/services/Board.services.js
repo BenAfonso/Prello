@@ -1,10 +1,12 @@
 import Config from '../config'
 import axios from 'axios'
 
-export function addBoardDistant (boardTitle) {
+export function addBoardDistant (payload) {
   return new Promise((resolve, reject) => {
+    console.log(payload.color)
     axios.post(`${Config.API_URL}/boards`, {
-      title: boardTitle
+      title: payload.title,
+      background: payload.color
     }).then(res => {
       resolve(res.data)
     }).catch(err => {
@@ -25,12 +27,17 @@ export function fetchBoards () {
 
 export function addCollaborators (board, emails) {
   return new Promise((resolve, reject) => {
-    // Not implementeted
   })
 }
 
-export function addCollaborator (board, email) {
+export function addCollaboratorDistant (board, email) {
   return new Promise((resolve, reject) => {
-    // Not implementeted
+    axios.post(`${Config.API_URL}/boards/${board}/collaborators`, {
+      email: email
+    }).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
   })
 }

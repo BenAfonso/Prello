@@ -26,11 +26,11 @@ export const defaultState = {
     lists: [],
     visibility: '',
     isArchived: false,
-    background: '',
+    background: '#fff',
     collaborators: []
   },
   boardslist: {
-    boards:[]
+    boards: []
   }
 }
 

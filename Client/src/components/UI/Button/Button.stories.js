@@ -52,22 +52,21 @@ storiesOf('Button', module)
 ))
 .add('With icon', () => (
   <Button
-  bgColor={color('bgColor', 'rgba(0,0,0,0.3)')}
-  color={color('color', '#fff')}
-  bold={boolean('bold', true)}
+    bgColor={color('bgColor', 'rgba(0,0,0,0.3)')}
+    color={color('color', '#fff')}
+    bold={boolean('bold', true)}
 >
-  <Icon name='ellipsis-h' color='#fff' />
-</Button>
+    <Icon name='ellipsis-h' color='#fff' />
+  </Button>
 ))
 .add('Custom hover color', () => (
   <Button
-  bgColor={color('bgColor', 'rgba(0,0,0,0.3)')}
-  color={color('color', '#fff')}
-  bold={boolean('bold', true)}
-  hoverBgColor={color('hoverBgColor', 'rgba(0,0,0,0.1)')}
-  hoverColor={color('hoverColor', 'rgba(0,0,0,0.1)')}
+    bgColor={color('bgColor', 'rgba(0,0,0,0.3)')}
+    color={color('color', '#fff')}
+    bold={boolean('bold', true)}
+    hoverBgColor={color('hoverBgColor', 'rgba(0,0,0,0.1)')}
+    hoverColor={color('hoverColor', 'rgba(0,0,0,0.1)')}
 >
   Custom hover
 </Button>
 ))
-

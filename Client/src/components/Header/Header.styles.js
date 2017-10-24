@@ -8,6 +8,17 @@ export default `
   font-size: 25px;
 }
 
+.brand {
+  position: absolute;
+  top: 20%;
+  left: calc(50% - 100px);
+  height: 60%;
+  width: 200px;
+  background-image: url("/assets/prello_logo.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
 .headerButtonBar {
   display: inline-block;
   float: right;
