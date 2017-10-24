@@ -3,6 +3,8 @@ import Icon from '../../../../../UI/Icon/Icon'
 import AvatarThumbnail from '../../../../../UI/AvatarThumbnail/AvatarThumbnail'
 import MembersMenu from '../../../CardDetailsMenu/MembersMenu/MembersMenu'
 
+
+
 const CardDetailsMembers = props => (
   <ul className='host'>
     {
@@ -14,7 +16,7 @@ const CardDetailsMembers = props => (
     }
     <li>
       <div className='addButton'>
-        <MembersMenu boardId={props.boardId} collaborators={props.collaborators} members={props.members} cardId={props.cardId} button={<Icon name='plus' fontSize='15px' color='#aaa' />} orientation='left' />
+        <MembersMenu boardId={props.boardId} collaborators={props.collaborators} members={props.card.collaborators} cardId={props.card._id} button={<Icon name='plus' fontSize='15px' color='#aaa' />} orientation='left' />
       </div>
     </li>
     <style jsx>

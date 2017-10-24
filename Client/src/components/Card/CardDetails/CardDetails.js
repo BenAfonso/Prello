@@ -7,7 +7,7 @@ import CardDetailsComments from './CardDetailsSections/CardDetailsComments/CardD
 import CardDetailsActivity from './CardDetailsSections/CardDetailsActivity/CardDetailsActivity'
 import CardDetailsInformations from './CardDetailsSections/CardDetailsInformations/CardDetailsInformations'
 import MembersMenu from './CardDetailsMenu/MembersMenu/MembersMenu'
-
+import { getCompleteCard } from '../../../services/Card.services'
 
 @connect(store => {
   return {
@@ -17,7 +17,13 @@ import MembersMenu from './CardDetailsMenu/MembersMenu/MembersMenu'
   }
 })
 
+
 export default class CardDetails extends React.Component {
+
+  componentDidMount () {
+    getCompleteCard(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.id)
+  }
+
   render () {
     const { boardId, collaborators } = this.props
     const card = this.props.lists[this.props.listIndex].cards[this.props.index]
@@ -25,8 +31,8 @@ export default class CardDetails extends React.Component {
     return (
       <div className='host'>
         <div className='content'>
-          <CardDetailsInformations {...this.props} boardId={boardId} collaborators={collaborators} members={card.collaborators} cardId={card.cardId}/>
-          <CardDetailsComments />
+          <CardDetailsInformations {...this.props} />
+          <CardDetailsComments {...this.props} />
           <CardDetailsActivity />
         </div>
 
