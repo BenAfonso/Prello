@@ -163,7 +163,6 @@ cardController.addCollaborator = (boardId, cardId, listId, userId, requesterId) 
   return new Promise((resolve, reject) => {
     Card.findOneAndUpdate({ '_id': cardId }, { $push: { collaborators: userId } }, { new: true }).populate('collaborators').exec((err, res) => {
       if (err) {
-        err.status = 500
         reject(err)
       } else {
         cardController.getOneCard(cardId).then((cardToEmit) => {
@@ -175,7 +174,6 @@ cardController.addCollaborator = (boardId, cardId, listId, userId, requesterId) 
           resolve(cardToEmit)
         })
         .catch((err) => {
-          err.status = 500
           reject(err)
         })
       }
