@@ -12,6 +12,7 @@ export default class LoginPage extends React.Component {
   }
 
   loginWithGoogle (googleResponse) {
+    console.log(googleResponse)
     loginGoogle(googleResponse.code).then((response) => {
       storeToken(response.token)
       this.setState({ redirectToReferrer: true })
@@ -61,7 +62,7 @@ export default class LoginPage extends React.Component {
           <a href='/#' className='forgottenPassword'>Forgotten password?</a>
         </form>
         <GoogleLogin
-          clientId='970457604836-o50jesfa5lblnger6egce7v32p8pukjq.apps.googleusercontent.com'
+          clientId='532471730394-bh1qi5q6hkh0c13quao0ptplp8sidfjb.apps.googleusercontent.com'
           scope='email profile'
           buttonText='Sign in with Google'
           responseType='code'

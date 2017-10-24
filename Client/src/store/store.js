@@ -17,6 +17,11 @@ const enhancer = composeEnhancers(
 )
 
 export const defaultState = {
+  currentUser: {
+    username: '',
+    name: '',
+    avatar: ''
+  },
   fetching: false,
   fetched: false,
   error: null,
