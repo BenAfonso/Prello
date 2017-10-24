@@ -125,7 +125,6 @@ describe('Card reducer actions', () => {
   })
 
   it('should NOT add a checklist with an empty title', () => {
-
     const action = {
       type: 'ADD_CHECKLIST',
       payload: {
@@ -168,5 +167,165 @@ describe('Card reducer actions', () => {
       }
     }
     expect(reducer(beforeState, action)).not.toEqual(afterState)
+  })
+
+  
+
+  it('should add a checklist item to a checklist', () => {
+    const action = {
+      type: 'ADD_CHECKLIST_ITEM',
+      payload: {
+        cardId: 'badId',
+        checklistIndex: 0,
+        content: 'HOORAY'
+      }
+    }
+
+    const beforeState = {
+      board: {
+        _id: '0',
+        title: 'MyBoard',
+        lists: [{_id: '0',
+          name: 'MyList',
+          isArchived: false,
+          cards: [{
+            _id: '0',
+            text: 'Hello world',
+            isArchived: false,
+            checklists: [{title: 'MyChecklist', index: 0, items: []}]
+          }]
+        }]
+      }
+    }
+
+    const afterState = {
+      board: {
+        _id: '0',
+        title: 'MyBoard',
+        lists: [{_id: '0',
+          name: 'MyList',
+          isArchived: false,
+          cards: [{
+            _id: '0',
+            text: 'Hello world',
+            isArchived: false,
+            checklists: [{title: 'MyChecklist', index: 0, items: []}]
+          }, {
+            _id: 'badId',
+            text: 'Hello there',
+            isArchived: false,
+            checklists: [{title: 'MyChecklist2', index: 0, items: []}]
+          }]
+        }]
+      }
+    }
+    expect(reducer(beforeState, action)).not.toEqual(afterState)
+  })
+
+  it('should add a checklist item to a checklist', () => {
+    const action = {
+      type: 'ADD_CHECKLIST_ITEM',
+      payload: {
+        cardId: '0',
+        checklistIndex: 0,
+        content: 'HOORAY'
+      }
+    }
+
+    const beforeState = {
+      board: {
+        _id: '0',
+        title: 'MyBoard',
+        lists: [{_id: '0',
+          name: 'MyList',
+          isArchived: false,
+          cards: [{
+            _id: '0',
+            text: 'Hello world',
+            isArchived: false,
+            checklists: [{title: 'MyChecklist', index: 0, items: []}]
+          }]
+        }]
+      }
+    }
+
+    const afterState = {
+      board: {
+        _id: '0',
+        title: 'MyBoard',
+        lists: [{_id: '0',
+          name: 'MyList',
+          isArchived: false,
+          cards: [{
+            _id: '0',
+            text: 'Hello world',
+            isArchived: false,
+            checklists: [{title: 'MyChecklist',
+              index: 0,
+              items: [{
+                index: 0,
+                done: false,
+                doneDate: null,
+                content: action.payload.content
+              }]
+            }]
+          }]
+        }]
+      }
+    }
+    expect(reducer(beforeState, action)).toEqual(afterState)
+  })
+
+  it('should delete a checklist item from a checklist', () => {
+    const action = {
+      type: 'DELETE_CHECKLIST_ITEM',
+      payload: {
+        cardId: '0',
+        checklistIndex: 0,
+        itemIndex: 0
+      }
+    }
+    const beforeState = {
+      board: {
+        _id: '0',
+        title: 'MyBoard',
+        lists: [{_id: '0',
+          name: 'MyList',
+          isArchived: false,
+          cards: [{
+            _id: '0',
+            text: 'Hello world',
+            isArchived: false,
+            checklists: [{title: 'MyChecklist',
+              index: 0,
+              items: [{
+                index: 0,
+                done: false,
+                doneDate: null,
+                content: 'Don\'t delete me please :('
+              }]
+            }]
+          }]
+        }]
+      }
+    }
+
+    const afterState = {
+      board: {
+        _id: '0',
+        title: 'MyBoard',
+        lists: [{_id: '0',
+          name: 'MyList',
+          isArchived: false,
+          cards: [{
+            _id: '0',
+            text: 'Hello world',
+            isArchived: false,
+            checklists: [{title: 'MyChecklist', index: 0, items: []}]
+          }]
+        }]
+      }
+    }
+    expect(reducer(beforeState, action)).toEqual(afterState)
   })
 })
