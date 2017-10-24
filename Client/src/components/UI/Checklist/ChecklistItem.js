@@ -11,15 +11,16 @@ export default class ChecklistItem extends React.Component {
     index: PropTypes.number.isRequired,
     onToggle: PropTypes.func,
     onDelete: PropTypes.func,
-    onContentChange: PropTypes.func,
-    done: PropTypes.bool
+    onChange: PropTypes.func,
+    doneDate: PropTypes.instanceOf(Date)
   }
 
   static defaultProps = {
     done: false,
+    doneDate: null,
     onToggle: null,
     onDelete: null,
-    onContentChange: null
+    onChange: null
   }
 
   constructor (props) {
@@ -27,7 +28,8 @@ export default class ChecklistItem extends React.Component {
     this.state = {
       isEditable: false,
       content: props.content,
-      done: props.done
+      done: props.done,
+      doneDate: props.doneDate
     }
     this.setEditable = this.setEditable.bind(this)
     this.updateText = this.updateText.bind(this)
@@ -43,7 +45,7 @@ export default class ChecklistItem extends React.Component {
   updateText () {
     if (this.textInput.input.value.length > 0) {
       this.setState({isEditable: false, content: this.textInput.input.value}, () => {
-        if (this.props.onContentChange !== null) { this.props.onContentChange(this.props.index, this.state.content) }
+        if (this.props.onChange !== null) { this.props.onChange(this.props.index, this.state.content, this.state.done, this.state.doneDate) }
       })
     }
   }
@@ -54,7 +56,16 @@ export default class ChecklistItem extends React.Component {
 
   onToggle () {
     this.setState({ done: this.checkbox.checked }, () => {
-      if (this.props.onToggle !== null) { this.props.onToggle(this.props.index, this.state.done) }
+      if (this.state.done) {
+        this.setState({ doneDate: new Date() }, () => {
+          if (this.props.onToggle !== null) { this.props.onChange(this.props.index, this.state.content, this.state.done, this.state.doneDate) }
+        })
+      } else {
+        this.setState({ doneDate: null }, () => {
+          if (this.props.onToggle !== null) { this.props.onToggle(this.props.index, this.state.content, this.state.done, this.state.doneDate) }
+        })
+        
+      }
     })
   }
 

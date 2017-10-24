@@ -4,7 +4,7 @@ export default `
     display: inline-block;
     border-style: none;
     position: absolute;
-    width: calc(100% - 40px);
+    width: 80%; /*calc(100% - 100px)*/
     margin-top: 5px;
     height: 8px;
     border-radius: 10px;
