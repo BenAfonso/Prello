@@ -13,6 +13,11 @@ describe('Board actions reducer', () => {
     }
 
     const newState = {
+      currentUser: {
+        username: '',
+        name: '',
+        avatar: ''
+      },
       fetching: false,
       fetched: false,
       error: null,

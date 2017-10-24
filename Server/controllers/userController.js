@@ -21,8 +21,9 @@ userController.loginGoogle = (profile, done) => {
       user = new User({
         name: profile.displayName,
         email: profile.emails[0].value,
-        username: profile.username,
+        username: profile.displayName.split(' ').join(''),
         provider: 'google',
+        picture: profile.image.url,
         google: profile._json
       })
       user.save(function (err) {

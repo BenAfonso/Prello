@@ -18,7 +18,7 @@ export default class CardDetailsInformations extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      editDescriptionFormDisplayed: true 
+      editDescriptionFormDisplayed: false
     }
 
     this.toggleDescriptionForm = this.toggleDescriptionForm.bind(this)

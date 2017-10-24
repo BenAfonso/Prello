@@ -46,7 +46,7 @@ export default class CardDetailsComments extends React.Component {
                           : `${c.author.name[0]}`
                         : ''
                     }
-                    thumbnail={c.author ? c.author.thumbnail : ''}
+                    thumbnail={c.author ? c.author.picture : ''}
                     timestamp={dateFormatter(c.createdAt)}
                   />
                 </div>
