@@ -42,7 +42,7 @@ export default class CardDetailsComments extends React.Component {
                     initials={
                       c.author 
                         ? c.author.name.split(' ').length > 1
-                          ? `${c.author.name.split(' ')[0][0]}${c.author.name.split(' ')[0][0]}`
+                          ? `${c.author.name.split(' ')[0][0]}${c.author.name.split(' ')[1][0]}`
                           : `${c.author.name[0]}`
                         : ''
                     }

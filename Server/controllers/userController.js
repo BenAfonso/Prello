@@ -14,6 +14,7 @@ userController.create = (user) => {
   })
 }
 userController.loginGoogle = (profile, done) => {
+  console.log(profile)
   User.findOne({'google.id': profile.id}, '_id email provider').exec(function (err, user) {
     if (err) return done(err)
     if (!user) {
@@ -47,6 +48,7 @@ userController.getUsers = (email) => {
 }
 
 userController.login = (userToConnect) => {
+  console.log(userToConnect)
   return new Promise((resolve, reject) => {
     User.load({
       where: { email: userToConnect.email },
