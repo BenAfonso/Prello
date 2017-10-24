@@ -143,6 +143,21 @@ export default function reducer (state = defaultState, action) {
         }
       }
     }
+    case 'UPDATE_CARD': {
+      let newLists = state.board.lists.slice()
+      let updatedList = newLists.filter(l => l._id === action.payload.listId)
+      let updatedCard = updatedList[0].cards.filter(c => c._id === action.payload.card._id)
+      let listIndex = newLists.indexOf(updatedList[0])
+      let cardIndex = updatedList[0].cards.indexOf(updatedCard[0])
+      newLists[listIndex].cards[cardIndex] = action.payload.card
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: newLists
+        }
+      }
+    }
     case 'UPDATE_COLLABORATORS': {
       const newCollaborators = action.payload
       return {

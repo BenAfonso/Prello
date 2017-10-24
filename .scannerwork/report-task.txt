@@ -1,0 +1,5 @@
+projectKey=themightyprello
+serverUrl=http://sonarqube.igpolytech.fr
+dashboardUrl=http://sonarqube.igpolytech.fr/dashboard/index/themightyprello
+ceTaskId=AV9LGEqnKxcoLjWRaGt4
+ceTaskUrl=http://sonarqube.igpolytech.fr/api/ce/task?id=AV9LGEqnKxcoLjWRaGt4

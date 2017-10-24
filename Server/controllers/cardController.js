@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Card = mongoose.model('Card')
 const List = mongoose.model('List')
+const User = mongoose.model('User')
 
 const listController = require('./listController')
 const boardController = require('./boardController')
@@ -56,9 +57,14 @@ cardController.updateCard = (req) => {
       if (err) {
         return reject(err)
       } else {
-        boardController.refreshOneboard('CARD_UPDATED', req.params.boardId)
-        // TODO: Log update to history
-        return resolve(item)
+        cardController.getOneCard(req.params.cardId).then((cardToEmit) => {
+          let payload = {
+            listId: req.params.listId,
+            card: cardToEmit
+          }
+          emit(req.params.boardId, 'CARD_UPDATED', payload)
+          return resolve(item)
+        })
       }
     })
   })
@@ -104,6 +110,49 @@ cardController.moveCard = (req) => {
                 })
               }
             })
+          }
+        })
+      }
+    })
+  })
+}
+cardController.addCommentToCard = (cardId, commentToAdd) => {
+  return new Promise((resolve, reject) => {
+    Card.findOneAndUpdate({'_id': cardId}, {$push: {comments: commentToAdd}}, {new: true}, function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+
+cardController.removeCommentFromCard = (cardId, commentId) => {
+  return new Promise((resolve, reject) => {
+    Card.findOneAndUpdate({'_id': cardId}, {$pull: {comments: commentId}}, {new: true}, function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+cardController.getOneCard = (cardId) => {
+  return new Promise((resolve, reject) => {
+    Card.findOne({ '_id': cardId }).populate('comments responsible', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        User.populate(res, {
+          path: 'comments.author',
+          select: { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }
+        }, function (err, res) {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(res)
           }
         })
       }
