@@ -68,7 +68,7 @@ export default class CardDetailsInformations extends React.Component {
               <div className='subsectionTitle'>
                 Members
               </div>
-              <CardDetailsMembers boardId={boardId} collaborators={collaborators} card={fullCard} />
+              <CardDetailsMembers boardId={boardId} collaborators={collaborators} listIndex={this.props.listIndex} card={fullCard} />
               </div>
             <div className='labels'>
               <div className='subsectionTitle'>

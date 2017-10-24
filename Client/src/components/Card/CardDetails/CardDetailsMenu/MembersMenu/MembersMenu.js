@@ -1,15 +1,22 @@
 import React from 'react'
 import { addMember } from '../../../../../store/actions'
+import { connect } from 'react-redux'
 import Button from '../../../../UI/Button/Button'
 import DropDown from '../../../../UI/DropDown/DropDown'
 import Icon from '../../../../UI/Icon/Icon'
 import AvatarThumbnail from '../../../../UI/AvatarThumbnail/AvatarThumbnail'
 
-export default class AddCollaboratorMenu extends React.Component {
+@connect(store => {
+  return {
+    board: store.board
+  }
+})
+
+export default class MembersMenu extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      matchingBoardCollaborators: this.props.collaborators,
+      matchingBoardCollaborators: this.props.board.collaborators,
       enableAdd: false,
       inputValue: ''
     }
@@ -25,7 +32,7 @@ export default class AddCollaboratorMenu extends React.Component {
   }
 
   addMember () {
-    //addMember(this.props.dispatch, this.props.cardId, this.email.value)
+    addMember(this.props.dispatch, this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId, this.email.value)
     this.setState({
       inputValue: '',
       enableAdd: false,
@@ -36,7 +43,7 @@ export default class AddCollaboratorMenu extends React.Component {
   getMatchingCollaborators (email) {
     const reg = new RegExp(email, 'i')
     let matchingCollaborators = []
-    this.props.collaborators.map(collaborator => collaborator.email.match(reg) ? matchingCollaborators.push(collaborator) : null)
+    this.props.board.collaborators.map(collaborator => collaborator.email.match(reg) ? matchingCollaborators.push(collaborator) : null)
     return matchingCollaborators
   }
 

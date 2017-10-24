@@ -11,8 +11,6 @@ import { getCompleteCard } from '../../../services/Card.services'
 
 @connect(store => {
   return {
-    boardId: store.board._id,
-    collaborators: store.board.collaborators,
     lists: store.board.lists
   }
 })
@@ -25,8 +23,8 @@ export default class CardDetails extends React.Component {
   }
 
   render () {
-    const { boardId, collaborators } = this.props
     const card = this.props.lists[this.props.listIndex].cards[this.props.index]
+
     
     return (
       <div className='host'>
@@ -45,15 +43,20 @@ export default class CardDetails extends React.Component {
         <div className='buttons'>
           <ul>
             <li>
-              <MembersMenu boardId={boardId} collaborators={collaborators} members={card.collaborators} cardId={card.cardId} orientation='right' button={<Button
-                bgColor='#eee'
-                hoverBgColor='#ddd'
-                size='x-small'
-                block
-              >
-                <Icon color='#000' name='user-plus' fontSize='12px' />
-                  Members
-              </Button>} />
+              <MembersMenu 
+                members={card.collaborators}
+                listIndex={this.props.listIndex} 
+                cardId={card._id} 
+                orientation='right' 
+                button={<Button
+                  bgColor='#eee'
+                  hoverBgColor='#ddd'
+                  size='x-small'
+                  block
+                >
+                  <Icon color='#000' name='user-plus' fontSize='12px' />
+                    Members
+                </Button>} />
             </li>
             <li>
               <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>

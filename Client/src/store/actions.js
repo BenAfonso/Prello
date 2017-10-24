@@ -196,8 +196,8 @@ export function fetchMatchingUsers (email) {
   })
 }
 
-export function addMember (dispatch, cardId, userId) {
-  addMemberDistant(cardId, userId).then(board => {
+export function addMember (dispatch, boardId, listId, cardId, email) {
+  addMemberDistant(boardId, listId, cardId, email).then(board => {
   }).catch(err => {
     return err
   })

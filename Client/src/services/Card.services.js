@@ -1,6 +1,6 @@
 import axios from 'axios'
 import Config from '../config'
-import { updateCard } from '../store/actions'
+import { updateCard, addMemberLocal } from '../store/actions'
 
 export function moveCard (boardId, cardId, oldListId, newListId, position) {
   axios.put(`${Config.API_URL}/boards/${boardId}/cards/${cardId}/move`, {
@@ -10,8 +10,13 @@ export function moveCard (boardId, cardId, oldListId, newListId, position) {
   })
 }
 
-export function addMemberDistant (cardId, userId) {
-  axios.put(`${Config.API_URL}/`, {})
+export function addMemberDistant (boardId, listId, cardId, email) {
+  axios.post(`${Config.API_URL}/boards/${boardId}/lists/${listId}/cards/${cardId}/collaborator`, {
+    email: email
+  }).then(res => {
+    // addMemberLocal(listId, res.data)
+    console.log('res : ' + res.data)
+  })
 }
 
 export function addComment (boardId, listId, cardId, content) {

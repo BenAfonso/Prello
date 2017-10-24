@@ -15,7 +15,7 @@ module.exports = (router, controller) => {
     */
   /**
     * @swagger
-    * /boards/{boardId}/lists/{listId}/cards/{cardId}/collaborators:
+    * /boards/{boardId}/lists/{listId}/cards/{cardId}/collaborator:
     *   post:
     *     tags:
     *       - Comments
