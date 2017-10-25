@@ -33,7 +33,7 @@ require('./User')(router, controllers.userController)
 require('./Comment')(router, controllers.commentController)
 
 router.get('/', (req, res) => {
-  res.status(200).json('Welcome on Prello')
+  res.redirect('/api-docs')
 })
 
 module.exports = router
