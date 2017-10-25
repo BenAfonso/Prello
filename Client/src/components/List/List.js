@@ -185,6 +185,7 @@ export default class List extends React.Component {
                   bgColor={this.props.primaryColor}
                   listIndex={this.props.index}
                   content={card.text}
+                  collaborators={card.collaborators}
                   popoverManager={this.props.popoverManager}/>
               </li>
             ))

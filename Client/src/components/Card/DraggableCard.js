@@ -83,6 +83,7 @@ export default class CardComponent extends React.Component {
     content: PropTypes.string.isRequired,
     isDragging: PropTypes.bool.isRequired,
     index: PropTypes.number.isRequired,
+    collaborators: PropTypes.arrayOf(PropTypes.any),
     bgColor: PropTypes.any,
     listIndex: PropTypes.number
   }
@@ -105,7 +106,7 @@ export default class CardComponent extends React.Component {
   }
 
   render () {
-    const { id, index, bgColor, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource } = this.props
+    const { id, index, bgColor, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource, collaborators } = this.props
 
     return connectCardDropTarget(connectCardDragSource(
       <div className='host' style={{position: 'relative'}} onClick={this.displayCardDetails.bind(this)}>
@@ -113,7 +114,7 @@ export default class CardComponent extends React.Component {
           opacity: isDragging ? 1 : 0
         }} />
 
-        <Card id={id} style={{ opacity: isDragging ? 0.3 : 1, backgroundColor: bgColor }} index={index} listIndex={listIndex} content={content} />
+        <Card id={id} style={{ opacity: isDragging ? 0.3 : 1, backgroundColor: bgColor }} index={index} listIndex={listIndex} content={content} collaborators={collaborators.map(c => this.props.board.collaborators.filter(c2 => c === c2._id)[0])}  />
         <style jsx>{`
           .overlay {
             position: absolute;

@@ -20,4 +20,16 @@ input {
   font-size: 16px;
   background-color: rgba(0,0,0,0);
 }
+
+.collaborators {
+  display: flex;
+  margin-top: 5px;
+  width: 100%;
+  height: 25px;
+  justify-content: flex-end;
+}
+
+.collaborator {
+  margin: 2px;
+}
 `
