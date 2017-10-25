@@ -2,7 +2,8 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const Item = new Schema({
   text: {type: String, default: ''},
-  isChecked: {type: Boolean, default: false}
+  isChecked: {type: Boolean, default: false},
+  doneDate: {type: Date}
 })
 
 const Checklist = new Schema({
