@@ -45,7 +45,6 @@ export default class CardDetailsChecklists extends React.Component {
   }
 
   render () {
-    console.log(this.props.checklists)
     return (
       <div className='host'>
         <CardDetailsSection title='Checklists' icon='check' />

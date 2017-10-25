@@ -101,7 +101,7 @@ export default class CardDetails extends React.Component {
             </li>
             <li>
               <DropDown title='Add a checklist'
-                orientation='left'
+                orientation='right'
                 layout='custom'
                 button={<Button
                   bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>Checklist</Button>
