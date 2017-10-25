@@ -74,6 +74,7 @@
     "babel-preset-stage-3": "^6.24.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-config-standard-react": "^5.0.0",
+    "eslint-plugin-node": "^5.2.1",
     "husky": "^0.14.3",
     "prettier-standard": "^7.0.1",
     "snazzy": "^7.0.0",
@@ -152,7 +153,10 @@
     ]
   },
   "eslintConfig": {
-    "extends": ["react-app", "standard"],
+    "extends": [
+      "react-app",
+      "standard"
+    ],
     "parser": "babel-eslint",
     "env": {
       "es6": true,
