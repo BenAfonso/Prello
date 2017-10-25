@@ -36,7 +36,7 @@ export default class Card extends React.Component {
           {
             this.props.collaborators.map(a => (
               <div key={a._id ? a._id : a} className='collaborator'>
-                <AvatarThumbnail initials={this.getInitials(a)} size='25px' fontSize='15px' />
+                <AvatarThumbnail thumbnail={a._id ? a.picture : ''} initials={this.getInitials(a)} size='25px' fontSize='15px' />
               </div>
             ))
           }
