@@ -15,6 +15,7 @@ export default class PopupManager extends React.Component {
   }
 
   dismissPopover () {
+    console.log("DISMISSED")
     this.setState({ popoverDisplayed: false })
   }
 
@@ -24,7 +25,7 @@ export default class PopupManager extends React.Component {
 
   renderPopover () {
     return (
-      <PortalWithState defaultOpen closeOnOutsideClick closeOnEsc>
+      <PortalWithState defaultOpen closeOnEsc onClose={this.dismissPopover.bind(this)}>
         {({ openPortal, closePortal, isOpen, portal }) => [
           portal(
             <div style={{

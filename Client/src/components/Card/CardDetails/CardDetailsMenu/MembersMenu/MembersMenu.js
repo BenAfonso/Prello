@@ -16,7 +16,7 @@ export default class MembersMenu extends React.Component {
     super(props)
     this.state = {
       matchingBoardCollaborators: this.props.board.collaborators,
-      enableAdd: false,
+      enableAdd: true,
       inputValue: ''
     }
     this.addMember = this.addMember.bind(this)
@@ -47,22 +47,28 @@ export default class MembersMenu extends React.Component {
   }
 
   onChange () {
-    this.setState({
-      inputValue: this.email.value,
-      enableAdd: false})
     if (this.email.value !== '') {
       const newmatchingBoardCollaborators = this.getMatchingCollaborators(this.email.value)      
-      this.setState({matchingBoardCollaborators: newmatchingBoardCollaborators})
+      this.setState({
+        inputValue: this.email.value,
+        matchingBoardCollaborators: newmatchingBoardCollaborators
+      })
     } else {
-      this.setState({matchingBoardCollaborators: this.props.board.collaborators})
+      this.setState({
+        inputValue: this.email.value,
+        matchingBoardCollaborators: this.props.board.collaborators
+      })
     }
   }
 
   setInputValue (email) {
+    console.log(email)
+    this.email.value = email
     this.setState({
       inputValue: email,
       enableAdd: true
     })
+    console.log(this.state.inputValue)
   }
 
   getInitials (name) {
@@ -122,15 +128,14 @@ export default class MembersMenu extends React.Component {
   }
 
   render () {
-    let menuElements = []
-    this.state.matchingBoardCollaborators.filter(collaborator =>
-      menuElements.push({
-        action: () => this.setInputValue(collaborator.email),
+    let menuElements = this.state.matchingBoardCollaborators.map(collaborator => {
+      return {
+        action: this.setInputValue.bind(this,collaborator.email),
         placeholder: this.renderUserinMenu(collaborator),
         closer: true,
         disabled: this.isCardMember(collaborator)
-      })
-    )
+      }
+    })
 
     return (
     <div className='host'>
