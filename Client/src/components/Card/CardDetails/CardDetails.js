@@ -11,6 +11,14 @@ import CardDetailsComments from './CardDetailsSections/CardDetailsComments/CardD
 import CardDetailsActivity from './CardDetailsSections/CardDetailsActivity/CardDetailsActivity'
 import CardDetailsInformations from './CardDetailsSections/CardDetailsInformations/CardDetailsInformations'
 import CardDetailsChecklists from './CardDetailsSections/CardDetailsChecklists/CardDetailsChecklists'
+import MembersMenu from './CardDetailsMenu/MembersMenu/MembersMenu'
+import { getCompleteCard } from '../../../services/Card.services'
+
+@connect(store => {
+  return {
+    lists: store.board.lists
+  }
+})
 
 @connect(store => {
   return {
@@ -46,13 +54,19 @@ export default class CardDetails extends React.Component {
     removeChecklist(this.props.id, index)
   }
 
+  componentDidMount () {
+    getCompleteCard(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.id)
+  }
+
   render () {
+    const card = this.props.lists[this.props.listIndex].cards[this.props.index]
+
     return (
       <div className='host'>
         <div className='content'>
           <CardDetailsInformations {...this.props} />
           <CardDetailsChecklists cardId={this.props.id} checklists={this.props.checklists} onDelete={this.deleteChecklist}/>
-          <CardDetailsComments />
+          <CardDetailsComments {...this.props}/>
           <CardDetailsActivity />
         </div>
 
@@ -65,9 +79,20 @@ export default class CardDetails extends React.Component {
         <div className='buttons'>
           <ul>
             <li>
-              <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>
-                Members
-              </Button>
+              <MembersMenu
+                members={card.collaborators}
+                listIndex={this.props.listIndex}
+                cardId={card._id}
+                orientation='right'
+                button={<Button
+                  bgColor='#eee'
+                  hoverBgColor='#ddd'
+                  size='x-small'
+                  block
+                >
+                  <Icon color='#000' name='user-plus' fontSize='12px' />
+                    Members
+                </Button>} />
             </li>
             <li>
               <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>
@@ -85,7 +110,7 @@ export default class CardDetails extends React.Component {
                   <ul>
                     <li>
                       <label className='newChecklistTitleInput'>Title: </label>
-                      <Input ref={(e) => this.checklistTitleInput = e} placeholder='Title' />
+                      <Input ref={ (e) => { this.checklistTitleInput = e }} placeholder='Title' />
                     </li>
                     <li>
                       <Button
@@ -93,7 +118,7 @@ export default class CardDetails extends React.Component {
                         hoverBgColor='#148407'
                         color='#FFF' onClick={this.createChecklist}>
                         Save
-                        </Button>
+                      </Button>
                     </li>
                   </ul>
                 </div>

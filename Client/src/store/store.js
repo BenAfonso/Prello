@@ -8,7 +8,7 @@ const composeEnhancers =
       {
         // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
       }
-      )
+    )
     : compose
 
 const enhancer = composeEnhancers(
@@ -17,6 +17,11 @@ const enhancer = composeEnhancers(
 )
 
 export const defaultState = {
+  currentUser: {
+    username: '',
+    name: '',
+    picture: ''
+  },
   fetching: false,
   fetched: false,
   error: null,

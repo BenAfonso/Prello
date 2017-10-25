@@ -1,4 +1,3 @@
-import { defaultState } from '../../../store/store'
 import reducer from '../../../store/reducer'
 
 describe('Card reducer actions', () => {
@@ -168,8 +167,6 @@ describe('Card reducer actions', () => {
     }
     expect(reducer(beforeState, action)).not.toEqual(afterState)
   })
-
-  
 
   it('should add a checklist item to a checklist', () => {
     const action = {

@@ -18,7 +18,7 @@ module.exports = (router, controllers) => {
 
   /**
     * @swagger
-    * /boards/{id}/cards/{cardId}:
+    * /boards/{id}/lists/{listId}/cards/{cardId}:
     *   put:
     *     tags:
     *       - Cards
@@ -30,6 +30,11 @@ module.exports = (router, controllers) => {
     *       - name: id
     *         type: string
     *         description: The board id where we want to update the card
+    *         in: path
+    *         required: true
+    *       - name: listId
+    *         type: string
+    *         description: The list id where we want to update the card
     *         in: path
     *         required: true
     *       - name: cardId
@@ -49,8 +54,8 @@ module.exports = (router, controllers) => {
     *       500:
     *         description: Internal error
     */
-  router.put('/boards/:boardId/cards/:cardId', [requiresLogin, cardExists, isCollaborator], function (req, res) {
-    let requiredParameter = ['cardId', 'boardId']
+  router.put('/boards/:boardId/lists/:listId/cards/:cardId', [requiresLogin, cardExists, isCollaborator], function (req, res) {
+    let requiredParameter = ['cardId', 'boardId', 'listId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
       let stringMessage = requiredParameter.join(',')

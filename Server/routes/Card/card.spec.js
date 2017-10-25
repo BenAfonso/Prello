@@ -38,10 +38,10 @@ module.exports = (server, chai) => {
         done()
       })
     })
-    describe('UPDATE /boards/:boardId/cards/:cardId', () => {
+    describe('UPDATE /boards/:boardId/lists/:listId/cards/:cardId', () => {
       it('it should UPDATE a card', done => {
         chai.request(server)
-          .put(`/boards/${board1._id}/cards/${card1._id}`)
+          .put(`/boards/${board1._id}/lists/${list1._id}/cards/${card1._id}`)
           .send({ text: 'Test card updated' })
           .set('authorization', `Bearer ${tokenU1}`)
           .end((err, res) => {
@@ -57,7 +57,7 @@ module.exports = (server, chai) => {
       })
       it('it should NOT UPDATE a card  (Not logged in)', done => {
         chai.request(server)
-          .put(`/boards/${board1._id}/cards/${card1._id}`)
+          .put(`/boards/${board1._id}/lists/${list1._id}/cards/${card1._id}`)
           .send({ text: 'Test card updated' })
           .end((err, res) => {
             if (err) { }
@@ -67,7 +67,7 @@ module.exports = (server, chai) => {
       })
       it('it should NOT UPDATE a card  (Not collaborator)', done => {
         chai.request(server)
-          .put(`/boards/${board1._id}/cards/${card1._id}`)
+          .put(`/boards/${board1._id}/lists/${list1._id}/cards/${card1._id}`)
           .send({ text: 'Test card updated' })
           .set('authorization', `Bearer ${tokenU3}`)
           .end((err, res) => {
@@ -78,7 +78,7 @@ module.exports = (server, chai) => {
       })
       it('it should NOT UPDATE a card  (Public)', done => {
         chai.request(server)
-          .put(`/boards/${board2._id}/cards/${card2._id}`)
+          .put(`/boards/${board2._id}/lists/${list2._id}/cards/${card2._id}`)
           .send({ text: 'Test card updated' })
           .set('authorization', `Bearer ${tokenU1}`)
           .end((err, res) => {

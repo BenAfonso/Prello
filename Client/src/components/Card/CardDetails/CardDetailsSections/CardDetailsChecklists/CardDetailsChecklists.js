@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import CardDetailsSection from '../../CardDetailsSection/CardDetailsSection'
 import Checklist from '../../../../UI/Checklist/Checklist'
-import Button from '../../../../UI/Button/Button'
 import { addChecklistItem, deleteChecklistItem, updateChecklistItem } from '../../../../../store/actions'
 
 export default class CardDetailsChecklists extends React.Component {
@@ -26,7 +25,7 @@ export default class CardDetailsChecklists extends React.Component {
     this.deleteChecklist = this.deleteChecklist.bind(this)
     this.addChecklistItem = this.addChecklistItem.bind(this)
     this.deleteChecklistItem = this.deleteChecklistItem.bind(this)
-    this.updateItemStatus =  this.updateItemStatus.bind(this)
+    this.updateItemStatus = this.updateItemStatus.bind(this)
   }
 
   deleteChecklist (index) {
@@ -46,21 +45,22 @@ export default class CardDetailsChecklists extends React.Component {
   }
 
   render () {
-      return (
+    console.log(this.props.checklists)
+    return (
       <div className='host'>
         <CardDetailsSection title='Checklists' icon='check' />
         {this.props.checklists.map((checklist, index) => (
           <div className='checklist'>
-            <Checklist 
-            index={parseInt(index, 10)}
-            onItemStatusChange={this.updateItemStatus}
-            onDelete={this.deleteChecklist}
-            onItemAdd={this.addChecklistItem}
-            onItemDelete={this.deleteChecklistItem}
-            onItemUpdate={this.updateItemStatus}
-            key={checklist.index} 
-            title={checklist.title}
-            items={checklist.items} />
+            <Checklist
+              index={parseInt(index, 10)}
+              onItemStatusChange={this.updateItemStatus}
+              onDelete={this.deleteChecklist}
+              onItemAdd={this.addChecklistItem}
+              onItemDelete={this.deleteChecklistItem}
+              onItemUpdate={this.updateItemStatus}
+              key={checklist.index}
+              title={checklist.title}
+              items={checklist.items} />
           </div>
         ))}
         <style jsx>{`

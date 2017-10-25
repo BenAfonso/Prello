@@ -2,16 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { DragSource, DropTarget } from 'react-dnd'
 import { ItemTypes } from '../Constants'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import {updateLists} from '../../store/actions'
 import { findDOMNode } from 'react-dom'
 import { getEmptyImage } from 'react-dnd-html5-backend'
 import Card from './Card'
-import {PortalWithState} from 'react-portal'
 import CardDetails from './CardDetails/CardDetails'
 
 const cardSource = {
-
   beginDrag (props, monitor, component) {
     const { clientWidth, clientHeight } = findDOMNode(component)
     return {
@@ -44,10 +42,10 @@ const cardTarget = {
     let newIndex = props.index
 
     let originalList = props.board.lists.filter((l, listIndex) => {
-      let cardss = l.cards.filter((c, cIndex) => {
+      let cards = l.cards.filter((c, cIndex) => {
         return c._id === draggedId
       })
-      return cardss.length > 0
+      return cards.length > 0
     })[0]
 
     originalListIndex = props.board.lists.indexOf(originalList)
@@ -92,16 +90,13 @@ export default class CardComponent extends React.Component {
     content: PropTypes.string.isRequired,
     isDragging: PropTypes.bool.isRequired,
     index: PropTypes.number.isRequired,
+    collaborators: PropTypes.arrayOf(PropTypes.any),
     bgColor: PropTypes.any,
     listIndex: PropTypes.number
   }
 
   static defaultProps = {
     checklists: []
-  }
-
-  constructor (props) {
-    super(props)
   }
 
   componentDidMount () {
@@ -112,21 +107,31 @@ export default class CardComponent extends React.Component {
 
   displayCardDetails () {
     this.props.popoverManager.setRenderedComponent(
-      <CardDetails {...this.props} handleClick={this.props.popoverManager.dismissPopover}/>
+      <CardDetails {...this.props} handleClick={this.props.popoverManager.dismissPopover} />
     )
     this.props.popoverManager.displayPopover()
   }
 
   render () {
-    const { id, index, bgColor, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource } = this.props
-
+    const { id, checklists, index, bgColor, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource, collaborators } = this.props
     return connectCardDropTarget(connectCardDragSource(
       <div className='host' style={{position: 'relative'}} onClick={this.displayCardDetails.bind(this)}>
         <div className='overlay' style={{
           opacity: isDragging ? 1 : 0
         }} />
 
-        <Card id={id} style={{ opacity: isDragging ? 0.3 : 1, backgroundColor: bgColor }} index={index} listIndex={listIndex} content={content} />
+        <Card
+          id={id}
+          style={{ opacity: isDragging ? 0.3 : 1, backgroundColor: bgColor }}
+          index={index}
+          listIndex={listIndex}
+          content={content}
+          checklists={checklists}
+          collaborators={
+            collaborators.map(c => c._id
+              ? c
+              : this.props.board.collaborators.filter(c2 => c === c2._id)[0])
+          } />
         <style jsx>{`
           .overlay {
             position: absolute;

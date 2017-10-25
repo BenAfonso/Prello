@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import styles from './Boardslist.styles'
 import BoardThumbnail from '../BoardThumbnail/BoardThumbnail'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import { setBoardslist } from '../../store/actions'
 import { subscribeToBoardslist } from '../../services/api'
 

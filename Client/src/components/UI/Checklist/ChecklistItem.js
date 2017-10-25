@@ -64,7 +64,6 @@ export default class ChecklistItem extends React.Component {
         this.setState({ doneDate: null }, () => {
           if (this.props.onChange !== null) { this.props.onChange(this.props.index, this.state.content, this.state.done, this.state.doneDate) }
         })
-        
       }
     })
   }
@@ -77,40 +76,40 @@ export default class ChecklistItem extends React.Component {
     return (
       <div className='checklistItem'>
         {!this.state.isEditable
-        ? <div className='readOnlyMode'>
-          <input type='checkbox' className='checkbox' ref={(t) => this.checkbox = t} checked={this.state.done} onClick={this.onToggle} />
-          <span className='itemContent' onClick={this.setEditable}>{this.state.content}</span>
-          <div className='deleteItemButton'>
+          ? <div className='readOnlyMode'>
+            <input type='checkbox' className='checkbox' ref={t => { this.checkbox = t }} checked={this.state.done} onClick={this.onToggle} />
+            <span className='itemContent' onClick={this.setEditable}>{this.state.content}</span>
+            <div className='deleteItemButton'>
+              <Button
+                onClick={this.onDelete}
+                bgColor='rgba(0,0,0,0)'
+                color='#70727c'
+                hoverBgColor='#ddd'
+                size='small'>
+                <Icon name='times' color='#70727c' />
+              </Button>
+            </div>
+          </div>
+          : <div className='editMode'>
+            <Input ref={v => { this.textInput = v }} placeholder={this.state.content} />
             <Button
-              onClick={this.onDelete}
+              onClick={this.updateText}
+              bgColor='#3cb221'
+              hoverBgColor='#148407'
+              color='#FFF'
+              size='x-small'
+            >
+              <Icon name='check' color='#FFF' />
+            </Button>
+            <Button
+              onClick={this.cancelEdit}
               bgColor='rgba(0,0,0,0)'
-              color='#70727c'
-              hoverBgColor='#ddd'
-              size='small'>
+              color='#444'
+              size='x-small'
+              hoverBgColor='#ddd'>
               <Icon name='times' color='#70727c' />
             </Button>
-          </div>
-        </div>
-        : <div className='editMode'>
-          <Input ref={(v) => this.textInput = v} placeholder={this.state.content} />
-          <Button
-            onClick={this.updateText}
-            bgColor='#3cb221'
-            hoverBgColor='#148407'
-            color='#FFF'
-            size='x-small'
-          >
-            <Icon name='check' color='#FFF' />
-          </Button>
-          <Button
-            onClick={this.cancelEdit}
-            bgColor='rgba(0,0,0,0)'
-            color='#444'
-            size='x-small'
-            hoverBgColor='#ddd'>
-            <Icon name='times' color='#70727c' />
-          </Button>
-        </div> }
+          </div> }
         <style jsx>{styles}</style>
       </div>
     )

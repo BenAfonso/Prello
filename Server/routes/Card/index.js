@@ -11,4 +11,6 @@ module.exports = (router, controller) => {
   require('./moveCard')(router, controller)
   require('./delete')(router, controller)
   require('./update')(router, controller)
+  require('./getOne')(router, controller)
+  require('./addCollaborator')(router, controller)
 }

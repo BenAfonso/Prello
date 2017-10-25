@@ -1,7 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import cn from 'classnames'
-import Color from 'color'
 
 export default class Input extends React.Component {
   static propTypes = {
@@ -48,8 +46,8 @@ export default class Input extends React.Component {
       <div className='host' style={{...props.style.height}}>
         {
           type === 'input'
-            ? <input ref={(v) => this.input = v} style={props.style} type='text' placeholder={placeholder} />
-            : <textarea ref={(v) => this.input = v} className='' dir='auto' placeholder={placeholder} />
+            ? <input ref={v => { this.input = v }} style={props.style} type='text' placeholder={placeholder} />
+            : <textarea ref={v => { this.input = v }} className='' dir='auto' placeholder={placeholder} />
         }
         <style jsx>{`
           input {

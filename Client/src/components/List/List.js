@@ -2,7 +2,7 @@ import React from 'react'
 // import Card from '../Card/Card'
 import Card from '../Card/DraggableCard'
 import styles from './List.styles'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import { addCard, moveList, moveCardDistant, updateLists } from '../../store/actions'
 import { DragSource, DropTarget } from 'react-dnd'
 import { ItemTypes } from '../Constants'
@@ -179,51 +179,52 @@ export default class List extends React.Component {
           {
             this.props.cards.map((card, i) => (
               <li key={card._id}>
-                <Card 
+                <Card
                   index={i}
                   id={card._id}
                   checklists={card.checklists}
                   bgColor={this.props.primaryColor}
                   listIndex={this.props.index}
                   content={card.text}
-                  popoverManager={this.props.popoverManager}/>
+                  collaborators={card.collaborators}
+                  popoverManager={this.props.popoverManager} />
               </li>
             ))
           }
         </ul>
         {
-              this.state.newCardFormDisplayed
-              ? <div className='newCardForm'>
-                <form onSubmit={this.addCard}>
-                  <textarea
-                    ref={(t) => { this.newCardTitle = t }}
-                    onKeyPress={(e) => { return e.charCode === 13 ? this.addCard() : null }}
-                  />
-                </form>
-                <div className='newCardFormButtons'>
-                  <div>
-                    <Button
-                      bgColor={'#5AAC44'}
-                      gradient
-                      bold
-                      shadow
-                      onClick={this.addCard}>
+          this.state.newCardFormDisplayed
+            ? <div className='newCardForm'>
+              <form onSubmit={this.addCard}>
+                <textarea
+                  ref={(t) => { this.newCardTitle = t }}
+                  onKeyPress={(e) => { return e.charCode === 13 ? this.addCard() : null }}
+                />
+              </form>
+              <div className='newCardFormButtons'>
+                <div>
+                  <Button
+                    bgColor={'#5AAC44'}
+                    gradient
+                    bold
+                    shadow
+                    onClick={this.addCard}>
                       Add
-                    </Button>
-                  </div>
-                  <div>
-                    <Button
-                      bgColor={'#444'}
-                      gradient
-                      shadow
-                      onClick={this.undisplayNewCardForm}>
+                  </Button>
+                </div>
+                <div>
+                  <Button
+                    bgColor={'#444'}
+                    gradient
+                    shadow
+                    onClick={this.undisplayNewCardForm}>
                      Cancel
-                    </Button>
-                  </div>
+                  </Button>
                 </div>
               </div>
-              : <div className='newCardButton'onClick={this.displayNewCardForm}>Add a card...</div>
-            }
+            </div>
+            : <div className='newCardButton'onClick={this.displayNewCardForm}>Add a card...</div>
+        }
         <style jsx>{styles}</style>
       </div>
     )))

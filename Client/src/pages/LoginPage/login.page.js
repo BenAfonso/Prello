@@ -12,6 +12,7 @@ export default class LoginPage extends React.Component {
   }
 
   loginWithGoogle (googleResponse) {
+    console.log(googleResponse)
     loginGoogle(googleResponse.code).then((response) => {
       storeToken(response.token)
       this.setState({ redirectToReferrer: true })
@@ -45,28 +46,28 @@ export default class LoginPage extends React.Component {
         <form>
           <label>
           E-mail
-        </label>
+          </label>
           <input type='text' placeholder='E-mail' ref={(e) => {
             this.email = e
           }} />
           <label>
           Password
-        </label>
+          </label>
           <input type='password' placeholder='Passord' ref={(p) => {
             this.password = p
           }} />
           <div className='button' onClick={this.submitLogin.bind(this)}>
           Sign in
-        </div>
+          </div>
           <a href='/#' className='forgottenPassword'>Forgotten password?</a>
         </form>
         <GoogleLogin
-          clientId='970457604836-o50jesfa5lblnger6egce7v32p8pukjq.apps.googleusercontent.com'
+          clientId='532471730394-bh1qi5q6hkh0c13quao0ptplp8sidfjb.apps.googleusercontent.com'
           scope='email profile'
           buttonText='Sign in with Google'
           responseType='code'
           onSuccess={this.loginWithGoogle.bind(this)}
-    />
+        />
         <style jsx>
           {`
       .host {

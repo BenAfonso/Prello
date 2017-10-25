@@ -1,12 +1,10 @@
 import React from 'react'
 import styles from './Board.styles'
 import List from '../List/List'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import { addList, setBoard, updateLists, removeList, resetBoard } from '../../store/actions'
 import { DragDropContext } from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
 import HTML5toTouch from 'react-dnd-multi-backend/lib/HTML5toTouch'
-
 import Button from '../UI/Button/Button'
 import { subscribeToBoard } from '../../services/api'
 import CustomDragLayer from '../CustomDragLayer'
@@ -110,7 +108,7 @@ export default class Board extends React.Component {
               shadow
               onClick={this.addList}>
           Add
-        </Button>
+            </Button>
           </div>
           <div>
             <Button
@@ -119,7 +117,7 @@ export default class Board extends React.Component {
               shadow
               onClick={this.undisplayNewListForm}>
          Cancel
-        </Button>
+            </Button>
           </div>
         </div>
         <style jsx>{styles}</style>
@@ -164,8 +162,8 @@ export default class Board extends React.Component {
         }}>
           {
             this.state.newListFormDisplayed
-            ? this.renderNewListForm()
-            : <div className='newListButton' onClick={this.displayNewListForm}>Add a list...</div>
+              ? this.renderNewListForm()
+              : <div className='newListButton' onClick={this.displayNewListForm}>Add a list...</div>
           }
         </li>
 

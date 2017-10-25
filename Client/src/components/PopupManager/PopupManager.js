@@ -1,5 +1,5 @@
 import React from 'react'
-import { PortalWithState } from 'react-portal'
+import {PortalWithState} from 'react-portal'
 import PopoverPage from '../../pages/popup.page'
 
 export default class PopupManager extends React.Component {
@@ -24,7 +24,7 @@ export default class PopupManager extends React.Component {
 
   renderPopover () {
     return (
-      <PortalWithState defaultOpen closeOnOutsideClick closeOnEsc>
+      <PortalWithState defaultOpen closeOnEsc onClose={this.dismissPopover.bind(this)}>
         {({ openPortal, closePortal, isOpen, portal }) => [
           portal(
             <div style={{
@@ -36,7 +36,7 @@ export default class PopupManager extends React.Component {
             }}>
               <PopoverPage dismiss={this.dismissPopover.bind(this)} component={this.state.renderedComponent} />
             </div>
-        )
+          )
         ]}
       </PortalWithState>
     )

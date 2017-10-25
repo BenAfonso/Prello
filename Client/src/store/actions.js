@@ -1,6 +1,6 @@
 import { fetchBoards, addBoardDistant, addCollaboratorDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant } from '../services/List.services'
-import { moveCard } from '../services/Card.services'
+import { moveCard, addMemberDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
 
 import store from '../store/store'
@@ -19,6 +19,16 @@ export function addListLocal (list) {
       payload: list
     })
   }
+}
+
+export function updateCard (listId, card) {
+  store.dispatch({
+    type: 'UPDATE_CARD',
+    payload: {
+      listId: listId,
+      card: card
+    }
+  })
 }
 
 export function moveList (dispatch, boardId, listId, position) {
@@ -102,6 +112,13 @@ export function removeList (dispatch, boardId, list) {
   })
 }
 
+export function setConnectedUser (user) {
+  store.dispatch({
+    type: 'SET_USER',
+    payload: user
+  })
+}
+
 export function removeListLocal (list) {
   store.dispatch({
     type: 'REMOVE_LIST',
@@ -145,7 +162,7 @@ export function setBoardslist (dispatch) {
 
 export function addBoard (dispatch, payload) {
   addBoardDistant(payload).then((board) => {
-      // <= HANDLED FROM SOCKETS
+    // <= HANDLED FROM SOCKETS
   }).catch(err => {
     return err
   })
@@ -167,7 +184,7 @@ export function addCollaborator (dispatch, boardId, email) {
   })
 }
 
-export function replaceCollaboratorLocal (users) {
+export function replaceCollaboratorsLocal (users) {
   if (users) {
     store.dispatch({
       type: 'UPDATE_COLLABORATORS',
@@ -249,4 +266,8 @@ export function deleteChecklistItem (cardId, checklistIndex, itemIndex) {
       }
     })
   }
+}
+
+export function addMember (dispatch, boardId, listId, cardId, email) {
+  addMemberDistant(boardId, listId, cardId, email)
 }
