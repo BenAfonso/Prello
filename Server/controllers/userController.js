@@ -14,15 +14,15 @@ userController.create = (user) => {
   })
 }
 userController.loginGoogle = (profile, done) => {
-  console.log(profile)
-  User.findOne({'google.id': profile.id}, '_id email provider').exec(function (err, user) {
+  User.findOne({'email': profile.emails[0].value}, '_id email provider').exec(function (err, user) {
     if (err) return done(err)
     if (!user) {
       user = new User({
         name: profile.displayName,
         email: profile.emails[0].value,
-        username: profile.username,
+        username: profile.displayName.split(' ').join(''),
         provider: 'google',
+        picture: profile.image.url,
         google: profile._json
       })
       user.save(function (err) {
