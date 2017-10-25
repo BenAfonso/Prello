@@ -141,7 +141,7 @@ cardController.removeCommentFromCard = (cardId, commentId) => {
 }
 cardController.getOneCard = (cardId) => {
   return new Promise((resolve, reject) => {
-    Card.findOne({ '_id': cardId }).populate('comments responsible', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+    Card.findOne({ '_id': cardId }).populate('comments responsible collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {

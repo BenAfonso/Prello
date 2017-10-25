@@ -51,8 +51,6 @@ export default class CardDetailsInformations extends React.Component {
 
   render () {
 
-    const boardId = this.props.board._id
-    const collaborators = this.props.board.collaborators
     const fullCard = this.props.board.lists[this.props.listIndex].cards
       .filter(c => c._id === this.props.id)[0]
 
@@ -68,7 +66,7 @@ export default class CardDetailsInformations extends React.Component {
               <div className='subsectionTitle'>
                 Members
               </div>
-              <CardDetailsMembers boardId={boardId} collaborators={collaborators} listIndex={this.props.listIndex} card={fullCard} />
+              <CardDetailsMembers listIndex={this.props.listIndex} id={fullCard._id} />
               </div>
             <div className='labels'>
               <div className='subsectionTitle'>

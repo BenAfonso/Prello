@@ -105,8 +105,7 @@ export default class UsersMenu extends React.Component {
             display:inline-block;
             position: relative;
             width: auto;
-            height: auto;
-            
+            height: auto;            
           }
 
           .ownerIcon {

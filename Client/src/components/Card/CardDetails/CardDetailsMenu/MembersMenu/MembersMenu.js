@@ -3,7 +3,6 @@ import { addMember } from '../../../../../store/actions'
 import { connect } from 'react-redux'
 import Button from '../../../../UI/Button/Button'
 import DropDown from '../../../../UI/DropDown/DropDown'
-import Icon from '../../../../UI/Icon/Icon'
 import AvatarThumbnail from '../../../../UI/AvatarThumbnail/AvatarThumbnail'
 
 @connect(store => {
@@ -36,7 +35,7 @@ export default class MembersMenu extends React.Component {
     this.setState({
       inputValue: '',
       enableAdd: false,
-      matchingBoardCollaborators: this.props.collaborators
+      matchingBoardCollaborators: this.props.board.collaborators
     })
   }
 
@@ -55,7 +54,7 @@ export default class MembersMenu extends React.Component {
       const newmatchingBoardCollaborators = this.getMatchingCollaborators(this.email.value)      
       this.setState({matchingBoardCollaborators: newmatchingBoardCollaborators})
     } else {
-      this.setState({matchingBoardCollaborators: this.props.collaborators})
+      this.setState({matchingBoardCollaborators: this.props.board.collaborators})
     }
   }
 

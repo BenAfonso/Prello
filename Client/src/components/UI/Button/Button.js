@@ -94,7 +94,6 @@ export default class Button extends React.Component {
             bgColorObj.lighten(0.2).string()})`
           : 'none',
       display: block ? 'block' : '',
-      'font-size': fontsize, 
       ...props.style
     }
 

@@ -9,13 +9,13 @@ export default class DropDown extends React.Component {
     orientation: PropTypes.oneOf(['left', 'right']),
     buttonStyle: PropTypes.object,
     dropdownStyle: PropTypes.object,
-    menuElements: PropTypes.oneOf([PropTypes.arrayOf(PropTypes.shape({
+    /*menuElements: PropTypes.oneOf([PropTypes.arrayOf(PropTypes.shape({
       action: PropTypes.func,
       placeholder: PropTypes.string,
       description: PropTypes.string,
       closer: PropTypes.bool,
       disabled: PropTypes.bool
-    })), 'separator'])
+    })), 'separator'])*/
   }
 
   static defaultProps = {

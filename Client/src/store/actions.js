@@ -199,12 +199,3 @@ export function fetchMatchingUsers (email) {
 export function addMember (dispatch, boardId, listId, cardId, email) {
   addMemberDistant(boardId, listId, cardId, email)
 }
-
-export function replaceMembersLocal (members) {
-  if (members) {
-    store.dispatch({
-      type: 'UPDATE_MEMBERS',
-      payload: members
-    })
-  }
-}
