@@ -9,5 +9,5 @@ module.exports = (router, controller) => {
   */
   require('./create')(router, controller)
   require('./createItem')(router, controller)
-  require('./checkItem')(router, controller)
+  require('./updateItem')(router, controller)
 }
