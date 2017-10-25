@@ -47,6 +47,18 @@ userController.getUsers = (email) => {
   })
 }
 
+userController.getUser = (id) => {
+  return new Promise((resolve, reject) => {
+    User.findOne({ '_id': id }, { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+
 userController.login = (userToConnect) => {
   console.log(userToConnect)
   return new Promise((resolve, reject) => {

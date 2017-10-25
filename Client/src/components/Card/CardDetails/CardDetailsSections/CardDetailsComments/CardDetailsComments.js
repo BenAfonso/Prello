@@ -9,6 +9,7 @@ import { dateFormatter } from '../../../../../util/dateFormatter'
 
 @connect(store => {
   return {
+    currentUser: store.currentUser,
     board: store.board
   }
 })
@@ -53,7 +54,17 @@ export default class CardDetailsComments extends React.Component {
               )) : null
             }
           </div>
-          <NewComment handleSubmit={this.onCommentSubmit} ref={n => this.newComment = n} />
+          <NewComment 
+            username={this.props.currentUser ? this.props.currentUser.username : ''}
+            initials={
+              this.props.currentUser 
+                ? this.props.currentUser.name.split(' ').length > 1
+                  ? `${this.props.currentUser.name.split(' ')[0][0]}${this.props.currentUser.name.split(' ')[1][0]}`
+                  : `${this.props.currentUser.name[0]}`
+                : ''
+            }
+            thumbnail={this.props.currentUser ? this.props.currentUser.picture : ''}
+            handleSubmit={this.onCommentSubmit} ref={n => this.newComment = n} />
         </CardDetailsSection>
         <style jsx>{`
           .comments {

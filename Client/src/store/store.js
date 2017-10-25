@@ -20,7 +20,7 @@ export const defaultState = {
   currentUser: {
     username: '',
     name: '',
-    avatar: ''
+    picture: ''
   },
   fetching: false,
   fetched: false,

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Config from '../config'
+import { setConnectedUser } from '../store/actions'
 
 export function storeToken (token) {
   window.localStorage.setItem('prello_access_token', token)
@@ -9,10 +10,18 @@ export function extractToken () {
   return window.localStorage.getItem('prello_access_token')
 }
 
+export function setProfile () {
+  console.log("ZAEAZE")
+  return axios.get(`${Config.API_URL}/me/`).then(res => {
+    setConnectedUser(res.data)
+  })
+}
+
 export function isAuthenticated () {
   if (window.localStorage.getItem('prello_access_token') !== undefined &&
     window.localStorage.getItem('prello_access_token') !== null) {
     setTokenHeader()
+    setProfile()
     return true
   } else {
     unsetTokenHeader()

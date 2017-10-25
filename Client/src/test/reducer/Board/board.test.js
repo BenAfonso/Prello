@@ -16,7 +16,7 @@ describe('Board actions reducer', () => {
       currentUser: {
         username: '',
         name: '',
-        avatar: ''
+        picture: ''
       },
       fetching: false,
       fetched: false,

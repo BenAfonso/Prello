@@ -168,6 +168,16 @@ export default function reducer (state = defaultState, action) {
         }
       }
     }
+    case 'SET_USER': {
+      return {
+        ...state,
+        currentUser: {
+          name: action.payload.name,
+          username: action.payload.username,
+          picture: action.payload.picture
+        }
+      }
+    }
     default:
       return state
   }

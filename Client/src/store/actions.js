@@ -112,6 +112,13 @@ export function removeList (dispatch, boardId, list) {
   })
 }
 
+export function setConnectedUser (user) {
+  store.dispatch({
+    type: 'SET_USER',
+    payload: user
+  })
+}
+
 export function removeListLocal (list) {
   store.dispatch({
     type: 'REMOVE_LIST',

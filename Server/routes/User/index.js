@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const request = require('request')
+const {requiresLogin} = require('../../config/middlewares/authorization')
 
 /**
   * @swagger
@@ -151,6 +152,14 @@ module.exports = (router, userController) => {
     // TODO: ADD Pagination
     userController.getUsers(req.query.email).then(users => {
       return res.status(200).send(users)
+    }).catch(err => {
+      return res.status(400).send(err)
+    })
+  })
+
+  router.get('/users/:userId', requiresLogin, function (req, res) {
+    userController.getUser(req.params.userId).then(user => {
+      return res.status(200).send(user)
     }).catch(err => {
       return res.status(400).send(err)
     })
