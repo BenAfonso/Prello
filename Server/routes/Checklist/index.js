@@ -8,4 +8,6 @@ module.exports = (router, controller) => {
   *         type: string
   */
   require('./create')(router, controller)
+  require('./createItem')(router, controller)
+  require('./checkItem')(router, controller)
 }

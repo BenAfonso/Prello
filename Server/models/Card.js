@@ -1,13 +1,13 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const Subtask = new Schema({
+const Item = new Schema({
   text: {type: String, default: ''},
   isChecked: {type: Boolean, default: false}
 })
 
 const Checklist = new Schema({
   text: {type: String, default: ''},
-  subtasks: [Subtask]
+  items: [Item]
 })
 
 const CardSchema = new Schema({
