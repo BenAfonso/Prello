@@ -141,7 +141,7 @@ cardController.removeCommentFromCard = (cardId, commentId) => {
 }
 cardController.getOneCard = (cardId) => {
   return new Promise((resolve, reject) => {
-    Card.findOne({ '_id': cardId }).populate('comments responsible', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+    Card.findOne({ '_id': cardId }).populate('comments responsible collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
@@ -156,6 +156,52 @@ cardController.getOneCard = (cardId) => {
           }
         })
       }
+    })
+  })
+}
+cardController.addCollaborator = (boardId, cardId, listId, userId, requesterId) => {
+  return new Promise((resolve, reject) => {
+    Card.findOneAndUpdate({ '_id': cardId }, { $push: { collaborators: userId } }, { new: true }).populate('collaborators').exec((err, res) => {
+      if (err) {
+        err.status = 500
+        reject(err)
+      } else {
+        cardController.getOneCard(cardId).then((cardToEmit) => {
+          let payload = {
+            listId: listId,
+            card: cardToEmit
+          }
+          emit(boardId, 'CARD_UPDATED', payload)
+          resolve(cardToEmit)
+        })
+        .catch((err) => {
+          err.status = 500
+          reject(err)
+        })
+      }
+    })
+  })
+}
+
+cardController.addCollaboratorEmail = (boardId, cardId, listId, email, requesterId) => {
+  return new Promise((resolve, reject) => {
+    console.log(email)
+    User.findOne({ email: email }).then((res) => {
+      if (res) {
+        cardController.addCollaborator(boardId, cardId, listId, res._id, requesterId).then(res => {
+          resolve(res)
+        }).catch(err => {
+          err.status = 500
+          reject(err)
+        })
+      } else {
+        let err = new Error('Not found')
+        err.status = 404
+//        return reject(err)
+      }
+    }).catch((err) => {
+      err.status = 500
+      reject(err)
     })
   })
 }

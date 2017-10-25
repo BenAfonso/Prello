@@ -1,6 +1,6 @@
 import { fetchBoards, addBoardDistant, addCollaboratorDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant } from '../services/List.services'
-import { moveCard } from '../services/Card.services'
+import { moveCard, addMemberDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
 
 import store from '../store/store'
@@ -177,7 +177,7 @@ export function addCollaborator (dispatch, boardId, email) {
   })
 }
 
-export function replaceCollaboratorLocal (users) {
+export function replaceCollaboratorsLocal (users) {
   if (users) {
     store.dispatch({
       type: 'UPDATE_COLLABORATORS',
@@ -194,4 +194,8 @@ export function fetchMatchingUsers (email) {
       reject(err)
     })
   })
+}
+
+export function addMember (dispatch, boardId, listId, cardId, email) {
+  addMemberDistant(boardId, listId, cardId, email)
 }

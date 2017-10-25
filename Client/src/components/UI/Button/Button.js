@@ -47,6 +47,7 @@ export default class Button extends React.Component {
       color,
       block,
       round,
+      fontsize,
       size,
       width,
       height,

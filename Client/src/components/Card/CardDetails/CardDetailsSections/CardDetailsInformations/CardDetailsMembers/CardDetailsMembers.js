@@ -1,47 +1,105 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import Icon from '../../../../../UI/Icon/Icon'
 import AvatarThumbnail from '../../../../../UI/AvatarThumbnail/AvatarThumbnail'
+import MembersMenu from '../../../CardDetailsMenu/MembersMenu/MembersMenu'
 
-const CardDetailsMembers = props => (
-  <ul className='host'>
-    {
-      <li>
-        <AvatarThumbnail initials='BA' size='30px' fontSize='16px' />
-      </li>
-    }
-    <li>
-      <div className='addButton'>
-        <Icon name='plus' fontSize='15px' color='#aaa' />
+@connect(store => {
+  return {
+    board: store.board
+  }
+})
+
+export default class CardDetailsInformations extends React.Component {
+  constructor (props) {
+    super(props)
+    this.getInitials = this.getInitials.bind(this)
+    this.renderUserAvatar = this.renderUserAvatar.bind(this)
+  }
+
+  getInitials (name) {
+    if (name !== undefined) {
+      const matches = name.match(/\b(\w)/g)
+      const initials = matches.join('').toUpperCase()
+      return initials
+    }      
+  }
+
+  renderUserAvatar (user) {
+    return (
+      <div className='avatar'>
+        <AvatarThumbnail
+          size='30px'
+          fontSize=''
+          thumbnail={user.picture}
+          initials={this.getInitials(user.name)}
+          bgColor={user.bgColor}
+          color='black' />
+        <style jsx>
+          {`
+            .avatar {
+              display: inline-block
+              padding: 5px 5px
+              cursor: pointer;            
+            }        
+          `}
+        </style>
       </div>
-    </li>
-    <style jsx>
-      {`
-  ul {
-    list-style-type: none;
-    display: flex;
+    )
   }
 
-  ul li {
-    margin-right: 5px;
-  }
+  render () {
+    const list = this.props.board.lists[this.props.listIndex]
+    const card = list.cards.filter(c => c._id === this.props.id)[0] 
+    const members = card.collaborators
+    const cardId = this.props.id
 
-  .addButton {
-    height: 30px;
-    width: 30px;
-    background-color: #eee;
-    border-radius: 3px;
-    text-align: center;
-  }
+    return (
+      <div className='host'>
+        <div className='members'>
+        {
+          members.map((member) =>  this.renderUserAvatar(member))          
+        }
+        </div>
+        <div className='buttonSection'>
+          <MembersMenu
+            members={members}
+            cardId={cardId}
+            listIndex={this.props.listIndex}
+            orientation='left'
+            button={<div className='addButton'><Icon name='plus' fontSize='15px' color='#aaa' /></div>} />
+        </div>
+      
+        <style jsx>
+          {`
+            .host {
+              display: flex;
+            }
+
+            .members {
+              max-height: 80px;
+              max-width: 175px;
+              overflow-y: auto;
+            }
+
+            .buttonSection {
+              padding: 5px 0;
+            }
+
+            .addButton {
+              height: 30px;
+              width: 30px;
+              background-color: #eee;
+              border-radius: 3px;
+              text-align: center;
+            }
   
-  .addButton:hover {
-    background-color: #ddd;
+            .addButton:hover {
+              background-color: #ddd
+            }
+          `}
+        </style>
+      </div>
+    )
   }
-    `}
-    </style>
-  </ul>
-)
-
-CardDetailsMembers.propTypes = {
 }
-
-export default CardDetailsMembers
