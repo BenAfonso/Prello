@@ -58,7 +58,7 @@ export default class CardDetailsChecklists extends React.Component {
               onItemDelete={this.deleteChecklistItem}
               onItemUpdate={this.updateItemStatus}
               key={checklist.index}
-              title={checklist.title}
+              title={checklist.text}
               items={checklist.items} />
           </div>
         ))}

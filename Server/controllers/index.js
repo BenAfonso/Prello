@@ -5,7 +5,6 @@ const userController = require('./userController')
 const commentController = require('./commentController')
 const checklistController = require('./checklistController')
 
-
 module.exports = {
   boardController: boardController,
   listController: listController,
