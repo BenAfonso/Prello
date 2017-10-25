@@ -162,7 +162,7 @@ export function setBoardslist (dispatch) {
 
 export function addBoard (dispatch, payload) {
   addBoardDistant(payload).then((board) => {
-      // <= HANDLED FROM SOCKETS
+    // <= HANDLED FROM SOCKETS
   }).catch(err => {
     return err
   })

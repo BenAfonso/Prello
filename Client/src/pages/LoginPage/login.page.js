@@ -46,19 +46,19 @@ export default class LoginPage extends React.Component {
         <form>
           <label>
           E-mail
-        </label>
+          </label>
           <input type='text' placeholder='E-mail' ref={(e) => {
             this.email = e
           }} />
           <label>
           Password
-        </label>
+          </label>
           <input type='password' placeholder='Passord' ref={(p) => {
             this.password = p
           }} />
           <div className='button' onClick={this.submitLogin.bind(this)}>
           Sign in
-        </div>
+          </div>
           <a href='/#' className='forgottenPassword'>Forgotten password?</a>
         </form>
         <GoogleLogin
@@ -67,7 +67,7 @@ export default class LoginPage extends React.Component {
           buttonText='Sign in with Google'
           responseType='code'
           onSuccess={this.loginWithGoogle.bind(this)}
-    />
+        />
         <style jsx>
           {`
       .host {

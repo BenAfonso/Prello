@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import Icon from '../../../../../UI/Icon/Icon'
 import AvatarThumbnail from '../../../../../UI/AvatarThumbnail/AvatarThumbnail'
 import MembersMenu from '../../../CardDetailsMenu/MembersMenu/MembersMenu'
@@ -22,12 +22,12 @@ export default class CardDetailsInformations extends React.Component {
       const matches = name.match(/\b(\w)/g)
       const initials = matches.join('').toUpperCase()
       return initials
-    }      
+    }
   }
 
   renderUserAvatar (user) {
     return (
-      <div className='avatar'>
+      <div key={user._id ? user._id : user} className='avatar'>
         <AvatarThumbnail
           size='30px'
           fontSize=''
@@ -50,16 +50,16 @@ export default class CardDetailsInformations extends React.Component {
 
   render () {
     const list = this.props.board.lists[this.props.listIndex]
-    const card = list.cards.filter(c => c._id === this.props.id)[0] 
+    const card = list.cards.filter(c => c._id === this.props.id)[0]
     const members = card.collaborators
     const cardId = this.props.id
 
     return (
       <div className='host'>
         <div className='members'>
-        {
-          members.map((member) =>  this.renderUserAvatar(member))          
-        }
+          {
+            members.map((member) => this.renderUserAvatar(member))
+          }
         </div>
         <div className='buttonSection'>
           <MembersMenu
@@ -69,7 +69,7 @@ export default class CardDetailsInformations extends React.Component {
             orientation='left'
             button={<div className='addButton'><Icon name='plus' fontSize='15px' color='#aaa' /></div>} />
         </div>
-      
+
         <style jsx>
           {`
             .host {

@@ -9,4 +9,4 @@ storiesOf('Header', module)
     <Header
       bgColor={color('bgColor', 'orange')}
       color={color('color', 'white')} />
-)
+  )

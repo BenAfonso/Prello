@@ -10,7 +10,7 @@ export function moveCard (boardId, cardId, oldListId, newListId, position) {
   })
 }
 
-export function addMemberDistant (boardId, listId, cardId, email) { 
+export function addMemberDistant (boardId, listId, cardId, email) {
   axios.post(`${Config.API_URL}/boards/${boardId}/lists/${listId}/cards/${cardId}/collaborator`, {
     email: email
   })

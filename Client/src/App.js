@@ -8,7 +8,6 @@ import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store/store'
 import { isAuthenticated } from './services/Authentication.services'
-import CardDetailsPage from './pages/popup.page'
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (

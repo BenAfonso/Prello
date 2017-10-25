@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import Button from '../../UI/Button/Button'
 import Icon from '../../UI/Icon/Icon'
 import styles from './CardDetails.styles'
@@ -15,9 +15,7 @@ import { getCompleteCard } from '../../../services/Card.services'
   }
 })
 
-
 export default class CardDetails extends React.Component {
-
   componentDidMount () {
     getCompleteCard(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.id)
   }
@@ -25,7 +23,6 @@ export default class CardDetails extends React.Component {
   render () {
     const card = this.props.lists[this.props.listIndex].cards[this.props.index]
 
-    
     return (
       <div className='host'>
         <div className='content'>
@@ -43,11 +40,11 @@ export default class CardDetails extends React.Component {
         <div className='buttons'>
           <ul>
             <li>
-              <MembersMenu 
+              <MembersMenu
                 members={card.collaborators}
-                listIndex={this.props.listIndex} 
-                cardId={card._id} 
-                orientation='right' 
+                listIndex={this.props.listIndex}
+                cardId={card._id}
+                orientation='right'
                 button={<Button
                   bgColor='#eee'
                   hoverBgColor='#ddd'

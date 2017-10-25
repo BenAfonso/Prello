@@ -8,8 +8,8 @@ import Button from '../UI/Button/Button'
 
 export default class Header extends React.Component {
   static propTypes = {
-    bgColor: PropTypes.string,
-    color: PropTypes.string
+    bgColor: PropTypes.any,
+    color: PropTypes.any
   }
 
   static defaultProps = {
@@ -37,11 +37,11 @@ export default class Header extends React.Component {
 
         { isAuthenticated
           ? <Button
-              onClick={logout}
-              size='x-small'
-              bgColor='rgba(0,0,0,0)'
-              hoverBgColor='rgba(0,0,0,0.2)'
-              color='#fff'>Log out</Button>
+            onClick={logout}
+            size='x-small'
+            bgColor='rgba(0,0,0,0)'
+            hoverBgColor='rgba(0,0,0,0.2)'
+            color='#fff'>Log out</Button>
           : null }
 
       </div>

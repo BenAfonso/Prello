@@ -1,40 +1,36 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import cn from 'classnames'
 
 export default class Label extends React.Component {
   constructor () {
     super()
     this.state = {
       isExpanded: false,
-      labelTitle: '',
+      labelTitle: ''
     }
     this.expandLabel = this.expandLabel.bind(this)
   }
   static propTypes = {
     labelText: PropTypes.string,
     width: PropTypes.string,
-    color: PropTypes.string,
     style: PropTypes.object,
     color: PropTypes.string,
     backgroundColor: PropTypes.string,
     fontWeight: PropTypes.string
   }
 
-
-
   static defaultProps = {
     height: '1pc',
     width: '150px',
     color: '#fff',
     backgroundColor: '#000',
-    fontWeight: "bold",
-    borderRadius: "3px",
+    fontWeight: 'bold',
+    borderRadius: '3px',
     fontSize: '12px',
     centeredText: true
   }
 
-  expandLabel  () {
+  expandLabel () {
     this.setState({
       isExpanded: !this.state.isExpanded
     })
@@ -42,7 +38,7 @@ export default class Label extends React.Component {
 
   render () {
     const {
-            labelText,
+      labelText,
       width,
       height,
       fontWeight,
@@ -52,7 +48,7 @@ export default class Label extends React.Component {
       fontSize,
       centeredText,
       ...props
-        } = this.props
+    } = this.props
 
     props.style = {
       width,
@@ -66,6 +62,6 @@ export default class Label extends React.Component {
       ...props.style
     }
     if (this.state.isExpanded) return <div style={props.style} onClick={this.expandLabel} checked>{this.props.labelText}</div>
-    else return <div style={props.style} onClick={this.expandLabel}></div>
+    else return <div style={props.style} onClick={this.expandLabel} />
   }
 }

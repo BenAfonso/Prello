@@ -2,10 +2,9 @@ import React from 'react'
 import CardDetailsSection from '../../CardDetailsSection/CardDetailsSection'
 import CardDetailsMembers from './CardDetailsMembers/CardDetailsMembers'
 import CardDetailsLabels from './CardDetailsLabels/CardDetailsLabels'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import Button from '../../../../UI/Button/Button'
-import NewComment from '../../../../UI/NewComment/NewComment'
-import { updateCardDescription } from '../../../../../services/Card.services'
+import {updateCardDescription} from '../../../../../services/Card.services'
 import Markdown from 'react-markdown'
 
 @connect(store => {
@@ -14,7 +13,6 @@ import Markdown from 'react-markdown'
   }
 })
 export default class CardDetailsInformations extends React.Component {
-
   constructor (props) {
     super(props)
     this.state = {
@@ -41,7 +39,7 @@ export default class CardDetailsInformations extends React.Component {
     this.dismissDescriptionForm()
     this.text.innerHTML = ''
     let newCard = this.props.board.lists[this.props.listIndex].cards
-    .filter(c => c._id === this.props.id)[0]
+      .filter(c => c._id === this.props.id)[0]
     newCard.description = desc
     updateCardDescription(this.props.board._id,
       this.props.board.lists[this.props.listIndex]._id,
@@ -50,7 +48,6 @@ export default class CardDetailsInformations extends React.Component {
   }
 
   render () {
-
     const fullCard = this.props.board.lists[this.props.listIndex].cards
       .filter(c => c._id === this.props.id)[0]
 
@@ -67,7 +64,7 @@ export default class CardDetailsInformations extends React.Component {
                 Members
               </div>
               <CardDetailsMembers listIndex={this.props.listIndex} id={fullCard._id} />
-              </div>
+            </div>
             <div className='labels'>
               <div className='subsectionTitle'>
                 Labels
@@ -78,13 +75,13 @@ export default class CardDetailsInformations extends React.Component {
           {
             this.state.editDescriptionFormDisplayed
               ? <div className='editDescriptionForm'>
-                  <div className='content'>
-                    <div className='card' contentEditable ref={c => this.text = c} />
-                    <div className='saveButton' onClick={() => { this.updateDescription(this.text.innerHTML) }}>
+                <div className='content'>
+                  <div className='card' contentEditable ref={c => { this.text = c }} />
+                  <div className='saveButton' onClick={() => { this.updateDescription(this.text.innerHTML) }}>
                       Save
-                    </div>
                   </div>
                 </div>
+              </div>
               : null
           }
           <Button

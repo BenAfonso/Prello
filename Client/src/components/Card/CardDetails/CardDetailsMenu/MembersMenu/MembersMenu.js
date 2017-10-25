@@ -1,6 +1,6 @@
 import React from 'react'
 import { addMember } from '../../../../../store/actions'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import Button from '../../../../UI/Button/Button'
 import DropDown from '../../../../UI/DropDown/DropDown'
 import AvatarThumbnail from '../../../../UI/AvatarThumbnail/AvatarThumbnail'
@@ -48,7 +48,7 @@ export default class MembersMenu extends React.Component {
 
   onChange () {
     if (this.email.value !== '') {
-      const newmatchingBoardCollaborators = this.getMatchingCollaborators(this.email.value)      
+      const newmatchingBoardCollaborators = this.getMatchingCollaborators(this.email.value)
       this.setState({
         inputValue: this.email.value,
         matchingBoardCollaborators: newmatchingBoardCollaborators
@@ -62,13 +62,11 @@ export default class MembersMenu extends React.Component {
   }
 
   setInputValue (email) {
-    console.log(email)
     this.email.value = email
     this.setState({
       inputValue: email,
       enableAdd: true
     })
-    console.log(this.state.inputValue)
   }
 
   getInitials (name) {
@@ -130,7 +128,7 @@ export default class MembersMenu extends React.Component {
   render () {
     let menuElements = this.state.matchingBoardCollaborators.map(collaborator => {
       return {
-        action: this.setInputValue.bind(this,collaborator.email),
+        action: this.setInputValue.bind(this, collaborator.email),
         placeholder: this.renderUserinMenu(collaborator),
         closer: true,
         disabled: this.isCardMember(collaborator)
@@ -138,38 +136,38 @@ export default class MembersMenu extends React.Component {
     })
 
     return (
-    <div className='host'>
-      <DropDown
-        layout='custom'
-        orientation={this.props.orientation}
-        button={this.props.button}
-        title='Members'>
-        <div style={{ width: '300px' }}>
-          <ul>
-            <li className='element'>
-              <div className='element-input'>
-                <form onSubmit={this.addCollaborator}>
-                  <DropDown
-                    menuElements={menuElements}
-                    input={<input type='text' height='20px' value={this.state.inputValue} placeholder='georges.abitbol@mondedem.fr' onChange={this.onChange} ref={(t) => { this.email = t }} />}
-                  />
-                </form>
-              </div>
-              <div className='element-button'>
-                <Button
-                  bgColor='#5AAC44'
-                  block
-                  onClick={this.addMember}
-                  disabled={!this.state.enableAdd}
-                >
+      <div className='host'>
+        <DropDown
+          layout='custom'
+          orientation={this.props.orientation}
+          button={this.props.button}
+          title='Members'>
+          <div style={{ width: '300px' }}>
+            <ul>
+              <li className='element'>
+                <div className='element-input'>
+                  <form onSubmit={this.addCollaborator}>
+                    <DropDown
+                      menuElements={menuElements}
+                      input={<input type='text' height='20px' value={this.state.inputValue} placeholder='georges.abitbol@mondedem.fr' onChange={this.onChange} ref={(t) => { this.email = t }} />}
+                    />
+                  </form>
+                </div>
+                <div className='element-button'>
+                  <Button
+                    bgColor='#5AAC44'
+                    block
+                    onClick={this.addMember}
+                    disabled={!this.state.enableAdd}
+                  >
                   Add
-                </Button>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </DropDown>
-      <style jsx>{`
+                  </Button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </DropDown>
+        <style jsx>{`
 
     .host {
       width: 100%;
@@ -203,7 +201,7 @@ export default class MembersMenu extends React.Component {
       margin: 8px 0 8px 5%;
     }
     `}</style>
-    </div>
-  )
+      </div>
+    )
   }
 }

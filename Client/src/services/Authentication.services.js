@@ -11,10 +11,14 @@ export function extractToken () {
 }
 
 export function setProfile () {
-  console.log("ZAEAZE")
-  return axios.get(`${Config.API_URL}/me/`).then(res => {
-    setConnectedUser(res.data)
-  })
+  if (profileIsInLocalStorage()) {
+    setConnectedUser(loadProfileFromLocalStorage())
+  } else {
+    fetchProfile().then(profile => {
+      setConnectedUser(profile)
+      storeProfileLocalStorage(profile)
+    })
+  }
 }
 
 export function isAuthenticated () {
@@ -51,11 +55,11 @@ export function login (email, password) {
       email: email,
       password: password
     })
-    .then((res) => {
-      resolve(res.data)
-    }).catch((err) => {
-      reject(err)
-    })
+      .then((res) => {
+        resolve(res.data)
+      }).catch((err) => {
+        reject(err)
+      })
   })
 }
 export function loginGoogle (code) {
@@ -73,17 +77,17 @@ export function loginGoogle (code) {
 export function register (name, email, password, withLogin) {
   return new Promise((resolve, reject) => {
     axios.post(`${Config.API_URL}/register${withLogin ? '?withLogin=true' : ''}`)
-    .send({
-      email: email,
-      name: name,
-      username: name.split(' ').join(''),
-      password: password
-    })
-    .then((res) => {
-      resolve(res.data)
-    }).catch((err) => {
-      reject(err)
-    })
+      .send({
+        email: email,
+        name: name,
+        username: name.split(' ').join(''),
+        password: password
+      })
+      .then((res) => {
+        resolve(res.data)
+      }).catch((err) => {
+        reject(err)
+      })
   })
 }
 
@@ -152,5 +156,26 @@ export function authDelete (url) {
       logout()
       reject(new Error('Not logged in'))
     }
+  })
+}
+
+const loadProfileFromLocalStorage = () => {
+  return JSON.parse(window.localStorage.getItem('prello_profile'))
+}
+
+const storeProfileLocalStorage = (profile) => {
+  window.localStorage.setItem('prello_profile', JSON.stringify(profile))
+}
+
+const profileIsInLocalStorage = () => (
+  window.localStorage.getItem('prello_profile') !== undefined &&
+  window.localStorage.getItem('prello_profile') !== null
+)
+
+const fetchProfile = () => {
+  return new Promise((resolve, reject) => {
+    axios.get(`${Config.API_URL}/me/`).then(res => {
+      resolve(res.data)
+    })
   })
 }

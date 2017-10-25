@@ -56,7 +56,7 @@ export default class BoardForm extends React.Component {
                   shadow
                   onClick={this.submit}>
                   Add
-                  </Button>
+                </Button>
 
               </div>
               <div>

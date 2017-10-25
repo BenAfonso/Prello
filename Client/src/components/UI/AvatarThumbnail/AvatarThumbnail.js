@@ -33,7 +33,7 @@ export default class AvatarThumbnail extends React.Component {
       color: color,
       backgroundColor: bgColor,
       backgroundImage:
-        (thumbnail && thumbnail!=='')
+        (thumbnail && thumbnail !== '')
           ? `url('${thumbnail}')`
           : 'none',
       fontSize: fontSize,
@@ -46,7 +46,7 @@ export default class AvatarThumbnail extends React.Component {
     return (
       <div {...props} className='host'>
         {
-          (!thumbnail || thumbnail==='')
+          (!thumbnail || thumbnail === '')
             ? initials
             : ''
         }

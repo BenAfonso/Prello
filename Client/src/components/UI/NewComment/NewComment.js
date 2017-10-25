@@ -17,7 +17,7 @@ const NewComment = (props) => {
         </div>
       </div>
       <div className='content'>
-        <div className='card' contentEditable ref={c => this.text = c} />
+        <div className='card' contentEditable ref={c => { this.text = c }} />
         <div className='saveButton' onClick={() => { handleSubmit(this.text.innerHTML) }}>
           Save
         </div>

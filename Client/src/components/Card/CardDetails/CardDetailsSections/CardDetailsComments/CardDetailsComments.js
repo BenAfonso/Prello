@@ -3,7 +3,7 @@ import CardDetailsSection from '../../CardDetailsSection/CardDetailsSection'
 import PropTypes from 'prop-types'
 import Comment from '../../../../UI/Comment/Comment'
 import NewComment from '../../../../UI/NewComment/NewComment'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import { addComment } from '../../../../../services/Card.services'
 import { dateFormatter } from '../../../../../util/dateFormatter'
 
@@ -14,7 +14,6 @@ import { dateFormatter } from '../../../../../util/dateFormatter'
   }
 })
 export default class CardDetailsComments extends React.Component {
-
   constructor (props) {
     super(props)
     this.onCommentSubmit = this.onCommentSubmit.bind(this)
@@ -26,22 +25,21 @@ export default class CardDetailsComments extends React.Component {
   }
 
   render () {
-
     const list = this.props.board.lists[this.props.listIndex]
-    const card = list.cards.filter(c => c._id === this.props.id)[0] 
+    const card = list.cards.filter(c => c._id === this.props.id)[0]
     const comments = card.comments
     return (
       <div className='host'>
         <CardDetailsSection title='Add comment' icon='comment-o'>
           <div className='comments'>
             {
-              comments ? comments.map(c => (
-                <div className='comment'>
+              comments ? comments.map((c, i) => (
+                <div key={i} className='comment'>
                   <Comment
-                    content={c.text}
+                    content={c.text || ''}
                     username={c.author ? c.author.username : ''}
                     initials={
-                      c.author 
+                      c.author
                         ? c.author.name.split(' ').length > 1
                           ? `${c.author.name.split(' ')[0][0]}${c.author.name.split(' ')[1][0]}`
                           : `${c.author.name[0]}`
@@ -54,17 +52,17 @@ export default class CardDetailsComments extends React.Component {
               )) : null
             }
           </div>
-          <NewComment 
+          <NewComment
             username={this.props.currentUser ? this.props.currentUser.username : ''}
             initials={
-              this.props.currentUser 
+              this.props.currentUser
                 ? this.props.currentUser.name.split(' ').length > 1
                   ? `${this.props.currentUser.name.split(' ')[0][0]}${this.props.currentUser.name.split(' ')[1][0]}`
                   : `${this.props.currentUser.name[0]}`
                 : ''
             }
             thumbnail={this.props.currentUser ? this.props.currentUser.picture : ''}
-            handleSubmit={this.onCommentSubmit} ref={n => this.newComment = n} />
+            handleSubmit={this.onCommentSubmit} />
         </CardDetailsSection>
         <style jsx>{`
           .comments {

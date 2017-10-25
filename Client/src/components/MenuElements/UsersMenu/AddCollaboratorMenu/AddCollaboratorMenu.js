@@ -127,51 +127,51 @@ export default class AddCollaboratorMenu extends React.Component {
     )
 
     return (
-    <div className='host'>
-      <DropDown
-        layout='custom'
-        orientation='right'
-        button={<Button
-          bgColor='rgba(0,0,0,0)'
-          color='#444'
-          hoverBgColor='rgba(0,0,0,0.1)'
-          block
-        >
-          <Icon color='#000' name='user-plus' fontSize='20px' />
+      <div className='host'>
+        <DropDown
+          layout='custom'
+          orientation='right'
+          button={<Button
+            bgColor='rgba(0,0,0,0)'
+            color='#444'
+            hoverBgColor='rgba(0,0,0,0.1)'
+            block
+          >
+            <Icon color='#000' name='user-plus' fontSize='20px' />
             Add a collaborator
-        </Button>}
-        title='Collaborators'>
-        <div style={{ width: '300px' }}>
-          <ul>
-            <li className='element'>
-              <div className='element-text'>Enter a name or an e-mail address to invite someone new !</div>
-              <div className='element-input'>
-                <form onSubmit={this.addCollaborator}>
-                  <DropDown
-                    menuElements={menuElements}
-                    input={<input type='text' height='20px' value={this.state.inputValue} placeholder='georges.abitbol@mondedem.fr' onChange={this.onChange} ref={(t) => { this.email = t }} />}
-                  />
-                </form>
-              </div>
-              <div className='element-button'>
-                <Button
-                  bgColor='#5AAC44'
-                  block
-                  onClick={this.addCollaborator}
-                  disabled={!this.state.enableAdd}
-                >
+          </Button>}
+          title='Collaborators'>
+          <div style={{ width: '300px' }}>
+            <ul>
+              <li className='element'>
+                <div className='element-text'>Enter a name or an e-mail address to invite someone new !</div>
+                <div className='element-input'>
+                  <form onSubmit={this.addCollaborator}>
+                    <DropDown
+                      menuElements={menuElements}
+                      input={<input type='text' height='20px' value={this.state.inputValue} placeholder='georges.abitbol@mondedem.fr' onChange={this.onChange} ref={(t) => { this.email = t }} />}
+                    />
+                  </form>
+                </div>
+                <div className='element-button'>
+                  <Button
+                    bgColor='#5AAC44'
+                    block
+                    onClick={this.addCollaborator}
+                    disabled={!this.state.enableAdd}
+                  >
                   Add
-                </Button>
-              </div>
-            </li>
-            <li className='separator' />
-            <li className='element'>
-              <div className='element-text'>Invite people by giving them a link</div>
-            </li>
-          </ul>
-        </div>
-      </DropDown>
-      <style jsx>{`
+                  </Button>
+                </div>
+              </li>
+              <li className='separator' />
+              <li className='element'>
+                <div className='element-text'>Invite people by giving them a link</div>
+              </li>
+            </ul>
+          </div>
+        </DropDown>
+        <style jsx>{`
 
     .host {
       width: 100%;
@@ -204,7 +204,7 @@ export default class AddCollaboratorMenu extends React.Component {
       margin: 8px 0 8px 5%;
     }
     `}</style>
-    </div>
-  )
+      </div>
+    )
   }
 }

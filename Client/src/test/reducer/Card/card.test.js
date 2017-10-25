@@ -1,4 +1,3 @@
-import { defaultState } from '../../../store/store'
 import reducer from '../../../store/reducer'
 
 describe('Card reducer actions', () => {
