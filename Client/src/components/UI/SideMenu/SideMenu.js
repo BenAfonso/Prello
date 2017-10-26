@@ -3,6 +3,7 @@ import styles from './SideMenu.styles'
 import Icon from '../Icon/Icon'
 import UsersMenu from '../../MenuElements/UsersMenu/UsersMenu'
 import ActivityMenu from '../../MenuElements/ActivityMenu/ActivityMenu'
+import ArchivedMenu from '../../MenuElements/ArchivedMenu/ArchivedMenu'
 
 const elements = [
   {
@@ -14,6 +15,11 @@ const elements = [
     icon: 'hashtag',
     description: 'Activity',
     component: <ActivityMenu />
+  },
+  {
+    icon: 'archive',
+    description: 'Archives',
+    component: <ArchivedMenu />
   }
 ]
 
