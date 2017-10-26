@@ -42,8 +42,7 @@ export default class AddCollaboratorMenu extends React.Component {
     if (this.email.value.length >= 3) {
       let newMatchingUsers = []
       fetchMatchingUsers(this.email.value).then(users => {
-        const firstUsers = users.slice(0, 5)
-        firstUsers.map(user =>
+        users.map(user =>
           newMatchingUsers.push(user)
         )
         this.setState({matchingUsers: newMatchingUsers})
