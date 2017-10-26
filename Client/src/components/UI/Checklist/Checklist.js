@@ -14,7 +14,7 @@ export default class Checklist extends React.Component {
       id: PropTypes.string,
       index: PropTypes.number,
       text: PropTypes.string,
-      done: PropTypes.bool
+      isChecked: PropTypes.bool
     })),
     title: PropTypes.string.isRequired,
     percentageDone: PropTypes.number
@@ -75,7 +75,7 @@ export default class Checklist extends React.Component {
   addItem () {
     if (this.textInput.input.value.length > 0) {
       let newItemsList = this.state.items.slice()
-      newItemsList.push({index: newItemsList.length, text: this.textInput.input.value, done: false})
+      newItemsList.push({index: newItemsList.length, text: this.textInput.input.value, isChecked: false})
       this.setState({items: newItemsList}, () => {
         this.setState({percentageDone: this.recalculatePercentageDone(newItemsList)})
       })
@@ -97,20 +97,20 @@ export default class Checklist extends React.Component {
     this.props.onDelete(this.props.id)
   }
 
-  updateItem (index, newContent, done, doneDate = null) {
+  updateItem (id, index, newContent, isChecked) {
     let newItemsList = this.state.items.slice()
-    newItemsList[index].done = done
+    newItemsList[index].isChecked = isChecked
     newItemsList[index].text = newContent
     this.setState({items: newItemsList}, () => {
       this.setState({percentageDone: this.recalculatePercentageDone(newItemsList)})
     })
-    this.props.onItemUpdate(this.props.index, index, newContent, doneDate)
+    this.props.onItemUpdate(this.props.id, id, newContent, isChecked)
   }
 
   recalculatePercentageDone (list) {
     if (this.state.items.length === 0) { return 0 }
     const size = this.state.items.length
-    return parseInt(list.filter((item) => item.done).length / size * 100, 10)
+    return parseInt(list.filter((item) => item.isChecked).length / size * 100, 10)
   }
 
   hideNewItemForm () {
@@ -161,7 +161,7 @@ export default class Checklist extends React.Component {
           <ChecklistItem
             id={item._id}
             key={item.index}
-            done={item.done}
+            isChecked={item.isChecked}
             index={parseInt(index, 10)}
             text={item.text}
             onChange={this.updateItem}

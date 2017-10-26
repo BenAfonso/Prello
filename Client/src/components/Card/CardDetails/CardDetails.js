@@ -28,7 +28,7 @@ import { getCompleteCard } from '../../../services/Card.services'
 export default class CardDetails extends React.Component {
   static propTypes = {
     checklists: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.Any,
       index: PropTypes.number,
       title: PropTypes.string.isRequired,
       items: PropTypes.array

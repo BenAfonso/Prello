@@ -7,16 +7,18 @@ import Icon from '../Icon/Icon'
 
 export default class ChecklistItem extends React.Component {
   static propTypes = {
+    id: PropTypes.any,
     text: PropTypes.string.isRequired,
     index: PropTypes.number.isRequired,
     onToggle: PropTypes.func,
     onDelete: PropTypes.func,
     onChange: PropTypes.func,
+    isChecked: PropTypes.boolean,
     doneDate: PropTypes.instanceOf(Date)
   }
 
   static defaultProps = {
-    done: false,
+    isChecked: false,
     doneDate: null,
     onToggle: null,
     onDelete: null,
@@ -28,7 +30,7 @@ export default class ChecklistItem extends React.Component {
     this.state = {
       isEditable: false,
       text: props.text,
-      done: props.done,
+      isChecked: props.isChecked,
       doneDate: props.doneDate
     }
     this.setEditable = this.setEditable.bind(this)
@@ -45,7 +47,7 @@ export default class ChecklistItem extends React.Component {
   updateText () {
     if (this.textInput.input.value.length > 0) {
       this.setState({isEditable: false, text: this.textInput.input.value}, () => {
-        if (this.props.onChange !== null) { this.props.onChange(this.props.index, this.state.text, this.state.done, this.state.doneDate) }
+        if (this.props.onChange !== null) { this.props.onChange(this.props.id, this.props.index, this.state.text, this.state.isChecked) }
       })
     }
   }
@@ -55,14 +57,14 @@ export default class ChecklistItem extends React.Component {
   }
 
   onToggle () {
-    this.setState({ done: this.checkbox.checked }, () => {
-      if (this.state.done) {
+    this.setState({ isChecked: this.checkbox.checked }, () => {
+      if (this.state.isChecked) {
         this.setState({ doneDate: new Date() }, () => {
-          if (this.props.onChange !== null) { this.props.onChange(this.props.index, this.state.text, this.state.done, this.state.doneDate) }
+          if (this.props.onChange !== null) { this.props.onChange(this.props.id, this.props.index, this.state.text, this.state.isChecked) }
         })
       } else {
         this.setState({ doneDate: null }, () => {
-          if (this.props.onChange !== null) { this.props.onChange(this.props.index, this.state.text, this.state.done, this.state.doneDate) }
+          if (this.props.onChange !== null) { this.props.onChange(this.props.id, this.props.index, this.state.text, this.state.isChecked) }
         })
       }
     })
@@ -77,7 +79,7 @@ export default class ChecklistItem extends React.Component {
       <div className='checklistItem'>
         {!this.state.isEditable
           ? <div className='readOnlyMode'>
-            <input type='checkbox' className='checkbox' ref={t => { this.checkbox = t }} checked={this.state.done} onClick={this.onToggle} />
+            <input type='checkbox' className='checkbox' ref={t => { this.checkbox = t }} checked={this.state.isChecked} onClick={this.onToggle} />
             <span className='itemContent' onClick={this.setEditable}>{this.state.text}</span>
             <div className='deleteItemButton'>
               <Button

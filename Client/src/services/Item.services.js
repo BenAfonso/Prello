@@ -12,7 +12,7 @@ export function deleteItem (boardId, listId, cardId, checklistId, itemId) {
   axios.delete(`${Config.API_URL}/boards/${boardId}/lists/${listId}/cards/${cardId}/checklists/${checklistId}/items/${itemId}`)
 }
 
-export function updateItem (boardId, cardId, listId, checklistId, itemId, newContent, isChecked) {
+export function updateItem (boardId, listId, cardId, checklistId, itemId, newContent, isChecked) {
   axios.put(`${Config.API_URL}/boards/${boardId}/lists/${listId}/cards/${cardId}/checklists/${checklistId}/items/${itemId}`, {
     text: newContent,
     isChecked: isChecked

@@ -35,7 +35,7 @@ export default class CardDetailsChecklists extends React.Component {
     this.updateChecklist = this.updateChecklist.bind(this)
     this.addChecklistItem = this.addChecklistItem.bind(this)
     this.deleteChecklistItem = this.deleteChecklistItem.bind(this)
-    this.updateItemStatus = this.updateItemStatus.bind(this)
+    this.updateItem = this.updateItem.bind(this)
   }
 
   deleteChecklist (id) {
@@ -54,8 +54,9 @@ export default class CardDetailsChecklists extends React.Component {
     addItem(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.cardId, checklistId, content)
   }
 
-  updateItemStatus (checklistIndex, itemIndex, content, doneDate = null) {
-    updateItem(this.props.cardId, checklistIndex, itemIndex, content, doneDate)
+  updateItem (checklistId, itemId, content, isChecked) {
+    console.log(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.cardId, checklistId, itemId, content, isChecked)
+    updateItem(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.cardId, checklistId, itemId, content, isChecked)
   }
 
   render () {
@@ -70,11 +71,11 @@ export default class CardDetailsChecklists extends React.Component {
             <Checklist
               id={checklist._id}
               index={parseInt(index, 10)}
-              onItemStatusChange={this.updateItemStatus}
+              onItemStatusChange={this.updateItem}
               onDelete={this.deleteChecklist}
               onItemAdd={this.addChecklistItem}
               onItemDelete={this.deleteChecklistItem}
-              onItemUpdate={this.updateItemStatus}
+              onItemUpdate={this.updateItem}
               onUpdate={this.updateChecklist}
               key={checklist.index}
               title={checklist.text}

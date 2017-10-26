@@ -82,9 +82,11 @@ export default class CardComponent extends React.Component {
       title: PropTypes.string.isRequired,
       index: PropTypes.number,
       items: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.any,
         index: PropTypes.number,
         text: PropTypes.string.isRequired,
-        items: PropTypes.array
+        isChecked: PropTypes.boolean,
+        doneDate: PropTypes.instanceOf(Date)
       }))
     })),
     content: PropTypes.string.isRequired,
