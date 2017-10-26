@@ -41,7 +41,7 @@ module.exports = (router, controller) => {
     *         in: body
     *         required: true
     *         schema:
-    *             $ref: '#/definitions/NewItem'
+    *             $ref: '#/definitions/Item'
     *     responses:
     *       201:
     *         description: Message confirming the Item has been created

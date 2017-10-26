@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const Comment = mongoose.model('Comment')
-const emit = require('../controllers/sockets').emit
 const cardController = require('./cardController')
 
 const commentController = {}

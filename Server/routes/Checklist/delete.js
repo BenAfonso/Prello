@@ -1,17 +1,16 @@
 const Util = require('../../controllers/Util')
 const {requiresLogin} = require('../../config/middlewares/authorization')
-const {cardExists} = require('../../config/middlewares/cardAuthorizations')
-const {listExists, hasCardInside} = require('../../config/middlewares/listAuthorizations')
+const {hasCardInside} = require('../../config/middlewares/listAuthorizations')
 const {isCollaborator, hasListInside} = require('../../config/middlewares/boardAuthorizations')
-const {checkListExists, itemExists} = require('../../config/middlewares/checkListAuthorizations')
+const {checkListExists} = require('../../config/middlewares/checkListAuthorizations')
 
 module.exports = (router, controller) => {
   /**
     * @swagger
-    * /boards/{boardId}/lists/{listId}/cards/{cardId}/checklists/{checklistId}/items/{itemId}:
+    * /boards/{boardId}/lists/{listId}/cards/{cardId}/checklists/{checklistId}:
     *   delete:
     *     tags:
-    *       - Items
+    *       - Checklists
     *     description: delete item inside a checklist
     *     summary: delete item inside a checklist
     *     produces:
@@ -19,37 +18,32 @@ module.exports = (router, controller) => {
     *     parameters:
     *       - name: boardId
     *         type: string
-    *         description: The board id where we want to delete the Item
+    *         description: The board id where we want to delete the Checklist
     *         in: path
     *         required: true
     *       - name: listId
     *         type: string
-    *         description: The list id where we want to delete the Item
+    *         description: The list id where we want to delete the Checklist
     *         in: path
     *         required: true
     *       - name: cardId
     *         type: string
-    *         description: The Card id where we want to delete the Item
+    *         description: The Card id where we want to delete the Checklist
     *         in: path
     *         required: true
     *       - name: checklistId
     *         type: string
-    *         description: The Checklist id where we want to delete the Item
-    *         in: path
-    *         required: true
-    *       - name: itemId
-    *         type: string
-    *         description: The item id we want to delete
+    *         description: The Checklist id we want to delete
     *         in: path
     *         required: true
     *     responses:
-    *       201:
-    *         description: Message confirming the Item has been created
+    *       200:
+    *         description: Message confirming the Checklist has been deleted
     *       500:
     *         description: Internal error
     */
-  router.delete('/boards/:boardId/lists/:listId/cards/:cardId/checklists/:checklistId/items/:itemId', [requiresLogin, isCollaborator, hasListInside, hasCardInside, checkListExists, itemExists], function (req, res) {
-    let requiredParameter = ['cardId', 'boardId', 'listId', 'checklistId', 'itemId']
+  router.delete('/boards/:boardId/lists/:listId/cards/:cardId/checklists/:checklistId', [requiresLogin, isCollaborator, hasListInside, hasCardInside, checkListExists], function (req, res) {
+    let requiredParameter = ['cardId', 'boardId', 'listId', 'checklistId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
       let stringMessage = requiredParameter.join(',')
@@ -57,7 +51,7 @@ module.exports = (router, controller) => {
       return
     }
 
-    controller.removeChecklistItem(req).then((data) => {
+    controller.removeChecklist(req).then((data) => {
       res.status(201).json(data)
     })
       .catch((err) => {
