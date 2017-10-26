@@ -6,14 +6,13 @@ import Icon from '../../UI/Icon/Icon'
 import styles from './CardDetails.styles'
 import DropDown from '../../UI/DropDown/DropDown'
 import Input from '../../UI/Input/Input'
-import { removeChecklist } from '../../../store/actions'
 import CardDetailsComments from './CardDetailsSections/CardDetailsComments/CardDetailsComments'
 import CardDetailsActivity from './CardDetailsSections/CardDetailsActivity/CardDetailsActivity'
 import CardDetailsInformations from './CardDetailsSections/CardDetailsInformations/CardDetailsInformations'
 import CardDetailsChecklists from './CardDetailsSections/CardDetailsChecklists/CardDetailsChecklists'
 import MembersMenu from './CardDetailsMenu/MembersMenu/MembersMenu'
 import { getCompleteCard } from '../../../services/Card.services'
-import { addChecklist } from '../../../services/Checklist.services'
+import { addChecklist, deleteChecklist } from '../../../services/Checklist.services'
 
 @connect(store => {
   return {
@@ -49,10 +48,8 @@ export default class CardDetails extends React.Component {
     addChecklist(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.id, this.checklistTitleInput.input.value)
   }
 
-  deleteChecklist (index) {
-    const newChecklistsList = this.props.checklists.slice()
-    newChecklistsList.splice(index, 1)
-    removeChecklist(this.props.id, index)
+  deleteChecklist (id) {
+    deleteChecklist(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.id, id)
   }
 
   componentDidMount () {

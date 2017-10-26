@@ -90,7 +90,7 @@ export default class Checklist extends React.Component {
   }
 
   onDelete () {
-    this.props.onDelete(this.props.index)
+    this.props.onDelete(this.props.id)
   }
 
   updateItem (index, newContent, done, doneDate = null) {

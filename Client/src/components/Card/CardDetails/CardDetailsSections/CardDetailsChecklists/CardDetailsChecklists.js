@@ -36,8 +36,8 @@ export default class CardDetailsChecklists extends React.Component {
     this.updateItemStatus = this.updateItemStatus.bind(this)
   }
 
-  deleteChecklist (index) {
-    this.props.onDelete(index)
+  deleteChecklist (id) {
+    this.props.onDelete(id)
   }
 
   deleteChecklistItem (checklistIndex, itemIndex) {
@@ -60,8 +60,9 @@ export default class CardDetailsChecklists extends React.Component {
       <div className='host'>
         <CardDetailsSection title='Checklists' icon='check' />
         {checklists.map((checklist, index) => (
-          <div className='checklist'>
+          <div key={parseInt(index, 10)} className='checklist'>
             <Checklist
+              id={checklist._id}
               index={parseInt(index, 10)}
               onItemStatusChange={this.updateItemStatus}
               onDelete={this.deleteChecklist}

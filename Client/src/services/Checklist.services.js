@@ -8,7 +8,7 @@ export function addChecklist (boardId, listId, cardId, title) {
 }
 
 export function deleteChecklist (boardId, listId, cardId, checklistId) {
-  axios.delete(`${Config.API_URL}/boards/${boardId}/cards/${cardId}/checklists/${checklistId}`)
+  axios.delete(`${Config.API_URL}/boards/${boardId}/lists/${listId}/cards/${cardId}/checklists/${checklistId}`)
 }
 
 export function updateChecklist (boardId, listId, cardId, checklistId, newTitle) {
