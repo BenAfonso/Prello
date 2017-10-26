@@ -77,6 +77,7 @@ const cardTarget = {
 export default class CardComponent extends React.Component {
   static propTypes = {
     id: PropTypes.any,
+    listId: PropTypes.any,
     connectCardDragSource: PropTypes.func.isRequired,
     content: PropTypes.string.isRequired,
     isDragging: PropTypes.bool.isRequired,

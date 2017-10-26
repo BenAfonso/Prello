@@ -16,7 +16,7 @@ export default (props) => (
         placeholder: 'Move list'
       },
       {
-        action: null,
+        action: () => { props.archive() },
         placeholder: 'Archive list'
       }]}>
     <Button

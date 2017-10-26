@@ -48,3 +48,9 @@ export function deleteList (boardId, listId) {
       })
   })
 }
+
+export function updateList (boardId, listId, list) {
+  axios.put(`${Config.API_URL}/boards/${boardId}/lists/${listId}`, list).then(res => {
+
+  }).catch(err => console.log(err))
+}

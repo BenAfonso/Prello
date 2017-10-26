@@ -15,6 +15,7 @@ export default `
   .content {
     display: inline-block;
     height: 100%;
+    overflow-y: auto;
     width: calc(100% - 60px);
     background-color: #EEE;
   }
