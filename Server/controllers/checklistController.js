@@ -105,6 +105,11 @@ checklistController.updateItem = (req) => {
         }
         if (req.body.isChecked !== undefined) {
           res.checklists.id(req.params.checklistId).items.id(req.params.itemId).isChecked = req.body.isChecked
+          if (req.body.isChecked) {
+            res.checklists.id(req.params.checklistId).items.id(req.params.itemId).doneDate = Date.now()
+          } else {
+            res.checklists.id(req.params.checklistId).items.id(req.params.itemId).doneDate = null
+          }
         }
         res.save().then((result) => {
           cardController.refreshOneCard(req.params.boardId, req.params.listId, req.params.cardId).then((cardToEmit) => {
