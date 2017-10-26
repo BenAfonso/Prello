@@ -19,7 +19,6 @@ export default class CardDetailsChecklists extends React.Component {
     onDelete: PropTypes.func,
     checklists: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string,
-      index: PropTypes.number,
       title: PropTypes.string.isRequired,
       items: PropTypes.array
     }))
@@ -66,21 +65,20 @@ export default class CardDetailsChecklists extends React.Component {
     return (
       <div className='host'>
         <CardDetailsSection title='Checklists' icon='check' />
-        {checklists.map((checklist, index) => (
-          <div key={parseInt(index, 10)} className='checklist'>
-            <Checklist
-              id={checklist._id}
-              index={parseInt(index, 10)}
-              onItemStatusChange={this.updateItem}
-              onDelete={this.deleteChecklist}
-              onItemAdd={this.addChecklistItem}
-              onItemDelete={this.deleteChecklistItem}
-              onItemUpdate={this.updateItem}
-              onUpdate={this.updateChecklist}
-              key={checklist.index}
-              title={checklist.text}
-              items={checklist.items} />
-          </div>
+        {checklists.map((checklist) => (
+          <Checklist
+            listIndex={this.props.listIndex}
+            cardId={this.props.cardId}
+            id={checklist._id}
+            onItemStatusChange={this.updateItem}
+            onDelete={this.deleteChecklist}
+            onItemAdd={this.addChecklistItem}
+            onItemDelete={this.deleteChecklistItem}
+            onItemUpdate={this.updateItem}
+            onUpdate={this.updateChecklist}
+            key={checklist._id}
+            title={checklist.text}
+            items={checklist.items} />
         ))}
         <style jsx>{`
         `}</style>

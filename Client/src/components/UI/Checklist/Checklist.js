@@ -5,14 +5,22 @@ import styles from './Checklist.styles'
 import Input from '../Input/Input'
 import Button from '../Button/Button'
 import Icon from '../Icon/Icon'
+import {connect} from 'react-redux'
+
+  @connect(store => {
+    return {
+      board: store.board,
+      lists: store.board.lists
+    }
+  })
 
 export default class Checklist extends React.Component {
   static propTypes = {
+    listIndex: PropTypes.string,
+    cardId: PropTypes.string,
     id: PropTypes.string,
-    index: PropTypes.number,
     items: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string,
-      index: PropTypes.number,
       text: PropTypes.string,
       isChecked: PropTypes.bool
     })),
@@ -28,13 +36,15 @@ export default class Checklist extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      listIndex: props.listIndex,
+      cardId: props.cardId,
+      id: props.id,
       items: props.items,
       displayNewItemForm: false,
       displayEditTitleForm: false,
       title: props.title,
       percentageDone: props.percentageDone
     }
-
     this.displayNewItemForm = this.displayNewItemForm.bind(this)
     this.addItem = this.addItem.bind(this)
     this.hideNewItemForm = this.hideNewItemForm.bind(this)
@@ -64,9 +74,9 @@ export default class Checklist extends React.Component {
     this.setState({displayEditTitleForm: false})
   }
 
-  updateTitle () {
-    if (this.titleInput.input.value.length > 0) {
-      this.setState({title: this.titleInput.input.value, displayEditTitleForm: false}, () => {
+  updateTitle (text) {
+    if (text.length > 0) {
+      this.setState({title: text, displayEditTitleForm: false}, () => {
         this.props.onUpdate(this.props.id, this.state.title)
       })
     }
@@ -74,22 +84,12 @@ export default class Checklist extends React.Component {
 
   addItem () {
     if (this.textInput.input.value.length > 0) {
-      let newItemsList = this.state.items.slice()
-      newItemsList.push({index: newItemsList.length, text: this.textInput.input.value, isChecked: false})
-      this.setState({items: newItemsList}, () => {
-        this.setState({percentageDone: this.recalculatePercentageDone(newItemsList)})
-      })
       this.props.onItemAdd(this.props.id, this.textInput.input.value)
       this.textInput.input.value = ''
     }
   }
 
-  deleteItem (id, index) {
-    let newItemsList = this.state.items.slice()
-    newItemsList.splice(index, 1)
-    this.setState({items: newItemsList}, () => {
-      this.setState({percentageDone: this.recalculatePercentageDone(newItemsList)})
-    })
+  deleteItem (id) {
     this.props.onItemDelete(this.props.id, id)
   }
 
@@ -97,20 +97,14 @@ export default class Checklist extends React.Component {
     this.props.onDelete(this.props.id)
   }
 
-  updateItem (id, index, newContent, isChecked) {
-    let newItemsList = this.state.items.slice()
-    newItemsList[index].isChecked = isChecked
-    newItemsList[index].text = newContent
-    this.setState({items: newItemsList}, () => {
-      this.setState({percentageDone: this.recalculatePercentageDone(newItemsList)})
-    })
+  updateItem (id, newContent, isChecked) {
     this.props.onItemUpdate(this.props.id, id, newContent, isChecked)
   }
 
-  recalculatePercentageDone (list) {
-    if (this.state.items.length === 0) { return 0 }
-    const size = this.state.items.length
-    return parseInt(list.filter((item) => item.isChecked).length / size * 100, 10)
+  recalculatePercentageDone (items) {
+    if (items.length === 0) { return 0 }
+    const size = items.length
+    return parseInt(items.filter((item) => item.isChecked).length / size * 100, 10)
   }
 
   hideNewItemForm () {
@@ -118,10 +112,13 @@ export default class Checklist extends React.Component {
   }
 
   render () {
+    const list = this.props.board.lists[this.props.listIndex]
+    const card = list.cards.filter(c => c._id === this.props.cardId)[0]
+    const checklists = card.checklists
+    const items = checklists.filter(i => i._id === this.props.id)[0].items
     const actualProgressBarStyle = {
-      width: this.state.percentageDone + '%' // 80% width for the total progress bar in the CSS
+      width: this.recalculatePercentageDone(items) + '%' // 80% width for the total progress bar in the CSS
     }
-
     return (
       <div className='Checklist'>
         {!this.state.displayEditTitleForm
@@ -129,40 +126,43 @@ export default class Checklist extends React.Component {
           ? <div className='title'>
             <span><Icon name='check-square-o' color='#888' /></span>
             <h2 onClick={this.displayEditTitleForm} className='checklistTitle'>{this.state.title}</h2>
+            <div className='trash'>
+              <Button
+                onClick={this.onDelete}
+                size='small'
+                bgColor='rgba(0,0,0,0)'
+                hoverBgColor='#ddd'>
+                <Icon name='trash-o' color='#70727c' />
+              </Button>
+            </div>
           </div>
-          : <div className='editTitleForm'>
-            <div className='textarea'><Input ref={v => { this.titleInput = v }} placeholder={this.state.title} /></div>
-            <Button
-              onClick={this.updateTitle}
-              bgColor='#3cb221'
-              hoverBgColor='#148407'
-              color='#FFF'
-              size='x-small'>
-              <Icon name='check' color='#FFF' />
-            </Button>
-            <Button
-              onClick={this.hideEditTitleForm}
-              bgColor='rgba(0,0,0,0)'
-              hoverBgColor='#ddd'
-              color='#70727c'
-              size='x-small'>
-              <Icon name='times' color='#70727c' />
-            </Button>
+          : <div className='editDescriptionForm'>
+            <div className='content'>
+              <div className='card' contentEditable ref={v => { this.titleInput = v }} placeholder={this.state.title} /></div>
+            <div>
+            </div>
+            <div className='button'>
+              <div className='saveButton' onClick={() => this.updateTitle(this.titleInput.innerHTML)}>
+                        Save
+              </div>
+              <div className='cancelButton' onClick={() => this.hideEditTitleForm()}>
+                        Cancel
+              </div>
+            </div>
           </div> }
         {/* Display progression in any case */}
         <div className='progressPart'>
-          <span className='percentageDone'>{this.state.percentageDone}%</span>
+          <span className='percentageDone'>{this.recalculatePercentageDone(items)}%</span>
           <div className='progressBar'>
             <div className='actualProgressBar' style={actualProgressBarStyle} />
           </div>
         </div>
         {/* Display checklist items */}
-        {this.state.items.map((item, index) => (
+        {items.map((item) => (
           <ChecklistItem
             id={item._id}
-            key={item.index}
+            key={item._id}
             isChecked={item.isChecked}
-            index={parseInt(index, 10)}
             text={item.text}
             onChange={this.updateItem}
             onDelete={this.deleteItem} />
@@ -179,34 +179,17 @@ export default class Checklist extends React.Component {
           : <div className='addItemDiv'>
             <Input ref={(v) => { this.textInput = v }} placeholder='Describe your item...' />
             <div className='button'>
-              <Button
-                onClick={this.addItem}
-                bgColor='#3cb221'
-                hoverBgColor='#148407'
-                color='#FFF'
-                size='small'>
-              Save
-              </Button>
-            </div>
-            <div className='button'>
-              <Button
-                onClick={this.hideNewItemForm}
-                bgColor='rgba(0,0,0,0)'
-                hoverBgColor='#ddd'
-                color='#70727c'
-                size='small'>
-                <Icon name='times' color='#70727c' />
-              </Button>
+              <div className='saveButton' onClick={() => this.addItem()}>
+                        Save
+              </div>
+              <div className='cancelButton' onClick={() => this.hideNewItemForm()}>
+                        Cancel
+              </div>
             </div>
           </div>
         }
-        <Button
-          onClick={this.onDelete}
-          size='small'>
-          <Icon name='trash-o' color='#70727c' />
-        </Button>
         <style jsx>{styles}</style>
       </div>
     )
   }
-}
+  }

@@ -9,7 +9,6 @@ export default class ChecklistItem extends React.Component {
   static propTypes = {
     id: PropTypes.any,
     text: PropTypes.string.isRequired,
-    index: PropTypes.number.isRequired,
     onToggle: PropTypes.func,
     onDelete: PropTypes.func,
     onChange: PropTypes.func,
@@ -47,7 +46,7 @@ export default class ChecklistItem extends React.Component {
   updateText () {
     if (this.textInput.input.value.length > 0) {
       this.setState({isEditable: false, text: this.textInput.input.value}, () => {
-        if (this.props.onChange !== null) { this.props.onChange(this.props.id, this.props.index, this.state.text, this.state.isChecked) }
+        if (this.props.onChange !== null) { this.props.onChange(this.props.id, this.state.text, this.state.isChecked) }
       })
     }
   }
@@ -60,18 +59,18 @@ export default class ChecklistItem extends React.Component {
     this.setState({ isChecked: this.checkbox.checked }, () => {
       if (this.state.isChecked) {
         this.setState({ doneDate: new Date() }, () => {
-          if (this.props.onChange !== null) { this.props.onChange(this.props.id, this.props.index, this.state.text, this.state.isChecked) }
+          if (this.props.onChange !== null) { this.props.onChange(this.props.id, this.state.text, this.state.isChecked) }
         })
       } else {
         this.setState({ doneDate: null }, () => {
-          if (this.props.onChange !== null) { this.props.onChange(this.props.id, this.props.index, this.state.text, this.state.isChecked) }
+          if (this.props.onChange !== null) { this.props.onChange(this.props.id, this.state.text, this.state.isChecked) }
         })
       }
     })
   }
 
   onDelete () {
-    if (this.props.onDelete !== null) { this.props.onDelete(this.props.id, this.props.index) }
+    if (this.props.onDelete !== null) { this.props.onDelete(this.props.id) }
   }
 
   render () {
