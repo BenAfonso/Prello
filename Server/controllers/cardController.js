@@ -178,7 +178,6 @@ cardController.addCollaborator = (boardId, cardId, listId, userId, requesterId) 
 
 cardController.addCollaboratorEmail = (boardId, cardId, listId, email, requesterId) => {
   return new Promise((resolve, reject) => {
-    console.log(email)
     User.findOne({ email: email }).then((res) => {
       if (res) {
         cardController.addCollaborator(boardId, cardId, listId, res._id, requesterId).then(res => {

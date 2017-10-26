@@ -35,6 +35,7 @@ socket.on('NEW_CARD', (newCard) => {
 })
 
 socket.on('CARD_UPDATED', payload => {
+  console.log(payload.card)
   updateCard(payload.listId, payload.card)
 })
 

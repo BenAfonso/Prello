@@ -11,7 +11,6 @@ import { connect } from 'react-redux'
     lists: store.board.lists
   }
 })
-
 export default class CardDetailsChecklists extends React.Component {
   static propTypes = {
     listIndex: PropTypes.number,
@@ -54,10 +53,13 @@ export default class CardDetailsChecklists extends React.Component {
   }
 
   render () {
+    const list = this.props.board.lists[this.props.listIndex]
+    const card = list.cards.filter(c => c._id === this.props.cardId)[0]
+    const checklists = card.checklists
     return (
       <div className='host'>
         <CardDetailsSection title='Checklists' icon='check' />
-        {this.props.checklists.map((checklist, index) => (
+        {checklists.map((checklist, index) => (
           <div className='checklist'>
             <Checklist
               index={parseInt(index, 10)}

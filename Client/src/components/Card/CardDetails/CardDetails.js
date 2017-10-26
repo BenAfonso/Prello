@@ -6,7 +6,7 @@ import Icon from '../../UI/Icon/Icon'
 import styles from './CardDetails.styles'
 import DropDown from '../../UI/DropDown/DropDown'
 import Input from '../../UI/Input/Input'
-import { addChecklistAction, removeChecklist } from '../../../store/actions'
+import { removeChecklist } from '../../../store/actions'
 import CardDetailsComments from './CardDetailsSections/CardDetailsComments/CardDetailsComments'
 import CardDetailsActivity from './CardDetailsSections/CardDetailsActivity/CardDetailsActivity'
 import CardDetailsInformations from './CardDetailsSections/CardDetailsInformations/CardDetailsInformations'
@@ -47,13 +47,6 @@ export default class CardDetails extends React.Component {
 
   createChecklist () {
     addChecklist(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.id, this.checklistTitleInput.input.value)
-      .then((res) => {
-        addChecklistAction(this.props.cardId, this.checklistTitleInput.input.value)
-      })
-      .catch((err) => {
-        console.log(err)
-        // TODO : HANDLE ERROR
-      })
   }
 
   deleteChecklist (index) {

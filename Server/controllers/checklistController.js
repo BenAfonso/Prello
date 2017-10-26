@@ -58,7 +58,6 @@ checklistController.removeChecklist = (req) => {
       } else {
         res.checklists.id(req.params.checklistId).remove()
         res.save().then((result) => {
-          console.log(result)
           cardController.refreshOneCard(req.params.boardId, req.params.listId, req.params.cardId).then((cardToEmit) => {
             resolve(cardToEmit)
           })
@@ -130,7 +129,6 @@ checklistController.removeChecklistItem = (req) => {
       } else {
         res.checklists.id(req.params.checklistId).items.id(req.params.itemId).remove()
         res.save().then((result) => {
-          console.log(result)
           cardController.refreshOneCard(req.params.boardId, req.params.listId, req.params.cardId).then((cardToEmit) => {
             resolve(cardToEmit)
           })
