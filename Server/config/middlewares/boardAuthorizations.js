@@ -56,7 +56,7 @@ module.exports.isOwner = (req, res, next) => {
   })
 }
 module.exports.hasListInside = (req, res, next) => {
-  Board.findOne({'_id': req.params.listId, 'lists': req.params.listId})
+  Board.findOne({'_id': req.params.boardId, 'lists': req.params.listId})
   .exec((err, result) => {
     if (err) {
       return res.status(500).send(err)

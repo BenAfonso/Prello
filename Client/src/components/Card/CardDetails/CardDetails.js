@@ -8,13 +8,13 @@ import CardDetailsActivity from './CardDetailsSections/CardDetailsActivity/CardD
 import CardDetailsInformations from './CardDetailsSections/CardDetailsInformations/CardDetailsInformations'
 import MembersMenu from './CardDetailsMenu/MembersMenu/MembersMenu'
 import { getCompleteCard } from '../../../services/Card.services'
+import { archiveCard } from '../../../store/actions'
 
 @connect(store => {
   return {
     lists: store.board.lists
   }
 })
-
 export default class CardDetails extends React.Component {
   componentDidMount () {
     getCompleteCard(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.id)
@@ -22,7 +22,6 @@ export default class CardDetails extends React.Component {
 
   render () {
     const card = this.props.lists[this.props.listIndex].cards[this.props.index]
-
     return (
       <div className='host'>
         <div className='content'>
@@ -73,6 +72,11 @@ export default class CardDetails extends React.Component {
             <li>
               <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>
                 Attachment
+              </Button>
+            </li>
+            <li>
+              <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small' onClick={() => { archiveCard(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, card) }}>
+                Archive
               </Button>
             </li>
           </ul>

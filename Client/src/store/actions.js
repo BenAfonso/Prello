@@ -1,6 +1,6 @@
 import { fetchBoards, addBoardDistant, addCollaboratorDistant } from '../services/Board.services'
-import { addListDistant, postCard, deleteList, moveListDistant } from '../services/List.services'
-import { moveCard, addMemberDistant } from '../services/Card.services'
+import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
+import { moveCard, addMemberDistant, updateCard } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
 
 import store from '../store/store'
@@ -21,7 +21,7 @@ export function addListLocal (list) {
   }
 }
 
-export function updateCard (listId, card) {
+export function updateCardAction (listId, card) {
   store.dispatch({
     type: 'UPDATE_CARD',
     payload: {
@@ -126,8 +126,8 @@ export function removeListLocal (list) {
   })
 }
 
-export function addCard (dispatch, boardId, listIndex, list, content) {
-  postCard(boardId, list._id, content).then(card => {
+export function addCard (dispatch, boardId, listId, content) {
+  postCard(boardId, listId, content).then(card => {
   }).catch(err => {
     return err
   })
@@ -205,4 +205,50 @@ export function fetchMatchingUsers (email) {
 
 export function addMember (dispatch, boardId, listId, cardId, email) {
   addMemberDistant(boardId, listId, cardId, email)
+}
+
+export function archiveCard (boardId, listId, card) {
+  if (card.isArchived) { return }
+  let newCard = { ...card, isArchived: true }
+  store.dispatch({
+    type: 'UPDATE_CARD',
+    payload: {
+      listId: listId,
+      card: newCard
+    }
+  })
+  updateCard(boardId, listId, card._id, newCard)
+}
+
+export function restoreCard (boardId, listId, card) {
+  if (!card.isArchived) { return }
+  let newCard = { ...card, isArchived: false }
+  store.dispatch({
+    type: 'UPDATE_CARD',
+    payload: {
+      listId: listId,
+      card: newCard
+    }
+  })
+  updateCard(boardId, listId, card._id, newCard)
+}
+
+export function archiveList (boardId, list) {
+  if (list.isArchived) { return }
+  list.isArchived = true
+  store.dispatch({
+    type: 'UPDATE_LIST',
+    payload: list
+  })
+  updateList(boardId, list._id, list)
+}
+
+export function restoreList (boardId, list) {
+  if (!list.isArchived) { return }
+  let newList = { ...list, isArchived: false }
+  updateList(boardId, list._id, newList)
+  store.dispatch({
+    type: 'UPDATE_LIST',
+    payload: newList
+  })
 }
