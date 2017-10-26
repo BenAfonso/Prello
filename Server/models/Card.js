@@ -2,12 +2,14 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const Subtask = {
   text: {type: String, default: ''},
-  isChecked: {type: Boolean, default: false}
+  isChecked: {type: Boolean, default: false},
+  createdAt: {type: Date, default: Date.now}
 }
 
 const Checklist = {
   text: {type: String, default: ''},
-  subtasks: [Subtask]
+  subtasks: [Subtask],
+  createdAt: {type: Date, default: Date.now}
 }
 
 const CardSchema = new Schema({
@@ -15,7 +17,7 @@ const CardSchema = new Schema({
   dueDate: {type: Date},
   checklists: [Checklist],
   comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
-  createdAt: {type: Date},
+  createdAt: {type: Date, default: Date.now},
   isArchived: {type: Boolean, default: false},
   description: {type: String, default: ''},
   attachments: [{type: Schema.Types.ObjectId, ref: 'Attachment'}],
