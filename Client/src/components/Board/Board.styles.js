@@ -17,7 +17,7 @@ export default `
   }
 
   ul {
-    height: calc(100% - 34px);
+    height: calc(100% - 22px);
     display: flex;
     flex-wrap: nowrap;
     align-items: flex-start;
