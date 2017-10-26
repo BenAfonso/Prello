@@ -1,8 +1,8 @@
 const Util = require('../../controllers/Util')
 const {requiresLogin} = require('../../config/middlewares/authorization')
-const {cardExists} = require('../../config/middlewares/cardAuthorizations')
-const {listExists, hasCardInside} = require('../../config/middlewares/listAuthorizations')
-const {isCollaborator} = require('../../config/middlewares/boardAuthorizations')
+const {hasCardInside} = require('../../config/middlewares/listAuthorizations')
+const {isCollaborator, hasListInside} = require('../../config/middlewares/boardAuthorizations')
+const {checkListExists} = require('../../config/middlewares/checkListAuthorizations')
 
 module.exports = (router, controller) => {
   /**
@@ -48,7 +48,7 @@ module.exports = (router, controller) => {
     *       500:
     *         description: Internal error
     */
-  router.post('/boards/:boardId/lists/:listId/cards/:cardId/checklists/:checklistId/items', [requiresLogin, cardExists, listExists, hasCardInside, isCollaborator], function (req, res) {
+  router.post('/boards/:boardId/lists/:listId/cards/:cardId/checklists/:checklistId/items', [requiresLogin, isCollaborator, hasListInside, hasCardInside, checkListExists], function (req, res) {
     let requiredBody = ['text']
     let requiredParameter = ['cardId', 'boardId', 'listId', 'checklistId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)

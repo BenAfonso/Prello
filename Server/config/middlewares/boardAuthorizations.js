@@ -17,6 +17,9 @@ module.exports.isCollaborator = (req, res, next) => {
     if (err) {
       return res.status(500).send(err)
     }
+    if (result === null) {
+      return res.status(404).send('Board not found')
+    }
     let collaborators = result.collaborators
     collaborators = collaborators.filter((c) => (c.toString() === req.user._id.toString()))
     if (collaborators.length > 0) {
@@ -56,13 +59,13 @@ module.exports.isOwner = (req, res, next) => {
   })
 }
 module.exports.hasListInside = (req, res, next) => {
-  Board.findOne({'_id': req.params.listId, 'lists': req.params.listId})
+  Board.findOne({'_id': req.params.boardId, 'lists': req.params.listId})
   .exec((err, result) => {
     if (err) {
       return res.status(500).send(err)
     }
     if (result === null) {
-      return res.status(404).send('List not found')
+      return res.status(404).send('List not found in the board')
     }
     next()
   })

@@ -10,4 +10,5 @@ module.exports = (router, controller) => {
   require('./create')(router, controller)
   require('./createItem')(router, controller)
   require('./updateItem')(router, controller)
+  require('./removeItem')(router, controller)
 }

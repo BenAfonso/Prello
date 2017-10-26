@@ -14,13 +14,7 @@ checklistController.createChecklist = (req) => {
       } else {
         res.checklists.push({text: req.body.text})
         res.save().then((result) => {
-          cardController.getOneCard(req.params.cardId)
-          .then((cardToEmit) => {
-            let payload = {
-              listId: req.params.listId,
-              card: cardToEmit
-            }
-            emit(req.params.boardId, 'NEW_COMMENT', payload)
+          cardController.refreshOneCard(req.params.boardId, req.params.listId, req.params.cardId).then((cardToEmit) => {
             resolve(cardToEmit)
           })
           .catch((err) => {
@@ -42,13 +36,7 @@ checklistController.createChecklistItem = (req) => {
       } else {
         res.checklists.id(req.params.checklistId).items.push({text: req.body.text})
         res.save().then((result) => {
-          cardController.getOneCard(req.params.cardId)
-          .then((cardToEmit) => {
-            let payload = {
-              listId: req.params.listId,
-              card: cardToEmit
-            }
-            emit(req.params.boardId, 'NEW_COMMENT', payload)
+          cardController.refreshOneCard(req.params.boardId, req.params.listId, req.params.cardId).then((cardToEmit) => {
             resolve(cardToEmit)
           })
           .catch((err) => {
@@ -75,13 +63,30 @@ checklistController.updateItem = (req) => {
           res.checklists.id(req.params.checklistId).items.id(req.params.itemId).isChecked = req.body.isChecked
         }
         res.save().then((result) => {
-          cardController.getOneCard(req.params.cardId)
-          .then((cardToEmit) => {
-            let payload = {
-              listId: req.params.listId,
-              card: cardToEmit
-            }
-            emit(req.params.boardId, 'CARD_UPDATED', payload)
+          cardController.refreshOneCard(req.params.boardId, req.params.listId, req.params.cardId).then((cardToEmit) => {
+            resolve(cardToEmit)
+          })
+          .catch((err) => {
+            reject(err)
+          })
+        })
+        .catch((error) => {
+          reject(error)
+        })
+      }
+    })
+  })
+}
+checklistController.removeChecklistItem = (req) => {
+  return new Promise((resolve, reject) => {
+    Card.findOne({ '_id': req.params.cardId }).exec(function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        res.checklists.id(req.params.checklistId).items.id(req.params.itemId).remove()
+        res.save().then((result) => {
+          console.log(result)
+          cardController.refreshOneCard(req.params.boardId, req.params.listId, req.params.cardId).then((cardToEmit) => {
             resolve(cardToEmit)
           })
           .catch((err) => {
