@@ -73,6 +73,8 @@ export default class DropDown extends React.Component {
       title,
       children,
       layout,
+      scrollable,
+      maxHeight,
       button,
       input,
       ...props
@@ -84,7 +86,12 @@ export default class DropDown extends React.Component {
 
     const dropDownStyles = {
       left: orientation === 'left' ? 0 : '',
-      right: orientation === 'right' ? 0 : ''
+      right: orientation === 'right' ? 0 : ''       
+    }
+
+    const scrollableStyles = {
+      'maxHeight': maxHeight ? maxHeight : '',
+      'overflowY': scrollable ? 'auto' : 'hidden'     
     }
 
     if (layout === 'auto') {
@@ -103,7 +110,7 @@ export default class DropDown extends React.Component {
                     ? <div className='dropdown-title'>{title}</div>
                     : null
                 }
-                <ul id='dropdown' >
+                <ul id='dropdown' style={{ ...scrollableStyles }}>
                   {
                     this.props.menuElements.map((e, i) => (
                       e === 'separator'

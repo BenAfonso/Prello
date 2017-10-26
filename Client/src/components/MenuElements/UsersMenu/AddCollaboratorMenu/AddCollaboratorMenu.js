@@ -39,10 +39,11 @@ export default class AddCollaboratorMenu extends React.Component {
     this.setState({
       inputValue: this.email.value,
       enableAdd: false})
-    if (this.email.value !== '') {
+    if (this.email.value.length >= 3) {
       let newMatchingUsers = []
       fetchMatchingUsers(this.email.value).then(users => {
-        users.map(user =>
+        const firstUsers = users.slice(0, 5)
+        firstUsers.map(user =>
           newMatchingUsers.push(user)
         )
         this.setState({matchingUsers: newMatchingUsers})
@@ -89,7 +90,7 @@ export default class AddCollaboratorMenu extends React.Component {
       display: inline-block;
       padding: 0 10px;
       overflow: hidden;
-      width: 200px;
+      width: 190px;
       text-overflow: ellipsis;    
     }
 
@@ -147,10 +148,12 @@ export default class AddCollaboratorMenu extends React.Component {
                 <div className='element-text'>Enter a name or an e-mail address to invite someone new !</div>
                 <div className='element-input'>
                   <form onSubmit={this.addCollaborator}>
-                    <DropDown
-                      menuElements={menuElements}
-                      input={<input type='text' height='20px' value={this.state.inputValue} placeholder='georges.abitbol@mondedem.fr' onChange={this.onChange} ref={(t) => { this.email = t }} />}
-                    />
+                      <DropDown
+                        menuElements={menuElements}
+                        scrollable
+                        maxHeight='250px'
+                        input={<input type='text' height='20px' value={this.state.inputValue} placeholder='georges.abitbol@mondedem.fr' onChange={this.onChange} ref={(t) => { this.email = t }} />}
+                      />
                   </form>
                 </div>
                 <div className='element-button'>
@@ -175,6 +178,11 @@ export default class AddCollaboratorMenu extends React.Component {
 
     .host {
       width: 100%;
+      display:flex;
+    }
+
+    .users-list {
+      overflow-y: auto;
     }
     .element {
       padding: 15px;
