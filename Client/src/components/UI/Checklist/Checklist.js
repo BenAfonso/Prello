@@ -65,7 +65,11 @@ export default class Checklist extends React.Component {
   }
 
   updateTitle () {
-    if (this.titleInput.input.value.length > 0) { this.setState({title: this.titleInput.input.value, displayEditTitleForm: false}) }
+    if (this.titleInput.input.value.length > 0) {
+      this.setState({title: this.titleInput.input.value, displayEditTitleForm: false}, () => {
+        this.props.onUpdate(this.props.id, this.state.title)
+      })
+    }
   }
 
   addItem () {

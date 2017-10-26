@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import CardDetailsSection from '../../CardDetailsSection/CardDetailsSection'
 import Checklist from '../../../../UI/Checklist/Checklist'
+import { deleteChecklist, updateChecklist } from '../../../../../services/Checklist.services'
 import { addChecklistItem, deleteChecklistItem, updateChecklistItem } from '../../../../../store/actions'
 import { connect } from 'react-redux'
 
@@ -31,13 +32,19 @@ export default class CardDetailsChecklists extends React.Component {
   constructor (props) {
     super(props)
     this.deleteChecklist = this.deleteChecklist.bind(this)
+    this.updateChecklist = this.updateChecklist.bind(this)
     this.addChecklistItem = this.addChecklistItem.bind(this)
     this.deleteChecklistItem = this.deleteChecklistItem.bind(this)
     this.updateItemStatus = this.updateItemStatus.bind(this)
   }
 
   deleteChecklist (id) {
-    this.props.onDelete(id)
+    deleteChecklist(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.cardId, id)
+  }
+
+  updateChecklist (id, newTitle) {
+    console.log(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.cardId, id, newTitle)
+    updateChecklist(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.cardId, id, newTitle)
   }
 
   deleteChecklistItem (checklistIndex, itemIndex) {
@@ -69,6 +76,7 @@ export default class CardDetailsChecklists extends React.Component {
               onItemAdd={this.addChecklistItem}
               onItemDelete={this.deleteChecklistItem}
               onItemUpdate={this.updateItemStatus}
+              onUpdate={this.updateChecklist}
               key={checklist.index}
               title={checklist.text}
               items={checklist.items} />

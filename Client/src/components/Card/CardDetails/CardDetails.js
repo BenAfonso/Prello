@@ -11,8 +11,8 @@ import CardDetailsActivity from './CardDetailsSections/CardDetailsActivity/CardD
 import CardDetailsInformations from './CardDetailsSections/CardDetailsInformations/CardDetailsInformations'
 import CardDetailsChecklists from './CardDetailsSections/CardDetailsChecklists/CardDetailsChecklists'
 import MembersMenu from './CardDetailsMenu/MembersMenu/MembersMenu'
+import { addChecklist } from '../../../services/Checklist.services'
 import { getCompleteCard } from '../../../services/Card.services'
-import { addChecklist, deleteChecklist } from '../../../services/Checklist.services'
 
 @connect(store => {
   return {
@@ -41,15 +41,10 @@ export default class CardDetails extends React.Component {
   constructor (props) {
     super(props)
     this.createChecklist = this.createChecklist.bind(this)
-    this.deleteChecklist = this.deleteChecklist.bind(this)
   }
 
   createChecklist () {
     addChecklist(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.id, this.checklistTitleInput.input.value)
-  }
-
-  deleteChecklist (id) {
-    deleteChecklist(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.id, id)
   }
 
   componentDidMount () {
@@ -63,7 +58,7 @@ export default class CardDetails extends React.Component {
       <div className='host'>
         <div className='content'>
           <CardDetailsInformations {...this.props} />
-          <CardDetailsChecklists cardId={this.props.id} listIndex={this.props.listIndex} checklists={this.props.checklists} onDelete={this.deleteChecklist}/>
+          <CardDetailsChecklists cardId={this.props.id} listIndex={this.props.listIndex} checklists={this.props.checklists}/>
           <CardDetailsComments {...this.props}/>
           <CardDetailsActivity />
         </div>
