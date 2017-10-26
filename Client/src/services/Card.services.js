@@ -16,6 +16,12 @@ export function addMemberDistant (boardId, listId, cardId, email) {
   })
 }
 
+export function addResponsibleDistant (boardId, listId, cardId, email) {
+  axios.post(`${Config.API_URL}/boards/${boardId}/lists/${listId}/cards/${cardId}/responsible`, {
+    email: email
+  })
+}
+
 export function addComment (boardId, listId, cardId, content) {
   axios.post(`${Config.API_URL}/boards/${boardId}/lists/${listId}/cards/${cardId}/comments`, {
     text: content,

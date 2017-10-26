@@ -1,5 +1,5 @@
 import React from 'react'
-import { addMember } from '../../../../../store/actions'
+import { addResponsible } from '../../../../../store/actions'
 import {connect} from 'react-redux'
 import Button from '../../../../UI/Button/Button'
 import DropDown from '../../../../UI/DropDown/DropDown'
@@ -11,7 +11,7 @@ import AvatarThumbnail from '../../../../UI/AvatarThumbnail/AvatarThumbnail'
   }
 })
 
-export default class MembersMenu extends React.Component {
+export default class ResponsibleMenu extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -19,19 +19,14 @@ export default class MembersMenu extends React.Component {
       enableAdd: false,
       inputValue: ''
     }
-    this.addMember = this.addMember.bind(this)
+    this.addResponsible = this.addResponsible.bind(this)
     this.onChange = this.onChange.bind(this)
     this.setInputValue = this.setInputValue.bind(this)
     this.getInitials = this.getInitials.bind(this)
-    this.isCardMember = this.isCardMember.bind(this)
   }
 
-  isCardMember (collaborator) {
-    return (this.props.members.find(member => member._id === collaborator._id) !== undefined)
-  }
-
-  addMember () {
-    addMember(this.props.dispatch, this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId, this.email.value)
+  addResponsible () {
+    addResponsible(this.props.dispatch, this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId, this.email.value)
     this.setState({
       inputValue: '',
       enableAdd: false,
@@ -131,8 +126,7 @@ export default class MembersMenu extends React.Component {
       return {
         action: this.setInputValue.bind(this, collaborator.email),
         placeholder: this.renderUserinMenu(collaborator),
-        closer: true,
-        disabled: this.isCardMember(collaborator)
+        closer: true
       }
     })
 
@@ -142,7 +136,7 @@ export default class MembersMenu extends React.Component {
           layout='custom'
           orientation={this.props.orientation}
           button={this.props.button}
-          title='Members'>
+          title='Responsible'>
           <div style={{ width: '300px' }}>
             <ul>
               <li className='element'>
@@ -160,7 +154,7 @@ export default class MembersMenu extends React.Component {
                   <Button
                     bgColor='#5AAC44'
                     block
-                    onClick={this.addMember}
+                    onClick={this.addResponsible}
                     disabled={!this.state.enableAdd}
                   >
                   Add

@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import AvatarThumbnail from '../../../../../UI/AvatarThumbnail/AvatarThumbnail'
-import MembersMenu from '../../../CardDetailsMenu/MembersMenu/MembersMenu'
+import ResponsibleMenu from '../../../CardDetailsMenu/ResponsibleMenu/ResponsibleMenu'
 
 @connect(store => {
   return {
@@ -13,10 +13,6 @@ export default class CardDetailsResponsible extends React.Component {
   constructor (props) {
     super(props)
     this.getInitials = this.getInitials.bind(this)
-  }
-
-  addResponsible () {
-
   }
 
   getInitials (name) {
@@ -56,8 +52,7 @@ export default class CardDetailsResponsible extends React.Component {
             </div>
             : <div className='no-responsible'>
                 There isn't any responsible for this card yet.&nbsp;
-                <MembersMenu
-                  title='Responsible'
+                <ResponsibleMenu
                   members={members}
                   cardId={cardId}
                   listIndex={this.props.listIndex}
