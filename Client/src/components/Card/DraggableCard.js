@@ -106,6 +106,7 @@ export default class CardComponent extends React.Component {
     return connectCardDropTarget(connectCardDragSource(
       <div className='host' style={{position: 'relative'}} onClick={this.displayCardDetails.bind(this)}>
         <div className='overlay' style={{
+          display: isDragging ? 'block' : 'none',
           opacity: isDragging ? 1 : 0
         }} />
 

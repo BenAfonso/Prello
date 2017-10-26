@@ -95,7 +95,7 @@ export default class CardDetailsInformations extends React.Component {
             }
   
             .addButton:hover {
-              background-color: #ddd
+              background-color: #ddd;
             }
           `}
         </style>

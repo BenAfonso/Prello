@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import styles from './Card.styles'
 import AvatarThumbnail from '../UI/AvatarThumbnail/AvatarThumbnail'
+import Button from '../UI/Button/Button'
+import Icon from '../UI/Icon/Icon'
 
 @connect(store => {
   return {
@@ -13,10 +15,15 @@ export default class Card extends React.Component {
   static propTypes = {
     content: PropTypes.string.isRequired,
     createdAt: PropTypes.string,
+    bgColor: PropTypes.any,
     index: PropTypes.number.isRequired,
     listIndex: PropTypes.number.isRequired,
     collaborators: PropTypes.arrayOf(PropTypes.any),
     id: PropTypes.any
+  }
+
+  static defaultProps = {
+    bgColor: '#fff'
   }
 
   getInitials (user) {
@@ -31,6 +38,7 @@ export default class Card extends React.Component {
   render () {
     return (
       <div style={{...this.props.style}} ref={c => { this.card = c }} className='root'>
+        <div className='editButton'><Button size='small' bgColor='rgba(0,0,0,0)' hoverBgColor='rgba(255,255,255,0.6)'><Icon name='edit' color='#444' /></Button></div>
         <div className='content'>{ this.props.content }</div>
         <div className='collaborators'>
           {

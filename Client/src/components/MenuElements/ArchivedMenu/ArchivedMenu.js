@@ -51,6 +51,7 @@ export default class ArchivedMenu extends React.Component {
                       index={0}
                       listIndex={0}
                       collaborators={[]}
+                      bgColor='#eee'
                       id={l._id} />
                     <div className='restoreButton' onClick={() => restoreList(this.props.board._id, l)}>Restore</div>
                   </li>
@@ -63,6 +64,10 @@ export default class ArchivedMenu extends React.Component {
             margin-bottom: 10px;
           }
 
+          li:hover {
+            transform: rotate(3deg);
+          }
+
           .title {
             font-weight: bold;
             margin-bottom: 20px;
@@ -71,9 +76,10 @@ export default class ArchivedMenu extends React.Component {
           .title span {
             display: block;
             font-size: 14px;
-            font-weight: regular;
+            font-weight: normal;
             cursor: pointer;
             color: #999;
+            text-decoration: underline;
           }
 
           .restoreButton {
