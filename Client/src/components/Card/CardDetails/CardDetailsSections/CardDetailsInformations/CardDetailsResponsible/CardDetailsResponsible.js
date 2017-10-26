@@ -52,13 +52,13 @@ export default class CardDetailsResponsible extends React.Component {
             </div>
             : <div className='no-responsible'>
                 There isn't any responsible for this card yet.&nbsp;
-                <ResponsibleMenu
-                  members={members}
-                  cardId={cardId}
-                  listIndex={this.props.listIndex}
-                  orientation='left'
-                  button={<span className='add-responsible'>Add one</span>} />
-              </div>
+              <ResponsibleMenu
+                members={members}
+                cardId={cardId}
+                listIndex={this.props.listIndex}
+                orientation='left'
+                button={<span className='add-responsible'>Add one</span>} />
+            </div>
 
         }
         <style jsx>{`

@@ -1,6 +1,6 @@
 import { fetchBoards, addBoardDistant, addCollaboratorDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
-import { moveCard, addMemberDistant, updateCard, addResponsibleDistant } from '../services/Card.services'
+import { moveCard, addMemberDistant, removeMemberDistant, updateCard, addResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
 
 import store from '../store/store'
@@ -205,6 +205,10 @@ export function fetchMatchingUsers (email) {
 
 export function addMember (dispatch, boardId, listId, cardId, email) {
   addMemberDistant(boardId, listId, cardId, email)
+}
+
+export function removeMember (dispatch, boardId, listId, cardId, email) {
+  removeMemberDistant(boardId, listId, cardId, email)
 }
 
 export function addResponsible (dispatch, boardId, listId, cardId, email) {

@@ -16,6 +16,12 @@ export function addMemberDistant (boardId, listId, cardId, email) {
   })
 }
 
+export function removeMemberDistant (boardId, listId, cardId, email) {
+  axios.delete(`${Config.API_URL}/boards/${boardId}/lists/${listId}/cards/${cardId}/collaborator`, {
+    email: email
+  })
+}
+
 export function addResponsibleDistant (boardId, listId, cardId, email) {
   axios.post(`${Config.API_URL}/boards/${boardId}/lists/${listId}/cards/${cardId}/responsible`, {
     email: email
