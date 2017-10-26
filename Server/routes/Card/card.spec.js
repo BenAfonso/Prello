@@ -45,11 +45,11 @@ module.exports = (server, chai) => {
           .send({ text: 'Test card updated' })
           .set('authorization', `Bearer ${tokenU1}`)
           .end((err, res) => {
-            if (err) return err
+            if (err) {}
             res.should.have.status(200)
             res.body.should.be.a('string')
             Card.findById(card1._id, (err, res) => {
-              if (err) return err
+              if (err) {}
               res.text.should.equal('Test card updated')
               done()
             })
@@ -94,10 +94,10 @@ module.exports = (server, chai) => {
           .delete(`/boards/${board1._id}/lists/${list1._id}/cards/${card1._id}`)
           .set('authorization', `Bearer ${tokenU1}`)
           .end((err, res) => {
-            if (err) return err
+            if (err) {}
             res.should.have.status(200)
             Card.findById(card1._id, (err, res) => {
-              if (err) return err
+              if (err) {}
               chai.should().not.exist(res)
               done()
             })
@@ -143,7 +143,7 @@ module.exports = (server, chai) => {
           .send(mockedCard)
           .set('authorization', `Bearer ${tokenU1}`)
           .end((err, res) => {
-            if (err) throw new Error(err)
+            if (err) {}
             res.should.have.status(201)
             res.body.should.be.a('object')
             res.body._id.should.be.a('string')
