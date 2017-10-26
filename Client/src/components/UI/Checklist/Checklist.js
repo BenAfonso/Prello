@@ -13,7 +13,7 @@ export default class Checklist extends React.Component {
     items: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string,
       index: PropTypes.number,
-      content: PropTypes.string,
+      text: PropTypes.string,
       done: PropTypes.bool
     })),
     title: PropTypes.string.isRequired,
@@ -75,11 +75,11 @@ export default class Checklist extends React.Component {
   addItem () {
     if (this.textInput.input.value.length > 0) {
       let newItemsList = this.state.items.slice()
-      newItemsList.push({index: newItemsList.length, content: this.textInput.input.value, done: false})
+      newItemsList.push({index: newItemsList.length, text: this.textInput.input.value, done: false})
       this.setState({items: newItemsList}, () => {
         this.setState({percentageDone: this.recalculatePercentageDone(newItemsList)})
       })
-      this.props.onItemAdd(this.props.index, this.textInput.input.value)
+      this.props.onItemAdd(this.props.id, this.textInput.input.value)
       this.textInput.input.value = ''
     }
   }
@@ -100,7 +100,7 @@ export default class Checklist extends React.Component {
   updateItem (index, newContent, done, doneDate = null) {
     let newItemsList = this.state.items.slice()
     newItemsList[index].done = done
-    newItemsList[index].content = newContent
+    newItemsList[index].text = newContent
     this.setState({items: newItemsList}, () => {
       this.setState({percentageDone: this.recalculatePercentageDone(newItemsList)})
     })
@@ -162,7 +162,7 @@ export default class Checklist extends React.Component {
             key={item.index}
             done={item.done}
             index={parseInt(index, 10)}
-            content={item.content}
+            text={item.text}
             onChange={this.updateItem}
             onDelete={this.deleteItem} />
         ))}

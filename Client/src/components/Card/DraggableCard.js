@@ -83,7 +83,7 @@ export default class CardComponent extends React.Component {
       index: PropTypes.number,
       items: PropTypes.arrayOf(PropTypes.shape({
         index: PropTypes.number,
-        title: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
         items: PropTypes.array
       }))
     })),

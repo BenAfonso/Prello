@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import CardDetailsSection from '../../CardDetailsSection/CardDetailsSection'
 import Checklist from '../../../../UI/Checklist/Checklist'
 import { deleteChecklist, updateChecklist } from '../../../../../services/Checklist.services'
-import { addChecklistItem, deleteChecklistItem, updateChecklistItem } from '../../../../../store/actions'
+import { addItem, deleteItem, updateItem } from '../../../../../services/Item.services'
 import { connect } from 'react-redux'
 
 @connect(store => {
@@ -43,20 +43,20 @@ export default class CardDetailsChecklists extends React.Component {
   }
 
   updateChecklist (id, newTitle) {
-    console.log(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.cardId, id, newTitle)
     updateChecklist(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.cardId, id, newTitle)
   }
 
   deleteChecklistItem (checklistIndex, itemIndex) {
-    deleteChecklistItem(this.props.cardId, checklistIndex, itemIndex)
+    deleteItem(this.props.cardId, checklistIndex, itemIndex)
   }
 
-  addChecklistItem (checklistIndex, content) {
-    addChecklistItem(this.props.cardId, checklistIndex, content)
+  addChecklistItem (checklistId, content) {
+    console.log(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.cardId, checklistId, content)
+    addItem(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.cardId, checklistId, content)
   }
 
   updateItemStatus (checklistIndex, itemIndex, content, doneDate = null) {
-    updateChecklistItem(this.props.cardId, checklistIndex, itemIndex, content, doneDate)
+    updateItem(this.props.cardId, checklistIndex, itemIndex, content, doneDate)
   }
 
   render () {
