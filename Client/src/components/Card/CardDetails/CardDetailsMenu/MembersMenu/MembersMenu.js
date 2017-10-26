@@ -15,7 +15,7 @@ export default class MembersMenu extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      matchingBoardCollaborators: this.props.board.collaborators.slice(0,10),
+      matchingBoardCollaborators: this.props.board.collaborators.slice(0, 10),
       enableAdd: true,
       inputValue: ''
     }
@@ -43,7 +43,7 @@ export default class MembersMenu extends React.Component {
     const reg = new RegExp(email, 'i')
     let matchingCollaborators = []
     this.props.board.collaborators.map(collaborator => collaborator.email.match(reg) ? matchingCollaborators.push(collaborator) : null)
-    return matchingCollaborators.slice(0,10)
+    return matchingCollaborators.slice(0, 10)
   }
 
   onChange () {

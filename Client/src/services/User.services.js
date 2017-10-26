@@ -6,8 +6,8 @@ export function fetchMatchingUsersEmail (email) {
     axios.get(`${Config.API_URL}/users`, {
       params: {
         email: email,
-        limit: 5,
-        skip: 25
+        limit: 10,
+        skip: 0
       }
     }).then((res) => {
       resolve(res.data)
