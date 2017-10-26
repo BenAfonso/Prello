@@ -39,7 +39,7 @@ export default class AddCollaboratorMenu extends React.Component {
     this.setState({
       inputValue: this.email.value,
       enableAdd: false})
-    if (this.email.value !== '') {
+    if (this.email.value.length >= 3) {
       let newMatchingUsers = []
       fetchMatchingUsers(this.email.value).then(users => {
         users.map(user =>
@@ -89,7 +89,7 @@ export default class AddCollaboratorMenu extends React.Component {
       display: inline-block;
       padding: 0 10px;
       overflow: hidden;
-      width: 200px;
+      width: 190px;
       text-overflow: ellipsis;    
     }
 
@@ -149,6 +149,8 @@ export default class AddCollaboratorMenu extends React.Component {
                   <form onSubmit={this.addCollaborator}>
                     <DropDown
                       menuElements={menuElements}
+                      scrollable
+                      maxHeight='250px'
                       input={<input type='text' height='20px' value={this.state.inputValue} placeholder='georges.abitbol@mondedem.fr' onChange={this.onChange} ref={(t) => { this.email = t }} />}
                     />
                   </form>
@@ -175,6 +177,11 @@ export default class AddCollaboratorMenu extends React.Component {
 
     .host {
       width: 100%;
+      display:flex;
+    }
+
+    .users-list {
+      overflow-y: auto;
     }
     .element {
       padding: 15px;
