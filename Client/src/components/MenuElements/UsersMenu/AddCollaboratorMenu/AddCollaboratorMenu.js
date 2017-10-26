@@ -148,12 +148,12 @@ export default class AddCollaboratorMenu extends React.Component {
                 <div className='element-text'>Enter a name or an e-mail address to invite someone new !</div>
                 <div className='element-input'>
                   <form onSubmit={this.addCollaborator}>
-                      <DropDown
-                        menuElements={menuElements}
-                        scrollable
-                        maxHeight='250px'
-                        input={<input type='text' height='20px' value={this.state.inputValue} placeholder='georges.abitbol@mondedem.fr' onChange={this.onChange} ref={(t) => { this.email = t }} />}
-                      />
+                    <DropDown
+                      menuElements={menuElements}
+                      scrollable
+                      maxHeight='250px'
+                      input={<input type='text' height='20px' value={this.state.inputValue} placeholder='georges.abitbol@mondedem.fr' onChange={this.onChange} ref={(t) => { this.email = t }} />}
+                    />
                   </form>
                 </div>
                 <div className='element-button'>

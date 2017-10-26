@@ -86,12 +86,12 @@ export default class DropDown extends React.Component {
 
     const dropDownStyles = {
       left: orientation === 'left' ? 0 : '',
-      right: orientation === 'right' ? 0 : ''       
+      right: orientation === 'right' ? 0 : ''
     }
 
     const scrollableStyles = {
-      'maxHeight': maxHeight ? maxHeight : '',
-      'overflowY': scrollable ? 'auto' : 'hidden'     
+      'maxHeight': maxHeight || '',
+      'overflowY': scrollable ? 'auto' : 'hidden'
     }
 
     if (layout === 'auto') {
