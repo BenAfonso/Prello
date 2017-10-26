@@ -9,7 +9,6 @@ export default `
 
 .overlay {
   position: absolute;
-  background-color: rgb(174, 77, 123);
   z-index: 1;
   height: 100%;
   width: 100%;

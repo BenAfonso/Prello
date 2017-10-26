@@ -152,6 +152,7 @@ export default class Board extends React.Component {
                 title={list.name}
                 index={list.index}
                 cards={list.cards}
+                shadowColor={this.props.secondaryColor}
                 moveList={this.moveList}
                 findList={this.findList}
                 removeAction={this.removeList}

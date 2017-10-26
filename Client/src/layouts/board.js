@@ -6,10 +6,13 @@ import { TimelineMax } from 'gsap'
 import GSAP from 'react-gsap-enhancer'
 import Color from 'color'
 import {connect} from 'react-redux'
+import LoadingPage from '../pages/LoadingPage/loading.page'
 
 @connect(store => {
   return {
-    board: store.board
+    board: store.board,
+    fetching: store.fetching,
+    fetched: store.fetched
   }
 })
 @GSAP()
@@ -55,28 +58,43 @@ export default class BoardLayout extends React.Component {
       : primaryColor.lighten(0.2)
     return (
       <div style={{ position: 'relative', height: '100%' }}>
-        <Header bgColor={secondaryColor} />
-        <div className='content' style={{ display: 'flex', height: 'calc(100% - 50px)' }}>
-
-          <div name='boardContainer' className='boardContainer'>
-            <div className='drawerButton' style={{display: this.state.sideMenuExpanded ? 'none' : ''}} onClick={this.openDrawer}>
-              <Button bgColor='rgba(0,0,0,0)' size='x-small' hoverBgColor='rgba(0,0,0,0.1)'>Open menu...</Button>
+        {
+          this.props.fetching
+            ? <div className='loading'><LoadingPage /></div>
+            : null
+        }
+        <div style={{ height: 'calc(100% - 50px)' }}>
+          <Header bgColor={secondaryColor} />
+          <div className='content' style={{ display: 'flex', height: '100%' }}>
+            <div name='boardContainer' className='boardContainer'>
+              <div className='drawerButton' style={{ display: this.state.sideMenuExpanded ? 'none' : '' }} onClick={this.openDrawer}>
+                <Button bgColor='rgba(0,0,0,0)' size='x-small' hoverBgColor='rgba(0,0,0,0.1)'>Open menu...</Button>
+              </div>
+              {React.cloneElement(this.props.children, {
+                primaryColor: primaryColor,
+                secondaryColor: secondaryColor,
+                popoverManager: {
+                  setRenderedComponent: this.props.setRenderedComponent,
+                  displayPopover: this.props.displayPopover,
+                  dismissPopover: this.props.dismissPopover
+                }
+              })}
             </div>
-            {React.cloneElement(this.props.children, {
-              primaryColor: primaryColor,
-              secondaryColor: secondaryColor,
-              popoverManager: {
-                setRenderedComponent: this.props.setRenderedComponent,
-                displayPopover: this.props.displayPopover,
-                dismissPopover: this.props.dismissPopover
-              }
-            })}
-          </div>
-          <div name='sidebar' className='sideMenu'>
-            <SideMenu handleCloseAction={this.closeDrawer} />
+            <div name='sidebar' className='sideMenu'>
+              <SideMenu handleCloseAction={this.closeDrawer} />
+            </div>
           </div>
         </div>
         <style jsx>{`
+
+    .loading {
+      position: fixed;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      left: 0;
+      z-index: 1000;
+    }
 
     .boardContainer {
       position: relative;
@@ -107,7 +125,7 @@ export default class BoardLayout extends React.Component {
       right: -400px;
     }
     `}</style>
-      </div >
+      </div>
     )
   }
 }
