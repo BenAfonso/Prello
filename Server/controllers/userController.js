@@ -35,9 +35,9 @@ userController.loginGoogle = (profile, done) => {
   })
 }
 
-userController.getUsers = (email) => {
+userController.getUsers = (email, limit, skip) => {
   return new Promise((resolve, reject) => {
-    User.find({ email: new RegExp(email, 'i') }, { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+    User.find({ email: new RegExp(email, 'i') }, { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }, { skip: skip, limit: limit }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
