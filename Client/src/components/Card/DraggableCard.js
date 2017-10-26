@@ -96,7 +96,7 @@ export default class CardComponent extends React.Component {
 
   displayCardDetails () {
     this.props.popoverManager.setRenderedComponent(
-      <CardDetails {...this.props} handleClick={this.props.popoverManager.dismissPopover} />
+      <CardDetails {...this.props} dismissPopover={this.props.popoverManager.dismissPopover} />
     )
     this.props.popoverManager.displayPopover()
   }

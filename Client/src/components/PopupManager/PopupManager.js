@@ -15,7 +15,9 @@ export default class PopupManager extends React.Component {
   }
 
   dismissPopover () {
-    this.setState({ popoverDisplayed: false })
+    this.popover.onDismiss(() => {
+      this.setState({ popoverDisplayed: false })
+    })
   }
 
   setRenderedComponent (component) {
@@ -34,7 +36,7 @@ export default class PopupManager extends React.Component {
               width: '100vw',
               height: '100vh'
             }}>
-              <PopoverPage dismiss={this.dismissPopover.bind(this)} component={this.state.renderedComponent} />
+              <PopoverPage dismiss={this.dismissPopover.bind(this)} ref={p => { this.popover = p }} component={this.state.renderedComponent} />
             </div>
           )
         ]}
@@ -46,10 +48,9 @@ export default class PopupManager extends React.Component {
     return (
       <div className='main'>
         { this.state.popoverDisplayed
-          ? this.renderPopover()
+          ? <div name='popover' className='popover'>{this.renderPopover()}</div>
           : null
         }
-
         {
           React.cloneElement(this.props.children,
             {
@@ -65,6 +66,10 @@ export default class PopupManager extends React.Component {
             height: 100vh;
             width: 100vw;
             overflow-y: auto;
+          }
+
+          .popover {
+            width: 100px;
           }
         `}</style>
       </div>
