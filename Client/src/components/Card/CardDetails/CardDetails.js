@@ -30,7 +30,7 @@ export default class CardDetails extends React.Component {
           <CardDetailsActivity />
         </div>
 
-        <div className='cancelButton' onClick={this.props.handleClick}>
+        <div className='cancelButton' onClick={this.props.dismissPopover}>
           <Button bgColor='rgba(0,0,0,0)' hoverBgColor='rgba(0,0,0,0.1)'>
             <Icon name='times' />
           </Button>
@@ -75,7 +75,10 @@ export default class CardDetails extends React.Component {
               </Button>
             </li>
             <li>
-              <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small' onClick={() => { archiveCard(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, card) }}>
+              <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small' onClick={() => {
+                archiveCard(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, card)
+                this.props.dismissPopover()
+              }}>
                 Archive
               </Button>
             </li>
