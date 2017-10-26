@@ -84,13 +84,13 @@ export default class Checklist extends React.Component {
     }
   }
 
-  deleteItem (index) {
+  deleteItem (id, index) {
     let newItemsList = this.state.items.slice()
     newItemsList.splice(index, 1)
     this.setState({items: newItemsList}, () => {
       this.setState({percentageDone: this.recalculatePercentageDone(newItemsList)})
     })
-    this.props.onItemDelete(this.props.index, index)
+    this.props.onItemDelete(this.props.id, id)
   }
 
   onDelete () {
@@ -159,6 +159,7 @@ export default class Checklist extends React.Component {
         {/* Display checklist items */}
         {this.state.items.map((item, index) => (
           <ChecklistItem
+            id={item._id}
             key={item.index}
             done={item.done}
             index={parseInt(index, 10)}

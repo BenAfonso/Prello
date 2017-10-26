@@ -8,7 +8,7 @@ export function addItem (boardId, listId, cardId, checklistId, content) {
   })
 }
 
-export function deleteItem (boardId, cardId, listId, checklistId, itemId) {
+export function deleteItem (boardId, listId, cardId, checklistId, itemId) {
   axios.delete(`${Config.API_URL}/boards/${boardId}/lists/${listId}/cards/${cardId}/checklists/${checklistId}/items/${itemId}`)
 }
 

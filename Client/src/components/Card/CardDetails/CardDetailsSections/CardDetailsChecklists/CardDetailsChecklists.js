@@ -46,12 +46,11 @@ export default class CardDetailsChecklists extends React.Component {
     updateChecklist(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.cardId, id, newTitle)
   }
 
-  deleteChecklistItem (checklistIndex, itemIndex) {
-    deleteItem(this.props.cardId, checklistIndex, itemIndex)
+  deleteChecklistItem (checklistId, itemId) {
+    deleteItem(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.cardId, checklistId, itemId)
   }
 
   addChecklistItem (checklistId, content) {
-    console.log(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.cardId, checklistId, content)
     addItem(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.cardId, checklistId, content)
   }
 
