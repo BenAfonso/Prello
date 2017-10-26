@@ -6,13 +6,14 @@ import Icon from '../../UI/Icon/Icon'
 import styles from './CardDetails.styles'
 import DropDown from '../../UI/DropDown/DropDown'
 import Input from '../../UI/Input/Input'
-import { addChecklist, removeChecklist } from '../../../store/actions'
+import { addChecklistAction, removeChecklist } from '../../../store/actions'
 import CardDetailsComments from './CardDetailsSections/CardDetailsComments/CardDetailsComments'
 import CardDetailsActivity from './CardDetailsSections/CardDetailsActivity/CardDetailsActivity'
 import CardDetailsInformations from './CardDetailsSections/CardDetailsInformations/CardDetailsInformations'
 import CardDetailsChecklists from './CardDetailsSections/CardDetailsChecklists/CardDetailsChecklists'
 import MembersMenu from './CardDetailsMenu/MembersMenu/MembersMenu'
 import { getCompleteCard } from '../../../services/Card.services'
+import { addChecklist } from '../../../services/Checklist.services'
 
 @connect(store => {
   return {
@@ -45,7 +46,14 @@ export default class CardDetails extends React.Component {
   }
 
   createChecklist () {
-    addChecklist(this.props.id, this.checklistTitleInput.input.value)
+    addChecklist(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.id, this.checklistTitleInput.input.value)
+      .then((res) => {
+        addChecklistAction(this.props.cardId, this.checklistTitleInput.input.value)
+      })
+      .catch((err) => {
+        console.log(err)
+        // TODO : HANDLE ERROR
+      })
   }
 
   deleteChecklist (index) {
@@ -65,7 +73,7 @@ export default class CardDetails extends React.Component {
       <div className='host'>
         <div className='content'>
           <CardDetailsInformations {...this.props} />
-          <CardDetailsChecklists cardId={this.props.id} checklists={this.props.checklists} onDelete={this.deleteChecklist}/>
+          <CardDetailsChecklists cardId={this.props.id} listIndex={this.props.listIndex} checklists={this.props.checklists} onDelete={this.deleteChecklist}/>
           <CardDetailsComments {...this.props}/>
           <CardDetailsActivity />
         </div>

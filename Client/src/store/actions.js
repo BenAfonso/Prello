@@ -193,7 +193,7 @@ export function replaceCollaboratorsLocal (users) {
   }
 }
 
-export function addChecklist (cardId, title) {
+export function addChecklistAction (cardId, title) {
   if (cardId && title.length > 0) {
     store.dispatch({
       type: 'ADD_CHECKLIST',

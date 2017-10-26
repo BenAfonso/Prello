@@ -3,9 +3,18 @@ import PropTypes from 'prop-types'
 import CardDetailsSection from '../../CardDetailsSection/CardDetailsSection'
 import Checklist from '../../../../UI/Checklist/Checklist'
 import { addChecklistItem, deleteChecklistItem, updateChecklistItem } from '../../../../../store/actions'
+import { connect } from 'react-redux'
+
+@connect(store => {
+  return {
+    board: store.board,
+    lists: store.board.lists
+  }
+})
 
 export default class CardDetailsChecklists extends React.Component {
   static propTypes = {
+    listIndex: PropTypes.number,
     cardId: PropTypes.any,
     onDelete: PropTypes.func,
     checklists: PropTypes.arrayOf(PropTypes.shape({
