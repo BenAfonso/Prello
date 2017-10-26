@@ -112,6 +112,7 @@ export default class ResponsibleMenu extends React.Component {
 
           .user-email {
             font-style: italic;
+            text-align: left;
             padding: 5px 0;
             font-size: 10px;
             color: #999;        

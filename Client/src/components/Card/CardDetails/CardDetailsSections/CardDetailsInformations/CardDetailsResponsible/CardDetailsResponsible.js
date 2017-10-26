@@ -74,7 +74,7 @@ export default class CardDetailsResponsible extends React.Component {
         font-style: italic;
         text-align: center;
         padding: 5px 0;
-        font-size: 12px;
+        font-size: 13px;
         color: #999;
       }
 
