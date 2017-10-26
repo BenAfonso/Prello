@@ -16,7 +16,7 @@ export default class MembersMenu extends React.Component {
     super(props)
     this.state = {
       matchingBoardCollaborators: this.props.board.collaborators.slice(0, 10),
-      enableAdd: true,
+      enableAdd: false,
       inputValue: ''
     }
     this.addMember = this.addMember.bind(this)
@@ -47,6 +47,9 @@ export default class MembersMenu extends React.Component {
   }
 
   onChange () {
+    this.setState({
+      enableAdd: false
+    })
     if (this.email.value !== '') {
       const newmatchingBoardCollaborators = this.getMatchingCollaborators(this.email.value)
       this.setState({
@@ -141,7 +144,7 @@ export default class MembersMenu extends React.Component {
           layout='custom'
           orientation={this.props.orientation}
           button={this.props.button}
-          title='Members'>
+          title={this.props.title}>
           <div style={{ width: '300px' }}>
             <ul>
               <li className='element'>

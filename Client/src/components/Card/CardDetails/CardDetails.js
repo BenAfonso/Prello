@@ -40,6 +40,7 @@ export default class CardDetails extends React.Component {
           <ul>
             <li>
               <MembersMenu
+                title='Members'
                 members={card.collaborators}
                 listIndex={this.props.listIndex}
                 cardId={card._id}

@@ -63,6 +63,7 @@ export default class CardDetailsInformations extends React.Component {
         </div>
         <div className='buttonSection'>
           <MembersMenu
+            title='Members'
             members={members}
             cardId={cardId}
             listIndex={this.props.listIndex}

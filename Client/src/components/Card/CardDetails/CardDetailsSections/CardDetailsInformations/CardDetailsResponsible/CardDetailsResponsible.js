@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import AvatarThumbnail from '../../../../../UI/AvatarThumbnail/AvatarThumbnail'
+import MembersMenu from '../../../CardDetailsMenu/MembersMenu/MembersMenu'
 
 @connect(store => {
   return {
@@ -12,6 +13,10 @@ export default class CardDetailsResponsible extends React.Component {
   constructor (props) {
     super(props)
     this.getInitials = this.getInitials.bind(this)
+  }
+
+  addResponsible () {
+
   }
 
   getInitials (name) {
@@ -26,6 +31,8 @@ export default class CardDetailsResponsible extends React.Component {
     const list = this.props.board.lists[this.props.listIndex]
     const card = list.cards.filter(c => c._id === this.props.id)[0]
     const responsible = card.responsible
+    const members = card.collaborators
+    const cardId = this.props.id
 
     return (
       <div className='host'>
@@ -47,19 +54,38 @@ export default class CardDetailsResponsible extends React.Component {
                 <div className='user-email'>{responsible.email}</div>
               </div>
             </div>
-            : <div className='no-responsible'>There isn't any responsible for this card yet</div>
+            : <div className='no-responsible'>
+                There isn't any responsible for this card yet.&nbsp;
+                <MembersMenu
+                  title='Responsible'
+                  members={members}
+                  cardId={cardId}
+                  listIndex={this.props.listIndex}
+                  orientation='left'
+                  button={<span className='add-responsible'>Add one</span>} />
+              </div>
+
         }
         <style jsx>{`
 
       .host {
          width: 250px;
+         border-radius: 3px;
+         background: #eee;
+         padding: 8px;
       }
 
       .no-responsible {
         font-style: italic;
+        text-align: center;
         padding: 5px 0;
         font-size: 12px;
         color: #999;
+      }
+
+      .add-responsible {
+        text-decoration: underline;
+        cursor: pointer;
       }
 
       .user-infos {
