@@ -62,7 +62,7 @@ export default `
   }
 
   .checkbox {
-    display: inline-block;
+    flex-grow:1;
   }
 
   .percentageDone {
@@ -99,6 +99,7 @@ export default `
     font-size: 13px;
   }
   .content .card {
+    font-size: 18px;    
     border: none;
     outline: none;
     resize: vertical;
@@ -110,6 +111,7 @@ export default `
     box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
     border-radius: 3px;
     height:0px;
+    width:100%;
   }
   .saveButton {
     padding: 8px;
@@ -147,7 +149,16 @@ export default `
     margin-left:7%;
   }
   .editItemDiv{
-    width:86%;
-    margin-left:7%;
+    width:88%;
   }
+  .editChecklistItem{
+    margin-bottom: 5px;
+    display:flex;    
+  }
+  .checkboxEditItem{
+    flex-grow:1;
+    margin-top: 2%;
+    margin-left: -0.5%;
+  }
+
 `

@@ -42,10 +42,10 @@ export default class ChecklistItem extends React.Component {
     this.setState({isEditable: true})
   }
 
-  updateText () {
-    if (this.textInput.input.value.length > 0) {
-      this.setState({isEditable: false, text: this.textInput.input.value}, () => {
-        if (this.props.onChange !== null) { this.props.onChange(this.props.id, this.state.text, this.state.isChecked) }
+  updateText (text) {
+    if (text.length > 0) {
+      this.setState({isEditable: false, text: text.value}, () => {
+        if (this.props.onChange !== null) { this.props.onChange(this.props.id, text, this.state.isChecked) }
       })
     }
   }
@@ -71,7 +71,6 @@ export default class ChecklistItem extends React.Component {
   onDelete () {
     if (this.props.onDelete !== null) { this.props.onDelete(this.props.id) }
   }
-
   render () {
     return (
       <div className='checklistItem'>
@@ -90,14 +89,14 @@ export default class ChecklistItem extends React.Component {
               </Button>
             </div>
           </div>
-          : <div className='title'>
-            <input type='checkbox' className='checkbox' ref={t => { this.checkbox = t }} checked={this.props.isChecked} onClick={this.onToggle} />
+          : <div className='editChecklistItem'>
+            <input type='checkbox' className='checkboxEditItem' ref={t => { this.checkbox = t }} checked={this.props.isChecked} onClick={this.onToggle} />
             <div className='editItemDiv'>
               <div className='content'>
-                <div className='card' contentEditable ref={(v) => { this.textInput = v }} placeholder='Describe your item...' />
+                <textarea className='card' ref={(v) => { this.textInput = v }} placeholder={this.props.text}/>
               </div>
               <div className='button'>
-                <div className='saveButton' onClick={() => this.updateText(this.textInput.innerHTML)}>
+                <div className='saveButton' onClick={() => this.updateText(this.textInput.value)}>
                           Save
                 </div>
                 <div className='cancelButton' onClick={() => this.cancelEdit()}>

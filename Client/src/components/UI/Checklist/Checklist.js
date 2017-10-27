@@ -68,7 +68,7 @@ export default class Checklist extends React.Component {
   updateTitle (text) {
     if (text.length > 0) {
       this.setState({title: text, displayEditTitleForm: false}, () => {
-        this.props.onUpdate(this.props.id, this.state.title)
+        this.props.onUpdate(this.props.id, text)
       })
     }
   }
@@ -76,7 +76,7 @@ export default class Checklist extends React.Component {
   addItem (text) {
     if (text.length > 0) {
       this.props.onItemAdd(this.props.id, text)
-      this.textInput.innerHTML = ''
+      this.textInput.value = ''
     }
   }
 
@@ -114,7 +114,7 @@ export default class Checklist extends React.Component {
           ? <div className='title'>
             <span><Icon name='check-square-o' color='#888' /></span>
             <div onClick={this.displayEditTitleForm} className='checklistTitle'>
-              <Markdown source={this.state.title} />
+              <Markdown source={this.props.title} />
             </div>
             <div className='trash'>
               <Button
@@ -130,11 +130,11 @@ export default class Checklist extends React.Component {
             <span><Icon name='check-square-o' color='#888' /></span>
             <div className='editDescriptionForm'>
               <div className='content'>
-                <div className='card' contentEditable ref={v => { this.titleInput = v }} placeholder={this.props.title} /></div>
+                <textarea className='card' contentEditable ref={v => { this.titleInput = v }} placeholder={this.props.title} /></div>
               <div>
               </div>
               <div className='button'>
-                <div className='saveButton' onClick={() => this.updateTitle(this.titleInput.innerHTML)}>
+                <div className='saveButton' onClick={() => this.updateTitle(this.titleInput.value)}>
                           Save
                 </div>
                 <div className='cancelButton' onClick={() => this.hideEditTitleForm()}>
@@ -181,10 +181,10 @@ export default class Checklist extends React.Component {
           // Form to add an item
           : <div className='addItemDiv'>
             <div className='content'>
-              <div className='card' contentEditable ref={(v) => { this.textInput = v }} placeholder='Describe your item...' />
+              <textarea className='card' contentEditable ref={(v) => { this.textInput = v }} placeholder='Describe your item...' />
             </div>
             <div className='button'>
-              <div className='saveButton' onClick={() => this.addItem(this.textInput.innerHTML)}>
+              <div className='saveButton' onClick={() => this.addItem(this.textInput.value)}>
                         Save
               </div>
               <div className='cancelButton' onClick={() => this.hideNewItemForm()}>
