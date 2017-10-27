@@ -12,8 +12,11 @@ export default `
     background-color: #eee;
     z-index: 1;
   }
-  .trash {
-    float : right;
+  .trash{
+    float:right;
+  }
+  .title {
+    display : flex
   }
   .title span {
     font-size: 20px;
@@ -44,11 +47,14 @@ export default `
   .itemContent:hover {
     background-color: #ddd;
     cursor: pointer;
+    border-radius: 3px;    
   }
 
   .checklistTitle {
+    flex-grow: 3;
     font-size: 18px;
     margin-bottom: 15px;
+    margin-left: 20px;
   }
 
   .deleteItemButton {
@@ -84,6 +90,9 @@ export default `
     margin-bottom: 15px;
   }
   .editDescriptionForm {
+    flex-grow:2;
+    margin-left:20px;
+    width: 50%;
     margin-bottom: 20px;
   }
   .content {
@@ -95,12 +104,12 @@ export default `
     resize: vertical;
     overflow: visible;
     display: block;
-    width: 100%;
     padding: 8px;
-    padding-bottom: 50px;
+    padding-bottom: 25px;
     background-color: #fff;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
     border-radius: 3px;
+    height:0px;
   }
   .saveButton {
     padding: 8px;
@@ -132,5 +141,13 @@ export default `
   .button {
     display:inline-block;
     width:100%;
+  }
+  .addItemDiv{
+    width:86%;
+    margin-left:7%;
+  }
+  .editItemDiv{
+    width:86%;
+    margin-left:7%;
   }
 `

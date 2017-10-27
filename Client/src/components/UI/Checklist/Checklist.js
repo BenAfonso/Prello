@@ -2,18 +2,9 @@ import React from 'react'
 import ChecklistItem from './ChecklistItem'
 import PropTypes from 'prop-types'
 import styles from './Checklist.styles'
-import Input from '../Input/Input'
 import Button from '../Button/Button'
 import Icon from '../Icon/Icon'
-import {connect} from 'react-redux'
-
-  @connect(store => {
-    return {
-      board: store.board,
-      lists: store.board.lists
-    }
-  })
-
+import Markdown from 'react-markdown'
 export default class Checklist extends React.Component {
   static propTypes = {
     listIndex: PropTypes.string,
@@ -82,10 +73,10 @@ export default class Checklist extends React.Component {
     }
   }
 
-  addItem () {
-    if (this.textInput.input.value.length > 0) {
-      this.props.onItemAdd(this.props.id, this.textInput.input.value)
-      this.textInput.input.value = ''
+  addItem (text) {
+    if (text.length > 0) {
+      this.props.onItemAdd(this.props.id, text)
+      this.textInput.innerHTML = ''
     }
   }
 
@@ -112,10 +103,7 @@ export default class Checklist extends React.Component {
   }
 
   render () {
-    const list = this.props.board.lists[this.props.listIndex]
-    const card = list.cards.filter(c => c._id === this.props.cardId)[0]
-    const checklists = card.checklists
-    const items = checklists.filter(i => i._id === this.props.id)[0].items
+    const items = this.props.items
     const actualProgressBarStyle = {
       width: this.recalculatePercentageDone(items) + '%' // 80% width for the total progress bar in the CSS
     }
@@ -125,7 +113,9 @@ export default class Checklist extends React.Component {
         // Title
           ? <div className='title'>
             <span><Icon name='check-square-o' color='#888' /></span>
-            <h2 onClick={this.displayEditTitleForm} className='checklistTitle'>{this.state.title}</h2>
+            <div onClick={this.displayEditTitleForm} className='checklistTitle'>
+              <Markdown source={this.state.title} />
+            </div>
             <div className='trash'>
               <Button
                 onClick={this.onDelete}
@@ -136,18 +126,30 @@ export default class Checklist extends React.Component {
               </Button>
             </div>
           </div>
-          : <div className='editDescriptionForm'>
-            <div className='content'>
-              <div className='card' contentEditable ref={v => { this.titleInput = v }} placeholder={this.state.title} /></div>
-            <div>
+          : <div className='title'>
+            <span><Icon name='check-square-o' color='#888' /></span>
+            <div className='editDescriptionForm'>
+              <div className='content'>
+                <div className='card' contentEditable ref={v => { this.titleInput = v }} placeholder={this.props.title} /></div>
+              <div>
+              </div>
+              <div className='button'>
+                <div className='saveButton' onClick={() => this.updateTitle(this.titleInput.innerHTML)}>
+                          Save
+                </div>
+                <div className='cancelButton' onClick={() => this.hideEditTitleForm()}>
+                          Cancel
+                </div>
+              </div>
             </div>
-            <div className='button'>
-              <div className='saveButton' onClick={() => this.updateTitle(this.titleInput.innerHTML)}>
-                        Save
-              </div>
-              <div className='cancelButton' onClick={() => this.hideEditTitleForm()}>
-                        Cancel
-              </div>
+            <div className='trash'>
+              <Button
+                onClick={this.onDelete}
+                size='small'
+                bgColor='rgba(0,0,0,0)'
+                hoverBgColor='#ddd'>
+                <Icon name='trash-o' color='#70727c' />
+              </Button>
             </div>
           </div> }
         {/* Display progression in any case */}
@@ -169,17 +171,20 @@ export default class Checklist extends React.Component {
         ))}
 
         {!this.state.displayNewItemForm
-          ? <Button onClick={this.displayNewItemForm}
-            color='#444'
-            size='x-small'
-            bgColor='rgba(0,0,0,0)'
-            hoverBgColor='#ddd'
-            block>Add an item...</Button>
+          ? <div className='addItemDiv' >
+            <Button onClick={this.displayNewItemForm}
+              color='#444'
+              size='x-small'
+              bgColor='rgba(0,0,0,0)'
+              hoverBgColor='#ddd'
+              block>Add an item...</Button></div>
           // Form to add an item
           : <div className='addItemDiv'>
-            <Input ref={(v) => { this.textInput = v }} placeholder='Describe your item...' />
+            <div className='content'>
+              <div className='card' contentEditable ref={(v) => { this.textInput = v }} placeholder='Describe your item...' />
+            </div>
             <div className='button'>
-              <div className='saveButton' onClick={() => this.addItem()}>
+              <div className='saveButton' onClick={() => this.addItem(this.textInput.innerHTML)}>
                         Save
               </div>
               <div className='cancelButton' onClick={() => this.hideNewItemForm()}>
@@ -192,4 +197,4 @@ export default class Checklist extends React.Component {
       </div>
     )
   }
-  }
+}

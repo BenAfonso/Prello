@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Input from '../Input/Input'
 import Button from '../Button/Button'
 import styles from './Checklist.styles'
 import Icon from '../Icon/Icon'
@@ -56,14 +55,14 @@ export default class ChecklistItem extends React.Component {
   }
 
   onToggle () {
-    this.setState({ isChecked: this.checkbox.checked }, () => {
-      if (this.state.isChecked) {
+    this.setState({ isChecked: !this.checkbox.checked }, () => {
+      if (!this.props.isChecked) {
         this.setState({ doneDate: new Date() }, () => {
-          if (this.props.onChange !== null) { this.props.onChange(this.props.id, this.state.text, this.state.isChecked) }
+          if (this.props.onChange !== null) { this.props.onChange(this.props.id, this.props.text, !this.props.isChecked) }
         })
       } else {
         this.setState({ doneDate: null }, () => {
-          if (this.props.onChange !== null) { this.props.onChange(this.props.id, this.state.text, this.state.isChecked) }
+          if (this.props.onChange !== null) { this.props.onChange(this.props.id, this.props.text, !this.props.isChecked) }
         })
       }
     })
@@ -78,8 +77,8 @@ export default class ChecklistItem extends React.Component {
       <div className='checklistItem'>
         {!this.state.isEditable
           ? <div className='readOnlyMode'>
-            <input type='checkbox' className='checkbox' ref={t => { this.checkbox = t }} checked={this.state.isChecked} onClick={this.onToggle} />
-            <span className='itemContent' onClick={this.setEditable}>{this.state.text}</span>
+            <input type='checkbox' className='checkbox' ref={t => { this.checkbox = t }} checked={this.props.isChecked} onClick={this.onToggle} />
+            <span className='itemContent' onClick={this.setEditable}>{this.props.text}</span>
             <div className='deleteItemButton'>
               <Button
                 onClick={this.onDelete}
@@ -91,25 +90,31 @@ export default class ChecklistItem extends React.Component {
               </Button>
             </div>
           </div>
-          : <div className='editMode'>
-            <Input ref={v => { this.textInput = v }} placeholder={this.state.text} />
-            <Button
-              onClick={this.updateText}
-              bgColor='#3cb221'
-              hoverBgColor='#148407'
-              color='#FFF'
-              size='x-small'
-            >
-              <Icon name='check' color='#FFF' />
-            </Button>
-            <Button
-              onClick={this.cancelEdit}
-              bgColor='rgba(0,0,0,0)'
-              color='#444'
-              size='x-small'
-              hoverBgColor='#ddd'>
-              <Icon name='times' color='#70727c' />
-            </Button>
+          : <div className='title'>
+            <input type='checkbox' className='checkbox' ref={t => { this.checkbox = t }} checked={this.props.isChecked} onClick={this.onToggle} />
+            <div className='editItemDiv'>
+              <div className='content'>
+                <div className='card' contentEditable ref={(v) => { this.textInput = v }} placeholder='Describe your item...' />
+              </div>
+              <div className='button'>
+                <div className='saveButton' onClick={() => this.updateText(this.textInput.innerHTML)}>
+                          Save
+                </div>
+                <div className='cancelButton' onClick={() => this.cancelEdit()}>
+                          Cancel
+                </div>
+              </div>
+            </div>
+            <div className='deleteItemButton'>
+              <Button
+                onClick={this.onDelete}
+                bgColor='rgba(0,0,0,0)'
+                color='#70727c'
+                hoverBgColor='#ddd'
+                size='small'>
+                <Icon name='times' color='#70727c' />
+              </Button>
+            </div>
           </div> }
         <style jsx>{styles}</style>
       </div>
