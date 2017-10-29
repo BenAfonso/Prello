@@ -116,6 +116,7 @@ cardController.moveCard = (req) => {
     })
   })
 }
+
 cardController.addCommentToCard = (cardId, commentToAdd) => {
   return new Promise((resolve, reject) => {
     Card.findOneAndUpdate({'_id': cardId}, {$push: {comments: commentToAdd}}, {new: true}, function (err, res) {
