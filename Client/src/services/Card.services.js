@@ -1,6 +1,6 @@
 import axios from 'axios'
 import Config from '../config'
-import { updateCard } from '../store/actions'
+import { updateCardAction } from '../store/actions'
 
 export function moveCard (boardId, cardId, oldListId, newListId, position) {
   axios.put(`${Config.API_URL}/boards/${boardId}/cards/${cardId}/move`, {
@@ -29,6 +29,10 @@ export function updateCardDescription (boardId, listId, cardId, card) {
 
 export function getCompleteCard (boardId, listId, cardId) {
   axios.get(`${Config.API_URL}/boards/${boardId}/lists/${listId}/cards/${cardId}`).then(res => {
-    updateCard(listId, res.data)
+    updateCardAction(listId, res.data)
   })
+}
+
+export function updateCard (boardId, listId, cardId, card) {
+  axios.put(`${Config.API_URL}/boards/${boardId}/lists/${listId}/cards/${cardId}`, card)
 }

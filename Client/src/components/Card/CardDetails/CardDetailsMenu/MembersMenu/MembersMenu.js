@@ -15,7 +15,7 @@ export default class MembersMenu extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      matchingBoardCollaborators: this.props.board.collaborators,
+      matchingBoardCollaborators: this.props.board.collaborators.slice(0, 10),
       enableAdd: true,
       inputValue: ''
     }
@@ -43,7 +43,7 @@ export default class MembersMenu extends React.Component {
     const reg = new RegExp(email, 'i')
     let matchingCollaborators = []
     this.props.board.collaborators.map(collaborator => collaborator.email.match(reg) ? matchingCollaborators.push(collaborator) : null)
-    return matchingCollaborators
+    return matchingCollaborators.slice(0, 10)
   }
 
   onChange () {
@@ -99,7 +99,7 @@ export default class MembersMenu extends React.Component {
       display: inline-block;
       padding: 0 10px;
       overflow: hidden;
-      width: 200px;
+      width: 190px;
       text-overflow: ellipsis;    
     }
 
@@ -149,6 +149,8 @@ export default class MembersMenu extends React.Component {
                   <form onSubmit={this.addCollaborator}>
                     <DropDown
                       menuElements={menuElements}
+                      scrollable
+                      maxHeight='250px'
                       input={<input type='text' height='20px' value={this.state.inputValue} placeholder='georges.abitbol@mondedem.fr' onChange={this.onChange} ref={(t) => { this.email = t }} />}
                     />
                   </form>

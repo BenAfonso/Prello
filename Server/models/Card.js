@@ -16,7 +16,7 @@ const CardSchema = new Schema({
   dueDate: {type: Date},
   checklists: [Checklist],
   comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
-  createdAt: {type: Date},
+  createdAt: {type: Date, default: Date.now},
   isArchived: {type: Boolean, default: false},
   description: {type: String, default: ''},
   attachments: [{type: Schema.Types.ObjectId, ref: 'Attachment'}],

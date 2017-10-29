@@ -12,7 +12,6 @@ import PropTypes from 'prop-types'
 import MultiBackend from 'react-dnd-multi-backend'
 
 @connect(store => {
-  console.log(store)
   return {
     currentBoard: store.currentBoard,
     board: store.currentBoard.board
@@ -45,7 +44,6 @@ export default class Board extends React.Component {
 
   componentDidMount () {
     setBoard(this.props.dispatch, this.props._id).then(board => {
-      console.log(this.props.currentBoard)
       subscribeToBoard(board)
     }).catch(err => {
       console.error(err)
@@ -69,7 +67,7 @@ export default class Board extends React.Component {
   }
 
   findList (id) {
-    const list = this.props.board.lists.filter((l) => l._id === id)[0]
+    const list = this.props.board.lists.filter((l) => !l.isArchived && l._id === id)[0]
     return {
       list,
       index: this.props.board.lists.indexOf(list)
@@ -133,7 +131,6 @@ export default class Board extends React.Component {
   }
 
   render () {
-    console.log(this.props)
     const boardStyle = {
       backgroundColor: this.props.primaryColor
     }
@@ -145,13 +142,18 @@ export default class Board extends React.Component {
       <ul>
         {
           this.props.board.lists.map((list, i) => (
+            { ...list, index: i }
+          )).filter(l =>
+            !l.isArchived
+          ).map(list => (
             <li key={list._id}>
               <List
                 id={list._id}
                 key={list._id}
                 title={list.name}
-                index={i}
+                index={list.index}
                 cards={list.cards}
+                shadowColor={this.props.secondaryColor}
                 moveList={this.moveList}
                 findList={this.findList}
                 removeAction={this.removeList}

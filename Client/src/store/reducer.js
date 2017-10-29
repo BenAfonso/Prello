@@ -281,6 +281,19 @@ export default function reducer (state = defaultState, action) {
         }
       }
     }
+    case 'UPDATE_LIST': {
+      let newLists = state.board.lists.slice()
+      let updatedList = newLists.filter(l => l._id === action.payload._id)
+      let listIndex = newLists.indexOf(updatedList[0])
+      newLists[listIndex] = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: newLists
+        }
+      }
+    }
     default:
       return state
   }

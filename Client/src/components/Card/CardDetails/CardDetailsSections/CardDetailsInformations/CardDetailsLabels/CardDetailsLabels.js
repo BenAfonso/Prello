@@ -16,12 +16,12 @@ const CardDetailsLabels = props => (
     <style jsx>
       {`
   ul {
-    list-style-type: none
-    display: flex
+    list-style-type: none;
+    display: flex;
   }
 
   ul li {
-    margin-right: 5px
+    margin-right: 5px;
   }
 
   .label {
@@ -31,15 +31,15 @@ const CardDetailsLabels = props => (
   }
 
   .addButton {
-    height: 30px
-    width: 30px
-    background-color: #eee
-    border-radius: 3px
-    text-align: center
+    height: 30px;
+    width: 30px;
+    background-color: #eee;
+    border-radius: 3px;
+    text-align: center;
   }
   
   .addButton:hover {
-    background-color: #ddd
+    background-color: #ddd;
   }
     `}
     </style>
