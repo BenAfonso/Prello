@@ -7,6 +7,7 @@ import GSAP from 'react-gsap-enhancer'
 import Color from 'color'
 import {connect} from 'react-redux'
 import LoadingPage from '../pages/LoadingPage/loading.page'
+import Root from './root'
 
 @connect(store => {
   return {
@@ -57,7 +58,7 @@ export default class BoardLayout extends React.Component {
       ? primaryColor.darken(0.2)
       : primaryColor.lighten(0.2)
     return (
-      <div style={{ position: 'relative', height: '100%' }}>
+      <Root>
         {
           this.props.fetching
             ? <div className='loading'><LoadingPage /></div>
@@ -125,7 +126,7 @@ export default class BoardLayout extends React.Component {
       right: -400px;
     }
     `}</style>
-      </div>
+      </Root>
     )
   }
 }

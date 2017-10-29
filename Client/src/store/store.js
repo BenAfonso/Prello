@@ -17,6 +17,7 @@ const enhancer = composeEnhancers(
 )
 
 export const defaultState = {
+  notifications: [],
   currentUser: {
     username: '',
     name: '',

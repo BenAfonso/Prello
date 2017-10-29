@@ -21,6 +21,22 @@ export function addListLocal (list) {
   }
 }
 
+export function addNotification (notification) {
+  store.dispatch({
+    type: 'ADD_NOTIFICATION',
+    payload: notification
+  })
+  setTimeout(() => {
+    removeLastNotification()
+  }, 5000)
+}
+
+export function removeLastNotification () {
+  store.dispatch({
+    type: 'REMOVE_NOTIFICATION'
+  })
+}
+
 export function updateCardAction (listId, card) {
   store.dispatch({
     type: 'UPDATE_CARD',

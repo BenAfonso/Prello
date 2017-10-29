@@ -13,6 +13,21 @@ export default function reducer (state = defaultState, action) {
         }
       }
     }
+    case 'ADD_NOTIFICATION': {
+      let newNotifs = state.notifications.slice()
+      newNotifs.push(action.payload)
+      return {
+        ...state,
+        notifications: newNotifs
+      }
+    }
+    case 'REMOVE_NOTIFICATION': {
+      let newNotifs = state.notifications.slice(1, state.notifications.length)
+      return {
+        ...state,
+        notifications: newNotifs
+      }
+    }
     case 'FETCH_BOARD_ERROR': {
       return {
         ...state,
