@@ -67,6 +67,7 @@ export function setBoard (dispatch, id) {
         type: 'FETCH_BOARD_SUCCESS',
         payload: data.filter(x => x._id === id)[0]
       })
+      console.log('resolve')
       resolve(data.filter(x => x._id === id)[0])
     }).catch((err) => {
       dispatch({

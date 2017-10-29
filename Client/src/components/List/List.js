@@ -79,7 +79,8 @@ const listTarget = {
 
 @connect(store => {
   return {
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 // List can be hovered by another dragged list

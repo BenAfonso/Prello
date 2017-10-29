@@ -6,7 +6,8 @@ import AddCollaboratorMenu from './AddCollaboratorMenu/AddCollaboratorMenu'
 
 @connect(store => {
   return {
-    board: store.board
+    currentboard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 
@@ -53,6 +54,7 @@ export default class UsersMenu extends React.Component {
   }
 
   render () {
+    console.log(this.props.board)
     const { collaborators, owner } = this.props.board
     const boardId = this.props.board._id
 

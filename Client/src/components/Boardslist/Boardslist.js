@@ -7,6 +7,7 @@ import { setBoardslist } from '../../store/actions'
 import { subscribeToBoardslist } from '../../services/api'
 
 @connect(store => {
+  console.log(store)
   return {
     boardslist: store.boardslist
   }
