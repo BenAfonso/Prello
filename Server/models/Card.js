@@ -22,7 +22,8 @@ const CardSchema = new Schema({
   attachments: [{type: Schema.Types.ObjectId, ref: 'Attachment'}],
   owner: {type: Schema.Types.ObjectId, ref: 'User'},
   responsible: {type: Schema.Types.ObjectId, ref: 'User'},
-  collaborators: [{type: Schema.Types.ObjectId, ref: 'User'}]
+  collaborators: [{type: Schema.Types.ObjectId, ref: 'User'}],
+  labels: [{type: Schema.Types.ObjectId, ref: 'Label'}]
 })
 
 CardSchema.methods = {

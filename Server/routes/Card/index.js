@@ -13,4 +13,6 @@ module.exports = (router, controller) => {
   require('./update')(router, controller)
   require('./getOne')(router, controller)
   require('./addCollaborator')(router, controller)
+  require('./addLabel')(router, controller)
+  require('./removeLabel')(router, controller)
 }

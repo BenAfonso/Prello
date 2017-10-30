@@ -5,3 +5,5 @@ require('./Comment')
 require('./Card')
 require('./List')
 require('./Board')
+require('./Label')
+
