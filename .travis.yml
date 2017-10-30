@@ -6,4 +6,4 @@ services:
 - redis-server
 before_script:
 - mongo prello_test --eval 'db.createUser({user:"prello",pwd:"prello",roles:["readWrite"]});'
-script: cd Server && npm install && npm test && cd ../Client && npm install && npm test
+script: cd Server && npm install && npm test # && cd ../Client && npm install && npm test
