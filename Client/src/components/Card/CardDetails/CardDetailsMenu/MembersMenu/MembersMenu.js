@@ -7,7 +7,8 @@ import AvatarThumbnail from '../../../../UI/AvatarThumbnail/AvatarThumbnail'
 
 @connect(store => {
   return {
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 

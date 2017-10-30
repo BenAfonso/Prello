@@ -66,10 +66,42 @@ export default (state = defaultBoardState, action) => {
         }
       }
     }
+    case 'UPDATE_LIST': {
+      let newLists = state.board.lists.slice()
+      let updatedList = newLists.filter(l => l._id === action.payload._id)
+      let listIndex = newLists.indexOf(updatedList[0])
+      newLists[listIndex] = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: newLists
+        }
+      }
+    }
     case 'UPDATE_LISTS': {
       return {
+        ...state,
         board: {
-          ...state,
+          ...state.board,
+          lists: action.payload
+        }
+      }
+    }
+    case 'REMOVE_LIST': {
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: state.board.lists.filter(l => l._id !== action.payload._id)
+        }
+      }
+    }
+    case 'MOVE_LIST': {
+      return {
+        ...state,
+        board: {
+          ...state.board,
           lists: action.payload
         }
       }
@@ -86,6 +118,51 @@ export default (state = defaultBoardState, action) => {
         board: {
           ...state.board,
           lists: newLists
+        }
+      }
+    }
+    case 'MOVE_CARD': {
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: action.payload
+        }
+      }
+    }
+    case 'UPDATE_CARD': {
+      let newLists = state.board.lists.slice()
+      let updatedList = newLists.filter(l => l._id === action.payload.listId)
+      let updatedCard = updatedList[0].cards.filter(c => c._id === action.payload.card._id)
+      let listIndex = newLists.indexOf(updatedList[0])
+      let cardIndex = updatedList[0].cards.indexOf(updatedCard[0])
+      newLists[listIndex].cards[cardIndex] = action.payload.card
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: newLists
+        }
+      }
+    }
+    case 'UPDATE_CARDS': {
+      let newLists = state.board.lists.slice()
+      newLists[action.payload.listIndex].cards = action.payload.cards
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: newLists
+        }
+      }
+    }
+    case 'UPDATE_COLLABORATORS': {
+      const newCollaborators = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          collaborators: newCollaborators
         }
       }
     }
