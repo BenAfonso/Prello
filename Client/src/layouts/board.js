@@ -10,7 +10,8 @@ import LoadingPage from '../pages/LoadingPage/loading.page'
 
 @connect(store => {
   return {
-    board: store.board,
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board,
     fetching: store.fetching,
     fetched: store.fetched
   }

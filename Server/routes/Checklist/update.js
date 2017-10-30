@@ -2,64 +2,63 @@ const Util = require('../../controllers/Util')
 const {requiresLogin} = require('../../config/middlewares/authorization')
 const {hasCardInside} = require('../../config/middlewares/listAuthorizations')
 const {isCollaborator, hasListInside} = require('../../config/middlewares/boardAuthorizations')
+const {checkListExists} = require('../../config/middlewares/checkListAuthorizations')
 
 module.exports = (router, controller) => {
   /**
     * @swagger
-    * /boards/{boardId}/lists/{listId}/cards/{cardId}/comments:
-    *   post:
+    * /boards/{boardId}/lists/{listId}/cards/{cardId}/checklists/{checklistId}:
+    *   put:
     *     tags:
-    *       - Comments
-    *     description: Create a new Comment inside a Card
-    *     summary: CREATE a new Comment inside a Card
+    *       - Checklists
+    *     description: update item inside a checklist
+    *     summary: update item inside a checklist
     *     produces:
     *       - application/json
     *     parameters:
     *       - name: boardId
     *         type: string
-    *         description: The board id where we want to insert the Comment
+    *         description: The board id where we want to update the checklist
     *         in: path
     *         required: true
     *       - name: listId
     *         type: string
-    *         description: The list id where we want to insert the Comment
+    *         description: The list id where we want to update the checklist
     *         in: path
     *         required: true
     *       - name: cardId
     *         type: string
-    *         description: The Card id where we want to insert the Comment
+    *         description: The Card id where we want to update the checklist
+    *         in: path
+    *         required: true
+    *       - name: checklistId
+    *         type: string
+    *         description: The Checklist id we want to update
     *         in: path
     *         required: true
     *       - name: body
-    *         description: The Comment object that needs to be added
+    *         description: The Checklist object that needs to be update
     *         in: body
     *         required: true
     *         schema:
-    *             $ref: '#/definitions/NewComment'
+    *             $ref: '#/definitions/Checklist'
     *     responses:
-    *       201:
-    *         description: Message confirming the Comment has been created
+    *       200:
+    *         description: Message confirming the checklist has been updated
     *       500:
     *         description: Internal error
     */
-  router.post('/boards/:boardId/lists/:listId/cards/:cardId/comments', [requiresLogin, isCollaborator, hasListInside, hasCardInside], function (req, res) {
-    let requiredBody = ['text']
-    let requiredParameter = ['cardId', 'boardId', 'listId']
+  router.put('/boards/:boardId/lists/:listId/cards/:cardId/checklists/:checklistId', [requiresLogin, isCollaborator, hasListInside, hasCardInside, checkListExists], function (req, res) {
+    let requiredParameter = ['cardId', 'boardId', 'listId', 'checklistId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
       let stringMessage = requiredParameter.join(',')
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-    requiredBody = Util.checkRequest(req.body, requiredBody)
-    if (requiredBody.length > 0) {
-      let stringMessage = requiredBody.join(',')
-      res.status(400).json(`Missing ${stringMessage}`)
-      return
-    }
 
-    controller.createComment(req).then((data) => {
-      res.status(201).json(data)
+    controller.updateChecklist(req).then((data) => {
+      res.status(200).json(data)
     })
       .catch((err) => {
         res.status(err.code).json(err.message)
