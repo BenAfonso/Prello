@@ -13,7 +13,8 @@ import MultiBackend from 'react-dnd-multi-backend'
 
 @connect(store => {
   return {
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 @DragDropContext(MultiBackend(HTML5toTouch))
@@ -66,7 +67,7 @@ export default class Board extends React.Component {
   }
 
   findList (id) {
-    const list = this.props.board.lists.filter((l) => l._id === id)[0]
+    const list = this.props.board.lists.filter((l) => !l.isArchived && l._id === id)[0]
     return {
       list,
       index: this.props.board.lists.indexOf(list)
@@ -136,18 +137,23 @@ export default class Board extends React.Component {
 
     return <div className='host' style={boardStyle} >
 
-      <h1 className='boardTitle'>{this.props.board.title}</h1>
+      <h1 className='boardTitle'>{this.props.currentBoard.title}</h1>
       <CustomDragLayer snapToGrid={false} />
       <ul>
         {
           this.props.board.lists.map((list, i) => (
+            { ...list, index: i }
+          )).filter(l =>
+            !l.isArchived
+          ).map(list => (
             <li key={list._id}>
               <List
                 id={list._id}
                 key={list._id}
                 title={list.name}
-                index={i}
+                index={list.index}
                 cards={list.cards}
+                shadowColor={this.props.secondaryColor}
                 moveList={this.moveList}
                 findList={this.findList}
                 removeAction={this.removeList}

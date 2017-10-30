@@ -6,7 +6,8 @@ import MembersMenu from '../../../CardDetailsMenu/MembersMenu/MembersMenu'
 
 @connect(store => {
   return {
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 
@@ -95,7 +96,7 @@ export default class CardDetailsInformations extends React.Component {
             }
   
             .addButton:hover {
-              background-color: #ddd
+              background-color: #ddd;
             }
           `}
         </style>

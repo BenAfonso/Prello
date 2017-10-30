@@ -8,8 +8,9 @@ import { connect } from 'react-redux'
 
 @connect(store => {
   return {
-    board: store.board,
-    lists: store.board.lists
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board,
+    lists: store.currentBoard.board.lists
   }
 })
 export default class CardDetailsChecklists extends React.Component {

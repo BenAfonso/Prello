@@ -40,11 +40,11 @@ module.exports = (server, chai) => {
           .send({ name: 'Test list updated' })
           .set('authorization', `Bearer ${tokenU1}`)
           .end((err, res) => {
-            if (err) return err
+            if (err) {}
             res.should.have.status(200)
             res.body.should.be.a('string')
             List.findById(list1._id, (err, res) => {
-              if (err) return err
+              if (err) {}
               res.name.should.equal('Test list updated')
               done()
             })
@@ -89,10 +89,10 @@ module.exports = (server, chai) => {
           .delete(`/boards/${board1._id}/lists/${list1._id}`)
           .set('authorization', `Bearer ${tokenU1}`)
           .end((err, res) => {
-            if (err) return err
+            if (err) {}
             res.should.have.status(200)
             List.findById(list1._id, (err, res) => {
-              if (err) return err
+              if (err) {}
               chai.should().not.exist(res)
               done()
             })

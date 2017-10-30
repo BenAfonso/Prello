@@ -1,9 +1,8 @@
 import React from 'react'
-// import Card from '../Card/Card'
 import Card from '../Card/DraggableCard'
 import styles from './List.styles'
 import {connect} from 'react-redux'
-import { addCard, moveList, moveCardDistant, updateLists } from '../../store/actions'
+import { addCard, moveList, moveCardDistant, updateLists, archiveList } from '../../store/actions'
 import { DragSource, DropTarget } from 'react-dnd'
 import { ItemTypes } from '../Constants'
 import { PropTypes } from 'prop-types'
@@ -48,7 +47,7 @@ const cardTarget = {
     })[0]
     let card = originalList.cards.filter((e, i) => e._id === draggedId)[0]
 
-    if (props.cards.length === 0) {
+    if (props.cards.filter(c => !c.isArchived).length === 0) {
       let newLists = props.board.lists.slice()
       newLists[props.index].cards.push(card)
       newLists[originalListIndex].cards.splice(originalIndex, 1)
@@ -57,7 +56,7 @@ const cardTarget = {
   },
   drop (props, monitor) {
     const { id: draggedId, originalListIndex } = monitor.getItem()
-    let card = props.cards.filter((e, i) => e._id === draggedId)[0]
+    let card = props.cards.filter((e, i) => !e.isArchived && e._id === draggedId)[0]
     moveCardDistant(props.board._id, card._id, props.board.lists[originalListIndex]._id, props.id, props.cards.indexOf(card))
   }
 }
@@ -79,7 +78,8 @@ const listTarget = {
 
 @connect(store => {
   return {
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 // List can be hovered by another dragged list
@@ -107,8 +107,7 @@ export default class List extends React.Component {
     id: PropTypes.any,
     title: PropTypes.string.isRequired,
     moveList: PropTypes.func.isRequired,
-    primaryColor: PropTypes.any,
-    secondaryColor: PropTypes.any
+    shadowColor: PropTypes.any
   }
 
   constructor (props) {
@@ -142,9 +141,15 @@ export default class List extends React.Component {
     this.newCardTitle = ''
   }
 
+  archive () {
+    let newLists = this.props.board.lists.slice()
+    let updatedList = newLists.filter(l => l._id === this.props.id)
+    archiveList(this.props.board._id, updatedList[0])
+  }
+
   addCard () {
     if (this.newCardTitle !== '') {
-      addCard(this.props.dispatch, this.props.board._id, this.props.index, this.props.board.lists[this.props.index], this.newCardTitle.value)
+      addCard(this.props.dispatch, this.props.board._id, this.props.id, this.newCardTitle.value)
       this.clearForm()
     }
     this.undisplayNewCardForm()
@@ -161,15 +166,14 @@ export default class List extends React.Component {
   }
 
   render () {
-    const { title, secondaryColor, isDragging, connectDragSource, connectListDropTarget, connectCardDropTarget } = this.props
+    const { title, shadowColor, isDragging, connectDragSource, connectListDropTarget, connectCardDropTarget } = this.props
     return connectDragSource(connectListDropTarget(connectCardDropTarget(
       <div className='host'
-        style={{backgroundColor: secondaryColor}}
         ref={(l) => { this.host = l }}>
-        { isDragging ? <div className='overlay' /> : null }
+        { isDragging ? <div className='overlay' style={{backgroundColor: shadowColor}} /> : null }
         <div className='title'>{title}</div>
         <div className='button'>
-          <ListMenu />
+          <ListMenu archive={this.archive.bind(this)} />
         </div>
         <ul ref={(l) => { this.cardContainer = l }} style={{
           maxHeight: this.state.newCardFormDisplayed
@@ -178,12 +182,18 @@ export default class List extends React.Component {
         }}>
           {
             this.props.cards.map((card, i) => (
+              { ...card, index: i }
+            )).filter(card =>
+              !card.isArchived
+            ).map(card => (
               <li key={card._id}>
                 <Card
-                  index={i}
+                  index={card.index}
                   id={card._id}
                   checklists={card.checklists}
                   bgColor={this.props.primaryColor}
+                  listId={this.props.id}
+                  shadowColor={this.props.shadowColor}
                   listIndex={this.props.index}
                   content={card.text}
                   collaborators={card.collaborators}

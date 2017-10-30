@@ -13,16 +13,18 @@ import CardDetailsChecklists from './CardDetailsSections/CardDetailsChecklists/C
 import MembersMenu from './CardDetailsMenu/MembersMenu/MembersMenu'
 import { addChecklist } from '../../../services/Checklist.services'
 import { getCompleteCard } from '../../../services/Card.services'
+import { archiveCard } from '../../../store/actions'
 
 @connect(store => {
   return {
-    lists: store.board.lists
+    lists: store.currentBoard.board.lists
   }
 })
 
 @connect(store => {
   return {
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 export default class CardDetails extends React.Component {
@@ -53,7 +55,6 @@ export default class CardDetails extends React.Component {
 
   render () {
     const card = this.props.lists[this.props.listIndex].cards[this.props.index]
-
     return (
       <div className='host'>
         <div className='content'>
@@ -63,7 +64,7 @@ export default class CardDetails extends React.Component {
           <CardDetailsActivity />
         </div>
 
-        <div className='cancelButton' onClick={this.props.handleClick}>
+        <div className='cancelButton' onClick={this.props.dismissPopover}>
           <Button bgColor='rgba(0,0,0,0)' hoverBgColor='rgba(0,0,0,0.1)'>
             <Icon name='times' />
           </Button>
@@ -125,6 +126,14 @@ export default class CardDetails extends React.Component {
             <li>
               <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>
                 Attachment
+              </Button>
+            </li>
+            <li>
+              <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small' onClick={() => {
+                archiveCard(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, card)
+                this.props.dismissPopover()
+              }}>
+                Archive
               </Button>
             </li>
           </ul>
