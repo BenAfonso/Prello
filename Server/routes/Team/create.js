@@ -2,7 +2,6 @@ const Util = require('../../controllers/Util')
 const {requiresLogin} = require('../../config/middlewares/authorization')
 
 module.exports = (router, controller) => {
-
   /**
   * @swagger
   * /Teams:
