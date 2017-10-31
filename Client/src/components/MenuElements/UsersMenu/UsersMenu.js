@@ -6,7 +6,8 @@ import AddCollaboratorMenu from './AddCollaboratorMenu/AddCollaboratorMenu'
 
 @connect(store => {
   return {
-    board: store.board
+    currentboard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 

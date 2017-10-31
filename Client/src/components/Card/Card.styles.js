@@ -1,13 +1,28 @@
 export default `
 
 .root {
-  background-color: #FFF;
+  background-color: #fff;
   padding: 10px;
   color: #444;
   border-radius: 3px;
   font-size: 16px;
   min-height: 38px;
   box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+}
+
+.root:hover {
+  background-color: #eee;
+}
+
+.editButton {
+  display: none;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.root:hover .editButton {
+  display: block;
 }
 
 .content {

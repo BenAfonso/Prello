@@ -10,7 +10,8 @@ import { dateFormatter } from '../../../../../util/dateFormatter'
 @connect(store => {
   return {
     currentUser: store.currentUser,
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 export default class CardDetailsComments extends React.Component {

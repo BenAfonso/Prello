@@ -60,7 +60,6 @@ userController.getUser = (id) => {
 }
 
 userController.login = (userToConnect) => {
-  console.log(userToConnect)
   return new Promise((resolve, reject) => {
     User.load({
       where: { email: userToConnect.email },

@@ -3,7 +3,6 @@ import axios from 'axios'
 
 export function addBoardDistant (payload) {
   return new Promise((resolve, reject) => {
-    console.log(payload.color)
     axios.post(`${Config.API_URL}/boards`, {
       title: payload.title,
       background: payload.color

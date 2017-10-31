@@ -8,7 +8,8 @@ import Icon from '../../../../UI/Icon/Icon'
 
 @connect(store => {
   return {
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 

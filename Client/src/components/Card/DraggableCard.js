@@ -63,7 +63,8 @@ const cardTarget = {
 
 @connect(store => {
   return {
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 @DropTarget(ItemTypes.CARD, cardTarget, connect => ({
@@ -79,12 +80,28 @@ export default class CardComponent extends React.Component {
     id: PropTypes.any,
     listId: PropTypes.any,
     connectCardDragSource: PropTypes.func.isRequired,
+    checklists: PropTypes.arrayOf(PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      index: PropTypes.number,
+      items: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.any,
+        index: PropTypes.number,
+        text: PropTypes.string.isRequired,
+        isChecked: PropTypes.boolean,
+        doneDate: PropTypes.instanceOf(Date)
+      }))
+    })),
     content: PropTypes.string.isRequired,
+    shadowColor: PropTypes.any,
     isDragging: PropTypes.bool.isRequired,
     index: PropTypes.number.isRequired,
     collaborators: PropTypes.arrayOf(PropTypes.any),
     bgColor: PropTypes.any,
     listIndex: PropTypes.number
+  }
+
+  static defaultProps = {
+    checklists: []
   }
 
   componentDidMount () {
@@ -95,18 +112,19 @@ export default class CardComponent extends React.Component {
 
   displayCardDetails () {
     this.props.popoverManager.setRenderedComponent(
-      <CardDetails {...this.props} handleClick={this.props.popoverManager.dismissPopover} />
+      <CardDetails {...this.props} dismissPopover={this.props.popoverManager.dismissPopover} />
     )
     this.props.popoverManager.displayPopover()
   }
 
   render () {
-    const { id, index, bgColor, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource, collaborators } = this.props
-
+    const { id, checklists, index, bgColor, shadowColor, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource, collaborators } = this.props
     return connectCardDropTarget(connectCardDragSource(
       <div className='host' style={{position: 'relative'}} onClick={this.displayCardDetails.bind(this)}>
         <div className='overlay' style={{
-          opacity: isDragging ? 1 : 0
+          display: isDragging ? 'block' : 'none',
+          opacity: isDragging ? 1 : 0,
+          backgroundColor: shadowColor
         }} />
 
         <Card
@@ -115,6 +133,7 @@ export default class CardComponent extends React.Component {
           index={index}
           listIndex={listIndex}
           content={content}
+          checklists={checklists}
           collaborators={
             collaborators.map(c => c._id
               ? c

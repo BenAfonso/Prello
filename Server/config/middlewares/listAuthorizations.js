@@ -19,7 +19,7 @@ module.exports.hasCardInside = (req, res, next) => {
         return res.status(500).send(err)
       }
       if (result === null) {
-        return res.status(404).send('List not found')
+        return res.status(404).send('Card not found in the list')
       }
       next()
     })

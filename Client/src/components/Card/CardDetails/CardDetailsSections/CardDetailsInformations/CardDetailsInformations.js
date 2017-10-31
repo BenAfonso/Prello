@@ -10,7 +10,8 @@ import Markdown from 'react-markdown'
 
 @connect(store => {
   return {
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 export default class CardDetailsInformations extends React.Component {
