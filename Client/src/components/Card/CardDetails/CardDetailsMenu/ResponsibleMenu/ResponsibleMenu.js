@@ -1,5 +1,5 @@
 import React from 'react'
-import { addResponsible } from '../../../../../store/actions'
+import { updateResponsible } from '../../../../../store/actions'
 import {connect} from 'react-redux'
 import Button from '../../../../UI/Button/Button'
 import DropDown from '../../../../UI/DropDown/DropDown'
@@ -7,7 +7,8 @@ import AvatarThumbnail from '../../../../UI/AvatarThumbnail/AvatarThumbnail'
 
 @connect(store => {
   return {
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 
@@ -19,20 +20,27 @@ export default class ResponsibleMenu extends React.Component {
       enableAdd: false,
       inputValue: ''
     }
-    this.addResponsible = this.addResponsible.bind(this)
+    this.updateResponsible = this.updateResponsible.bind(this)
     this.onChange = this.onChange.bind(this)
     this.setInputValue = this.setInputValue.bind(this)
     this.getInitials = this.getInitials.bind(this)
   }
 
-  addResponsible () {
-    addResponsible(this.props.dispatch, this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId, this.email.value)
+  isResponsible (collaborator) {
+    if (this.props.responsible) return this.props.responsible.email === collaborator.email
+    else return false
+  }
+
+  updateResponsible () {
+    updateResponsible(this.props.dispatch, this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId, this.email.value)
     this.setState({
       inputValue: '',
       enableAdd: false,
       matchingBoardCollaborators: this.props.board.collaborators
     })
   }
+
+  removeResponsible (user) {}
 
   getMatchingCollaborators (email) {
     const reg = new RegExp(email, 'i')
@@ -127,7 +135,8 @@ export default class ResponsibleMenu extends React.Component {
       return {
         action: this.setInputValue.bind(this, collaborator.email),
         placeholder: this.renderUserinMenu(collaborator),
-        closer: true
+        closer: true,
+        disabled: this.isResponsible(collaborator)
       }
     })
 
@@ -155,10 +164,19 @@ export default class ResponsibleMenu extends React.Component {
                   <Button
                     bgColor='#5AAC44'
                     block
-                    onClick={this.addResponsible}
+                    onClick={this.updateResponsible}
                     disabled={!this.state.enableAdd}
                   >
                   Add
+                  </Button>
+                </div>
+                <div className='element-button'>
+                  <Button
+                    bgColor='#e60000'
+                    block
+                    onClick={() => this.removeResponsible(this.props.responsible)}
+                  >
+                  Remove
                   </Button>
                 </div>
               </li>

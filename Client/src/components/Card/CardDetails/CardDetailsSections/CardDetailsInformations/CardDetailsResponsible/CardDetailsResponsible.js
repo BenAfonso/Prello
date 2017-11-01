@@ -5,7 +5,8 @@ import ResponsibleMenu from '../../../CardDetailsMenu/ResponsibleMenu/Responsibl
 
 @connect(store => {
   return {
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 
@@ -34,21 +35,30 @@ export default class CardDetailsResponsible extends React.Component {
       <div className='host'>
         {
           responsible
-            ? <div className='user'>
-              <div className='user-thumbnail'>
-                <AvatarThumbnail
-                  size='30px'
-                  fontSize=''
-                  thumbnail={responsible.picture}
-                  initials={this.getInitials(responsible.name)}
-                  bgColor={responsible.bgColor}
-                  color='black'
-                />
+            ? <div className='responsible'>
+              <div className='user'>
+                <div className='user-thumbnail'>
+                  <AvatarThumbnail
+                    size='30px'
+                    fontSize=''
+                    thumbnail={responsible.picture}
+                    initials={this.getInitials(responsible.name)}
+                    bgColor={responsible.bgColor}
+                    color='black'
+                  />
+                </div>
+                <div className='user-infos'>
+                  <div className='user-username'>{responsible.username}</div>
+                  <div className='user-email'>{responsible.email}</div>
+                </div>
               </div>
-              <div className='user-infos'>
-                <div className='user-username'>{responsible.username}</div>
-                <div className='user-email'>{responsible.email}</div>
-              </div>
+              <div className='modify-responsible-block'><ResponsibleMenu
+                responsible={responsible}
+                members={members}
+                cardId={cardId}
+                listIndex={this.props.listIndex}
+                orientation='left'
+                button={<span className='modify-responsible'>Modify</span>} /></div>
             </div>
             : <div className='no-responsible'>
                 There isn't any responsible for this card yet.&nbsp;
@@ -64,10 +74,11 @@ export default class CardDetailsResponsible extends React.Component {
         <style jsx>{`
 
       .host {
-         width: 250px;
+        display: flex;
          border-radius: 3px;
          background: #eee;
          padding: 8px;
+         
       }
 
       .no-responsible {
@@ -78,9 +89,29 @@ export default class CardDetailsResponsible extends React.Component {
         color: #999;
       }
 
+      .responsible {
+        position: relative;
+      }
+
       .add-responsible {
         text-decoration: underline;
         cursor: pointer;
+      }
+
+      .modify-responsible-block {
+        display: inline-block;
+        vertical-align: top;
+        cursor: pointer;
+      }
+
+      .modify-responsible {
+        font-size: 12px;
+        text-decoration: underline;
+        color: #999;
+      }
+
+      .user {
+        display: inline-block;
       }
 
       .user-infos {
