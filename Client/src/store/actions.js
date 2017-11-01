@@ -1,4 +1,4 @@
-import { fetchBoards, addBoardDistant, addCollaboratorDistant } from '../services/Board.services'
+import { fetchBoards, addBoardDistant, addCollaboratorDistant, removeCollaboratorDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
@@ -179,6 +179,13 @@ export function addBoardLocal (board) {
 
 export function addCollaborator (dispatch, boardId, email) {
   addCollaboratorDistant(boardId, email).then((board) => {
+  }).catch(err => {
+    return err
+  })
+}
+
+export function removeCollaborator (boardId, userId) {
+  removeCollaboratorDistant(boardId, userId).then((board) => {
   }).catch(err => {
     return err
   })
