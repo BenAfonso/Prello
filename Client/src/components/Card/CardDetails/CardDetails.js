@@ -11,6 +11,7 @@ import CardDetailsActivity from './CardDetailsSections/CardDetailsActivity/CardD
 import CardDetailsInformations from './CardDetailsSections/CardDetailsInformations/CardDetailsInformations'
 import CardDetailsChecklists from './CardDetailsSections/CardDetailsChecklists/CardDetailsChecklists'
 import MembersMenu from './CardDetailsMenu/MembersMenu/MembersMenu'
+import DueDateMenu from './CardDetailsMenu/DueDateMenu/DueDateMenu'
 import { addChecklist } from '../../../services/Checklist.services'
 import { getCompleteCard } from '../../../services/Card.services'
 import { archiveCard } from '../../../store/actions'
@@ -119,9 +120,19 @@ export default class CardDetails extends React.Component {
               </DropDown>
             </li>
             <li>
-              <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>
-                Due Date
-              </Button>
+              <DueDateMenu
+                listIndex={this.props.listIndex}
+                cardId={card._id}
+                orientation='right'
+                button={<Button
+                  bgColor='#eee'
+                  hoverBgColor='#ddd'
+                  size='small'
+                  block
+                >
+                  <Icon color='#000' name='clock-o' fontSize='12px' />
+                    Due Date
+                </Button>} />
             </li>
             <li>
               <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>
