@@ -5,6 +5,7 @@ import BoardsPage from './pages/boards.page'
 import BoardPage from './pages/board.page'
 import RegisterPage from './pages/RegisterPage/register.page'
 import LoadingPage from './pages/LoadingPage/loading.page'
+import ProfilePage from './pages/ProfilePage/profile.page'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store/store'
@@ -35,6 +36,7 @@ class App extends Component {
             <PrivateRoute exact path='/boards' component={BoardsPage} />
             <PrivateRoute exact path='/boards/:id' component={BoardPage} />
             <Route exact path='/loading' component={LoadingPage} />
+            <PrivateRoute exact path='/profile' component={ProfilePage} />
           </div>
         </Provider>
       </Router>
