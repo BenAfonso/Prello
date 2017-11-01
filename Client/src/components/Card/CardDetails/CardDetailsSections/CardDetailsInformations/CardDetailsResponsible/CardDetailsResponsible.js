@@ -57,7 +57,7 @@ export default class CardDetailsResponsible extends React.Component {
                 members={members}
                 cardId={cardId}
                 listIndex={this.props.listIndex}
-                orientation='left'
+                orientation='right'
                 button={<span className='modify-responsible'>Modify</span>} /></div>
             </div>
             : <div className='no-responsible'>
@@ -66,7 +66,7 @@ export default class CardDetailsResponsible extends React.Component {
                 members={members}
                 cardId={cardId}
                 listIndex={this.props.listIndex}
-                orientation='left'
+                orientation='right'
                 button={<span className='add-responsible'>Add one</span>} />
             </div>
 

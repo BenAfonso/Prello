@@ -1,5 +1,5 @@
 import React from 'react'
-import { updateResponsible } from '../../../../../store/actions'
+import { updateResponsible, removeResponsible } from '../../../../../store/actions'
 import {connect} from 'react-redux'
 import Button from '../../../../UI/Button/Button'
 import DropDown from '../../../../UI/DropDown/DropDown'
@@ -32,7 +32,7 @@ export default class ResponsibleMenu extends React.Component {
   }
 
   updateResponsible () {
-    updateResponsible(this.props.dispatch, this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId, this.email.value)
+    updateResponsible(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId, this.email.value)
     this.setState({
       inputValue: '',
       enableAdd: false,
@@ -40,7 +40,9 @@ export default class ResponsibleMenu extends React.Component {
     })
   }
 
-  removeResponsible (user) {}
+  removeResponsible () {
+    removeResponsible(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId)
+  }
 
   getMatchingCollaborators (email) {
     const reg = new RegExp(email, 'i')
@@ -167,18 +169,22 @@ export default class ResponsibleMenu extends React.Component {
                     onClick={this.updateResponsible}
                     disabled={!this.state.enableAdd}
                   >
-                  Add
+                  Set Responsible
                   </Button>
                 </div>
-                <div className='element-button'>
-                  <Button
-                    bgColor='#e60000'
-                    block
-                    onClick={() => this.removeResponsible(this.props.responsible)}
-                  >
-                  Remove
-                  </Button>
-                </div>
+                {
+                  this.props.responsible
+                    ? <div className='element-button'>
+                      <Button
+                        bgColor='#e60000'
+                        block
+                        onClick={() => this.removeResponsible(this.props.responsible)}
+                      >
+                      Remove
+                      </Button>
+                    </div>
+                    : null
+                }
               </li>
             </ul>
           </div>

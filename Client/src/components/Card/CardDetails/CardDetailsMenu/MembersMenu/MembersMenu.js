@@ -33,7 +33,7 @@ export default class MembersMenu extends React.Component {
   }
 
   addMember () {
-    addMember(this.props.dispatch, this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId, this.email.value)
+    addMember(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId, this.email.value)
     this.setState({
       inputValue: '',
       enableAdd: false,
@@ -42,7 +42,7 @@ export default class MembersMenu extends React.Component {
   }
 
   removeMember (user) {
-    removeMember(this.props.dispatch, this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId, user.email)
+    removeMember(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId, user._id)
     this.setState({
       inputValue: '',
       enableAdd: false,
@@ -160,7 +160,7 @@ export default class MembersMenu extends React.Component {
       return {
         action: this.isCardMember(collaborator) ? this.removeMember.bind(this, collaborator) : this.setInputValue.bind(this, collaborator.email),
         placeholder: this.renderUserinMenu(collaborator),
-        closer: true
+        closer: !this.isCardMember(collaborator)
       }
     })
 
