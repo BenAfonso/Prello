@@ -47,4 +47,25 @@ input {
 .collaborator {
   margin: 2px;
 }
+
+.dueDate {
+  display: flex;
+  width: 70px;
+  background: #eee;
+  border-radius: 3px;
+  font-size: 12px;
+  align-items: center;
+}
+
+.dueDate-icon {
+  display: inline-block;
+  padding: 3px;
+}
+
+.duedate-date {
+  display: inline-block;
+  padding: 3px;
+}
+
+
 `
