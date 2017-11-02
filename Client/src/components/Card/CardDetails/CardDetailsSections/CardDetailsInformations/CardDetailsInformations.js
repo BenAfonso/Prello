@@ -126,6 +126,10 @@ export default class CardDetailsInformations extends React.Component {
     .members {
       margin-right: 20px;
     }
+
+    .labels {
+      margin-right: 20px;
+    }
     
     .subsectionTitle {
       font-size: 14px;

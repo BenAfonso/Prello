@@ -85,8 +85,8 @@ export default class CardDetails extends React.Component {
                   size='x-small'
                   block
                 >
-                  <Icon color='#000' name='user-plus' fontSize='12px' />
-                    Members
+                  <Icon color='#000' name='user-plus' fontSize='13px' />
+                  <div className='button-text'>Members</div>
                 </Button>} />
             </li>
             <li>
@@ -127,11 +127,11 @@ export default class CardDetails extends React.Component {
                 button={<Button
                   bgColor='#eee'
                   hoverBgColor='#ddd'
-                  size='small'
+                  size='x-small'
                   block
                 >
-                  <Icon color='#000' name='clock-o' fontSize='12px' />
-                    Due Date
+                  <Icon color='#000' name='clock-o' fontSize='13px' />
+                  <div className='button-text'>Due Date</div>
                 </Button>} />
             </li>
             <li>
