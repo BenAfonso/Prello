@@ -14,7 +14,7 @@ export default (state = defaultCurrentUserState, action) => {
     }
     case 'UPDATE_USER': {
       return {
-        ...state.currentUser,
+        ...state,
         name: action.payload.name,
         username: action.payload.username
       }

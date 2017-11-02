@@ -22,7 +22,6 @@ export function setProfile () {
 }
 
 export function updateProfileLocalStorage (profile) {
-  console.log(profile)
   storeProfileLocalStorage(profile)
 }
 

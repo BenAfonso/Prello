@@ -43,7 +43,6 @@ export default class ProfilePage extends React.Component {
     }
     updateProfile(datas)
       .then(updatedUser => {
-        console.log(updatedUser)
         updateProfileLocalStorage(updatedUser)
         updateProfileAction(updatedUser)
       })
