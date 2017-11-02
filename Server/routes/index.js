@@ -26,6 +26,14 @@ router.get('/me/*', [requiresLogin], (req, res, next) => {
   next()
 })
 
+router.put('/me/*', [requiresLogin], (req, res, next) => {
+  let request = req.originalUrl.split('/').filter(e => e !== '')
+  request[0] = `/users/${req.user._id}`
+  request = request.join('/')
+  req.url = request
+  next()
+})
+
 require('./List')(router, controllers)
 require('./Board')(router, controllers.boardController)
 require('./Card')(router, controllers.cardController)
