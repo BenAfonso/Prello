@@ -3,7 +3,6 @@ import { defaultCurrentUserState } from '../store'
 export default (state = defaultCurrentUserState, action) => {
   switch (action.type) {
     case 'SET_USER': {
-      console.log(action.payload)
       return {
         ...state.currentUser,
         id: action.payload._id,
