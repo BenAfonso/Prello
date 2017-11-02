@@ -6,6 +6,9 @@ import Input from '../../components/UI/Input/Input'
 import Button from '../../components/UI/Button/Button'
 import defaultAvatar from './default-avatar.png'
 import styles from './profilePage.style'
+import { updateProfile } from '../../services/User.services'
+import { updateProfileAction } from '../../store/actions'
+import { updateProfileLocalStorage } from '../../services/Authentication.services'
 
 @connect(store => {
   return {
@@ -22,6 +25,7 @@ export default class ProfilePage extends React.Component {
     this.renderModifyProfileForm = this.renderModifyProfileForm.bind(this)
     this.displayModifyProfileForm = this.displayModifyProfileForm.bind(this)
     this.hideModifyProfileForm = this.hideModifyProfileForm.bind(this)
+    this.updateProfile = this.updateProfile.bind(this)
   }
 
   displayModifyProfileForm () {
@@ -32,15 +36,30 @@ export default class ProfilePage extends React.Component {
     this.setState({ displayModifyProfileForm: false })
   }
 
+  updateProfile () {
+    const datas = {
+      name: this.nameInput.input.value,
+      username: this.usernameInput.input.value
+    }
+    updateProfile(datas)
+      .then(updatedUser => {
+        console.log(updatedUser)
+        updateProfileLocalStorage(updatedUser)
+        updateProfileAction(updatedUser)
+      })
+    this.hideModifyProfileForm()
+  }
+
   renderModifyProfileForm () {
     return (
       <form>
         <label>Full name : </label>
-        <Input placeholder={this.props.currentUser.name} />
+        <Input placeholder={this.props.currentUser.name} ref={e => { this.nameInput = e }} width='50px' font-size='14px'/>
         <label>User name : </label>
-        <Input placeholder={this.props.currentUser.username} />
+        <Input placeholder={this.props.currentUser.username} ref={e => { this.usernameInput = e }} width='50px' font-size='14px'/>
         <div className='saveButton'>
           <Button bgColor='#28af28'
+            onClick={this.updateProfile}
             color='#FFF'>Save</Button>
         </div>
         <Button onClick={this.hideModifyProfileForm}>Cancel</Button>
@@ -58,6 +77,7 @@ export default class ProfilePage extends React.Component {
                 width='5%'
                 alt='Avatar picture' />
               <p>Username: {this.props.currentUser.username}</p>
+              <p>Full name: {this.props.currentUser.name}</p>
               <Button onClick={this.displayModifyProfileForm}
                 bgColor='#999'>Modify</Button>
             </div>

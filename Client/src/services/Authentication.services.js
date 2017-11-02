@@ -21,6 +21,11 @@ export function setProfile () {
   }
 }
 
+export function updateProfileLocalStorage (profile) {
+  console.log(profile)
+  storeProfileLocalStorage(profile)
+}
+
 export function isAuthenticated () {
   if (window.localStorage.getItem('prello_access_token') !== undefined &&
     window.localStorage.getItem('prello_access_token') !== null) {

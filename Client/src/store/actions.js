@@ -119,6 +119,13 @@ export function setConnectedUser (user) {
   })
 }
 
+export function updateProfileAction (datas) {
+  store.dispatch({
+    type: 'UPDATE_USER',
+    payload: datas
+  })
+}
+
 export function removeListLocal (list) {
   store.dispatch({
     type: 'REMOVE_LIST',
