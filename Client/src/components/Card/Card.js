@@ -37,6 +37,11 @@ export default class Card extends React.Component {
   }
 
   render () {
+    const list = this.props.board.lists[this.props.listIndex]
+    const card = list.cards.filter(c => c._id === this.props.id)[0]
+    const dueDate = new Date(card.dueDate)
+    const day = (dueDate.getDate() < 10 ? '0' : '') + dueDate.getDate()
+    console.log(day)
     return (
       <div style={{...this.props.style}} ref={c => { this.card = c }} className='root'>
         <div className='editButton'><Button size='small' bgColor='rgba(0,0,0,0)' hoverBgColor='rgba(255,255,255,0.6)'><Icon name='edit' color='#444' /></Button></div>
@@ -49,6 +54,10 @@ export default class Card extends React.Component {
               </div>
             ))
           }
+        </div>
+        {
+        }
+        <div className='dueDate'>
         </div>
         <style jsx>
           {styles}

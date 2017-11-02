@@ -1,7 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import Calendar from 'react-calendar'
 import Button from '../../../../UI/Button/Button'
 import DropDown from '../../../../UI/DropDown/DropDown'
+import { updateCardDueDate, removeCardDueDate } from '../../../../../store/actions'
 
 @connect(store => {
   return {
@@ -10,31 +12,63 @@ import DropDown from '../../../../UI/DropDown/DropDown'
   }
 })
 
-export default class MembersMenu extends React.Component {
+export default class DueDateMenu extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {}
-  }
-
-  onChange () {
-    if (this.email.value !== '') {
-      const newmatchingBoardCollaborators = this.getMatchingCollaborators(this.email.value)
-      this.setState({
-        inputValue: this.email.value,
-        matchingBoardCollaborators: newmatchingBoardCollaborators
-      })
-    } else {
-      this.setState({
-        inputValue: this.email.value,
-        matchingBoardCollaborators: this.props.board.collaborators
-      })
+    this.state = {
+      selectedDate: '',
+      selectedHour: '12:00',
+      enableAdd: false
     }
+    this.setInputValue = this.setInputValue.bind(this)
+    this.isDueDateSet = this.isDueDateSet.bind(this)
+    this.updateDueDate = this.updateDueDate.bind(this)
+    this.removeDueDate = this.removeDueDate.bind(this)
+    this.onHourChange = this.onHourChange.bind(this)
+    this.checkHour = this.checkHour.bind(this)
   }
 
-  setInputValue (email) {
-    this.email.value = email
+  updateDueDate () {
+    const card = this.props.board.lists[this.props.listIndex].cards.filter(c => c._id === this.props.cardId)[0]
+    const time = this.hour.value.split(':')
+    const dueDate = new Date(this.state.selectedDate).setHours(time[0], time[1])
+    updateCardDueDate(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, card, dueDate)
+  }
+
+  removeDueDate () {
+    const card = this.props.board.lists[this.props.listIndex].cards.filter(c => c._id === this.props.cardId)[0]
+    removeCardDueDate(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, card)
+  }
+
+  isDueDateSet () {
+    const card = this.props.board.lists[this.props.listIndex].cards.filter(c => c._id === this.props.cardId)[0]
+    return card.dueDate !== undefined
+  }
+
+  onHourChange () {
+    this.setState({selectedHour: this.hour.value})
+  }
+
+  checkHour () {
+    const regH = new RegExp('^([0-1]?[0-9]|2[0-4])$')
+    const regM = new RegExp('^([0-5][0-9])$')
+    const time = this.hour.value.split(':')
+    let hour
+    let minutes
+    if (regH.test(time[0])) { hour = time[0] } else { hour = '12' }
+    if (regM.test(time[1])) { minutes = time[1] } else { minutes = '00' }
+    this.hour.value = hour + ':' + minutes
+    this.setState({selectedHour: this.hour.value})
+  }
+
+  setInputValue (date) {
+    const day = (date.getDate() < 10 ? '0' : '') + date.getDate()
+    const month = ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1)
+    const year = date.getFullYear()
+    const inputDate = day + '/' + month + '/' + year
+    this.date.value = inputDate
     this.setState({
-      inputValue: email,
+      selectedDate: date,
       enableAdd: true
     })
   }
@@ -51,21 +85,26 @@ export default class MembersMenu extends React.Component {
             <ul>
               <li className='element'>
                 <div className='element-input'>
-                  <form onSubmit={this.addCollaborator}>
+                  <form onSubmit={this.updateDueDate}>
                     <div className='input-block'>
                       <div className='input-title'>Date</div>
-                      <input />
+                      <input ref={(t) => { this.date = t }} disabled />
                     </div>
                     <div className='input-block'>
                       <div className='input-title'>Hour</div>
-                      <input />
+                      <input ref={(t) => { this.hour = t }} value={this.state.selectedHour} onChange={this.onHourChange} onBlur={this.checkHour} />
                     </div>
                   </form>
+                  <div className='calendar'>
+                    <Calendar onChange={this.setInputValue} />
+                  </div>
                 </div>
                 <div className='buttons'>
                   <div className='add-button'>
                     <Button
                       bgColor='#5AAC44'
+                      onClick={this.updateDueDate}
+                      disabled={!this.state.enableAdd}
                     >
                     Add
                     </Button>
@@ -73,6 +112,8 @@ export default class MembersMenu extends React.Component {
                   <div className='remove-button'>
                     <Button
                       bgColor='#CC0000'
+                      onClick={this.removeDueDate}
+                      disabled={!this.isDueDateSet()}
                     >
                     Remove
                     </Button>
@@ -94,6 +135,10 @@ export default class MembersMenu extends React.Component {
 
     .element-input {
       padding: 8px 0px;
+    }
+
+    .calendar {
+      padding: 5px 0;
     }
 
     .buttons {

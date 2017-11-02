@@ -74,12 +74,16 @@ export default class CardDetailsInformations extends React.Component {
               </div>
               <CardDetailsLabels />
             </div>
-            <div className='dueDate'>
-              <div className='subsectionTitle'>
-                Due Date
-              </div>
-              <CardDetailsDueDate />
-            </div>
+            {
+              fullCard.dueDate !== undefined
+                ? <div className='dueDate'>
+                  <div className='subsectionTitle'>
+                      Due Date
+                  </div>
+                  <CardDetailsDueDate listIndex={this.props.listIndex} id={fullCard._id}/>
+                </div>
+                : null
+            }
           </div>
           {
             this.state.editDescriptionFormDisplayed
