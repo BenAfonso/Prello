@@ -53,6 +53,10 @@ cardController.removeCard = (boardId, listId, cardId) => {
 }
 cardController.updateCard = (req) => {
   return new Promise((resolve, reject) => {
+    if (req.body.dueDate === null) {
+      delete req.body.dueDate
+      Card.update({ '_id': req.params.cardId }, {$unset: {dueDate: ''}}).exec()
+    }
     Card.update({ '_id': req.params.cardId }, req.body, (err, item) => {
       if (err) {
         reject(err)
