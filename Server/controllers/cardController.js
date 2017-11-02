@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 const Card = mongoose.model('Card')
 const List = mongoose.model('List')
 const User = mongoose.model('User')
+const boardController = require('./boardController')
 
 const listController = require('./listController')
-const boardController = require('./boardController')
 
 const emit = require('../controllers/sockets').emit
 
@@ -283,6 +283,11 @@ cardController.removeCollaborator = (boardId, listId, cardId, userId) => {
         })
       }
     })
+  })
+}
+
+cardController.findAllCardUser = (boardId, userId) => {
+  return new Promise((resolve, reject) => {
   })
 }
 
