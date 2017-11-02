@@ -247,7 +247,7 @@ boardController.removeCollaborator = (boardId, userId, requesterId) => {
                   Card.findOneAndUpdate({'_id': card._id}, {$pull: {collaborators: userId}}).exec()
                 }
               })
-              if (card.responsible !== null) {
+              if (card.responsible !== null && card.responsible !== undefined) {
                 if (card.responsible.toString() === userId.toString()) {
                   Card.findOneAndUpdate({'_id': card._id}, {responsible: null}).exec()
                 }
