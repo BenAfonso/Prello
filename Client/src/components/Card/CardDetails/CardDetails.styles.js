@@ -27,6 +27,11 @@ export default `
   width: 100px;
 }
 
+.button-text {
+  display: inline-block;
+  padding: 3px;
+}
+
 .buttons li {
   width: 100%;
   margin-bottom: 5px;

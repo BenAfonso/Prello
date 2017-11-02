@@ -14,6 +14,7 @@ const Checklist = new Schema({
 const CardSchema = new Schema({
   text: {type: String, default: '', required: true},
   dueDate: {type: Date},
+  validated: {type: Boolean, default: false},
   checklists: [Checklist],
   comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
   createdAt: {type: Date, default: Date.now},

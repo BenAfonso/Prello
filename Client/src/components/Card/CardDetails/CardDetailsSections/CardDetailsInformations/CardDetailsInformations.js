@@ -2,6 +2,8 @@ import React from 'react'
 import CardDetailsSection from '../../CardDetailsSection/CardDetailsSection'
 import CardDetailsMembers from './CardDetailsMembers/CardDetailsMembers'
 import CardDetailsLabels from './CardDetailsLabels/CardDetailsLabels'
+import CardDetailsDueDate from './CardDetailsDueDate/CardDetailsDueDate'
+
 import {connect} from 'react-redux'
 import Button from '../../../../UI/Button/Button'
 import {updateCardDescription} from '../../../../../services/Card.services'
@@ -72,6 +74,16 @@ export default class CardDetailsInformations extends React.Component {
               </div>
               <CardDetailsLabels />
             </div>
+            {
+              fullCard.dueDate !== undefined
+                ? <div className='dueDate'>
+                  <div className='subsectionTitle'>
+                      Due Date
+                  </div>
+                  <CardDetailsDueDate listIndex={this.props.listIndex} id={fullCard._id}/>
+                </div>
+                : null
+            }
           </div>
           {
             this.state.editDescriptionFormDisplayed
@@ -112,6 +124,10 @@ export default class CardDetailsInformations extends React.Component {
     }
     
     .members {
+      margin-right: 20px;
+    }
+
+    .labels {
       margin-right: 20px;
     }
     

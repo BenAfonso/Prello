@@ -272,6 +272,22 @@ export function addMember (dispatch, boardId, listId, cardId, email) {
   addMemberDistant(boardId, listId, cardId, email)
 }
 
+export function updateCardDueDate (boardId, listId, card, dueDate) {
+  let newCard = { ...card, dueDate: dueDate }
+  updateCard(boardId, listId, card._id, newCard)
+}
+
+export function removeCardDueDate (boardId, listId, card) {
+  let newCard = { ...card, dueDate: null, validated: false }
+  console.log(newCard)
+  updateCard(boardId, listId, card._id, newCard)
+}
+
+export function updateCardValidated (boardId, listId, card, validated) {
+  let newCard = { ...card, validated: validated }
+  updateCard(boardId, listId, card._id, newCard)
+}
+
 export function archiveCard (boardId, listId, card) {
   if (card.isArchived) { return }
   let newCard = { ...card, isArchived: true }
