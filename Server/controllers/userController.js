@@ -82,4 +82,16 @@ userController.login = (userToConnect) => {
     })
   })
 }
+userController.updateUser = (userId, body) => {
+  return new Promise((resolve, reject) => {
+    delete body.email
+    User.findOneAndUpdate('_id', body, { new: true }).exec(function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
 module.exports = userController
