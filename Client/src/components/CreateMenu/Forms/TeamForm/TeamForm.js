@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './TeamForm.styles'
-// import { addTeam } from '../../../../store/actions'
+import { addTeam } from '../../../../store/actions'
 import Button from '../../../UI/Button/Button'
 
 export default class TeamForm extends React.Component {
@@ -12,9 +12,9 @@ export default class TeamForm extends React.Component {
     this.submit = this.submit.bind(this)
   }
 
-  submit (title) {
-    if (this.title.value !== '') {
-      // addTeam(this.props.dispatch)
+  submit (name) {
+    if (this.name.value !== '') {
+      addTeam(this.name.value)
       this.props.onSubmit()
     }
   }
@@ -31,9 +31,7 @@ export default class TeamForm extends React.Component {
           <li className='teamFormItem'>
             <form onSubmit={this.submit}>
               <p className='teamFormItemTitle'>Name</p>
-              <input type='text' placeholder='Add a team...' ref={(t) => { this.title = t }} />
-              <p className='teamFormItemTitle'>Description</p>
-              <textarea ref={(input) => { this.description = input }} />
+              <input type='text' placeholder='Add a team...' ref={(t) => { this.name = t }} />
             </form>
           </li>
 

@@ -15,14 +15,14 @@ export default class CreateMenu extends React.Component {
 
     this.displayNewBoardForm = this.displayNewBoardForm.bind(this)
     this.displayMenu = this.displayMenu.bind(this)
-    this.addBoard = this.addBoard.bind(this)
-    this.clearForm = this.clearForm.bind(this)
+    this.addAction = this.addAction.bind(this)
+    this.clearForms = this.clearForms.bind(this)
     this.itemActions = this.itemActions.bind(this)
     this.hideMenu = this.hideMenu.bind(this)
   }
 
-  addBoard () {
-    this.clearForm()
+  addAction () {
+    this.clearForms()
     this.hideMenu()
   }
 
@@ -65,14 +65,15 @@ export default class CreateMenu extends React.Component {
     })
   }
 
-  clearForm () {
+  clearForms () {
     this.title = ''
+    this.name = ''
   }
 
   displayContent (menuItems) {
     if (this.state.isOpen) return (<MenuDropDown title='Create' menuItems={menuItems} itemActions={this.itemActions} />)
-    else if (this.state.newBoardFormDisplayed) return (<BoardForm onSubmit={this.addBoard} back={this.displayMenu} cancel={this.hideMenu} />)
-    else if (this.state.newTeamFormDisplayed) return (<TeamForm onSubmit={this.addTeam} back={this.displayMenu} cancel={this.hideMenu} />)
+    else if (this.state.newBoardFormDisplayed) return (<BoardForm onSubmit={this.addAction} back={this.displayMenu} cancel={this.hideMenu} />)
+    else if (this.state.newTeamFormDisplayed) return (<TeamForm onSubmit={this.addAction} back={this.displayMenu} cancel={this.hideMenu} />)
   }
 
   render () {
