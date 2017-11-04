@@ -14,6 +14,7 @@ import MembersMenu from './CardDetailsMenu/MembersMenu/MembersMenu'
 import { addChecklist } from '../../../services/Checklist.services'
 import { getCompleteCard } from '../../../services/Card.services'
 import { archiveCard } from '../../../store/actions'
+import LabelDropdown from '../../UI/LabelDropdown/LabelDropdown'
 
 @connect(store => {
   return {
@@ -89,9 +90,15 @@ export default class CardDetails extends React.Component {
                 </Button>} />
             </li>
             <li>
-              <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>
-                Labels
-              </Button>
+              <DropDown title='Labels'
+                orientation='right'
+                layout='custom'
+                button={<Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>Labels</Button>
+                }>
+                <div style={{ width: '340px' }}>
+                  <LabelDropdown />
+                </div>
+              </DropDown>
             </li>
             <li>
               <DropDown title='Add a checklist'

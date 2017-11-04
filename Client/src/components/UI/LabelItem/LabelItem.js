@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Button from '../Button/Button'
 import Icon from '../Icon/Icon'
-import styles from './LabelItem.styles'
 
 export default class LabelItem extends React.Component {
   constructor () {
@@ -11,7 +10,6 @@ export default class LabelItem extends React.Component {
       isExpanded: true
     }
     this.onDelete = this.onDelete.bind(this)
-    this.toto = this.toto.bind(this)
   }
   static propTypes = {
     labelText: PropTypes.string,
@@ -34,12 +32,8 @@ export default class LabelItem extends React.Component {
     centeredText: true
   }
 
-  onDelete() {
+  onDelete () {
     this.props.onDeleteLabel(this.props.labelText)
-  }
-
-  toto () {
-    alert("Delete item")
   }
 
   render () {
@@ -67,7 +61,7 @@ export default class LabelItem extends React.Component {
       textAlign: centeredText ? 'center' : 'left',
       ...props.style
     }
-    return(
+    return (
       <div>
         <div style={props.style} checked>{this.props.labelText}</div>
         <div className='deleteLabelButton'>

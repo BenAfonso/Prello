@@ -1,13 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import cn from 'classnames'
+import { connect } from 'react-redux'
 import Button from '../Button/Button'
 import Input from '../Input/Input'
 import LabelItem from '../LabelItem/LabelItem'
-import Label from '../Label/Label'
+import { addLabel, getBoardLabels } from '../../../services/Label.services'
 
+@connect(store => {
+  return {
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
+  }
+})
 export default class LabelDropdown extends React.Component {
-  
   static propTypes = {
     width: PropTypes.string,
     color: PropTypes.string,
@@ -20,18 +25,16 @@ export default class LabelDropdown extends React.Component {
     }))
   }
 
-
-
   static defaultProps = {
     height: '459px',
     width: '302px',
     color: '#fff',
-    backgroundColor: '#c8c8c8',
-    fontWeight: "bold",
-    borderRadius: "3px",
+    backgroundColor: null,
+    fontWeight: 'bold',
+    borderRadius: '3px',
     fontSize: '12px',
     centeredText: true,
-    boardLabels: [{label: "Blue", color: "#1c5fcc"}, {label: "Red", color: "#cc1b53"}, {label: "Green", color: "#1dcc1a"}]
+    boardLabels: [{label: 'Blue', color: '#1c5fcc'}, {label: 'Red', color: '#cc1b53'}, {label: 'Green', color: '#1dcc1a'}]
   }
 
   constructor (props) {
@@ -43,11 +46,8 @@ export default class LabelDropdown extends React.Component {
     this.displayLabelForm = this.displayLabelForm.bind(this)
     this.addLabel = this.addLabel.bind(this)
     this.deleteLabel = this.deleteLabel.bind(this)
+    this.addLabelWithAxios = this.addLabelWithAxios.bind(this)
   }
-
-  /*shouldComponentUpdate(nextState){
-    return this.state.boardLabels != nextState.boardLabels
-  }*/
 
   displayLabelForm () {
     this.setState({
@@ -62,6 +62,14 @@ export default class LabelDropdown extends React.Component {
       displayLabelCreationForm: !this.state.displayLabelCreationForm,
       boardLabels: newBoardLabels
     })
+  }
+
+  addLabelWithAxios () {
+    addLabel(this.props.board._id, this.labelTitle.input.value, this.labelColor.input.value)
+  }
+
+  getLabels () {
+    console.log(getBoardLabels(this.props.board._id))
   }
 
   deleteLabel (id) {
@@ -91,10 +99,10 @@ export default class LabelDropdown extends React.Component {
       backgroundColor,
       fontWeight,
       borderRadius,
-      fontSize,
+      fontSize
     }
-    return(
-      <div style={props.style}>Labels
+    return (
+      <div style={props.style}>
         <div>
           <ul>
             {this.state.boardLabels.map(e => <LabelItem onDeleteLabel={this.deleteLabel} labelText={e['label']} backgroundColor={e['color']} />)}
@@ -103,12 +111,11 @@ export default class LabelDropdown extends React.Component {
         <div>
           <Button onClick={this.displayLabelForm}>Create label</Button>
           {this.state.displayLabelCreationForm
-             ? <div>
-               <Input ref={(v) => this.labelTitle = v} placeholder="Label title"/>
-               <Input ref={(v) => this.labelColor = v} placeholder="#c5c5c5"/>
-               <Button onClick={this.addLabel}>Add Label</Button>
-             </div> 
-             : null}
+            ? <div>
+              <Input ref={(v) => { this.labelTitle = v } } placeholder='Label title'/>
+              <Input ref={(v) => { this.labelColor = v } } placeholder='#c5c5c5'/>
+              <Button onClick={this.addLabelWithAxios}>Add Label</Button>
+            </div> : null}
         </div>
       </div>
     )
