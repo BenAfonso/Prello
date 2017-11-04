@@ -12,3 +12,13 @@ export function addTeamDistant (teamName) {
     })
   })
 }
+
+export function fetchTeams () {
+  return new Promise((resolve, reject) => {
+    axios.get(`${Config.API_URL}/me/teams`).then((res) => {
+      resolve(res.data)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}

@@ -1,5 +1,5 @@
 import { fetchBoards, addBoardDistant, addCollaboratorDistant } from '../services/Board.services'
-import { addTeamDistant } from '../services/Team.services'
+import { fetchTeams, addTeamDistant } from '../services/Team.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, updateCard } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
@@ -178,22 +178,45 @@ export function addBoardLocal (board) {
   }
 }
 
+export function setTeamslist (dispatch) {
+  return new Promise((resolve, reject) => {
+    dispatch({type: 'FETCH_TEAMSLIST_START'})
+    fetchTeams().then((data) => {
+      dispatch({
+        type: 'FETCH_TEAMSLIST_SUCCESS',
+        payload: data
+      })
+      resolve(data)
+    }).catch((err) => {
+      dispatch({
+        type: 'FETCH_TEAMSLIST_ERROR',
+        payload: err
+      })
+    })
+  })
+}
+
 export function addTeam (teamName) {
   addTeamDistant(teamName).then((team) => {
-    // <= HANDLED FROM SOCKETS
+    if (team) {
+      store.dispatch({
+        type: 'ADD_TEAM',
+        payload: team
+      })
+    }
   }).catch(err => {
     return err
   })
 }
 
-export function addTeamLocal (team) {
+/* export function addTeamLocal (team) {
   if (team) {
     store.dispatch({
       type: 'ADD_TEAM',
       payload: team
     })
   }
-}
+} */
 
 export function addCollaborator (dispatch, boardId, email) {
   addCollaboratorDistant(boardId, email).then((board) => {

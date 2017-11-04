@@ -64,5 +64,20 @@ export const defaultBoardslistState = {
   boards: []
 }
 
-export const defaultState = Object.assign(defaultCurrentUserState, defaultBoardState, defaultBoardslistState)
+export const defaultTeamState = {
+  fetching: false,
+  fetched: false,
+  error: null,
+  team: {
+    _id: '',
+    name: '',
+    users: []
+  }
+}
+
+export const defaultTeamslistState = {
+  teams: []
+}
+
+export const defaultState = Object.assign(defaultCurrentUserState, defaultBoardState, defaultBoardslistState, defaultTeamState, defaultTeamslistState)
 export default createStore(reducer, { ...defaultState }, enhancer)

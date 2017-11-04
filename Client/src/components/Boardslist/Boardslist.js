@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom'
 import styles from './Boardslist.styles'
 import BoardThumbnail from '../BoardThumbnail/BoardThumbnail'
 import {connect} from 'react-redux'
-import { setBoardslist } from '../../store/actions'
+import { setBoardslist, setTeamslist } from '../../store/actions'
 import { subscribeToBoardslist } from '../../services/api'
 
 @connect(store => {
   return {
-    boardslist: store.boardslist
+    boardslist: store.boardslist,
+    teamslist: store.teamslist
   }
 })
 
@@ -21,6 +22,10 @@ export default class Boardslist extends React.Component {
   componentDidMount () {
     setBoardslist(this.props.dispatch).then(() => {
       subscribeToBoardslist('testID')
+    }).catch(err => {
+      console.error(err)
+    })
+    setTeamslist(this.props.dispatch).then(() => {
     }).catch(err => {
       console.error(err)
     })
@@ -75,6 +80,25 @@ export default class Boardslist extends React.Component {
                   index={i}
                   background={board.background}
                   isFavorite={board.isFavorite}
+                />
+              </Link>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h1>My teams</h1>
+
+      <ul className='teams'>
+        {
+          this.props.teamslist.teams.map((team, i) => (
+
+            <li key={team._id}>
+              <Link to={`/teams/${team._id}`}>
+                <BoardThumbnail
+                  id={team._id}
+                  title={team.name}
+                  index={i}
                 />
               </Link>
             </li>
