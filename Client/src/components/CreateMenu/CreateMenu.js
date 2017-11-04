@@ -2,13 +2,15 @@ import React from 'react'
 import styles from './CreateMenu.styles'
 import MenuDropDown from '../UI/MenuDropDown/MenuDropDown'
 import BoardForm from './Forms/BoardForm/BoardForm'
+import TeamForm from './Forms/TeamForm/TeamForm'
 
 export default class CreateMenu extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       isOpen: false,
-      newBoardFormDisplayed: false
+      newBoardFormDisplayed: false,
+      newTeamFormDisplayed: false
     }
 
     this.displayNewBoardForm = this.displayNewBoardForm.bind(this)
@@ -30,6 +32,10 @@ export default class CreateMenu extends React.Component {
         this.displayNewBoardForm()
         break
       }
+      case 'addTeam': {
+        this.displayNewTeamForm()
+        break
+      }
       default:
     }
   }
@@ -46,6 +52,15 @@ export default class CreateMenu extends React.Component {
   displayNewBoardForm () {
     this.setState({
       newBoardFormDisplayed: true,
+      newTeamFormDisplayed: false,
+      isOpen: false
+    })
+  }
+
+  displayNewTeamForm () {
+    this.setState({
+      newBoardFormDisplayed: false,
+      newTeamFormDisplayed: true,
       isOpen: false
     })
   }
@@ -57,12 +72,13 @@ export default class CreateMenu extends React.Component {
   displayContent (menuItems) {
     if (this.state.isOpen) return (<MenuDropDown title='Create' menuItems={menuItems} itemActions={this.itemActions} />)
     else if (this.state.newBoardFormDisplayed) return (<BoardForm onSubmit={this.addBoard} back={this.displayMenu} cancel={this.hideMenu} />)
+    else if (this.state.newTeamFormDisplayed) return (<TeamForm onSubmit={this.addTeam} back={this.displayMenu} cancel={this.hideMenu} />)
   }
 
   render () {
     const menuItems = [
       { title: 'Create a board', body: 'A board is a set of cards classified in lists. Use it to manage your projects !', action: 'addBoard' },
-      { title: 'Create a team', body: 'A team is a set of boards and users. Use it to keep your business organized' }
+      { title: 'Create a team', body: 'A team is a set of boards and users. Use it to keep your business organized', action: 'addTeam' }
     ]
 
     return (<div className='host'>
