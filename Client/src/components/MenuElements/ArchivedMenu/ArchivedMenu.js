@@ -5,7 +5,8 @@ import { restoreCard, restoreList } from '../../../store/actions'
 
 @connect(store => {
   return {
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 export default class ArchivedMenu extends React.Component {

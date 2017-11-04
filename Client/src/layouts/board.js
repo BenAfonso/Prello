@@ -11,7 +11,8 @@ import Root from './root'
 
 @connect(store => {
   return {
-    board: store.board,
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board,
     fetching: store.fetching,
     fetched: store.fetched
   }

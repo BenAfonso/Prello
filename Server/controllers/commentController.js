@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const Comment = mongoose.model('Comment')
-const emit = require('../controllers/sockets').emit
 const cardController = require('./cardController')
 
 const commentController = {}
@@ -15,13 +14,7 @@ commentController.createComment = (req) => {
       } else {
         cardController.addCommentToCard(req.params.cardId, commentToAdd)
             .then((data) => {
-              cardController.getOneCard(req.params.cardId)
-              .then((cardToEmit) => {
-                let payload = {
-                  listId: req.params.listId,
-                  card: cardToEmit
-                }
-                emit(req.params.boardId, 'NEW_COMMENT', payload)
+              cardController.refreshOneCard(req.params.boardId, req.params.listId, req.params.cardId).then((cardToEmit) => {
                 resolve(cardToEmit)
               })
               .catch((err) => {
@@ -43,12 +36,7 @@ commentController.removeComment = (boardId, listId, cardId, commentId) => {
       } else {
         cardController.removeCommentFromCard(cardId, commentId)
           .then((data) => {
-            cardController.getOneCard(cardId).then((cardToEmit) => {
-              let payload = {
-                listId: listId,
-                card: cardToEmit
-              }
-              emit(boardId, 'REMOVE_COMMENT', payload)
+            cardController.refreshOneCard(boardId, listId, cardId).then((cardToEmit) => {
               resolve(cardToEmit)
             })
             .catch((err) => {
@@ -69,13 +57,7 @@ commentController.updateComment = (req) => {
       if (err) {
         return reject(err)
       } else {
-        cardController.getOneCard(req.params.cardId)
-        .then((cardToEmit) => {
-          let payload = {
-            listId: req.params.listId,
-            card: cardToEmit
-          }
-          emit(req.params.boardId, 'UPDATE_COMMENT', payload)
+        cardController.refreshOneCard(req.params.boardId, req.params.listId, req.params.cardId).then((cardToEmit) => {
           resolve(cardToEmit)
         })
         .catch((err) => {

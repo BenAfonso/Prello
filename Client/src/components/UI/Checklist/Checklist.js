@@ -2,13 +2,19 @@ import React from 'react'
 import ChecklistItem from './ChecklistItem'
 import PropTypes from 'prop-types'
 import styles from './Checklist.styles'
-import Input from '../Input/Input'
 import Button from '../Button/Button'
 import Icon from '../Icon/Icon'
-
+import Markdown from 'react-markdown'
 export default class Checklist extends React.Component {
   static propTypes = {
-    items: PropTypes.array,
+    listIndex: PropTypes.string,
+    cardId: PropTypes.string,
+    id: PropTypes.string,
+    items: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string,
+      text: PropTypes.string,
+      isChecked: PropTypes.bool
+    })),
     title: PropTypes.string.isRequired,
     percentageDone: PropTypes.number
   }
@@ -21,13 +27,15 @@ export default class Checklist extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      listIndex: props.listIndex,
+      cardId: props.cardId,
+      id: props.id,
       items: props.items,
       displayNewItemForm: false,
       displayEditTitleForm: false,
       title: props.title,
       percentageDone: props.percentageDone
     }
-
     this.displayNewItemForm = this.displayNewItemForm.bind(this)
     this.addItem = this.addItem.bind(this)
     this.hideNewItemForm = this.hideNewItemForm.bind(this)
@@ -35,8 +43,8 @@ export default class Checklist extends React.Component {
     this.hideEditTitleForm = this.hideEditTitleForm.bind(this)
     this.deleteItem = this.deleteItem.bind(this)
     this.updateTitle = this.updateTitle.bind(this)
-    this.updateItemStatus = this.updateItemStatus.bind(this)
-    this.updateItemContent = this.updateItemContent.bind(this)
+    this.onDelete = this.onDelete.bind(this)
+    this.updateItem = this.updateItem.bind(this)
     this.recalculatePercentageDone = this.recalculatePercentageDone.bind(this)
   }
 
@@ -57,47 +65,37 @@ export default class Checklist extends React.Component {
     this.setState({displayEditTitleForm: false})
   }
 
-  updateTitle () {
-    if (this.titleInput.input.value.length > 0) { this.setState({title: this.titleInput.input.value, displayEditTitleForm: false}) }
-  }
-
-  addItem () {
-    if (this.textInput.input.value.length > 0) {
-      let newItemsList = this.state.items.slice()
-      newItemsList.push({index: newItemsList.length, content: this.textInput.input.value, done: false})
-      this.setState({items: newItemsList}, () => {
-        this.setState({percentageDone: this.recalculatePercentageDone(newItemsList)})
+  updateTitle (text) {
+    if (text.length > 0) {
+      this.setState({title: text, displayEditTitleForm: false}, () => {
+        this.props.onUpdate(this.props.id, text)
       })
-      this.textInput.input.value = ''
     }
   }
 
-  deleteItem (index) {
-    let newItemsList = this.state.items.slice()
-    newItemsList.splice(index, 1)
-    this.setState({items: newItemsList}, () => {
-      this.setState({percentageDone: this.recalculatePercentageDone(newItemsList)})
-    })
+  addItem (text) {
+    if (text.length > 0) {
+      this.props.onItemAdd(this.props.id, text)
+      this.textInput.value = ''
+    }
   }
 
-  updateItemContent (index, newContent) {
-    let newItemsList = this.state.items.slice()
-    newItemsList[index].content = newContent
-    this.setState({items: newItemsList})
+  deleteItem (id) {
+    this.props.onItemDelete(this.props.id, id)
   }
 
-  updateItemStatus (index, done) {
-    let newItemsList = this.state.items.slice()
-    newItemsList[index].done = done
-    this.setState({items: newItemsList}, () => {
-      this.setState({percentageDone: this.recalculatePercentageDone(newItemsList)})
-    })
+  onDelete () {
+    this.props.onDelete(this.props.id)
   }
 
-  recalculatePercentageDone (list) {
-    if (this.state.items.length === 0) { return 0 }
-    const size = this.state.items.length
-    return parseInt(list.filter((item) => item.done).length / size * 100, 10)
+  updateItem (id, newContent, isChecked) {
+    this.props.onItemUpdate(this.props.id, id, newContent, isChecked)
+  }
+
+  recalculatePercentageDone (items) {
+    if (items.length === 0) { return 0 }
+    const size = items.length
+    return parseInt(items.filter((item) => item.isChecked).length / size * 100, 10)
   }
 
   hideNewItemForm () {
@@ -105,78 +103,96 @@ export default class Checklist extends React.Component {
   }
 
   render () {
+    const items = this.props.items
     const actualProgressBarStyle = {
-      width: this.state.percentageDone + '%' // 80% width for the total progress bar in the CSS
+      width: this.recalculatePercentageDone(items) + '%' // 80% width for the total progress bar in the CSS
     }
-
     return (
       <div className='Checklist'>
         {!this.state.displayEditTitleForm
         // Title
           ? <div className='title'>
             <span><Icon name='check-square-o' color='#888' /></span>
-            <h2 onClick={this.displayEditTitleForm} className='checklistTitle'>{this.state.title}</h2>
+            <div onClick={this.displayEditTitleForm} className='checklistTitle'>
+              <Markdown source={this.props.title} />
+            </div>
+            <div className='trash'>
+              <Button
+                onClick={this.onDelete}
+                size='small'
+                bgColor='rgba(0,0,0,0)'
+                hoverBgColor='#ddd'>
+                <Icon name='trash-o' color='#70727c' />
+              </Button>
+            </div>
           </div>
-          : <div className='editTitleForm'>
-            <div className='textarea'><Input ref={v => { this.titleInput = v }} placeholder={this.state.title} /></div>
-            <Button
-              onClick={this.updateTitle}
-              bgColor='#3cb221'
-              hoverBgColor='#148407'
-              color='#FFF'
-              size='x-small'>
-              <Icon name='check' color='#FFF' />
-            </Button>
-            <Button
-              onClick={this.hideEditTitleForm}
-              bgColor='rgba(0,0,0,0)'
-              hoverBgColor='#ddd'
-              color='#70727c'
-              size='x-small'>
-              <Icon name='times' color='#70727c' />
-            </Button>
+          : <div className='title'>
+            <span><Icon name='check-square-o' color='#888' /></span>
+            <div className='editDescriptionForm'>
+              <div className='content'>
+                <textarea className='card' contentEditable ref={v => { this.titleInput = v }} placeholder={this.props.title} /></div>
+              <div>
+              </div>
+              <div className='button'>
+                <div className='saveButton' onClick={() => this.updateTitle(this.titleInput.value)}>
+                          Save
+                </div>
+                <div className='cancelButton' onClick={() => this.hideEditTitleForm()}>
+                          Cancel
+                </div>
+              </div>
+            </div>
+            <div className='trash'>
+              <Button
+                onClick={this.onDelete}
+                size='small'
+                bgColor='rgba(0,0,0,0)'
+                hoverBgColor='#ddd'>
+                <Icon name='trash-o' color='#70727c' />
+              </Button>
+            </div>
           </div> }
         {/* Display progression in any case */}
         <div className='progressPart'>
-          <span className='percentageDone'>{this.state.percentageDone}%</span>
+          <span className='percentageDone'>{this.recalculatePercentageDone(items)}%</span>
           <div className='progressBar'>
             <div className='actualProgressBar' style={actualProgressBarStyle} />
           </div>
         </div>
         {/* Display checklist items */}
-        {this.state.items.map((item, index) => (<ChecklistItem key={item.index} done={item.done} index={parseInt(index, 10)} content={item.content} onContentChange={this.updateItemContent} onToggle={this.updateItemStatus} onDelete={this.deleteItem} />))}
+        {items.map((item) => (
+          <ChecklistItem
+            id={item._id}
+            key={item._id}
+            isChecked={item.isChecked}
+            text={item.text}
+            onChange={this.updateItem}
+            onDelete={this.deleteItem} />
+        ))}
 
         {!this.state.displayNewItemForm
-          ? <Button onClick={this.displayNewItemForm}
-            color='#444'
-            size='x-small'
-            bgColor='rgba(0,0,0,0)'
-            hoverBgColor='#ddd'
-            block>Add an item...</Button>
+          ? <div className='addItemDiv' >
+            <Button onClick={this.displayNewItemForm}
+              color='#444'
+              size='x-small'
+              bgColor='rgba(0,0,0,0)'
+              hoverBgColor='#ddd'
+              block>Add an item...</Button></div>
           // Form to add an item
           : <div className='addItemDiv'>
-            <Input ref={(v) => { this.textInput = v }} placeholder='Describe your item...' />
-            <div className='button'>
-              <Button
-                onClick={this.addItem}
-                bgColor='#3cb221'
-                hoverBgColor='#148407'
-                color='#FFF'
-                size='small'>
-              Save
-              </Button>
+            <div className='content'>
+              <textarea className='card' contentEditable ref={(v) => { this.textInput = v }} placeholder='Describe your item...' />
             </div>
             <div className='button'>
-              <Button
-                onClick={this.hideNewItemForm}
-                bgColor='rgba(0,0,0,0)'
-                hoverBgColor='#ddd'
-                color='#70727c'
-                size='small'>
-                <Icon name='times' color='#70727c' />
-              </Button>
+              <div className='saveButton' onClick={() => this.addItem(this.textInput.value)}>
+                        Save
+              </div>
+              <div className='cancelButton' onClick={() => this.hideNewItemForm()}>
+                        Cancel
+              </div>
             </div>
-          </div>}
+          </div>
+        }
         <style jsx>{styles}</style>
       </div>
     )

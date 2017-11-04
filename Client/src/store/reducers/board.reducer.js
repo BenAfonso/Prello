@@ -1,36 +1,30 @@
-import { defaultState } from './store'
+import { defaultBoardState } from '../store'
 
-export default function reducer (state = defaultState, action) {
+export default (state = defaultBoardState, action) => {
   switch (action.type) {
-    case 'ADD_BOARD': {
-      let newBoards = state.boardslist.boards.slice()
-      newBoards.push(action.payload)
+    case 'RESET_BOARD': {
       return {
-        ...state,
-        boardslist: {
-          ...state.boardslist,
-          boards: newBoards
+        ...state.currentBoard,
+        board: {
+          _id: '',
+          title: '',
+          lists: [],
+          visibility: '',
+          isArchived: false,
+          background: '',
+          collaborators: []
         }
       }
     }
-    case 'ADD_NOTIFICATION': {
-      let newNotifs = state.notifications.slice()
-      newNotifs.push(action.payload)
+    case 'SET_FETCHING_STATE': {
       return {
-        ...state,
-        notifications: newNotifs
-      }
-    }
-    case 'REMOVE_NOTIFICATION': {
-      let newNotifs = state.notifications.slice(1, state.notifications.length)
-      return {
-        ...state,
-        notifications: newNotifs
+        ...state.currentBoard,
+        fetching: action.payload.state
       }
     }
     case 'FETCH_BOARD_ERROR': {
       return {
-        ...state,
+        ...state.currentBoard,
         fetching: false,
         error: action.payload
       }
@@ -61,33 +55,22 @@ export default function reducer (state = defaultState, action) {
         fetching: true
       }
     }
-    case 'FETCH_BOARDSLIST_SUCCESS': {
-      return {
-        ...state,
-        fetching: false,
-        boardslist: {
-          ...state.boardslist,
-          boards: action.payload
-        }
-      }
-    }
-    case 'RESET_BOARD': {
-      return {
-        ...state,
-        board: {
-          _id: '',
-          title: '',
-          lists: [],
-          visibility: '',
-          isArchived: false,
-          background: '',
-          collaborators: []
-        }
-      }
-    }
     case 'ADD_LIST': {
       let newLists = state.board.lists.slice()
       newLists.push(action.payload)
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: newLists
+        }
+      }
+    }
+    case 'UPDATE_LIST': {
+      let newLists = state.board.lists.slice()
+      let updatedList = newLists.filter(l => l._id === action.payload._id)
+      let listIndex = newLists.indexOf(updatedList[0])
+      newLists[listIndex] = action.payload
       return {
         ...state,
         board: {
@@ -105,17 +88,6 @@ export default function reducer (state = defaultState, action) {
         }
       }
     }
-    case 'UPDATE_CARDS': {
-      let newLists = state.board.lists.slice()
-      newLists[action.payload.listIndex].cards = action.payload.cards
-      return {
-        ...state,
-        board: {
-          ...state.board,
-          lists: newLists
-        }
-      }
-    }
     case 'REMOVE_LIST': {
       return {
         ...state,
@@ -126,15 +98,6 @@ export default function reducer (state = defaultState, action) {
       }
     }
     case 'MOVE_LIST': {
-      return {
-        ...state,
-        board: {
-          ...state.board,
-          lists: action.payload
-        }
-      }
-    }
-    case 'MOVE_CARD': {
       return {
         ...state,
         board: {
@@ -158,6 +121,15 @@ export default function reducer (state = defaultState, action) {
         }
       }
     }
+    case 'MOVE_CARD': {
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: action.payload
+        }
+      }
+    }
     case 'UPDATE_CARD': {
       let newLists = state.board.lists.slice()
       let updatedList = newLists.filter(l => l._id === action.payload.listId)
@@ -165,6 +137,17 @@ export default function reducer (state = defaultState, action) {
       let listIndex = newLists.indexOf(updatedList[0])
       let cardIndex = updatedList[0].cards.indexOf(updatedCard[0])
       newLists[listIndex].cards[cardIndex] = action.payload.card
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: newLists
+        }
+      }
+    }
+    case 'UPDATE_CARDS': {
+      let newLists = state.board.lists.slice()
+      newLists[action.payload.listIndex].cards = action.payload.cards
       return {
         ...state,
         board: {
@@ -183,30 +166,9 @@ export default function reducer (state = defaultState, action) {
         }
       }
     }
-    case 'SET_USER': {
-      return {
-        ...state,
-        currentUser: {
-          name: action.payload.name,
-          username: action.payload.username,
-          picture: action.payload.picture
-        }
-      }
-    }
-    case 'UPDATE_LIST': {
-      let newLists = state.board.lists.slice()
-      let updatedList = newLists.filter(l => l._id === action.payload._id)
-      let listIndex = newLists.indexOf(updatedList[0])
-      newLists[listIndex] = action.payload
-      return {
-        ...state,
-        board: {
-          ...state.board,
-          lists: newLists
-        }
-      }
-    }
     default:
-      return state
+      return {
+        ...state
+      }
   }
 }

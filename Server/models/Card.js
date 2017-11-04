@@ -1,20 +1,20 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const Subtask = {
+const Item = new Schema({
   text: {type: String, default: ''},
   isChecked: {type: Boolean, default: false},
-  createdAt: {type: Date, default: Date.now}
-}
+  doneDate: {type: Date}
+})
 
-const Checklist = {
+const Checklist = new Schema({
   text: {type: String, default: ''},
-  subtasks: [Subtask],
-  createdAt: {type: Date, default: Date.now}
-}
+  items: [Item]
+})
 
 const CardSchema = new Schema({
   text: {type: String, default: '', required: true},
   dueDate: {type: Date},
+  validated: {type: Boolean, default: false},
   checklists: [Checklist],
   comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
   createdAt: {type: Date, default: Date.now},

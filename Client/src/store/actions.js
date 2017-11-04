@@ -209,6 +209,43 @@ export function replaceCollaboratorsLocal (users) {
   }
 }
 
+export function addChecklistAction (cardId, title) {
+  if (cardId && title.length > 0) {
+    store.dispatch({
+      type: 'ADD_CHECKLIST',
+      payload: {
+        cardId: cardId,
+        title: title
+      }
+    })
+  }
+}
+
+export function removeChecklist (cardId, checklistIndex) {
+  if (cardId && checklistIndex > -1) {
+    store.dispatch({
+      type: 'DELETE_CHECKLIST',
+      payload: {
+        cardId: cardId,
+        checklistIndex: checklistIndex
+      }
+    })
+  }
+}
+
+export function addChecklistItem (cardId, checklistIndex, content) {
+  if (cardId && checklistIndex > -1 && content.length > 0) {
+    store.dispatch({
+      type: 'ADD_CHECKLIST_ITEM',
+      payload: {
+        cardId: cardId,
+        checklistIndex: checklistIndex,
+        content: content
+      }
+    })
+  }
+}
+
 export function fetchMatchingUsers (email) {
   return new Promise((resolve, reject) => {
     fetchMatchingUsersEmail(email).then((users) => {
@@ -219,8 +256,52 @@ export function fetchMatchingUsers (email) {
   })
 }
 
+export function updateChecklistItem (cardId, checklistIndex, itemIndex, content, doneDate = null) {
+  if (cardId && checklistIndex > -1 && content.length > 0) {
+    store.dispatch({
+      type: 'UPDATE_CHECKLIST_ITEM',
+      payload: {
+        cardId: cardId,
+        checklistIndex: checklistIndex,
+        itemIndex: itemIndex,
+        content: content,
+        doneDate: doneDate
+      }
+    })
+  }
+}
+
+export function deleteChecklistItem (cardId, checklistIndex, itemIndex) {
+  if (cardId && checklistIndex > -1 && itemIndex > -1) {
+    store.dispatch({
+      type: 'DELETE_CHECKLIST_ITEM',
+      payload: {
+        cardId: cardId,
+        checklistIndex: checklistIndex,
+        itemIndex: itemIndex
+      }
+    })
+  }
+}
+
 export function addMember (dispatch, boardId, listId, cardId, email) {
   addMemberDistant(boardId, listId, cardId, email)
+}
+
+export function updateCardDueDate (boardId, listId, card, dueDate) {
+  let newCard = { ...card, dueDate: dueDate }
+  updateCard(boardId, listId, card._id, newCard)
+}
+
+export function removeCardDueDate (boardId, listId, card) {
+  let newCard = { ...card, dueDate: null, validated: false }
+  console.log(newCard)
+  updateCard(boardId, listId, card._id, newCard)
+}
+
+export function updateCardValidated (boardId, listId, card, validated) {
+  let newCard = { ...card, validated: validated }
+  updateCard(boardId, listId, card._id, newCard)
 }
 
 export function archiveCard (boardId, listId, card) {

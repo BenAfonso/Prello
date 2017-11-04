@@ -1,6 +1,6 @@
 import { applyMiddleware, createStore, compose } from 'redux'
 import thunk from 'redux-thunk'
-import reducer from './reducer'
+import reducer from './reducers/index'
 
 const composeEnhancers =
   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -16,13 +16,17 @@ const enhancer = composeEnhancers(
   // other store enhancers if any
 )
 
-export const defaultState = {
-  notifications: [],
-  currentUser: {
-    username: '',
-    name: '',
-    picture: ''
-  },
+export const defaultCurrentUserState = {
+  username: '',
+  name: '',
+  picture: ''
+}
+
+export const defaultNotificationsState = {
+  elements: []
+}
+
+export const defaultBoardState = {
   fetching: false,
   fetched: false,
   error: null,
@@ -34,10 +38,12 @@ export const defaultState = {
     isArchived: false,
     background: '#fff',
     collaborators: []
-  },
-  boardslist: {
-    boards: []
   }
 }
 
+export const defaultBoardslistState = {
+  boards: []
+}
+
+export const defaultState = Object.assign(defaultCurrentUserState, defaultBoardState, defaultBoardslistState)
 export default createStore(reducer, { ...defaultState }, enhancer)

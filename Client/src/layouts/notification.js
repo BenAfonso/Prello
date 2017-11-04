@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 @connect(store => {
   return {
-    notifications: store.notifications
+    notifications: store.notifications.elements
   }
 })
 export default class NotificationContainer extends React.Component {

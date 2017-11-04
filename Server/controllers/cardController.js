@@ -53,17 +53,19 @@ cardController.removeCard = (boardId, listId, cardId) => {
 }
 cardController.updateCard = (req) => {
   return new Promise((resolve, reject) => {
+    if (req.body.dueDate === null) {
+      delete req.body.dueDate
+      Card.update({ '_id': req.params.cardId }, {$unset: {dueDate: ''}}).exec()
+    }
     Card.update({ '_id': req.params.cardId }, req.body, (err, item) => {
       if (err) {
-        return reject(err)
+        reject(err)
       } else {
-        cardController.getOneCard(req.params.cardId).then((cardToEmit) => {
-          let payload = {
-            listId: req.params.listId,
-            card: cardToEmit
-          }
-          emit(req.params.boardId, 'CARD_UPDATED', payload)
-          return resolve(item)
+        cardController.refreshOneCard(req.params.boardId, req.params.listId, req.params.cardId).then((cardToEmit) => {
+          resolve(cardToEmit)
+        })
+        .catch((err) => {
+          reject(err)
         })
       }
     })
@@ -166,12 +168,7 @@ cardController.addCollaborator = (boardId, cardId, listId, userId, requesterId) 
         err.status = 500
         reject(err)
       } else {
-        cardController.getOneCard(cardId).then((cardToEmit) => {
-          let payload = {
-            listId: listId,
-            card: cardToEmit
-          }
-          emit(boardId, 'CARD_UPDATED', payload)
+        cardController.refreshOneCard(boardId, listId, cardId).then((cardToEmit) => {
           resolve(cardToEmit)
         })
         .catch((err) => {
@@ -185,7 +182,6 @@ cardController.addCollaborator = (boardId, cardId, listId, userId, requesterId) 
 
 cardController.addCollaboratorEmail = (boardId, cardId, listId, email, requesterId) => {
   return new Promise((resolve, reject) => {
-    console.log(email)
     User.findOne({ email: email }).then((res) => {
       if (res) {
         cardController.addCollaborator(boardId, cardId, listId, res._id, requesterId).then(res => {
@@ -203,6 +199,22 @@ cardController.addCollaboratorEmail = (boardId, cardId, listId, email, requester
       err.status = 500
       reject(err)
     })
+  })
+}
+cardController.refreshOneCard = (boardId, listId, cardId) => {
+  return new Promise((resolve, reject) => {
+    cardController.getOneCard(cardId).then((cardToEmit) => {
+      let payload = {
+        listId: listId,
+        card: cardToEmit
+      }
+      emit(boardId, 'CARD_UPDATED', payload)
+      resolve(cardToEmit)
+    })
+  .catch((err) => {
+    err.status = 500
+    reject(err)
+  })
   })
 }
 module.exports = cardController

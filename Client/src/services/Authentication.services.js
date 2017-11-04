@@ -43,9 +43,9 @@ export function removeToken () {
   window.localStorage.removeItem('prello_access_token')
 }
 
-// TODO: Use app state to make it??
 export function logout () {
   removeToken()
+  deleteProfileLocalStorage()
   window.location = '/login'
 }
 
@@ -165,6 +165,10 @@ const loadProfileFromLocalStorage = () => {
 
 const storeProfileLocalStorage = (profile) => {
   window.localStorage.setItem('prello_profile', JSON.stringify(profile))
+}
+
+const deleteProfileLocalStorage = () => {
+  window.localStorage.removeItem('prello_profile')
 }
 
 const profileIsInLocalStorage = () => (
