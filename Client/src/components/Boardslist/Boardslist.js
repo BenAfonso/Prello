@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import styles from './Boardslist.styles'
 import BoardThumbnail from '../BoardThumbnail/BoardThumbnail'
+import Icon from '../UI/Icon/Icon'
 import {connect} from 'react-redux'
 import { setBoardslist, setTeamslist } from '../../store/actions'
 import { subscribeToBoardslist } from '../../services/api'
@@ -65,8 +66,10 @@ export default class Boardslist extends React.Component {
 
       </ul>
       */ }
-
-      <h1>My boards</h1>
+      <div className='titleSection'>
+        <Icon color='white' name='window-restore' fontSize='40px' />
+        <h1>My boards</h1>
+      </div>
 
       <ul className='boards'>
         {
@@ -85,22 +88,49 @@ export default class Boardslist extends React.Component {
             </li>
           ))
         }
+        <li>
+          <div className='createBoard'>
+            <div className='createBoard-title'>
+              Create a board...
+            </div>
+          </div>
+        </li>
       </ul>
 
-      <h1>My teams</h1>
+      <div className='titleSection'>
+        <Icon color='white' name='users' fontSize='40px' />
+        <h1>My teams</h1>
+      </div>
 
       <ul className='teams'>
         {
           this.props.teamslist.teams.map((team, i) => (
-
-            <li key={team._id}>
-              <Link to={`/teams/${team._id}`}>
-                <BoardThumbnail
-                  id={team._id}
-                  title={team.name}
-                  index={i}
-                />
-              </Link>
+            <li key={i}>
+              <div className='teamSection'>
+                <h2>{team.title}</h2>
+                <ul className='teamBoards'>
+                  {
+                    team.boards.map((teamBoard, i) => (
+                      <li key={teamBoard._id}>
+                        <Link to={`/boards/${teamBoard._id}`}>
+                          <BoardThumbnail
+                            id={teamBoard._id}
+                            title={teamBoard.title}
+                            index={i}
+                            background={teamBoard.background}
+                            isFavorite={teamBoard.isFavorite}
+                          />
+                        </Link>
+                      </li>
+                    ))
+                  }
+                  <li>
+                    <div className='createBoard'>
+                      Create a board...
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </li>
           ))
         }

@@ -1,26 +1,49 @@
 export default `
+
 .host {
-  min-height: 100%;
+  height: 100%;
   width: 100%;
-  background-color: #cd5a91;
-  padding: 30px 10px;
+  background: #cd5a91;  
 }
 
-.titleSection {
+.teamProfileSection {
   display: flex;
-  margin-left: 23px;
-  align-items: center;
+  justify-content: center;
+  min-height: 250px;
+  background: rgba(250, 250, 250, 0.3);
 }
 
-h1 {
-  display: inline-block;  
-  color: white;
-  padding: 10px;
+.teamProfileBlock {
+  padding: 50px;
+  display: flex;
 }
 
-h2 {
-  color: white;
-  padding: 10px;
+.team-avatar {
+  display: inline-block;
+}
+
+.team-infos {
+  display: inline-block;
+  padding-left: 20px;
+}
+
+.team-name {
+  display: inline-block;
+  font-size: 30px;
+  font-weight: bold;
+  padding-bottom: 15px;
+}
+
+.team-privacy {
+  display: inline-block;
+  font-size: 12px;
+  padding-left: 20px;
+  padding-bottom: 15px;  
+}
+
+.tabsSection {
+  display: flex;
+  background: #cd5a91;
 }
 
 ul {
@@ -67,12 +90,4 @@ ul.boards {
   justify-content: center;
 }
 
-.teamSection {
-  margin-left: 46px;
-  width: 100%;
-}
-
-.teamBoards {
-  width: 100%;
-}
 `
