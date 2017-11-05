@@ -1,7 +1,7 @@
-// const mongoose = require('mongoose')
-// const Board = mongoose.model('Board')
-// const Card = mongoose.model('Card')
-// const Attachment = mongoose.model('Attachment')
+const mongoose = require('mongoose')
+const Board = mongoose.model('Board')
+const Card = mongoose.model('Card')
+const Attachment = mongoose.model('Attachment')
 const FileUploader = require('../services/fileStorage')
 const attachmentController = {}
 
@@ -28,10 +28,31 @@ attachmentController.getCardAttachments = function () {
 attachmentController.createAttachment = function (req) {
   return new Promise((resolve, reject) => {
     if (req.files) {
-      var file = req.files[0]
-      FileUploader.uploadFile(req.params.boardId, Math.floor(Math.random() * 1000000000), file).then(result => {
-        resolve(result)
-      }).catch(err => reject(err))
+      let file = req.files[0]
+      let name = ''
+      if (req.body.name !== undefined) {
+        name = req.body.name
+      } else {
+        name = file.originalname
+      }
+      const ext = file.originalname.split('.')[file.originalname.split('.').length - 1]
+      const attachmentToAdd = new Attachment({name: name, owner: req.user._id, ext: ext})
+      attachmentToAdd.save((err, item) => {
+        console.log(item)
+        if (err) {
+          console.log(err)
+          reject(err)
+        } else {
+          FileUploader.uploadFile(req.params.boardId, item._id, file).then(result => {
+            if (req.params.cardId !== undefined) {
+              Card.findOneAndUpdate({'_id': req.params.cardId}, {$push: {attachments: item._id}}).exec()
+              resolve(result)
+            } else {
+              Board.findOneAndUpdate({'_id': req.params.boardId}, {$push: {attachments: item._id}})
+            }
+          }).catch(err => reject(err))
+        }
+      })
     } else {
       // TODO: File missing -> 400 Bad Request
       reject(new Error('Missing file'))
@@ -45,13 +66,14 @@ attachmentController.deleteAttachment = function (userId, file) {
   })
 }
 
-attachmentController.updateAttachment = function (boardId, userId, fileName, file) {
+attachmentController.updateAttachment = function (boardId, fileId, fileName) {
   return new Promise((resolve, reject) => {
-    const attachmentId = '' // Previously created attachmentId
-    FileUploader.uploadFile(boardId, attachmentId, file).then(res => {
-      resolve(true)
-    }).catch(err => {
-      reject(err)
+    Attachment.update({ '_id': fileId }, {name: fileName}, {new: true}).exec((err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
     })
   })
 }
