@@ -89,6 +89,7 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "storybook": "start-storybook -p 6006 -c .storybook",
+    "build-storybook": "build-storybook -c .storybook -o .storybook-build/dist",
     "standard": "standard --verbose | snazzy",
     "standard-fix": "standard --fix --parser babel-eslint | snazzy",
     "lint": "eslint --ext .js --ext .jsx src --fix",
