@@ -6,7 +6,8 @@ const ListSchema = new Schema({
   position: {type: Number},
   createdAt: {type: Date, default: Date.now},
   isArchived: {type: Boolean, default: false},
-  cards: [{type: Schema.Types.ObjectId, ref: 'Card'}]
+  cards: [{type: Schema.Types.ObjectId, ref: 'Card'}],
+  modifications: [{type: Schema.Types.ObjectId, ref: 'Modification'}]
 })
 
 mongoose.model('List', ListSchema)

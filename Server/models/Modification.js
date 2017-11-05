@@ -32,4 +32,4 @@ const ModificationSchema = new Schema({
   list: {type: Schema.Types.ObjectId, ref: 'List'}
 })
 
-mongoose.model('Card', ModificationSchema)
+mongoose.model('Modification', ModificationSchema)
