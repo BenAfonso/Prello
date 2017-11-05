@@ -10,7 +10,11 @@ export default (state = defaultNotificationsState, action) => {
       }
     }
     case 'REMOVE_NOTIFICATION': {
-      let newNotifs = state.elements.slice(1, state.length)
+      let newNotifs = state.elements.slice()
+      action.payload
+        ? newNotifs = state.elements.filter(e => e.id !== action.payload)
+        : newNotifs.splice(state.length, 1)
+
       return {
         elements: newNotifs
       }

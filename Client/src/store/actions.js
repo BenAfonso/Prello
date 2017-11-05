@@ -24,11 +24,15 @@ export function addListLocal (list) {
 export function addNotification (notification) {
   store.dispatch({
     type: 'ADD_NOTIFICATION',
-    payload: notification
+    payload: { ...notification, id: Math.floor(Math.random() * 1000000) }
   })
-  setTimeout(() => {
-    removeLastNotification()
-  }, 5000)
+}
+
+export function removeNotification (index) {
+  store.dispatch({
+    type: 'REMOVE_NOTIFICATION',
+    payload: index
+  })
 }
 
 export function removeLastNotification () {

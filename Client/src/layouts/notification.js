@@ -1,5 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import Notification from '../components/UI/Notification/Notification'
+import { removeNotification } from '../store/actions'
 
 @connect(store => {
   return {
@@ -7,28 +9,18 @@ import { connect } from 'react-redux'
   }
 })
 export default class NotificationContainer extends React.Component {
-  renderNotification (notification) {
+  renderNotification (notification, index) {
     return (
-      <div className='notification'>
-        <div className='title'>
-          { notification.title }
-        </div>
-        <div className='content'>
-          { notification.content }
-        </div>
+      <div className='notification' key={notification.id}>
+        <Notification
+          title={notification.title}
+          content={notification.content}
+          type={notification.type}
+          dismiss={() => { removeNotification(notification.id) }}
+        />
         <style jsx>{`
           .notification {
             z-index: 1000;
-            background-color: white;
-            width: calc(100% - 10px);
-            height: 100px;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
-          }
-
-          .title {
-            font-weight: bold;
             margin-bottom: 10px;
           }
         `}</style>
@@ -44,8 +36,8 @@ export default class NotificationContainer extends React.Component {
           this.props.notifications.length > 0
             ? <ul className='notifications'>
               {
-                this.props.notifications.map(n => (
-                  this.renderNotification(n)
+                this.props.notifications.map((n, i) => (
+                  this.renderNotification(n, i)
                 ))
               }
             </ul>

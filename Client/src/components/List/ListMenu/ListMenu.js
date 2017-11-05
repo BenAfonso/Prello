@@ -9,11 +9,11 @@ export default (props) => (
     orientation='right'
     menuElements={[
       {
-        action: () => { displayNotification({title: 'Information', content: 'Not available yet!'}) },
+        action: () => { displayNotification({type: 'info', title: 'Information', content: 'Not available yet!'}) },
         placeholder: 'Rename list'
       },
       {
-        action: () => { displayNotification({title: 'Information', content: 'Not available yet!'}) },
+        action: () => { displayNotification({type: 'info', title: 'Information', content: 'Not available yet!'}) },
         placeholder: 'Move list'
       },
       {
