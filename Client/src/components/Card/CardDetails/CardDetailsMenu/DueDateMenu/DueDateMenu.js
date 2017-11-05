@@ -65,7 +65,7 @@ export default class DueDateMenu extends React.Component {
     const day = (date.getDate() < 10 ? '0' : '') + date.getDate()
     const month = ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1)
     const year = date.getFullYear()
-    const inputDate = day + '/' + month + '/' + year
+    const inputDate = month + '/' + day + '/' + year
     this.date.value = inputDate
     this.setState({
       selectedDate: date,
@@ -88,7 +88,7 @@ export default class DueDateMenu extends React.Component {
                   <form onSubmit={this.updateDueDate}>
                     <div className='input-block'>
                       <div className='input-title'>Date</div>
-                      <input ref={(t) => { this.date = t }} disabled />
+                      <input ref={(t) => { this.date = t }} placeholder='MM/dd/YYYY' disabled />
                     </div>
                     <div className='input-block'>
                       <div className='input-title'>Hour</div>
@@ -96,7 +96,7 @@ export default class DueDateMenu extends React.Component {
                     </div>
                   </form>
                   <div className='calendar'>
-                    <Calendar onChange={this.setInputValue} />
+                    <Calendar locale ='en-EN' onChange={this.setInputValue} />
                   </div>
                 </div>
                 <div className='buttons'>

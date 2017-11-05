@@ -47,7 +47,7 @@ export default class Card extends React.Component {
     if (dueDate !== null) {
       const day = (dueDate.getDate() < 10 ? '0' : '') + dueDate.getDate()
       const month = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ')[dueDate.getMonth()]
-      const formattedDate = day + ' ' + month
+      const formattedDate = month + ' ' + day
       return formattedDate
     }
   }

@@ -57,7 +57,7 @@ export default class CardDetailsDueDate extends React.Component {
     const year = dueDate.getFullYear()
     const hours = (dueDate.getHours() < 10 ? '0' : '') + dueDate.getHours()
     const minutes = (dueDate.getMinutes() < 10 ? '0' : '') + dueDate.getMinutes()
-    const formatedDate = day + '/' + month + '/' + year + ' à ' + hours + ':' + minutes
+    const formatedDate = month + '/' + day + '/' + year + ' at ' + hours + ':' + minutes
 
     return (
       <div className='host' style={{
@@ -78,7 +78,7 @@ export default class CardDetailsDueDate extends React.Component {
               background: #eee;
               border-radius: 3px;
               align-items: center;
-              height: 30px;
+              min-height: 30px;
             }
 
             .checkbox {
