@@ -30,16 +30,14 @@ export default class BoardLayout extends React.Component {
   }
 
   toggleSidebarAnimation ({ target }) {
-    let sidebar = target.find({ name: 'sidebar' })
-    let content = target.find({ name: 'boardContainer' })
     if (this.state.sideMenuExpanded) {
       return new TimelineMax()
-        .to(sidebar, 0.5, {right: '0px'}, 0)
-        .to(content, 0.5, {width: '-=400'}, 0)
+        .to(this.sidebar, 0.5, {right: '0px'}, 0)
+        .to(this.boardContainer, 0.5, {width: '-=400'}, 0)
     } else {
       return new TimelineMax()
-        .to(sidebar, 0.5, {right: '-400px'}, 0)
-        .to(content, 0.5, {width: '100%'}, 0)
+        .to(this.sidebar, 0.5, {right: '-400px'}, 0)
+        .to(this.boardContainer, 0.5, {width: '100%'}, 0)
     }
   }
 
@@ -68,7 +66,7 @@ export default class BoardLayout extends React.Component {
         <div style={{ height: 'calc(100% - 50px)' }}>
           <Header bgColor={secondaryColor} />
           <div className='content' style={{ display: 'flex', height: '100%' }}>
-            <div name='boardContainer' className='boardContainer'>
+            <div ref={(c) => { this.boardContainer = c }} className='boardContainer'>
               <div className='drawerButton' style={{ display: this.state.sideMenuExpanded ? 'none' : '' }} onClick={this.openDrawer}>
                 <Button bgColor='rgba(0,0,0,0)' size='x-small' hoverBgColor='rgba(0,0,0,0.1)'>Open menu...</Button>
               </div>
@@ -82,7 +80,7 @@ export default class BoardLayout extends React.Component {
                 }
               })}
             </div>
-            <div name='sidebar' className='sideMenu'>
+            <div name='sidebar' ref={(s) => { this.sidebar = s }} className='sideMenu'>
               <SideMenu handleCloseAction={this.closeDrawer} />
             </div>
           </div>

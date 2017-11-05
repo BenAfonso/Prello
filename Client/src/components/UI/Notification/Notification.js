@@ -22,7 +22,7 @@ class Notification extends React.Component {
   animateAppear (utils) {
     let notification = utils.target.find({ name: 'notification' })
     let topBar = utils.target.find({ name: 'topBar' })
-    return new TimelineMax({ onComplete: utils.options.onComplete })
+    return new TimelineMax()
       .from(notification, 0.5, { left: '400px' })
       .from(topBar, 0.5, { scaleX: 0 })
   }
