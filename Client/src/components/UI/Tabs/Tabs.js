@@ -52,14 +52,14 @@ export default class Tabs extends React.Component {
             }
 
             .tab:hover{
-              transform: scaleY(1.3) translateY(-5px)
-              
+              font-weight: bold;                        
             }
 
             .tab.active{
               border: solid 1px white;
               border-bottom: none;
               background: #cd5a91;
+              font-weight: bold;                                      
             }
           `}</style>
         </li>

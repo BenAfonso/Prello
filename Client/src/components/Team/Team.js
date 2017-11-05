@@ -8,6 +8,7 @@ import Button from '../UI/Button/Button'
 import Tabs from '../UI/Tabs/Tabs'
 import Icon from '../UI/Icon/Icon'
 import TabPanel from '../UI/TabPanel/TabPanel'
+import MembersTab from './TabsContent/MembersTab'
 
 // import { setTeam } from '../../store/actions'
 
@@ -60,9 +61,9 @@ export default class Team extends React.Component {
                   color='#444'
                   hoverBgColor='#ccc'
                   block
+                  shadow
                 >
-                  <Icon color='#000' name='user-plus' fontSize='20px' />
-                  Edit Team Profile
+                  <Icon color='#000' name='edit' fontSize='20px' /> Edit Team Profile
                 </Button>
               </div>
             </div>
@@ -100,8 +101,8 @@ export default class Team extends React.Component {
               </div>
             </TabPanel>
             <TabPanel label="Members">
-              <div>
-                This is my tab 2 contents!
+              <div className='members'>
+                <MembersTab />
               </div>
             </TabPanel>
             <TabPanel label="Settings">

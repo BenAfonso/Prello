@@ -46,6 +46,11 @@ export default `
   background: #cd5a91;
 }
 
+.members {
+  width: 100%;
+  padding: 0 30px;
+}
+
 ul {
   display: flex;
   flex-wrap: wrap; 
