@@ -11,7 +11,7 @@ const minioClient = new Minio.Client({
   secretKey: 'wJalrXUtnFEMI/K7MDENG/EXAMPLEKEY'
 })
 
-FileUploader.uploadFile = function (boardId, attachmentId, file) {
+FileUploader.uploadFile = (boardId, attachmentId, file) => {
   return new Promise((resolve, reject) => {
     console.log(file)
     const ext = file.originalname.split('.')[file.originalname.split('.').length - 1]
@@ -23,20 +23,20 @@ FileUploader.uploadFile = function (boardId, attachmentId, file) {
   })
 }
 
-FileUploader.getFile = function (boardId, attachmentName) {
+FileUploader.getFile = (boardId, attachmentName) => {
   return new Promise((resolve, reject) => {
     let chunks = []
-    minioClient.getObject(bucketName, `${boardId}/${attachmentName}`, function (err, dataStream) {
+    minioClient.getObject(bucketName, `${boardId}/${attachmentName}`, (err, dataStream) => {
       if (err) {
         reject(err)
       }
-      dataStream.on('data', function (chunk) {
+      dataStream.on('data', (chunk) => {
         chunks.push(chunk)
       })
-      dataStream.on('end', function () {
+      dataStream.on('end', () => {
         resolve({mimetype: 'image/png', fileName: 'test.png', buffer: Buffer.concat(chunks)})
       })
-      dataStream.on('error', function (err) {
+      dataStream.on('error', (err) => {
         reject(err)
       })
     })
