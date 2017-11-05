@@ -5,7 +5,7 @@ let FileUploader = {}
 
 const minioClient = new Minio.Client({
   endPoint: 'themightyprello-minio.igpolytech.fr',
-  port: 80,
+  port: 443,
   secure: true,
   accessKey: 'AKIAIOSFODNN7EXAMPLE',
   secretKey: 'wJalrXUtnFEMI/K7MDENG/EXAMPLEKEY'
@@ -13,9 +13,25 @@ const minioClient = new Minio.Client({
 
 FileUploader.uploadFile = function (boardId, attachmentId, file) {
   return new Promise((resolve, reject) => {
-    minioClient.fPutObject(bucketName, `${boardId}/${attachmentId}`, file, 'application/octet-stream', (err, etag) => {
-      if (err) return reject(err)
-      resolve(etag)
+    const ext = file.originalname.split('.')[file.originalname.split('.').length - 1]
+    minioClient.putObject(bucketName, `${boardId}/${attachmentId}.${ext}`, file.buffer, file.mimetype, (err, etag) => {
+      if (err) { return reject(err) }
+      // TODO: REPLACE WITH ENV
+      resolve({ etag: etag, url: `http://localhost:3000/boards/${boardId}/attachments/${attachmentId}.${ext}` })
+    })
+  })
+}
+
+FileUploader.getFile = function (boardId, attachmentName) {
+  return new Promise((resolve, reject) => {
+    console.log(`${boardId}/${attachmentName}`)
+    minioClient.getObject(bucketName, `${boardId}/${attachmentName}`, function (err, dataStream) {
+      if (err) {
+        reject(err)
+      } else {
+        console.log(dataStream)
+        //resolve(dataStream)
+      }
     })
   })
 }
@@ -23,7 +39,7 @@ FileUploader.uploadFile = function (boardId, attachmentId, file) {
 FileUploader.removeFile = function (boardId, attachmentId) {
   return new Promise((resolve, reject) => {
     minioClient.removeObject(bucketName, `${boardId}/${attachmentId}}`, err => {
-      if (err) return reject(err)
+      if (err) { console.error(err); return reject(err) }
       resolve()
     })
   })

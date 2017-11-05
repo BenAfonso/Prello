@@ -5,9 +5,17 @@
 const FileUploader = require('../services/fileStorage')
 const attachmentController = {}
 
-attachmentController.getBoardAttachments = function () {
+attachmentController.getBoardAttachments = function (req) {
   return new Promise((resolve, reject) => {
     resolve(true)
+  })
+}
+
+attachmentController.getFile = function (req) {
+  return new Promise((resolve, reject) => {
+    FileUploader.getFile(req.params.boardId, req.params.attachmentId).then(result => {
+      resolve(result)
+    }).catch(err => reject(err))
   })
 }
 
@@ -17,9 +25,17 @@ attachmentController.getCardAttachments = function () {
   })
 }
 
-attachmentController.createAttachment = function (userId, file) {
+attachmentController.createAttachment = function (req) {
   return new Promise((resolve, reject) => {
-    resolve(true)
+    if (req.files) {
+      var file = req.files[0]
+      FileUploader.uploadFile(req.params.boardId, Math.floor(Math.random() * 1000000000), file).then(result => {
+        resolve(result)
+      }).catch(err => reject(err))
+    } else {
+      // TODO: File missing -> 400 Bad Request
+      reject(new Error('Missing file'))
+    }
   })
 }
 
