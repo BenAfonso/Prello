@@ -24,14 +24,11 @@ FileUploader.uploadFile = function (boardId, attachmentId, file) {
 
 FileUploader.getFile = function (boardId, attachmentName) {
   return new Promise((resolve, reject) => {
-    console.log(`${boardId}/${attachmentName}`)
-    minioClient.getObject(bucketName, `${boardId}/${attachmentName}`, function (err, dataStream) {
-      if (err) {
-        reject(err)
-      } else {
-        console.log(dataStream)
-        //resolve(dataStream)
-      }
+    minioClient.getObject(bucketName, `${boardId}/${attachmentName}`).then(res => {
+      resolve(res.read())
+    }).catch(err => {
+      console.error(err)
+      reject(err)
     })
   })
 }
