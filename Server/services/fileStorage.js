@@ -13,6 +13,7 @@ const minioClient = new Minio.Client({
 
 FileUploader.uploadFile = function (boardId, attachmentId, file) {
   return new Promise((resolve, reject) => {
+    console.log(file)
     const ext = file.originalname.split('.')[file.originalname.split('.').length - 1]
     minioClient.putObject(bucketName, `${boardId}/${attachmentId}.${ext}`, file.buffer, file.mimetype, (err, etag) => {
       if (err) { return reject(err) }
@@ -24,11 +25,20 @@ FileUploader.uploadFile = function (boardId, attachmentId, file) {
 
 FileUploader.getFile = function (boardId, attachmentName) {
   return new Promise((resolve, reject) => {
-    minioClient.getObject(bucketName, `${boardId}/${attachmentName}`).then(res => {
-      resolve(res.read())
-    }).catch(err => {
-      console.error(err)
-      reject(err)
+    let chunks = []
+    minioClient.getObject(bucketName, `${boardId}/${attachmentName}`, function (err, dataStream) {
+      if (err) {
+        reject(err)
+      }
+      dataStream.on('data', function (chunk) {
+        chunks.push(chunk)
+      })
+      dataStream.on('end', function () {
+        resolve({mimetype: 'image/png', fileName: 'test.png', buffer: Buffer.concat(chunks)})
+      })
+      dataStream.on('error', function (err) {
+        reject(err)
+      })
     })
   })
 }
