@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import styles from './Boardslist.styles'
 import BoardThumbnail from '../BoardThumbnail/BoardThumbnail'
 import Icon from '../UI/Icon/Icon'
+import Button from '../UI/Button/Button'
 import {connect} from 'react-redux'
 import { setBoardslist, setTeamslist } from '../../store/actions'
 import { subscribeToBoardslist } from '../../services/api'
@@ -67,7 +68,7 @@ export default class Boardslist extends React.Component {
       </ul>
       */ }
       <div className='titleSection'>
-        <Icon color='white' name='window-restore' fontSize='40px' />
+        <Icon color='#dcdcda' name='window-restore' fontSize='40px' />
         <h1>My boards</h1>
       </div>
 
@@ -98,16 +99,58 @@ export default class Boardslist extends React.Component {
       </ul>
 
       <div className='titleSection'>
-        <Icon color='white' name='users' fontSize='40px' />
+        <Icon color='#dcdcda' name='users' fontSize='40px' />
         <h1>My teams</h1>
       </div>
-
       <ul className='teams'>
         {
           this.props.teamslist.teams.map((team, i) => (
             <li key={i}>
               <div className='teamSection'>
-                <h2>{team.title}</h2>
+                <div className='team-title'>
+                  <h2>{team.name}</h2>
+                  <div className='team-buttons'>
+                    <div className='team-button'>
+                      <Link to={`/teams/${team._id}`}>
+                        <Button
+                          bgColor='rgba(255,255,255,0.1)'
+                          hoverBgColor='rgba(255,255,255,0.3)'
+                          color='#dcdcda'
+                          gradient
+                          size='small'
+                          onClick={null}>
+                          <Icon color='#dcdcda' name='window-restore' fontSize='20px' />&nbsp;Boards
+                        </Button>
+                      </Link>
+                    </div>
+                    <div className='team-button'>
+                      <Link to={`/teams/${team._id}/members`}>
+                        <Button
+                          bgColor='rgba(255,255,255,0.1)'
+                          hoverBgColor='rgba(255,255,255,0.3)'
+                          color='#dcdcda'
+                          gradient
+                          size='small'
+                          onClick={null}>
+                          <Icon color='#dcdcda' name='user' fontSize='20px' />&nbsp;Members
+                        </Button>
+                      </Link>
+                    </div>
+                    <div className='team-button'>
+                      <Link to={`/teams/${team._id}/settings`}>
+                        <Button
+                          bgColor='rgba(255,255,255,0.1)'
+                          hoverBgColor='rgba(255,255,255,0.3)'
+                          color='#dcdcda'
+                          gradient
+                          size='small'
+                          onClick={null}>
+                          <Icon color='#dcdcda' name='cog' fontSize='20px' />&nbsp;Settings
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
                 <ul className='teamBoards'>
                   {
                     team.boards.map((teamBoard, i) => (
@@ -126,7 +169,9 @@ export default class Boardslist extends React.Component {
                   }
                   <li>
                     <div className='createBoard'>
-                      Create a board...
+                      <div className='createBoard-title'>
+                        Create a board...
+                      </div>
                     </div>
                   </li>
                 </ul>

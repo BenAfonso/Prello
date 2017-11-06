@@ -35,7 +35,8 @@ class App extends Component {
             <Route path='/register' component={RegisterPage} />
             <PrivateRoute exact path='/boards' component={BoardsPage} />
             <PrivateRoute exact path='/boards/:id' component={BoardPage} />
-            <PrivateRoute exact path='/team' component={TeamPage} />
+            <PrivateRoute exact path='/teams/:id' component={TeamPage} />
+            <PrivateRoute exact path='/teams/:id/:tab' component={TeamPage} />
             <Route exact path='/loading' component={LoadingPage} />
           </div>
         </Provider>

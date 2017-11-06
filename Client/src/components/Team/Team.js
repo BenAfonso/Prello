@@ -10,7 +10,7 @@ import Icon from '../UI/Icon/Icon'
 import TabPanel from '../UI/TabPanel/TabPanel'
 import MembersTab from './TabsContent/MembersTab'
 
-// import { setTeam } from '../../store/actions'
+import { setTeam } from '../../store/actions'
 
 @connect(store => {
   return {
@@ -27,11 +27,11 @@ export default class Team extends React.Component {
   }
 
   componentDidMount () {
-    /* setTeam(this.props.dispatch, this.props._id).then(team => {
+    setTeam(this.props.dispatch, this.props._id).then(team => {
       // subscribeToTeam(team)
     }).catch(err => {
       console.error(err)
-    }) */
+    })
   }
 
   componentWillUnmount () {
@@ -47,14 +47,13 @@ export default class Team extends React.Component {
           <div className='teamProfileBlock'>
             <div className='team-avatar'>
               <AvatarThumbnail
-                initials='BA'
                 size='100px'
-                thumbnail='https://randomuser.me/api/portraits/men/33.jpg'
+                thumbnail={team.picture === '' ? 'https://randomuser.me/api/portraits/men/33.jpg' : team.picture}
               />
             </div>
             <div className='team-infos'>
-              <div className='team-name'>(Nom test){team.visibility}</div>
-              <div className='team-privacy'><Icon color='white' name='lock' fontSize='15px' /> (Privacy){team.visibility}</div>
+              <div className='team-name'>{team.name}</div>
+              <div className='team-privacy'><Icon color='white' name='lock' fontSize='15px' />&nbsp;({team.visibility})</div>
               <div className='team-edit'>
                 <Button
                   bgColor='#eee'

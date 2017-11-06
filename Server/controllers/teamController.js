@@ -11,7 +11,7 @@ const teamController = {}
  */
 teamController.createTeam = function (name, userId) {
   return new Promise((resolve, reject) => {
-    const teamToAdd = new Team({name: name, collaborators: [userId]})
+    const teamToAdd = new Team({name: name, users: [userId]})
     teamToAdd.save((err, item) => {
       if (err) {
         reject(err)

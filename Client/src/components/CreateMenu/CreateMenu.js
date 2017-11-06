@@ -42,11 +42,11 @@ export default class CreateMenu extends React.Component {
 
   displayMenu () {
     const newState = !this.state.isOpen
-    this.setState({ isOpen: newState, newBoardFormDisplayed: false })
+    this.setState({ isOpen: newState, newBoardFormDisplayed: false, newTeamFormDisplayed: false })
   }
 
   hideMenu () {
-    this.setState({ isOpen: false, newBoardFormDisplayed: false })
+    this.setState({ isOpen: false, newBoardFormDisplayed: false, newTeamFormDisplayed: false })
   }
 
   displayNewBoardForm () {

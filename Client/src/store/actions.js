@@ -218,6 +218,25 @@ export function addTeam (teamName) {
   }
 } */
 
+export function setTeam (dispatch, id) {
+  return new Promise((resolve, reject) => {
+    dispatch({type: 'FETCH_TEAM_START'})
+    fetchTeams().then((data) => {
+      dispatch({
+        type: 'FETCH_TEAM_SUCCESS',
+        payload: data.filter(x => x._id === id)[0]
+      })
+      resolve(data.filter(x => x._id === id)[0])
+    }).catch((err) => {
+      dispatch({
+        type: 'FETCH_TEAM_ERROR',
+        payload: err
+      })
+      reject(err)
+    })
+  })
+}
+
 export function addCollaborator (dispatch, boardId, email) {
   addCollaboratorDistant(boardId, email).then((board) => {
   }).catch(err => {

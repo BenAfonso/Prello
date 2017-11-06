@@ -4,6 +4,9 @@ import PageLayout from '../layouts/page'
 
 export default (props) => (
   <PageLayout>
-    <Team />
+    <Team
+      _id={props.match.params.id}
+      tab={props.match.params.tab}
+    />
   </PageLayout>
 )

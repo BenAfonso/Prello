@@ -4,9 +4,10 @@ const Schema = mongoose.Schema
 
 const TeamSchema = new Schema({
   name: {type: String, default: ''},
+  picture: { type: String, default: '' },
   users: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
   createdAt: {type: Date, default: Date.now},
-  visibility: {type: String, enum: ['public', 'private', 'team'], default: 'private'},
+  visibility: {type: String, enum: ['Public', 'Private', 'Team'], default: 'Private'},
   boards: [{ type: Schema.Types.ObjectId, ref: 'Board', required: true }]
 })
 

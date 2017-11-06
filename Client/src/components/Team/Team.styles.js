@@ -36,7 +36,7 @@ export default `
 
 .team-privacy {
   display: inline-block;
-  font-size: 12px;
+  font-size: 15px;
   padding-left: 20px;
   padding-bottom: 15px;  
 }
@@ -44,6 +44,7 @@ export default `
 .tabsSection {
   display: flex;
   background: #cd5a91;
+  border-top: 1px white solid;
 }
 
 .members {

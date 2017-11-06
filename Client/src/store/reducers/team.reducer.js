@@ -15,13 +15,13 @@ export default (state = defaultTeamState, action) => {
         error: action.payload
       }
     }
-    case 'FETCH_BOARD_START': {
+    case 'FETCH_TEAM_START': {
       return {
         ...state,
         fetching: true
       }
     }
-    case 'FETCH_BOARD_SUCCESS': {
+    case 'FETCH_TEAM_SUCCESS': {
       return {
         ...state,
         fetching: false,
