@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
+const Team = mongoose.model('Team')
+
 const userController = {}
 const secretKey = require('../config').secretKey
 const jwt = require('jsonwebtoken')
@@ -78,6 +80,17 @@ userController.login = (userToConnect) => {
         }
       } else {
         return reject(new Error('User not found'))
+      }
+    })
+  })
+}
+userController.getUserTeams = function (userId) {
+  return new Promise((resolve, reject) => {
+    Team.findOne({ 'users': userId }).populate('boards').exec(function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
       }
     })
   })

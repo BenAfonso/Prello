@@ -11,4 +11,5 @@ module.exports = (router, controller) => {
   require('./addCollaborator')(router, controller)
   require('./removeCollaborator')(router, controller)
   require('./update')(router, controller)
+  require('./getOneTeam')(router, controller)
 }

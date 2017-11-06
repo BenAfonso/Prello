@@ -77,9 +77,20 @@ teamController.removeCollaboratorFromTeam = function (teamId, userId) {
 }
 teamController.updateTeam = function (teamId, body) {
   return new Promise((resolve, reject) => {
-    delete body.collaborators
+    delete body.users
     delete body.createdAt
     Team.findOneAndUpdate({ '_id': teamId }, { body }, { new: true }, function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+teamController.getOneTeam = function (teamId) {
+  return new Promise((resolve, reject) => {
+    Team.findOne({ '_id': teamId }).populate('boards users', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
