@@ -13,6 +13,7 @@ import Root from './root'
   return {
     currentBoard: store.currentBoard,
     board: store.currentBoard.board,
+    currentUser: store.currentUser,
     fetching: store.fetching,
     fetched: store.fetched
   }
@@ -64,7 +65,14 @@ export default class BoardLayout extends React.Component {
             : null
         }
         <div style={{ height: 'calc(100% - 50px)' }}>
-          <Header bgColor={secondaryColor} />
+          <Header
+            bgColor={secondaryColor}
+            currentUser={this.props.currentUser}
+            createBoardButton
+            notificationsButton
+            backHomeButton
+          />
+
           <div className='content' style={{ display: 'flex', height: '100%' }}>
             <div ref={(c) => { this.boardContainer = c }} className='boardContainer'>
               <div className='drawerButton' style={{ display: this.state.sideMenuExpanded ? 'none' : '' }} onClick={this.openDrawer}>
