@@ -53,7 +53,7 @@ function getClient (clientId, clientSecret) {
 }
 
 function getUser (username, password) {
-  console.log("aeaze")
+  console.log('aeaze')
   return User
     .findOne({username: username})
     .then(function (user) {
@@ -213,16 +213,15 @@ function getRefreshToken (refreshToken) {
         scope: savedRT.scope
       }
       return tokenTemp
-
     }).catch(function (err) {
       console.log('getRefreshToken - Err: ', err)
     })
 }
 
-function validateScope (token, client, scope) {
+/* function validateScope (token, client, scope) {
   console.log('validateScope', token, client, scope)
   return (token.scope === client.scope) ? scope : false
-}
+} */
 
 function verifyScope (token, scope) {
   console.log('verifyScope', token, scope)
