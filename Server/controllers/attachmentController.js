@@ -48,7 +48,8 @@ attachmentController.createAttachment = function (req) {
               Card.findOneAndUpdate({'_id': req.params.cardId}, {$push: {attachments: item._id}}).exec()
               resolve(result)
             } else {
-              Board.findOneAndUpdate({'_id': req.params.boardId}, {$push: {attachments: item._id}})
+              Board.findOneAndUpdate({'_id': req.params.boardId}, {$push: {attachments: item._id}}).exec()
+              resolve(result)
             }
           }).catch(err => reject(err))
         }

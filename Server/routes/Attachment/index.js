@@ -1,6 +1,7 @@
 module.exports = (router, controller) => {
   require('./getAll')(router, controller)
-  require('./create')(router, controller)
+  require('./createInBoard')(router, controller)
+  require('./createInCard')(router, controller)
   require('./getFromCard')(router, controller)
   require('./getOne')(router, controller)
   require('./removeFromCard')(router, controller)

@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 const Card = mongoose.model('Card')
 const List = mongoose.model('List')
 const User = mongoose.model('User')
-
 const listController = require('./listController')
 const boardController = require('./boardController')
 
@@ -153,7 +152,16 @@ cardController.getOneCard = (cardId) => {
           if (err) {
             reject(err)
           } else {
-            resolve(res)
+            User.populate(res, {
+              path: 'attachments.owner',
+              select: { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }
+            }, function (err, res) {
+              if (err) {
+                reject(err)
+              } else {
+                resolve(res)
+              }
+            })
           }
         })
       }
