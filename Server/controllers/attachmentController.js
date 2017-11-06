@@ -38,9 +38,7 @@ attachmentController.createAttachment = function (req) {
       const ext = file.originalname.split('.')[file.originalname.split('.').length - 1]
       const attachmentToAdd = new Attachment({name: name, owner: req.user._id, ext: ext})
       attachmentToAdd.save((err, item) => {
-        console.log(item)
         if (err) {
-          console.log(err)
           reject(err)
         } else {
           FileUploader.uploadFile(req.params.boardId, item._id, file).then(result => {
@@ -51,7 +49,10 @@ attachmentController.createAttachment = function (req) {
               Board.findOneAndUpdate({'_id': req.params.boardId}, {$push: {attachments: item._id}}).exec()
               resolve(result)
             }
-          }).catch(err => reject(err))
+          }).catch(err => {
+            Attachment.findOneAndRemove({'_id': item._id}).exec()
+            reject(err)
+          })
         }
       })
     } else {

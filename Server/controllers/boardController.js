@@ -137,7 +137,7 @@ boardController.getOneboard = function (boardId, userId) {
             } else {
               User.populate(res, {
                 path: 'attachments.owner',
-                select: { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }                
+                select: { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }
               }, function (err, res) {
                 if (err) {
                   err.status = 500

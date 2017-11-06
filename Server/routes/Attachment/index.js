@@ -7,4 +7,5 @@ module.exports = (router, controller) => {
   require('./removeFromCard')(router, controller)
   require('./delete')(router, controller)
   require('./update')(router, controller)
+  require('./updateFromCard')(router, controller)
 }
