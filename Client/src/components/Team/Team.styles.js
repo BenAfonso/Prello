@@ -1,9 +1,9 @@
 export default `
-
 .host {
   height: 100%;
   width: 100%;
-  background: #cd5a91;  
+  background: #cd5a91;
+  color: white;
 }
 
 .teamProfileSection {

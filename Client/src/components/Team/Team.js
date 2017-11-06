@@ -26,6 +26,19 @@ export default class Team extends React.Component {
   static defaultProps = {
   }
 
+  constructor (props) {
+    super(props)
+    let tabIndex
+    this.props.tab
+      ? this.props.tab === 'members'
+        ? tabIndex = 1
+        : tabIndex = 2
+      : tabIndex = 0
+    this.state = {
+      tabIndex: tabIndex
+    }
+  }
+
   componentDidMount () {
     setTeam(this.props.dispatch, this.props._id).then(team => {
       // subscribeToTeam(team)
@@ -69,7 +82,7 @@ export default class Team extends React.Component {
           </div>
         </div>
         <div className='tabsSection'>
-          <Tabs selected={0}>
+          <Tabs selected={this.state.tabIndex}>
             <TabPanel label="Boards">
               <div>
                 <ul className='boards'>
@@ -101,7 +114,9 @@ export default class Team extends React.Component {
             </TabPanel>
             <TabPanel label="Members">
               <div className='members'>
-                <MembersTab />
+                <MembersTab
+                  members={team.users}
+                />
               </div>
             </TabPanel>
             <TabPanel label="Settings">

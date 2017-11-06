@@ -11,7 +11,7 @@ const teamController = {}
  */
 teamController.createTeam = function (name, userId) {
   return new Promise((resolve, reject) => {
-    const teamToAdd = new Team({name: name, users: [userId]})
+    const teamToAdd = new Team({name: name, admins: [userId], users: [userId]})
     teamToAdd.save((err, item) => {
       if (err) {
         reject(err)
@@ -90,7 +90,7 @@ teamController.updateTeam = function (teamId, body) {
 }
 teamController.getOneTeam = function (teamId) {
   return new Promise((resolve, reject) => {
-    Team.findOne({ '_id': teamId }).populate('boards users', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+    Team.findOne({ '_id': teamId }).populate('boards users admins', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
