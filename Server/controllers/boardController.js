@@ -245,4 +245,14 @@ boardController.addCollaborators = (board, users) => {
 
 }
 
+boardController.importFromTrello = (req) => {
+  return new Promise((resolve, reject) => {
+    boardController.createBoard({name: req.body.name}).then(board => {
+      const lists = req.body.lists
+      lists.map((list) => {
+
+      })
+    })
+  })
+}
 module.exports = boardController

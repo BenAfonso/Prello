@@ -62,7 +62,7 @@ module.exports = (router, controller) => {
       return
     }
 
-    controller.createCard(req).then((data) => {
+    controller.createCard(req.params.boardId, req.params.listId, req.body).then((data) => {
       res.status(201).json(data)
     })
       .catch((err) => {

@@ -10,20 +10,20 @@ const emit = require('../controllers/sockets').emit
 
 const cardController = {}
 
-cardController.createCard = (req) => {
+cardController.createCard = (boardId, listId, card) => {
   return new Promise((resolve, reject) => {
-    const cardToAdd = new Card(req.body)
+    const cardToAdd = new Card(card)
     cardToAdd.save((err, item) => {
       if (err) {
         reject(err)
       } else {
-        listController.addCardToList(req.params.listId, cardToAdd)
+        listController.addCardToList(listId, cardToAdd)
             .then((data) => {
               let cardToEmit = {
                 card: item,
-                listId: req.params.listId
+                listId: listId
               }
-              emit(req.params.boardId, 'NEW_CARD', cardToEmit)
+              emit(boardId, 'NEW_CARD', cardToEmit)
               resolve(item)
             })
             .catch((err) => {
