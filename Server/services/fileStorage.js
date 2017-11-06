@@ -43,11 +43,11 @@ FileUploader.getFile = (boardId, attachmentName) => {
   })
 }
 
-FileUploader.removeFile = function (boardId, attachmentId) {
+FileUploader.removeFile = function (boardId, attachmentId, ext) {
   return new Promise((resolve, reject) => {
-    minioClient.removeObject(bucketName, `${boardId}/${attachmentId}}`, err => {
+    minioClient.removeObject(bucketName, `${boardId}/${attachmentId}.${ext}`, err => {
       if (err) { console.error(err); return reject(err) }
-      resolve()
+      resolve('success')
     })
   })
 }

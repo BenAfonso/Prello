@@ -62,9 +62,21 @@ attachmentController.createAttachment = function (req) {
   })
 }
 
-attachmentController.deleteAttachment = function (userId, file) {
+attachmentController.deleteAttachment = function (req) {
   return new Promise((resolve, reject) => {
-    resolve(true)
+    Attachment.findOne({'_id': req.params.attachmentId}).exec().then(file => {
+      FileUploader.removeFile(req.params.boardId, req.params.attachmentId, file.ext).then(result => {
+        if (req.params.cardId !== undefined) {
+          Card.findOneAndUpdate({'_id': req.params.cardId}, {$pull: {attachments: req.params.attachmentId}}).exec()
+          Attachment.findOneAndRemove({'_id': req.params.attachmentId}).exec()
+          resolve(result)
+        } else {
+          Board.findOneAndUpdate({'_id': req.params.boardId}, {$pull: {attachments: req.params.attachmentId}}).exec()
+          Attachment.findOneAndRemove({'_id': req.params.attachmentId}).exec()
+          resolve(result)
+        }
+      }).catch(err => reject(err))
+    }).catch(err => reject(err))
   })
 }
 
