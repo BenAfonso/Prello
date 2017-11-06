@@ -36,6 +36,22 @@ export default class Card extends React.Component {
     return initials
   }
 
+  getDueDate (card) {
+    if (card !== undefined) {
+      const dueDate = new Date(card.dueDate)
+      return dueDate
+    } else return null
+  }
+
+  getFormattedDueDate (dueDate) {
+    if (dueDate !== null) {
+      const day = (dueDate.getDate() < 10 ? '0' : '') + dueDate.getDate()
+      const month = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ')[dueDate.getMonth()]
+      const formattedDate = month + ' ' + day
+      return formattedDate
+    }
+  }
+
   getDueDateColor (validated, dueDate) {
     const dueDateMinus24 = dueDate.getTime() - (60 * 60 * 24 * 1000)
     const dueDatePlus24 = dueDate.getTime() + (60 * 60 * 24 * 1000)
@@ -52,13 +68,15 @@ export default class Card extends React.Component {
     if (validated || now >= dueDateMinus24) return 'white'
   }
 
+  shouldRenderDueDate (card) {
+    return (card !== undefined && card.dueDate !== undefined)
+  }
+
   render () {
     const list = this.props.board.lists[this.props.listIndex]
     const card = list.cards.filter(c => c._id === this.props.id)[0]
-    const dueDate = new Date(card.dueDate)
-    const day = (dueDate.getDate() < 10 ? '0' : '') + dueDate.getDate()
-    const month = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ')[dueDate.getMonth()]
-    const formattedDate = day + ' ' + month
+    const dueDate = this.getDueDate(card)
+    const formattedDate = this.getFormattedDueDate(dueDate)
 
     return (
       <div style={{...this.props.style}} ref={c => { this.card = c }} className='root'>
@@ -74,7 +92,7 @@ export default class Card extends React.Component {
           }
         </div>
         {
-          card.dueDate !== undefined
+          this.shouldRenderDueDate(card)
             ? <div className='dueDate' style={{
               background: this.getDueDateColor(card.validated, dueDate)
             }}>

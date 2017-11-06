@@ -2,17 +2,18 @@ import React from 'react'
 import Button from '../../UI/Button/Button'
 import DropDown from '../../UI/DropDown/DropDown'
 import Icon from '../../UI/Icon/Icon'
+import { displayNotification } from '../../../services/Notification.service'
 
 export default (props) => (
   <DropDown
     orientation='right'
     menuElements={[
       {
-        action: null,
+        action: () => { displayNotification({type: 'info', title: 'Information', content: 'Not available yet!'}) },
         placeholder: 'Rename list'
       },
       {
-        action: null,
+        action: () => { displayNotification({type: 'info', title: 'Information', content: 'Not available yet!'}) },
         placeholder: 'Move list'
       },
       {

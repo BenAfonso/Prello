@@ -101,19 +101,20 @@ export default class CardDetails extends React.Component {
                 button={<Button
                   bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>Checklist</Button>
                 }>
-                <div style={{ width: '340px' }}>
+                <div style={{ width: '300px' }}>
                   <ul>
-                    <li>
-                      <label className='newChecklistTitleInput'>Title: </label>
-                      <Input ref={ (e) => { this.checklistTitleInput = e }} placeholder='Title' />
-                    </li>
-                    <li>
-                      <Button
-                        bgColor='#3cb221'
-                        hoverBgColor='#148407'
-                        color='#FFF' onClick={this.createChecklist}>
+                    <li className='element'>
+                      <div className='element-input'>
+                        <Input ref={ (e) => { this.checklistTitleInput = e }} placeholder='Title' />
+                      </div>
+                      <div className='element-button'>
+                        <Button
+                          bgColor='#5AAC44'
+                          hoverBgColor='#148407'
+                          color='#FFF' block onClick={this.createChecklist}>
                         Save
-                      </Button>
+                        </Button>
+                      </div>
                     </li>
                   </ul>
                 </div>
