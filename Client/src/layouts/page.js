@@ -16,7 +16,7 @@ export default class Page extends React.Component {
           currentUser={this.props.currentUser}
           createBoardButton
         />
-        <div className='content' style={{height: 'calc(100% - 50px)'}}>
+        <div className='content' style={{height: 'calc(100% - 40px)'}}>
           {this.props.children}
         </div>
       </Root>

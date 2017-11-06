@@ -64,7 +64,7 @@ export default class BoardLayout extends React.Component {
             ? <div className='loading'><LoadingPage /></div>
             : null
         }
-        <div style={{ height: 'calc(100% - 50px)' }}>
+        <div style={{ height: 'calc(100% - 40px)' }}>
           <Header
             bgColor={secondaryColor}
             currentUser={this.props.currentUser}
