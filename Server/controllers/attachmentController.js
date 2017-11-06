@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Board = mongoose.model('Board')
+const Comment = mongoose.model('Comment')
 const Card = mongoose.model('Card')
 const Attachment = mongoose.model('Attachment')
 const FileUploader = require('../services/fileStorage')
@@ -42,13 +43,14 @@ attachmentController.createAttachment = function (req) {
           reject(err)
         } else {
           FileUploader.uploadFile(req.params.boardId, item._id, file).then(result => {
+            if (req.params.commentId !== undefined) {
+              Comment.findOneAndUpdate({'_id': req.params.commentId}, {$push: {attachments: item._id}}).exec()
+            }
             if (req.params.cardId !== undefined) {
               Card.findOneAndUpdate({'_id': req.params.cardId}, {$push: {attachments: item._id}}).exec()
-              resolve(result)
-            } else {
-              Board.findOneAndUpdate({'_id': req.params.boardId}, {$push: {attachments: item._id}}).exec()
-              resolve(result)
             }
+            Board.findOneAndUpdate({'_id': req.params.boardId}, {$push: {attachments: item._id}}).exec()
+            resolve(result)
           }).catch(err => {
             Attachment.findOneAndRemove({'_id': item._id}).exec()
             reject(err)
@@ -66,15 +68,15 @@ attachmentController.deleteAttachment = function (req) {
   return new Promise((resolve, reject) => {
     Attachment.findOne({'_id': req.params.attachmentId}).exec().then(file => {
       FileUploader.removeFile(req.params.boardId, req.params.attachmentId, file.ext).then(result => {
+        if (req.params.commentId !== undefined) {
+          Comment.findOneAndUpdate({'_id': req.params.commentId}, {$pull: {attachments: req.params.attachmentId}}).exec()
+        }
         if (req.params.cardId !== undefined) {
           Card.findOneAndUpdate({'_id': req.params.cardId}, {$pull: {attachments: req.params.attachmentId}}).exec()
-          Attachment.findOneAndRemove({'_id': req.params.attachmentId}).exec()
-          resolve(result)
-        } else {
-          Board.findOneAndUpdate({'_id': req.params.boardId}, {$pull: {attachments: req.params.attachmentId}}).exec()
-          Attachment.findOneAndRemove({'_id': req.params.attachmentId}).exec()
-          resolve(result)
         }
+        Board.findOneAndUpdate({'_id': req.params.boardId}, {$pull: {attachments: req.params.attachmentId}}).exec()
+        Attachment.findOneAndRemove({'_id': req.params.attachmentId}).exec()
+        resolve(result)
       }).catch(err => reject(err))
     }).catch(err => reject(err))
   })
