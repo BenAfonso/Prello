@@ -86,7 +86,7 @@ userController.login = (userToConnect) => {
 }
 userController.getUserTeams = function (userId) {
   return new Promise((resolve, reject) => {
-    Team.find({ 'users': userId }).populate('boards').exec(function (err, res) {
+    Team.find({ 'users': userId }).populate('boards users admins', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
