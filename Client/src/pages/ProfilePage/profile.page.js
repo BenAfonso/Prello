@@ -1,14 +1,15 @@
 import PageLayout from '../../layouts/page'
 import React from 'react'
 import { connect } from 'react-redux'
-import Image from '../../components/UI/Image/Image'
-import Input from '../../components/UI/Input/Input'
+// import Image from '../../components/UI/Image/Image'
+// import Input from '../../components/UI/Input/Input'
 import Button from '../../components/UI/Button/Button'
 import defaultAvatar from './default-avatar.png'
 import styles from './profilePage.style'
 import { updateProfile } from '../../services/User.services'
 import { updateProfileAction } from '../../store/actions'
 import { updateProfileLocalStorage } from '../../services/Authentication.services'
+import AvatarThumbnail from '../../components/UI/AvatarThumbnail/AvatarThumbnail'
 
 @connect(store => {
   return {
@@ -27,6 +28,7 @@ export default class ProfilePage extends React.Component {
     this.displayModifyProfileForm = this.displayModifyProfileForm.bind(this)
     this.hideModifyProfileForm = this.hideModifyProfileForm.bind(this)
     this.updateProfile = this.updateProfile.bind(this)
+    this.renderUserAvatar = this.renderUserAvatar.bind(this)
   }
 
   displayModifyProfileForm () {
@@ -61,11 +63,11 @@ export default class ProfilePage extends React.Component {
     return (
       <form>
         <label>Full name : </label>
-        <Input placeholder={this.props.currentUser.name} ref={e => { this.nameInput = e }} width='50px' font-size='14px'/>
+        <input value={this.props.currentUser.name} ref={e => { this.nameInput = e }}/>
         <label>User name : </label>
-        <Input placeholder={this.props.currentUser.username} ref={e => { this.usernameInput = e }} width='50px' font-size='14px'/>
+        <input value={this.props.currentUser.username} ref={e => { this.usernameInput = e }}/>
         <label>Avatar URL : </label>
-        <Input ref={e => { this.avatarInput = e }} width='50px' font-size='14px'/>
+        <input ref={e => { this.avatarInput = e }}/>
         <div className='saveButton'>
           <Button bgColor='#28af28'
             onClick={this.updateProfile}
@@ -75,18 +77,50 @@ export default class ProfilePage extends React.Component {
       </form>
     )
   }
+
+  getInitials (name) {
+    const matches = name.match(/\b(\w)/g)
+    const initials = matches.join('').toUpperCase()
+    return initials
+  }
+
+  renderUserAvatar (user) {
+    return (
+      <div className='avatar' onClick={this.onAvatarClick}>
+        <AvatarThumbnail
+          size='150px'
+          fontSize='80px'
+          thumbnail={user.picture}
+          initials={this.getInitials(user.name)}
+          bgColor={user.bgColor}
+          color='black'
+        />
+        <style jsx>
+          {`
+          .avatar {
+            display: inline-block;
+            padding: 5px 5px;
+            cursor: pointer;            
+          }        
+        `}
+        </style>
+      </div>
+    )
+  }
+
   render () {
     return (
       <div className='profilePage'>
         <PageLayout>
           {!this.state.displayModifyProfileForm
             ? <div className='profileInfos'>
-              <Image
+              {/* <Image
                 rounded
                 src={this.props.currentUser.picture} // TODO : remplacer par props plus tard avec le store etc..
                 height='10%'
                 width='10%'
-                alt='Avatar picture' />
+                alt='Avatar picture' /> */ }
+              {this.renderUserAvatar(this.props.currentUser)}
               <p>Username: {this.props.currentUser.username}</p>
               <p>Full name: {this.props.currentUser.name}</p>
               <Button onClick={this.displayModifyProfileForm}
