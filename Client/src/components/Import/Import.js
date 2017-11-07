@@ -1,6 +1,5 @@
 import React from 'react'
 import Dropzone from 'react-dropzone'
-import styles from './Import.styles'
 
 export default class Import extends React.Component {
   constructor () {
@@ -16,14 +15,14 @@ export default class Import extends React.Component {
   }
 
   sendBoardToServer (board) {
-    console.log("Sending board to server...")
+    console.log('Sending board to server...')
   }
 
   render () {
     return (
       <div>
         <Dropzone onDrop={this.importTrelloBoard} accept='application/json'>
-          <p>Click here to import JSON Trello file.</p>
+          <p>Click here to import Trello JSON file.</p>
         </Dropzone>
       </div>
     )
