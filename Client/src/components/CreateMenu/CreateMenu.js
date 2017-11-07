@@ -62,7 +62,8 @@ export default class CreateMenu extends React.Component {
   render () {
     const menuItems = [
       { title: 'Create a board', body: 'A board is a set of cards classified in lists. Use it to manage your projects !', action: 'addBoard' },
-      { title: 'Create a team', body: 'A team is a set of boards and users. Use it to keep your business organized' }
+      { title: 'Create a team', body: 'A team is a set of boards and users. Use it to keep your business organized' },
+      { title: 'Import board from Trello', body: 'upload JSON file provided by Trello' }
     ]
 
     return (<div className='host'>
