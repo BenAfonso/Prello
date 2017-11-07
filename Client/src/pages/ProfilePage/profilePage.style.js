@@ -8,7 +8,7 @@ export default `
 input {
     display: block;
     border-radius: 3px;
-    border: 1px solid rgba(0,0,0,0.2);
+    border: 1px solid #FF0000;
     padding: 4px 10px;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   }

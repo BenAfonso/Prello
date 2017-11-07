@@ -62,12 +62,18 @@ export default class ProfilePage extends React.Component {
   renderModifyProfileForm () {
     return (
       <form>
-        <label>Full name : </label>
-        <input value={this.props.currentUser.name} ref={e => { this.nameInput = e }}/>
-        <label>User name : </label>
-        <input value={this.props.currentUser.username} ref={e => { this.usernameInput = e }}/>
-        <label>Avatar URL : </label>
-        <input ref={e => { this.avatarInput = e }}/>
+        <div className='nameInput'>
+          <label>Full name : </label>
+          <input value={this.props.currentUser.name} ref={e => { this.nameInput = e }}/>
+        </div>
+        <div className='fullnameInput'>
+          <label>User name : </label>
+          <input value={this.props.currentUser.username} ref={e => { this.usernameInput = e }}/>
+        </div>
+        <div className='avatarInput'>
+          <label>Avatar URL : </label>
+          <input ref={e => { this.avatarInput = e }}/>
+        </div>
         <div className='saveButton'>
           <Button bgColor='#28af28'
             onClick={this.updateProfile}
