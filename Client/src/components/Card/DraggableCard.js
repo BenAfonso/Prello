@@ -118,7 +118,20 @@ export default class CardComponent extends React.Component {
   }
 
   render () {
-    const { id, checklists, index, bgColor, shadowColor, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource, collaborators } = this.props
+    const {
+      id,
+      checklists,
+      index,
+      nbChecklists,
+      nbComments,
+      bgColor,
+      shadowColor,
+      listIndex,
+      isDragging,
+      content,
+      connectCardDropTarget,
+      connectCardDragSource,
+      collaborators } = this.props
     return connectCardDropTarget(connectCardDragSource(
       <div className='host' style={{position: 'relative'}} onClick={this.displayCardDetails.bind(this)}>
         <div className='overlay' style={{
@@ -133,6 +146,8 @@ export default class CardComponent extends React.Component {
           index={index}
           listIndex={listIndex}
           content={content}
+          nbComments={nbComments}
+          nbChecklists={nbChecklists}
           checklists={checklists}
           collaborators={
             collaborators.map(c => c._id

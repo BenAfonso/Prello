@@ -27,8 +27,44 @@ export default `
   width: 100px;
 }
 
+.button-text {
+  display: inline-block;
+  padding: 3px;
+}
+
 .buttons li {
   width: 100%;
   margin-bottom: 5px;
+}
+.host {
+  width: 100%;
+}
+
+.element {
+  padding: 15px;
+}
+
+.element-input {
+  padding: 8px 0px;
+}
+
+.element-button {
+  padding: 8px 0;
+}
+
+input {
+  font-size: inherit;
+  width: 100%;
+  padding: 8px;
+  border-radius: 3px;
+}
+
+.separator {
+  content: '';
+  height: 1px;
+  padding: 0;
+  background-color: #aaa;
+  width: 90%;
+  margin: 8px 0 8px 5%;
 }
 `

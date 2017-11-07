@@ -21,6 +21,26 @@ export function addListLocal (list) {
   }
 }
 
+export function addNotification (notification) {
+  store.dispatch({
+    type: 'ADD_NOTIFICATION',
+    payload: { ...notification, id: Math.floor(Math.random() * 1000000) }
+  })
+}
+
+export function removeNotification (index) {
+  store.dispatch({
+    type: 'REMOVE_NOTIFICATION',
+    payload: index
+  })
+}
+
+export function removeLastNotification () {
+  store.dispatch({
+    type: 'REMOVE_NOTIFICATION'
+  })
+}
+
 export function updateCardAction (listId, card) {
   store.dispatch({
     type: 'UPDATE_CARD',
@@ -289,6 +309,22 @@ export function updateResponsible (boardId, listId, cardId, email) {
 
 export function removeResponsible (boardId, listId, cardId, email) {
   removeResponsibleDistant(boardId, listId, cardId)
+}
+
+export function updateCardDueDate (boardId, listId, card, dueDate) {
+  let newCard = { ...card, dueDate: dueDate }
+  updateCard(boardId, listId, card._id, newCard)
+}
+
+export function removeCardDueDate (boardId, listId, card) {
+  let newCard = { ...card, dueDate: null, validated: false }
+  console.log(newCard)
+  updateCard(boardId, listId, card._id, newCard)
+}
+
+export function updateCardValidated (boardId, listId, card, validated) {
+  let newCard = { ...card, validated: validated }
+  updateCard(boardId, listId, card._id, newCard)
 }
 
 export function archiveCard (boardId, listId, card) {
