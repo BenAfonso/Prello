@@ -21,7 +21,8 @@ export function updateProfile (datas) {
   return new Promise((resolve, reject) => {
     axios.put(`${Config.API_URL}/me/`, {
       name: datas.name,
-      username: datas.username
+      username: datas.username,
+      picture: datas.picture
     }).then(res => {
       resolve(res.data)
     }).catch(err => {

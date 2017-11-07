@@ -15,7 +15,8 @@ export default (state = defaultCurrentUserState, action) => {
       return {
         ...state,
         name: action.payload.name,
-        username: action.payload.username
+        username: action.payload.username,
+        picture: action.payload.picture
       }
     }
     default:

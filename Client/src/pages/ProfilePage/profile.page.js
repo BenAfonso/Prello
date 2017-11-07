@@ -19,7 +19,8 @@ export default class ProfilePage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      displayModifyProfileForm: false
+      displayModifyProfileForm: false,
+      avatar: this.props.currentUser.picture === '' ? defaultAvatar : this.props.currentUser.picture
     }
 
     this.renderModifyProfileForm = this.renderModifyProfileForm.bind(this)
@@ -37,16 +38,23 @@ export default class ProfilePage extends React.Component {
   }
 
   updateProfile () {
-    const datas = {
-      name: this.nameInput.input.value,
-      username: this.usernameInput.input.value
+    let name = this.nameInput.input.value
+    let username = this.usernameInput.input.value
+    let picture = this.avatarInput.input.value
+    if (name.length > 0 && username.length > 0 && picture.length > 0) {
+      const datas = {
+        name,
+        username,
+        picture
+      }
+      updateProfile(datas)
+        .then(updatedUser => {
+          console.log(updatedUser)
+          updateProfileLocalStorage(updatedUser)
+          updateProfileAction(updatedUser)
+        })
+      this.hideModifyProfileForm()
     }
-    updateProfile(datas)
-      .then(updatedUser => {
-        updateProfileLocalStorage(updatedUser)
-        updateProfileAction(updatedUser)
-      })
-    this.hideModifyProfileForm()
   }
 
   renderModifyProfileForm () {
@@ -56,6 +64,8 @@ export default class ProfilePage extends React.Component {
         <Input placeholder={this.props.currentUser.name} ref={e => { this.nameInput = e }} width='50px' font-size='14px'/>
         <label>User name : </label>
         <Input placeholder={this.props.currentUser.username} ref={e => { this.usernameInput = e }} width='50px' font-size='14px'/>
+        <label>Avatar URL : </label>
+        <Input ref={e => { this.avatarInput = e }} width='50px' font-size='14px'/>
         <div className='saveButton'>
           <Button bgColor='#28af28'
             onClick={this.updateProfile}
@@ -71,9 +81,11 @@ export default class ProfilePage extends React.Component {
         <PageLayout>
           {!this.state.displayModifyProfileForm
             ? <div className='profileInfos'>
-              <Image rounded src={this.props.currentUser.picture === '' ? defaultAvatar : this.props.currentUser.picture}
-                height='5%'
-                width='5%'
+              <Image
+                rounded
+                src={this.props.currentUser.picture} // TODO : remplacer par props plus tard avec le store etc..
+                height='10%'
+                width='10%'
                 alt='Avatar picture' />
               <p>Username: {this.props.currentUser.username}</p>
               <p>Full name: {this.props.currentUser.name}</p>
