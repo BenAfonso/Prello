@@ -1,6 +1,5 @@
 const Util = require('../../controllers/Util')
 const {requiresLogin} = require('../../config/middlewares/authorization')
-const {boardExists, isOwner} = require('../../config/middlewares/boardAuthorizations')
 
 module.exports = (router, controller) => {
   /**
@@ -30,7 +29,7 @@ module.exports = (router, controller) => {
     *       500:
     *         description: Internal error
     */
-  router.delete('/teams/:teamId/collaborators/:userId', [requiresLogin, boardExists, isOwner], function (req, res) {
+  router.delete('/teams/:teamId/collaborators/:userId', [requiresLogin], function (req, res) {
     let requiredParameter = ['teamId', 'userId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
