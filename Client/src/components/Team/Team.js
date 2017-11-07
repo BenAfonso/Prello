@@ -8,14 +8,15 @@ import Button from '../UI/Button/Button'
 import Tabs from '../UI/Tabs/Tabs'
 import Icon from '../UI/Icon/Icon'
 import TabPanel from '../UI/TabPanel/TabPanel'
-import MembersTab from './TabsContent/MembersTab'
+import MembersTab from './TabsContent/MembersTabs/MembersTab'
 
 import { setTeam } from '../../store/actions'
 
 @connect(store => {
   return {
     currentTeam: store.currentTeam,
-    team: store.currentTeam.team
+    team: store.currentTeam.team,
+    currentUser: store.currentUser
   }
 })
 
@@ -53,6 +54,8 @@ export default class Team extends React.Component {
 
   render () {
     const team = this.props.team
+    const currentUser = this.props.currentUser
+    console.log(currentUser)
 
     return (
       <div className='host'>
@@ -115,7 +118,10 @@ export default class Team extends React.Component {
             <TabPanel label="Members">
               <div className='members'>
                 <MembersTab
+                  currentUserId={currentUser._id}
+                  teamId={team._id}
                   members={team.users}
+                  admins={team.admins}
                 />
               </div>
             </TabPanel>

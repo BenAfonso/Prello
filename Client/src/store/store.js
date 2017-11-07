@@ -17,6 +17,7 @@ const enhancer = composeEnhancers(
 )
 
 export const defaultCurrentUserState = {
+  _id: '',
   username: '',
   name: '',
   picture: ''

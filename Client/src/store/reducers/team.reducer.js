@@ -28,6 +28,12 @@ export default (state = defaultTeamState, action) => {
         team: action.payload
       }
     }
+    case 'UPDATE_TEAM': {
+      return {
+        ...state,
+        team: action.payload
+      }
+    }
     default:
       return {
         ...state

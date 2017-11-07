@@ -22,3 +22,25 @@ export function fetchTeams () {
     })
   })
 }
+
+export function addTeamMemberDistant (team, email) {
+  return new Promise((resolve, reject) => {
+    axios.post(`${Config.API_URL}/teams/${team}/collaborators`, {
+      email: email
+    }).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function removeTeamMemberDistant (team, userId) {
+  return new Promise((resolve, reject) => {
+    axios.delete(`${Config.API_URL}/teams/${team}/collaborators/${userId}`).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}

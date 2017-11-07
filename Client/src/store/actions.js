@@ -1,5 +1,5 @@
 import { fetchBoards, addBoardDistant, addCollaboratorDistant } from '../services/Board.services'
-import { fetchTeams, addTeamDistant } from '../services/Team.services'
+import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDistant } from '../services/Team.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, updateCard } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
@@ -255,6 +255,31 @@ export function setTeam (dispatch, id) {
       reject(err)
     })
   })
+}
+
+export function addTeamMember (teamId, email) {
+  addTeamMemberDistant(teamId, email).then((team) => {
+    updateTeamLocal(team)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function removeTeamMember (teamId, userId) {
+  removeTeamMemberDistant(teamId, userId).then((team) => {
+    updateTeamLocal(team)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function updateTeamLocal (team) {
+  if (team) {
+    store.dispatch({
+      type: 'UPDATE_TEAM',
+      payload: team
+    })
+  }
 }
 
 export function addCollaborator (dispatch, boardId, email) {

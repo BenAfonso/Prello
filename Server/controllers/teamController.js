@@ -30,7 +30,7 @@ teamController.createTeam = function (name, userId) {
  */
 teamController.addCollaboratorToTeam = function (teamId, userId) {
   return new Promise((resolve, reject) => {
-    Team.findOneAndUpdate({ '_id': teamId }, { $push: { collaborators: userId } }, { new: true }, function (err, res) {
+    Team.findOneAndUpdate({ '_id': teamId }, { $push: { users: userId } }, { new: true }, function (err, res) {
       if (err) {
         reject(err)
       } else {
