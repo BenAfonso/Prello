@@ -53,7 +53,6 @@ function getClient (clientId, clientSecret) {
 }
 
 function getUser (username, password) {
-  console.log('aeaze')
   return User
     .findOne({username: username})
     .then(function (user) {
@@ -177,13 +176,14 @@ function saveAuthorizationCode (code, client, user) {
 }
 
 function getUserFromClient (client) {
-  console.log('getUserFromClient', client)
+  // console.log('getUserFromClient', client)
   let options = {client_id: client.client_id}
   if (client.client_secret) options.client_secret = client.client_secret
 
+  console.log(client)
   return OAuthClient
     .findOne(options)
-    .populate('User')
+    .populate({path: 'User', model: 'User'})
     .then(function (client) {
       console.log(client)
       if (!client) return false
@@ -197,7 +197,6 @@ function getUserFromClient (client) {
 function getRefreshToken (refreshToken) {
   console.log('getRefreshToken', refreshToken)
   if (!refreshToken || refreshToken === 'undefined') return false
-// [OAuthClient, User]
   return OAuthRefreshToken
     .findOne({refresh_token: refreshToken})
     .populate('User')
