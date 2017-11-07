@@ -128,6 +128,7 @@ export default class CardDetailsInformations extends React.Component {
       margin-top: 20px;
       margin-bottom: 20px;
       display: flex;
+      flex-wrap: wrap;
     }
     
     .members {
@@ -135,6 +136,10 @@ export default class CardDetailsInformations extends React.Component {
     }
 
     .labels {
+      margin-right: 20px;
+    }
+
+    .responsible {
       margin-right: 20px;
     }
     
