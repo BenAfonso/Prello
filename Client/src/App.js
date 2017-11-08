@@ -3,6 +3,7 @@ import IndexPage from './pages/index.page'
 import LoginPage from './pages/LoginPage/login.page'
 import BoardsPage from './pages/boards.page'
 import BoardPage from './pages/board.page'
+import TeamPage from './pages/team.page'
 import RegisterPage from './pages/RegisterPage/register.page'
 import LoadingPage from './pages/LoadingPage/loading.page'
 import ProfilePage from './pages/ProfilePage/profile.page'
@@ -35,6 +36,8 @@ class App extends Component {
             <Route path='/register' component={RegisterPage} />
             <PrivateRoute exact path='/boards' component={BoardsPage} />
             <PrivateRoute exact path='/boards/:id' component={BoardPage} />
+            <PrivateRoute exact path='/teams/:id' component={TeamPage} />
+            <PrivateRoute exact path='/teams/:id/:tab' component={TeamPage} />
             <Route exact path='/loading' component={LoadingPage} />
             <PrivateRoute exact path='/profile' component={ProfilePage} />
           </div>

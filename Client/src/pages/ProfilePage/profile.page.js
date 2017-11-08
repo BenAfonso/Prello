@@ -147,7 +147,7 @@ export default class ProfilePage extends React.Component {
                 </Button>
               </div>
             </div>
-            : <div>
+            : <div className='editProfilePart'>
               {this.renderUserAvatar(this.props.currentUser)}
               {this.renderModifyProfileForm()}
             </div>

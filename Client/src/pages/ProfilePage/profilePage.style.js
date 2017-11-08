@@ -11,6 +11,11 @@ export default `
     vertical-align: top;
 }
 
+.editProfilePart,
+.profileInfos {
+    margin-left: 30%;
+}
+
 .buttons {
     margin-top: 2%;
     margin-left: 3%;

@@ -1,9 +1,10 @@
 import React from 'react'
-import { addMember } from '../../../../../store/actions'
+import { addMember, removeMember } from '../../../../../store/actions'
 import {connect} from 'react-redux'
 import Button from '../../../../UI/Button/Button'
 import DropDown from '../../../../UI/DropDown/DropDown'
 import AvatarThumbnail from '../../../../UI/AvatarThumbnail/AvatarThumbnail'
+import Icon from '../../../../UI/Icon/Icon'
 
 @connect(store => {
   return {
@@ -17,7 +18,7 @@ export default class MembersMenu extends React.Component {
     super(props)
     this.state = {
       matchingBoardCollaborators: this.props.board.collaborators.slice(0, 10),
-      enableAdd: true,
+      enableAdd: false,
       inputValue: ''
     }
     this.addMember = this.addMember.bind(this)
@@ -32,7 +33,16 @@ export default class MembersMenu extends React.Component {
   }
 
   addMember () {
-    addMember(this.props.dispatch, this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId, this.email.value)
+    addMember(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId, this.email.value)
+    this.setState({
+      inputValue: '',
+      enableAdd: false,
+      matchingBoardCollaborators: this.props.board.collaborators
+    })
+  }
+
+  removeMember (user) {
+    removeMember(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId, user._id)
     this.setState({
       inputValue: '',
       enableAdd: false,
@@ -48,6 +58,9 @@ export default class MembersMenu extends React.Component {
   }
 
   onChange () {
+    this.setState({
+      enableAdd: false
+    })
     if (this.email.value !== '') {
       const newmatchingBoardCollaborators = this.getMatchingCollaborators(this.email.value)
       this.setState({
@@ -90,38 +103,54 @@ export default class MembersMenu extends React.Component {
           />
         </div>
         <div className='user-infos'>
-          <div className='user-username'>{user.username}</div>
+          <div className='user-username'>
+            {user.username}
+          </div>
           <div className='user-email'>{user.email}</div>
+          {this.isCardMember(user)
+            ? <div className='remove-icon'><Icon color='#999' name='minus-circle' fontSize='30px' /></div>
+            : null
+          }
         </div>
         <style jsx>{`
+          .user-infos {
+            position: relative;
+            float: right;
+            display: inline-block;
+            padding: 0 10px;
+            overflow: hidden;
+            width: 190px;
+            text-overflow: ellipsis;    
+          }
 
-    .user-infos {
-      float: right;
-      display: inline-block;
-      padding: 0 10px;
-      overflow: hidden;
-      width: 190px;
-      text-overflow: ellipsis;    
-    }
+          .user-thumbnail {
+            float: left;  
+          }
 
-    .user-thumbnail {
-      float: left;  
-    }
+          .user-username {
+            width:100%;
+            font-weight: bold;
+            text-align: left;
+            color: #000;
+            text-overflow: ellipsis;   
+          }
 
-    .user-username {
-      font-weight: bold;
-      text-align: left;
-      color: #000;
-    }
+          .user-email {
+            width:100%;
+            font-style: italic;
+            padding: 5px 0;
+            font-size: 10px;
+            color: #999;
+            text-overflow: ellipsis;   
+          }
 
-    .user-email {
-      font-style: italic;
-      padding: 5px 0;
-      font-size: 10px;
-      color: #999;        
-    }
-    `}
-        </style>
+          .remove-icon {
+            position: absolute;
+            top: 10px;
+            right: 0;
+          }
+          
+        `}</style>
       </div>
     )
   }
@@ -129,10 +158,9 @@ export default class MembersMenu extends React.Component {
   render () {
     let menuElements = this.state.matchingBoardCollaborators.map(collaborator => {
       return {
-        action: this.setInputValue.bind(this, collaborator.email),
+        action: this.isCardMember(collaborator) ? this.removeMember.bind(this, collaborator) : this.setInputValue.bind(this, collaborator.email),
         placeholder: this.renderUserinMenu(collaborator),
-        closer: true,
-        disabled: this.isCardMember(collaborator)
+        closer: !this.isCardMember(collaborator)
       }
     })
 
@@ -171,39 +199,38 @@ export default class MembersMenu extends React.Component {
           </div>
         </DropDown>
         <style jsx>{`
+          .host {
+            width: 100%;
+          }
 
-    .host {
-      width: 100%;
-    }
+          .element {
+            padding: 15px;
+          }
 
-    .element {
-      padding: 15px;
-    }
+          .element-input {
+            padding: 8px 0px;
+          }
 
-    .element-input {
-      padding: 8px 0px;
-    }
+          .element-button {
+            padding: 8px 0;
+          }
 
-    .element-button {
-      padding: 8px 0;
-    }
+          input {
+            font-size: inherit;
+            width: 100%;
+            padding: 8px;
+            border-radius: 3px;
+          }
 
-    input {
-      font-size: inherit;
-      width: 100%;
-      padding: 8px;
-      border-radius: 3px;
-    }
-
-    .separator {
-      content: '';
-      height: 1px;
-      padding: 0;
-      background-color: #aaa;
-      width: 90%;
-      margin: 8px 0 8px 5%;
-    }
-    `}</style>
+          .separator {
+            content: '';
+            height: 1px;
+            padding: 0;
+            background-color: #aaa;
+            width: 90%;
+            margin: 8px 0 8px 5%;
+          }
+        `}</style>
       </div>
     )
   }

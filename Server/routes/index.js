@@ -40,6 +40,7 @@ require('./Card')(router, controllers.cardController)
 require('./User')(router, controllers.userController)
 require('./Comment')(router, controllers.commentController)
 require('./Checklist')(router, controllers.checklistController)
+require('./Team')(router, controllers.teamController)
 
 router.get('/', (req, res) => {
   res.redirect('/api-docs')

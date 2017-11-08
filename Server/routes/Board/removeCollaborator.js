@@ -39,7 +39,7 @@ module.exports = (router, controller) => {
       return
     }
     controller.removeCollaborator(req.params.boardId, req.params.userId, req.user._id).then((data) => {
-      res.status(200).json('Successfully updated')
+      res.status(200).json('Successfully removed')
     }).catch((err) => {
       res.status(err.status).json(err)
     })

@@ -39,6 +39,7 @@ input {
 }
 
 .details {
+  position: relative;
   margin-top: 10px;
   display: flex;
 }
@@ -47,10 +48,27 @@ input {
   display: flex;
   width: calc(100% - 70px);
   justify-content: flex-end;
+  float: right;
 }
 
 .collaborator {
+  position: relative;
   margin: 2px;
+}
+
+.responsible {
+  border-radius: 50%;
+  border: solid 2px #ffda11;
+}
+
+.responsible .responsible-icon {
+  position: absolute;
+  bottom: -10px;
+  right: 6px;
+}
+
+.push {
+  width: 70px;
 }
 
 .dueDate {
@@ -61,6 +79,7 @@ input {
   border-radius: 3px;
   font-size: 12px;
   align-items: center;
+  margin-top: 5px;
 }
 
 .dueDate-icon {

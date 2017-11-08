@@ -35,6 +35,7 @@ export default class Page extends React.Component {
           top: 40px;
           left: 0px;
           height: calc(100% - 40px);
+          width: 100%;
         }
         `}</style>
       </Root>
