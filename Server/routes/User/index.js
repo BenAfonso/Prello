@@ -69,6 +69,10 @@ module.exports = (router, userController) => {
       }
     })
 
+    router.post('/auth/prello/callback', (req, res) => {
+      
+    })
+
   /**
     * @swagger
     * /register:

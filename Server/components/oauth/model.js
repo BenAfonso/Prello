@@ -4,6 +4,8 @@ const OAuthAccessToken = mongoose.model('OAuthAccessToken')
 const OAuthAuthorizationCode = mongoose.model('OAuthAuthorizationCode')
 const OAuthRefreshToken = mongoose.model('OAuthRefreshToken')
 const User = mongoose.model('User')
+const jwt = require('jsonwebtoken')
+const secretKey = require('../../config').secretKey
 
 function getAccessToken (bearerToken) {
   return OAuthAccessToken
@@ -25,10 +27,8 @@ function getAccessToken (bearerToken) {
 }
 
 function getClient (clientId, clientSecret) {
-  console.log('getClient', clientId, clientSecret)
   const options = {client_id: clientId}
   if (clientSecret) options.client_secret = clientSecret
-
   return OAuthClient
     .findOne(options)
     .then(client => {
@@ -37,35 +37,31 @@ function getClient (clientId, clientSecret) {
         _id: client._id,
         User: client.User,
         scope: client.scope,
-        redirect_uri: client.redirect_uri,
+        redirectUris: client.redirectUris,
         client_secret: client.client_secret,
         client_id: client.client_id,
         name: client.name,
         grant_type: 'password',
         grants: ['authorization_code', 'password', 'refresh_token', 'client_credentials']
       }
-      clientWithGrants.redirectUris = [clientWithGrants.redirect_uri]
-      delete clientWithGrants.redirect_uri
       return clientWithGrants
     }).catch(err => {
       console.log('getClient - Err: ', err)
     })
 }
 
-function getUser (username, password) {
+function getUser (email, password) {
   return User
-    .findOne({username: username})
-    .then(function (user) {
-      console.log('u', user)
+    .findOne({email: email})
+    .then(user => {
       return user.authenticate(password) ? user : false
     })
-    .catch(function (err) {
+    .catch(err => {
       console.log('getUser - Err: ', err)
     })
 }
 
 function revokeAuthorizationCode (code) {
-  console.log('revokeAuthorizationCode', code)
   return OAuthAuthorizationCode.findOne({
     where: {
       authorization_code: code.code
@@ -80,7 +76,6 @@ function revokeAuthorizationCode (code) {
 }
 
 function revokeToken (token) {
-  console.log('revokeToken', token)
   return OAuthRefreshToken.findOne({
     where: {
       refresh_token: token.refreshToken
@@ -95,8 +90,15 @@ function revokeToken (token) {
   })
 }
 
+function generateOAuthAccessToken (client, user, scope) {
+  if (user._id) {
+    let payload = { iss: 'Prello-OAuthServer', userId: user._id }
+    return jwt.sign(payload, secretKey, { expiresIn: '7d' })
+  }
+  throw new Error('No user id')
+}
+
 function saveToken (token, client, user) {
-  console.log('saveToken', token, client, user)
   return Promise.all([
     OAuthAccessToken.create({
       access_token: token.accessToken,
@@ -130,14 +132,12 @@ function saveToken (token, client, user) {
 }
 
 function getAuthorizationCode (code) {
-  console.log('getAuthorizationCode', code)
   return OAuthAuthorizationCode
     .findOne({authorization_code: code})
     .populate('User')
     .populate('OAuthClient')
     .then(function (authCodeModel) {
       if (!authCodeModel) return false
-      console.log(authCodeModel)
       let client = authCodeModel.OAuthClient
       let user = authCodeModel.User
       return {
@@ -158,7 +158,6 @@ function getAuthorizationCode (code) {
 }
 
 function saveAuthorizationCode (code, client, user) {
-  console.log('saveAuthorizationCode', code, client, user)
   return OAuthAuthorizationCode
     .create({
       expires: code.expiresAt,
@@ -176,16 +175,12 @@ function saveAuthorizationCode (code, client, user) {
 }
 
 function getUserFromClient (client) {
-  // console.log('getUserFromClient', client)
   let options = {client_id: client.client_id}
   if (client.client_secret) options.client_secret = client.client_secret
-
-  console.log(client)
   return OAuthClient
     .findOne(options)
     .populate({path: 'User', model: 'User'})
-    .then(function (client) {
-      console.log(client)
+    .then(client => {
       if (!client) return false
       if (!client.User) return false
       return client.User
@@ -195,14 +190,12 @@ function getUserFromClient (client) {
 }
 
 function getRefreshToken (refreshToken) {
-  console.log('getRefreshToken', refreshToken)
   if (!refreshToken || refreshToken === 'undefined') return false
   return OAuthRefreshToken
     .findOne({refresh_token: refreshToken})
     .populate('User')
     .populate('OAuthClient')
     .then(function (savedRT) {
-      console.log('srt', savedRT)
       let tokenTemp = {
         user: savedRT ? savedRT.User : {},
         client: savedRT ? savedRT.OAuthClient : {},
@@ -228,16 +221,13 @@ function verifyScope (token, scope) {
 }
 
 module.exports = {
-  // generateOAuthAccessToken, optional - used for jwt
-  // generateAuthorizationCode, optional
-  // generateOAuthRefreshToken, - optional
+  generateAccessToken: generateOAuthAccessToken, //, optional - used for jwt
   getAccessToken: getAccessToken,
   getAuthorizationCode: getAuthorizationCode, // getOAuthAuthorizationCode renamed to,
   getClient: getClient,
   getRefreshToken: getRefreshToken,
   getUser: getUser,
   getUserFromClient: getUserFromClient,
-  // grantTypeAllowed, Removed in oauth2-server 3.0
   revokeAuthorizationCode: revokeAuthorizationCode,
   revokeToken: revokeToken,
   saveToken: saveToken, // saveOAuthAccessToken, renamed to

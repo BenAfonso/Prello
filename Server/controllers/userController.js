@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const userController = {}
-const secretKey = require('../config').secretKey
-const jwt = require('jsonwebtoken')
+const querystring = require('querystring')
+const request = require('request')
 
 userController.create = (user) => {
   return new Promise((resolve, reject) => {
@@ -13,6 +13,7 @@ userController.create = (user) => {
     })
   })
 }
+
 userController.loginGoogle = (profile, done) => {
   User.findOne({'email': profile.emails[0].value}, '_id email provider').exec(function (err, user) {
     if (err) return done(err)
@@ -67,7 +68,27 @@ userController.login = (userToConnect) => {
     }, (err, user) => {
       if (err) reject(new Error('Bad request'))
       if (user) {
-        if (userToConnect.provider === 'google' || user.authenticate(userToConnect.password)) {
+        let auth = 'Basic ' + Buffer.from(`${process.env.PRELLO_CLIENTID}:${process.env.PRELLO_SECRET}`).toString('base64')
+        let form = {
+          grant_type: 'password',
+          username: user.email,
+          password: userToConnect.password
+        }
+        let formData = querystring.stringify(form)
+        request({
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': auth
+          },
+          uri: `${process.env.PRELLO_APIURL}/oauth/token`,
+          body: formData,
+          method: 'POST'
+        }, function (err, res, body) {
+          if (err) { reject(err) }
+          resolve(JSON.parse(body).accessToken)
+        })
+
+        /* if (userToConnect.provider === 'google' || user.authenticate(userToConnect.password)) {
           let payload = {
             id: user._id
           }
@@ -75,17 +96,18 @@ userController.login = (userToConnect) => {
           resolve(token)
         } else {
           return reject(new Error('Wrong credentials'))
-        }
+        } */
       } else {
         return reject(new Error('User not found'))
       }
     })
   })
 }
+
 userController.updateUser = (userId, body) => {
   return new Promise((resolve, reject) => {
     delete body.email
-    User.findOneAndUpdate('_id', body, { new: true }).exec(function (err, res) {
+    User.findOneAndUpdate('_id', body, { new: true }).exec((err, res) => {
       if (err) {
         reject(err)
       } else {
