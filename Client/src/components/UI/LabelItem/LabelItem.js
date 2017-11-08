@@ -10,6 +10,7 @@ export default class LabelItem extends React.Component {
       isExpanded: true
     }
     this.onDelete = this.onDelete.bind(this)
+    this.onAddCardLabel = this.onAddCardLabel.bind(this)
   }
   static propTypes = {
     labelText: PropTypes.string,
@@ -18,7 +19,8 @@ export default class LabelItem extends React.Component {
     color: PropTypes.string,
     backgroundColor: PropTypes.string,
     fontWeight: PropTypes.string,
-    onDeleteLabel: PropTypes.func
+    onDeleteLabel: PropTypes.func,
+    onAddCardLabel: PropTypes.func
   }
 
   static defaultProps = {
@@ -34,6 +36,10 @@ export default class LabelItem extends React.Component {
 
   onDelete () {
     this.props.onDeleteLabel(this.props.labelText)
+  }
+
+  onAddCardLabel () {
+    this.props.onAddCardLabel(this.props.labelText, this.props.backgroundColor)
   }
 
   render () {
@@ -63,7 +69,7 @@ export default class LabelItem extends React.Component {
     }
     return (
       <div>
-        <div style={props.style} checked>{this.props.labelText}</div>
+        <div style={props.style} onClick={this.props.onAddCardLabel}>{this.props.labelText}</div>
         <div className='deleteLabelButton'>
           <Button
             onClick={this.onDelete}

@@ -22,7 +22,8 @@ export default class LabelDropdown extends React.Component {
     boardLabels: PropTypes.arrayOf(PropTypes.shape({
       title: PropTypes.string,
       color: PropTypes.string
-    }))
+    })),
+    onAddLabelCard: PropTypes.func
   }
 
   static defaultProps = {
@@ -105,7 +106,7 @@ export default class LabelDropdown extends React.Component {
       <div style={props.style}>
         <div>
           <ul>
-            {this.state.boardLabels.map(e => <LabelItem onDeleteLabel={this.deleteLabel} labelText={e['label']} backgroundColor={e['color']} />)}
+            {this.state.boardLabels.map(e => <LabelItem onAddCardLabel={this.props.onAddLabelCard} onDeleteLabel={this.deleteLabel} labelText={e['label']} backgroundColor={e['color']} />)}
           </ul>
         </div>
         <div>
