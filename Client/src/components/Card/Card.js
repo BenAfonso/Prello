@@ -22,6 +22,7 @@ export default class Card extends React.Component {
     index: PropTypes.number.isRequired,
     listIndex: PropTypes.number.isRequired,
     collaborators: PropTypes.arrayOf(PropTypes.any),
+    responsible: PropTypes.any,
     id: PropTypes.any
   }
 
@@ -122,9 +123,17 @@ export default class Card extends React.Component {
                 <div className='dueDate-icon'><Icon name='clock-o' color={this.getDueDateTextColor(card.validated, dueDate)} /></div>
                 <div className='dueDate-date' style={{color: this.getDueDateTextColor(card.validated, dueDate)}}>{formattedDate}</div>
               </div>
-              : null
+              : <div className='push' />
           }
           <div className='collaborators'>
+            {
+              this.props.responsible
+                ? <div key={this.props.responsible._id ? this.props.responsible._id : this.props.responsible} className='collaborator responsible'>
+                  <AvatarThumbnail thumbnail={this.props.responsible._id ? this.props.responsible.picture : ''} initials={this.getInitials(this.props.responsible)} size='25px' fontSize='15px' />
+                  <div className='responsible-icon'><Icon name='star' color='#ffda11' fontSize='15px' /></div>
+                </div>
+                : null
+            }
             {
               this.props.collaborators.map(a => (
                 <div key={a._id ? a._id : a} className='collaborator'>

@@ -3,7 +3,6 @@ const List = mongoose.model('List')
 const boardController = require('./boardController')
 const listController = {}
 const emit = require('../controllers/sockets').emit
-
 listController.createList = (req) => {
   return new Promise((resolve, reject) => {
     const listToAdd = new List(req.body)

@@ -2,6 +2,7 @@ import React from 'react'
 import CardDetailsSection from '../../CardDetailsSection/CardDetailsSection'
 import CardDetailsMembers from './CardDetailsMembers/CardDetailsMembers'
 import CardDetailsLabels from './CardDetailsLabels/CardDetailsLabels'
+import CardDetailsResponsible from './CardDetailsResponsible/CardDetailsResponsible'
 import CardDetailsDueDate from './CardDetailsDueDate/CardDetailsDueDate'
 
 import {connect} from 'react-redux'
@@ -74,6 +75,12 @@ export default class CardDetailsInformations extends React.Component {
               </div>
               <CardDetailsLabels />
             </div>
+            <div className='responsible'>
+              <div className='subsectionTitle'>
+                Responsible
+              </div>
+              <CardDetailsResponsible listIndex={this.props.listIndex} id={fullCard._id} />
+            </div>
             {
               fullCard.dueDate !== undefined
                 ? <div className='dueDate'>
@@ -121,6 +128,7 @@ export default class CardDetailsInformations extends React.Component {
       margin-top: 20px;
       margin-bottom: 20px;
       display: flex;
+      flex-wrap: wrap;
     }
     
     .members {
@@ -128,6 +136,10 @@ export default class CardDetailsInformations extends React.Component {
     }
 
     .labels {
+      margin-right: 20px;
+    }
+
+    .responsible {
       margin-right: 20px;
     }
     

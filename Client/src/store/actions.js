@@ -1,6 +1,6 @@
-import { fetchBoards, addBoardDistant, addCollaboratorDistant } from '../services/Board.services'
+import { fetchBoards, addBoardDistant, addCollaboratorDistant, removeCollaboratorDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
-import { moveCard, addMemberDistant, updateCard } from '../services/Card.services'
+import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
 
 import store from '../store/store'
@@ -204,6 +204,13 @@ export function addCollaborator (dispatch, boardId, email) {
   })
 }
 
+export function removeCollaborator (boardId, userId) {
+  removeCollaboratorDistant(boardId, userId).then((board) => {
+  }).catch(err => {
+    return err
+  })
+}
+
 export function replaceCollaboratorsLocal (users) {
   if (users) {
     store.dispatch({
@@ -288,8 +295,20 @@ export function deleteChecklistItem (cardId, checklistIndex, itemIndex) {
   }
 }
 
-export function addMember (dispatch, boardId, listId, cardId, email) {
+export function addMember (boardId, listId, cardId, email) {
   addMemberDistant(boardId, listId, cardId, email)
+}
+
+export function removeMember (boardId, listId, cardId, userId) {
+  removeMemberDistant(boardId, listId, cardId, userId)
+}
+
+export function updateResponsible (boardId, listId, cardId, email) {
+  updateResponsibleDistant(boardId, listId, cardId, email)
+}
+
+export function removeResponsible (boardId, listId, cardId, email) {
+  removeResponsibleDistant(boardId, listId, cardId)
 }
 
 export function updateCardDueDate (boardId, listId, card, dueDate) {
