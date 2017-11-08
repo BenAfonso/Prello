@@ -317,3 +317,15 @@ export function restoreList (boardId, list) {
     payload: newList
   })
 }
+
+export function addLabel (boardId, labelText, labelColor) {
+  if (labelText.length > 0 && labelColor.length > 0) {
+    store.dispatch({
+      type: 'ADD_LABEL',
+      payload: {
+        name: labelText,
+        color: labelColor
+      }
+    })
+  }
+}

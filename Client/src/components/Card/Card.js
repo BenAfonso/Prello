@@ -20,11 +20,16 @@ export default class Card extends React.Component {
     index: PropTypes.number.isRequired,
     listIndex: PropTypes.number.isRequired,
     collaborators: PropTypes.arrayOf(PropTypes.any),
+    cardLabels: PropTypes.arrayOf(PropTypes.shape({
+      title: PropTypes.string,
+      color: PropTypes.string
+    })),
     id: PropTypes.any
   }
 
   static defaultProps = {
-    bgColor: '#fff'
+    bgColor: '#fff',
+    cardLabels: []
   }
 
   getInitials (user) {

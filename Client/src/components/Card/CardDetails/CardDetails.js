@@ -35,11 +35,16 @@ export default class CardDetails extends React.Component {
       index: PropTypes.number,
       title: PropTypes.string.isRequired,
       items: PropTypes.array
+    })),
+    labels: PropTypes.arrayOf(PropTypes.shape({
+      label: PropTypes.string,
+      color: PropTypes.string
     }))
   }
 
   static defaultProps = {
-    checklists: []
+    checklists: [],
+    labels: []
   }
   constructor (props) {
     super(props)
@@ -62,7 +67,7 @@ export default class CardDetails extends React.Component {
           <CardDetailsInformations {...this.props} />
           <CardDetailsChecklists cardId={this.props.id} listIndex={this.props.listIndex} checklists={this.props.checklists}/>
           <CardDetailsComments {...this.props}/>
-          <CardDetailsActivity />
+          <CardDetailsActivity labels={this.props.labels}/>
         </div>
 
         <div className='cancelButton' onClick={this.props.dismissPopover}>

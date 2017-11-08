@@ -114,7 +114,7 @@ export default class LabelDropdown extends React.Component {
             ? <div>
               <Input ref={(v) => { this.labelTitle = v } } placeholder='Label title'/>
               <Input ref={(v) => { this.labelColor = v } } placeholder='#c5c5c5'/>
-              <Button onClick={this.addLabelWithAxios}>Add Label</Button>
+              <Button onClick={this.addLabel}>Add Label</Button>
             </div> : null}
         </div>
       </div>
