@@ -91,6 +91,7 @@ teamController.updateTeam = function (teamId, body) {
 teamController.getOneTeam = function (teamId) {
   return new Promise((resolve, reject) => {
     Team.findOne({ '_id': teamId }).populate('boards users admins', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+      console.log(res)
       if (err) {
         reject(err)
       } else {
