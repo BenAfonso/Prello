@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 // import Image from '../../components/UI/Image/Image'
 // import Input from '../../components/UI/Input/Input'
 import Button from '../../components/UI/Button/Button'
-import defaultAvatar from './default-avatar.png'
 import styles from './profilePage.style'
 import { updateProfile } from '../../services/User.services'
 import { updateProfileAction } from '../../store/actions'
@@ -20,8 +19,7 @@ export default class ProfilePage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      displayModifyProfileForm: false,
-      avatar: this.props.currentUser.picture === '' ? defaultAvatar : this.props.currentUser.picture
+      displayModifyProfileForm: false
     }
 
     this.renderModifyProfileForm = this.renderModifyProfileForm.bind(this)
@@ -61,18 +59,22 @@ export default class ProfilePage extends React.Component {
 
   renderModifyProfileForm () {
     return (
-      <form>
-        <div className='nameInput'>
+      <form className='profileForm'>
+        <div className='formDiv'>
           <label>Full name : </label>
-          <input value={this.props.currentUser.name} ref={e => { this.nameInput = e }}/>
+          <input className='input' defaultValue={this.props.currentUser.name} ref={e => { this.nameInput = e }}/>
         </div>
-        <div className='fullnameInput'>
+        <div className='formDiv'>
           <label>User name : </label>
-          <input value={this.props.currentUser.username} ref={e => { this.usernameInput = e }}/>
+          <input className='input' defaultValue={this.props.currentUser.username} ref={e => { this.usernameInput = e }}/>
         </div>
-        <div className='avatarInput'>
+        <div className='formDiv'>
           <label>Avatar URL : </label>
-          <input ref={e => { this.avatarInput = e }}/>
+          <input className='input' ref={e => { this.avatarInput = e }}/>
+        </div>
+        <div className='formDiv'>
+          <label>Biopic : </label>
+          <textarea className='textarea' ref={e => { this.avatarInput = e }} rows='5'/>
         </div>
         <div className='saveButton'>
           <Button bgColor='#28af28'
@@ -80,6 +82,7 @@ export default class ProfilePage extends React.Component {
             color='#FFF'>Save</Button>
         </div>
         <Button onClick={this.hideModifyProfileForm}>Cancel</Button>
+        <style jsx>{styles}</style>
       </form>
     )
   }
@@ -101,15 +104,7 @@ export default class ProfilePage extends React.Component {
           bgColor={user.bgColor}
           color='black'
         />
-        <style jsx>
-          {`
-          .avatar {
-            display: inline-block;
-            padding: 5px 5px;
-            cursor: pointer;            
-          }        
-        `}
-        </style>
+        <style jsx>{styles}</style>
       </div>
     )
   }
@@ -127,15 +122,19 @@ export default class ProfilePage extends React.Component {
                 width='10%'
                 alt='Avatar picture' /> */ }
               {this.renderUserAvatar(this.props.currentUser)}
-              <p>Username: {this.props.currentUser.username}</p>
-              <p>Full name: {this.props.currentUser.name}</p>
+              <div className='subpartProfile'>
+                <span className='usernameSpan'>{this.props.currentUser.username}</span>
+                <span className='nameSpan'>@{this.props.currentUser.name}</span>
+              </div>
               <Button onClick={this.displayModifyProfileForm}
                 bgColor='#999'>Modify</Button>
             </div>
             : this.renderModifyProfileForm()
           }
         </PageLayout>
-        <style jsx>{styles}</style>
+        <style jsx>
+          {styles}
+        </style>
       </div>
     )
   }
