@@ -6,6 +6,7 @@ const OAuthRefreshToken = mongoose.model('OAuthRefreshToken')
 const User = mongoose.model('User')
 const jwt = require('jsonwebtoken')
 const secretKey = require('../../config').secretKey
+const request = require('request')
 
 function getAccessToken (bearerToken) {
   return OAuthAccessToken
@@ -90,12 +91,13 @@ function revokeToken (token) {
   })
 }
 
-function generateOAuthAccessToken (client, user, scope) {
+function generateAccessToken (client, user, scope) {
   if (user._id) {
     let payload = { iss: 'Prello-OAuthServer', userId: user._id }
-    return jwt.sign(payload, secretKey, { expiresIn: '7d' })
+    let token = jwt.sign(payload, secretKey, { expiresIn: '7d' })
+    console.log(token)
+    return token
   }
-  throw new Error('No user id')
 }
 
 function saveToken (token, client, user) {
@@ -220,8 +222,34 @@ function verifyScope (token, scope) {
   return token.scope === scope
 }
 
+function validateGoogleCode (code, origin) {
+  const data = {
+    code: code,
+    client_id: '532471730394-bh1qi5q6hkh0c13quao0ptplp8sidfjb.apps.googleusercontent.com',
+    client_secret: '1YYKI6q6wMsrZNl45ALgL1w2',
+    redirect_uri: origin,
+    scope: 'email profile',
+    grant_type: 'authorization_code'
+  }
+  return new Promise((resolve, reject) => {
+    request({method: 'post', url: 'https://accounts.google.com/o/oauth2/token', form: data}, (error, response) => {
+      if (!error && response.statusCode === 200) {
+        let accessToken = JSON.parse(response.body).access_token
+        request({method: 'get', url: `https://www.googleapis.com/plus/v1/people/me?access_token=${accessToken}`}, (err, res) => {
+          if (err) { return reject(err) }
+          if (!res) { return reject(new Error('Google profile not found.')) }
+          let profile = JSON.parse(res.body)
+          return resolve({accessToken, profile})
+        })
+      } else {
+        return reject(error)
+      }
+    })
+  })
+}
+
 module.exports = {
-  generateAccessToken: generateOAuthAccessToken, //, optional - used for jwt
+  generateAccessToken: generateAccessToken, //, optional - used for jwt
   getAccessToken: getAccessToken,
   getAuthorizationCode: getAuthorizationCode, // getOAuthAuthorizationCode renamed to,
   getClient: getClient,
@@ -233,5 +261,6 @@ module.exports = {
   saveToken: saveToken, // saveOAuthAccessToken, renamed to
   saveAuthorizationCode: saveAuthorizationCode, // renamed saveOAuthAuthorizationCode,
   // validateScope: validateScope,
-  verifyScope: verifyScope
+  verifyScope: verifyScope,
+  validateGoogleCode: validateGoogleCode
 }

@@ -6,12 +6,25 @@ const OAuthClient = mongoose.model('OAuthClient')
 const OAuthAuthorizationCode = mongoose.model('OAuthAuthorizationCode')
 const crypto = require('crypto')
 const oauth = require('./index')
+const oauthModel = require('./model')
 const bodyParser = require('body-parser')
 const {requiresLogin} = require('../../config/middlewares/authorization')
+const userController = require('../../controllers/userController')
 
 module.exports = function (app) {
+  app.all('/*', (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+    res.header('Access-Control-Allow-Headers', 'Content-Type,Accept,Authorization')
+    if (req.method === 'OPTIONS') {
+      res.status(200).end()
+    } else {
+      next()
+    }
+  })
   app.use(bodyParser.urlencoded({ extended: true }))
   app.use(bodyParser.json())
+  app.set('view engine', 'ejs')
   app.all('/oauth/token', (req, res, next) => {
     var request = new Request(req)
     var response = new Response(res)
@@ -20,8 +33,34 @@ module.exports = function (app) {
       .then(token => {
         return res.json(token)
       }).catch(err => {
-        return res.status(500).json(err)
+        return res.status(err.status).json(err)
       })
+  })
+
+  app.get('/oauth/prello/login', (req, res) => {
+    return res.render('login', {
+      redirect_uri: 'zaezae',
+      email: ''
+    })
+  })
+
+  app.post('/auth/google/callback', (req, res, next) => {
+    oauthModel.validateGoogleCode(req.body.code, req.headers.origin).then(result => {
+      userController.getOrCreateGoogleUser(result.profile, result.accessToken).then(user => {
+        oauthModel.getClient(process.env.PRELLO_CLIENTID, process.env.PRELLO_SECRET).then(client => {
+          let date = new Date()
+          let token = {
+            accessToken: oauthModel.generateAccessToken(client, user, '').toString(),
+            accessTokenExpiresAt: date.setDate(date.getDate() + 7)
+          }
+          oauthModel.saveToken(token, client, user).then(result => {
+            return res.status(200).send({ token: result.accessToken })
+          })
+        })
+      })
+    }).catch(err => {
+      return res.status(400).send(err) // Change code 400
+    })
   })
 
   app.post('/authenticate', (req, res) => {

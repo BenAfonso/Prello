@@ -14,25 +14,30 @@ userController.create = (user) => {
   })
 }
 
-userController.loginGoogle = (profile, done) => {
-  User.findOne({'email': profile.emails[0].value}, '_id email provider').exec(function (err, user) {
-    if (err) return done(err)
-    if (!user) {
-      user = new User({
-        name: profile.displayName,
-        email: profile.emails[0].value,
-        username: profile.displayName.split(' ').join(''),
-        provider: 'google',
-        picture: profile.image.url,
-        google: profile._json
-      })
-      user.save(function (err) {
-        if (err) console.log(err)
-        return done(err, user)
-      })
-    } else {
-      return done(err, user)
-    }
+userController.getOrCreateGoogleUser = (profile, accessToken) => {
+  return new Promise((resolve, reject) => {
+    User.findOne({'email': profile.emails[0].value}, '_id email provider').exec((err, user) => {
+      if (err) return reject(err)
+      if (!user) {
+        user = new User({
+          name: profile.displayName,
+          email: profile.emails[0].value,
+          username: profile.displayName.split(' ').join(''),
+          provider: 'google',
+          picture: profile.image.url,
+          google: {
+            ...profile._json,
+            accessToken: accessToken
+          }
+        })
+        user.save(err => {
+          if (err) return reject(err)
+          return resolve(user)
+        })
+      } else {
+        return resolve(user)
+      }
+    })
   })
 }
 
@@ -64,10 +69,15 @@ userController.login = (userToConnect) => {
   return new Promise((resolve, reject) => {
     User.load({
       where: { email: userToConnect.email },
-      select: 'name username email passwordHash salt'
+      select: 'name username email passwordHash salt provider'
     }, (err, user) => {
-      if (err) reject(new Error('Bad request'))
+      if (err) return reject(new Error('Bad request'))
       if (user) {
+        if (user.provider === 'google') {
+          let error = new Error('Couldn\'t issue token for Google, sign in with Google')
+          error.status = 403
+          return reject(error)
+        }
         let auth = 'Basic ' + Buffer.from(`${process.env.PRELLO_CLIENTID}:${process.env.PRELLO_SECRET}`).toString('base64')
         let form = {
           grant_type: 'password',
@@ -84,21 +94,22 @@ userController.login = (userToConnect) => {
           body: formData,
           method: 'POST'
         }, function (err, res, body) {
-          if (err) { reject(err) }
-          resolve(JSON.parse(body).accessToken)
-        })
-
-        /* if (userToConnect.provider === 'google' || user.authenticate(userToConnect.password)) {
-          let payload = {
-            id: user._id
+          // TODO: refactor this
+          if (err) { return reject(err) }
+          let token = JSON.parse(body).accessToken
+          console.log(JSON.parse(body))
+          if (token) {
+            return resolve(token)
+          } else {
+            let error = new Error('Server error: Couldn\'t generate token')
+            error.status = 500
+            return reject(error)
           }
-          let token = jwt.sign(payload, secretKey, { expiresIn: '7d' })
-          resolve(token)
-        } else {
-          return reject(new Error('Wrong credentials'))
-        } */
+        })
       } else {
-        return reject(new Error('User not found'))
+        let error = new Error('Wrong credentials')
+        error.status = 403
+        return reject(error)
       }
     })
   })
