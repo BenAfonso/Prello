@@ -3,6 +3,7 @@ export default `
 .profilePage {
     width: 100%;
     height: 100%;
+    background-color: #ededed;
 }
 
 .input,
@@ -19,17 +20,26 @@ label {
     font-weight: bold;
 }
 
-.usernameSpan {
+.nameSpan {
+    display: inline-block;
+    vertical-align: middle;
     font-weight: bold;
-    font-size: 200%;
+    font-size: 150%;
     margin-right: 2%;
+}
+
+.usernameSpan {
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .avatar {
     display: inline-block;
-    vertical-align: top;
+    vertical-align: middle;
     margin-left: 3%;
     margin-top: 3%;
+    margin-bottom: 5%;
+    margin-right: 10%;
 }
 
 .subpartProfile {

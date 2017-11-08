@@ -38,10 +38,12 @@ export default class ProfilePage extends React.Component {
   }
 
   updateProfile () {
-    let name = this.nameInput.input.value
-    let username = this.usernameInput.input.value
-    let picture = this.avatarInput.input.value
+    let name = this.nameInput.value
+    let username = this.usernameInput.value
+    let picture = this.avatarInput.value
+    console.log(name, username, picture)
     if (name.length > 0 && username.length > 0 && picture.length > 0) {
+      console.log('la')
       const datas = {
         name,
         username,
@@ -70,11 +72,11 @@ export default class ProfilePage extends React.Component {
         </div>
         <div className='formDiv'>
           <label>Avatar URL : </label>
-          <input className='input' ref={e => { this.avatarInput = e }}/>
+          <input className='input' defaultValue={this.props.currentUser.picture} ref={e => { this.avatarInput = e }}/>
         </div>
         <div className='formDiv'>
           <label>Biopic : </label>
-          <textarea className='textarea' ref={e => { this.avatarInput = e }} rows='5'/>
+          <textarea className='textarea' ref={e => { this.biopicInput = e }} rows='5'/>
         </div>
         <div className='saveButton'>
           <Button bgColor='#28af28'
@@ -122,10 +124,8 @@ export default class ProfilePage extends React.Component {
                 width='10%'
                 alt='Avatar picture' /> */ }
               {this.renderUserAvatar(this.props.currentUser)}
-              <div className='subpartProfile'>
-                <span className='usernameSpan'>{this.props.currentUser.username}</span>
-                <span className='nameSpan'>@{this.props.currentUser.name}</span>
-              </div>
+              <span className='nameSpan'>{this.props.currentUser.name}</span>
+              <span className='usernameSpan'>@{this.props.currentUser.username}</span>
               <Button onClick={this.displayModifyProfileForm}
                 bgColor='#999'>Modify</Button>
             </div>
