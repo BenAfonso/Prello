@@ -6,12 +6,19 @@ export default `
     background-color: #ededed;
 }
 
+.profileForm {
+    display: inline-block;
+    vertical-align: top;
+}
+
 .input,
 .textarea {
+    margin-left: 3%;
     display: block;
     border-radius: 3px;
     border: 1px solid #bec5d1;
     padding: 4px 10px;
+    background-color: #e2e4e6;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
     font-size: 14px;
 }
@@ -36,10 +43,10 @@ label {
 .avatar {
     display: inline-block;
     vertical-align: middle;
-    margin-left: 3%;
-    margin-top: 3%;
-    margin-bottom: 5%;
-    margin-right: 10%;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 30px;
 }
 
 .subpartProfile {

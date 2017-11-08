@@ -117,19 +117,16 @@ export default class ProfilePage extends React.Component {
         <PageLayout>
           {!this.state.displayModifyProfileForm
             ? <div className='profileInfos'>
-              {/* <Image
-                rounded
-                src={this.props.currentUser.picture} // TODO : remplacer par props plus tard avec le store etc..
-                height='10%'
-                width='10%'
-                alt='Avatar picture' /> */ }
               {this.renderUserAvatar(this.props.currentUser)}
               <span className='nameSpan'>{this.props.currentUser.name}</span>
               <span className='usernameSpan'>@{this.props.currentUser.username}</span>
               <Button onClick={this.displayModifyProfileForm}
                 bgColor='#999'>Modify</Button>
             </div>
-            : this.renderModifyProfileForm()
+            : <div>
+              {this.renderUserAvatar(this.props.currentUser)}
+              {this.renderModifyProfileForm()}
+            </div>
           }
         </PageLayout>
         <style jsx>
