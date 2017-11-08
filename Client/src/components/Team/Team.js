@@ -55,7 +55,7 @@ export default class Team extends React.Component {
   render () {
     const team = this.props.team
     const currentUser = this.props.currentUser
-    console.log(currentUser)
+    console.log('team', team)
 
     return (
       <div className='host'>
@@ -119,9 +119,6 @@ export default class Team extends React.Component {
               <div className='members'>
                 <MembersTab
                   currentUserId={currentUser._id}
-                  teamId={team._id}
-                  members={team.users}
-                  admins={team.admins}
                 />
               </div>
             </TabPanel>

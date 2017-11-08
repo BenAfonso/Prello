@@ -30,7 +30,7 @@ teamController.createTeam = function (name, userId) {
  */
 teamController.addCollaboratorToTeam = function (teamId, userId) {
   return new Promise((resolve, reject) => {
-    Team.findOneAndUpdate({ '_id': teamId }, { $push: { users: userId } }, { new: true }, function (err, res) {
+    Team.findOneAndUpdate({ '_id': teamId }, { $push: { users: userId } }, { new: true }).populate('boards admins users').exec((err, res) => {
       if (err) {
         reject(err)
       } else {
@@ -66,10 +66,13 @@ teamController.addCollaboratorEmail = (teamId, email) => {
  */
 teamController.removeCollaboratorFromTeam = function (teamId, userId) {
   return new Promise((resolve, reject) => {
-    Team.findOneAndUpdate({ '_id': teamId }, { $pull: { collaborators: userId } }, { new: true }, function (err, res) {
+    console.log('teamId', teamId)
+    console.log('userId', userId)
+    Team.findOneAndUpdate({ '_id': teamId }, { $pull: { users: userId } }, { new: true }, function (err, res) {
       if (err) {
         reject(err)
       } else {
+        console.log(res)
         resolve(res)
       }
     })

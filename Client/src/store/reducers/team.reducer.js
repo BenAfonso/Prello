@@ -28,6 +28,15 @@ export default (state = defaultTeamState, action) => {
         team: action.payload
       }
     }
+    case 'REMOVE_MEMBER': {
+      return {
+        ...state,
+        team: {
+          ...state.team,
+          users: state.team.users.filter(u => u._id !== action.payload)
+        }
+      }
+    }
     case 'UPDATE_TEAM': {
       return {
         ...state,

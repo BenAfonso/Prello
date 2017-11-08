@@ -2,6 +2,7 @@ export default `
 .host {
   height: 100%;
   width: 100%;
+  overflow-y: auto;
   background: #cd5a91;
   color: white;
 }

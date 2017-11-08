@@ -37,7 +37,7 @@ module.exports = (router, controller) => {
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-    controller.removeCollaboratorFromTeam(req.params.boardId, req.params.userId).then((data) => {
+    controller.removeCollaboratorFromTeam(req.params.teamId, req.params.userId).then((data) => {
       res.status(200).json('Successfully removed')
     }).catch((err) => {
       res.status(err.status).json(err)

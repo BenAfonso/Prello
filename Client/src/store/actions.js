@@ -266,15 +266,25 @@ export function addTeamMember (teamId, email) {
 }
 
 export function removeTeamMember (teamId, userId) {
-  removeTeamMemberDistant(teamId, userId).then((team) => {
-    updateTeamLocal(team)
+  removeTeamMemberDistant(teamId, userId).then((res) => {
+    removeTeamMemberLocal(userId)
   }).catch(err => {
     return err
   })
 }
 
+export function removeTeamMemberLocal (userId) {
+  if (userId) {
+    store.dispatch({
+      type: 'REMOVE_MEMBER',
+      payload: userId
+    })
+  }
+}
+
 export function updateTeamLocal (team) {
   if (team) {
+    console.log('team', team)
     store.dispatch({
       type: 'UPDATE_TEAM',
       payload: team

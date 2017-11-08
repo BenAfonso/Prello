@@ -4,28 +4,90 @@ import Icon from '../../../UI/Icon/Icon'
 import AvatarThumbnail from '../../../UI/AvatarThumbnail/AvatarThumbnail'
 import DropDown from '../../../UI/DropDown/DropDown'
 import AddMemberMenu from './AddMemberMenu'
-
+import {connect} from 'react-redux'
 import { removeTeamMember } from '../../../../store/actions'
+import { displayNotification } from '../../../../services/Notification.service'
 
-export default class Team extends React.Component {
+@connect(store => {
+  return {
+    currentTeam: store.currentTeam,
+    team: store.currentTeam.team
+  }
+})
+
+export default class MembersTab extends React.Component {
   static propTypes = {
   }
 
   static defaultProps = {
   }
 
+  constructor (props) {
+    super(props)
+    this.state = {
+      matchingTeamMembers: this.props.team.users
+    }
+    this.onSearchChange = this.onSearchChange.bind(this)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (this.props.team !== nextProps.team) {
+      this.updateMatchingMembers(nextProps)
+    }
+  }
+
+  updateMatchingMembers (nextProps) {
+    this.setState({matchingTeamMembers: nextProps.team.users})
+  }
+
   isCurrentUserAdmin () {
-    const isAdmin = this.props.admins.filter(admin => admin._id === this.props.currentUserId)[0]
+    const isAdmin = this.props.team.admins.filter(admin => admin._id === this.props.currentUserId)[0]
     return isAdmin !== undefined
   }
 
   isMemberAdmin (member) {
-    const isAdmin = this.props.admins.filter(admin => admin._id === member._id)[0]
+    const isAdmin = this.props.team.admins.filter(admin => admin._id === member._id)[0]
     return isAdmin !== undefined
   }
 
+  isLastAdmin () {
+    const isLast = this.props.team.admins.length === 1
+    return isLast
+  }
+
   removeTeamMember (userId) {
-    removeTeamMember(this.props.teamId, userId)
+    removeTeamMember(this.props.team._id, userId)
+  }
+
+  removeTeamAdminSelf (userId) {
+    if (this.isLastAdmin()) {
+      displayNotification({type: 'error', title: 'Error', content: 'You\'re the last admin ! You can\'t just leave like that...'})
+    } else {
+      removeTeamMember(this.props.team._id, userId)
+    }
+  }
+
+  getMatchingMembers (email) {
+    const reg = new RegExp(email, 'i')
+    let matchingMembers = []
+    this.props.team.users.map(member => member.email.match(reg) ? matchingMembers.push(member) : null)
+    return matchingMembers.slice(0, 10)
+  }
+
+  onSearchChange () {
+    this.setState({
+      enableAdd: false
+    })
+    if (this.email.value !== '') {
+      const newmatchingTeamMembers = this.getMatchingMembers(this.email.value)
+      this.setState({
+        matchingTeamMembers: newmatchingTeamMembers
+      })
+    } else {
+      this.setState({
+        matchingTeamMembers: this.props.team.users
+      })
+    }
   }
 
   renderMemberAction (member) {
@@ -37,24 +99,43 @@ export default class Team extends React.Component {
         </div>
         <div className='member-button'>
           {
-            isCurrentAdmin
-              ? <Button
-                bgColor='rgba(255,255,255,0.1)'
-                hoverBgColor='rgba(255,255,255,0.3)'
-                color='#dcdcda'
-                gradient
-                onClick={() => this.removeTeamMember(member._id)}>
-                <Icon color='#dcdcda' name='remove' fontSize='20px' />&nbsp;{this.props.currentUserId === member._id ? 'Leave' : 'Remove'}
-              </Button>
-              : null
+            this.props.currentUserId === member._id
+              ? isCurrentAdmin
+                ? <Button
+                  bgColor='rgba(255,255,255,0.1)'
+                  hoverBgColor='rgba(255,255,255,0.3)'
+                  color='#dcdcda'
+                  gradient
+                  onClick={() => this.removeTeamAdminSelf(member._id)}>
+                  <Icon color='#dcdcda' name='remove' fontSize='20px' />&nbsp;Leave
+                </Button>
+                : <Button
+                  bgColor='rgba(255,255,255,0.1)'
+                  hoverBgColor='rgba(255,255,255,0.3)'
+                  color='#dcdcda'
+                  gradient
+                  onClick={() => this.removeTeamMember(member._id)}>
+                  <Icon color='#dcdcda' name='remove' fontSize='20px' />&nbsp;Leave
+                </Button>
+              : isCurrentAdmin
+                ? <Button
+                  bgColor='rgba(255,255,255,0.1)'
+                  hoverBgColor='rgba(255,255,255,0.3)'
+                  color='#dcdcda'
+                  gradient
+                  onClick={() => this.removeTeamMember(member._id)}>
+                  <Icon color='#dcdcda' name='remove' fontSize='20px' />&nbsp;Remove
+                </Button>
+                : null
           }
         </div>
         <style jsx>{`
         .member-actions {
+          display: flex;
+          align-items: center;
         }
 
         .member-button {
-          display: inline-block;
           padding-left: 10px;
         }
         `}</style>
@@ -138,8 +219,8 @@ export default class Team extends React.Component {
     return (
       <div className='avatar' onClick={this.onAvatarClick}>
         <AvatarThumbnail
-          size='30px'
-          fontSize=''
+          size='60px'
+          fontSize='30px'
           thumbnail={user.picture}
           initials={this.getInitials(user.name)}
           bgColor={user.bgColor}
@@ -159,7 +240,8 @@ export default class Team extends React.Component {
   }
 
   render () {
-    const { teamId, members } = this.props
+    const teamId = this.props.team._id
+    const members = this.props.team.users
 
     return (
       <div className='host'>
@@ -168,29 +250,34 @@ export default class Team extends React.Component {
             <li className='menuTitle'>Search Team</li>
             <li className='menuSeparator'></li>
             <li className='menuItem'>
-              <input className='menuItemInput' placeholder='Find members...' />
+              <input className='menuItemInput' placeholder='Find members...' onChange={this.onSearchChange} ref={(t) => { this.email = t }} />
             </li>
           </ul>
-          <ul className='menu'>
-            <li className='menuTitle'>Add Members</li>
-            <li className='menuSeparator'></li>
-            <li className='menuItem'>
-              <AddMemberMenu teamId={teamId} members={members} />
-            </li>
-          </ul>
+          {
+            this.isCurrentUserAdmin()
+              ? <ul className='menu'>
+                <li className='menuTitle'>Add Members</li>
+                <li className='menuSeparator'></li>
+                <li className='menuItem'>
+                  <AddMemberMenu teamId={teamId} members={members} />
+                </li>
+              </ul>
+              : null
+          }
         </div>
         <div className='main'>
           <ul className='members'>
             {
-              members.map((member, i) => (
+              this.state.matchingTeamMembers.map((member, i) => (
                 <div>
                   <li key={member._id} className='member' >
                     <div className='member-infos'>
                       <div className='member-avatar'>
-                        {/* this.renderUserAvatar(member) */}
+                        {this.renderUserAvatar(member)}
                       </div>
                       <div className='member-names'>
-                        {member.name}egrgfrerera
+                        <div className='member-name'>{member.name}</div>
+                        <div className='member-email'>{member.email}</div>
                       </div>
                     </div>
                     {this.renderMemberAction(member)}
@@ -203,13 +290,17 @@ export default class Team extends React.Component {
         </div>
         <style jsx>{`
 
+          .host {
+            color: white;
+          }
+
           .menu {
             padding-bottom: 40px;
           }
           .menuSeparator {
             display: block;            
             height: 1px;
-            border-top: 1px solid #999;
+            border-top: 1px solid white;
           }
 
           .menuTitle {
@@ -245,15 +336,29 @@ export default class Team extends React.Component {
           }
 
           .member-infos {
-
+            display: flex;
+            align-items: center;
           }
 
-          
+          .member-names {
+            display: inline-block;
+            margin-left: 10px;
+          }
+
+          .member-name {
+            font-weight: bold;
+            font-size: 20px;
+          }
+
+          .member-email {
+            color: #ddd
+            font-size: 15px;
+          }
 
           .memberSeparator {
             display: block;            
             height: 1px;
-            border-top: 1px solid #999;
+            border-top: 1px solid white;
             margin: 10px 0;
           }
         `}</style>

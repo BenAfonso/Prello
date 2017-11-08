@@ -53,6 +53,7 @@ export const defaultTeamState = {
   team: {
     _id: '',
     name: '',
+    admins: [],
     users: [],
     boards: []
   }
