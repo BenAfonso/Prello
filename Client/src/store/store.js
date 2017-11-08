@@ -20,7 +20,8 @@ export const defaultCurrentUserState = {
   id: '',
   username: '',
   name: '',
-  picture: ''
+  picture: '',
+  bio: ''
 }
 
 export const defaultNotificationsState = {

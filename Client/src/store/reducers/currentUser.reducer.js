@@ -8,7 +8,8 @@ export default (state = defaultCurrentUserState, action) => {
         id: action.payload._id,
         name: action.payload.name,
         username: action.payload.username,
-        picture: action.payload.picture
+        picture: action.payload.picture,
+        bio: action.payload.bio
       }
     }
     case 'UPDATE_USER': {
@@ -16,7 +17,8 @@ export default (state = defaultCurrentUserState, action) => {
         ...state,
         name: action.payload.name,
         username: action.payload.username,
-        picture: action.payload.picture
+        picture: action.payload.picture,
+        bio: action.payload.bio
       }
     }
     default:

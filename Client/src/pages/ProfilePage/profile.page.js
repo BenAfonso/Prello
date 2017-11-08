@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 // import Image from '../../components/UI/Image/Image'
 // import Input from '../../components/UI/Input/Input'
 import Button from '../../components/UI/Button/Button'
+import Icon from '../../components/UI/Icon/Icon'
 import styles from './profilePage.style'
 import { updateProfile } from '../../services/User.services'
 import { updateProfileAction } from '../../store/actions'
@@ -41,13 +42,13 @@ export default class ProfilePage extends React.Component {
     let name = this.nameInput.value
     let username = this.usernameInput.value
     let picture = this.avatarInput.value
-    console.log(name, username, picture)
+    let bio = this.biopicInput.value
     if (name.length > 0 && username.length > 0 && picture.length > 0) {
-      console.log('la')
       const datas = {
         name,
         username,
-        picture
+        picture,
+        bio
       }
       updateProfile(datas)
         .then(updatedUser => {
@@ -75,15 +76,31 @@ export default class ProfilePage extends React.Component {
           <input className='input' defaultValue={this.props.currentUser.picture} ref={e => { this.avatarInput = e }}/>
         </div>
         <div className='formDiv'>
-          <label>Biopic : </label>
-          <textarea className='textarea' ref={e => { this.biopicInput = e }} rows='5'/>
+          <label>Biopic : (facultative)</label>
+          <textarea className='textarea' defaultValue={this.props.currentUser.bio} ref={e => { this.biopicInput = e }} rows='5'/>
         </div>
-        <div className='saveButton'>
-          <Button bgColor='#28af28'
-            onClick={this.updateProfile}
-            color='#FFF'>Save</Button>
+        <div className='buttons'>
+          <span className='saveButton'>
+            <Button bgColor='#5AAC44'
+              onClick={this.updateProfile}
+              hoverBgColor='#07a801'
+              fontSize='12px'
+              bold
+              shadow
+              color='black'><Icon name='check' fontSize='10px' style={{marginRight: '5px'}}/>Save
+            </Button>
+          </span>
+          <span className='cancelButton'>
+            <Button onClick={this.hideModifyProfileForm}
+              bgColor='#E2E4E6'
+              hoverBgColor='#d6d6d6'
+              color='black'
+              fontSize='12px'
+              bold
+              shadow><Icon name='ban' fontSize='10px' style={{marginRight: '5px'}}/>Cancel
+            </Button>
+          </span>
         </div>
-        <Button onClick={this.hideModifyProfileForm}>Cancel</Button>
         <style jsx>{styles}</style>
       </form>
     )
@@ -120,8 +137,16 @@ export default class ProfilePage extends React.Component {
               {this.renderUserAvatar(this.props.currentUser)}
               <span className='nameSpan'>{this.props.currentUser.name}</span>
               <span className='usernameSpan'>@{this.props.currentUser.username}</span>
-              <Button onClick={this.displayModifyProfileForm}
-                bgColor='#999'>Modify</Button>
+              <div className='modifyButton'>
+                <Button onClick={this.displayModifyProfileForm}
+                  bgColor='#E2E4E6'
+                  hoverBgColor='#d6d6d6'
+                  color='black'
+                  fontSize='12px'
+                  bold
+                  shadow><Icon name='pencil' fontSize='10px' style={{marginRight: '5px'}}/>Edit
+                </Button>
+              </div>
             </div>
             : <div>
               {this.renderUserAvatar(this.props.currentUser)}

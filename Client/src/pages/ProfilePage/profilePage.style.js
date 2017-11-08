@@ -3,12 +3,30 @@ export default `
 .profilePage {
     width: 100%;
     height: 100%;
-    background-color: #ededed;
+    background-color: #EDEFF0;
 }
 
 .profileForm {
     display: inline-block;
     vertical-align: top;
+}
+
+.buttons {
+    margin-top: 2%;
+    margin-left: 3%;
+}
+
+.modifyButton {
+    margin-left: 10px;
+}
+
+.saveButton {
+    margin-right: 5px;
+}
+
+.textarea {
+    resize: none;
+    font-family: Arial;
 }
 
 .input,
@@ -21,6 +39,7 @@ export default `
     background-color: #e2e4e6;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
     font-size: 14px;
+    width: 200%;
 }
 
 label {
@@ -43,7 +62,7 @@ label {
 .avatar {
     display: inline-block;
     vertical-align: middle;
-    margin-left: 10px;
+    margin-left: 50px;
     margin-top: 10px;
     margin-bottom: 10px;
     margin-right: 30px;
