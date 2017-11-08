@@ -166,6 +166,28 @@ export default (state = defaultBoardState, action) => {
         }
       }
     }
+
+    case 'ADD_LABEL': {
+      const newLabels = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          labels: newLabels
+        }
+      }
+    }
+    case 'REMOVE_LABEL': {
+      let newLabels = state.board.labels.slice().filter(label => label['label'] !== action.payload.color)
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          labels: newLabels
+        }
+      }
+    }
+
     default:
       return {
         ...state

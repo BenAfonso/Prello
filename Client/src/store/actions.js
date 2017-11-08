@@ -318,10 +318,29 @@ export function restoreList (boardId, list) {
   })
 }
 
-export function addLabel (boardId, labelText, labelColor) {
+export function addLabel (labels) {
+  store.dispatch({
+    type: 'ADD_LABEL',
+    payload: labels
+  })
+}
+
+export function removeLabel (labelText, labelColor) {
   if (labelText.length > 0 && labelColor.length > 0) {
     store.dispatch({
-      type: 'ADD_LABEL',
+      type: 'REMOVE_LABEL',
+      payload: {
+        name: labelText,
+        color: labelColor
+      }
+    })
+  }
+}
+
+export function updateLabel (boardId, labelText, labelColor) {
+  if (labelText.length > 0 && labelColor.length > 0) {
+    store.dispatch({
+      type: 'UPDATE_LABEL',
       payload: {
         name: labelText,
         color: labelColor

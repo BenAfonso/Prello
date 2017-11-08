@@ -5,6 +5,7 @@ import styles from './Card.styles'
 import AvatarThumbnail from '../UI/AvatarThumbnail/AvatarThumbnail'
 import Button from '../UI/Button/Button'
 import Icon from '../UI/Icon/Icon'
+import Label from '../UI/Label/Label'
 
 @connect(store => {
   return {
@@ -29,7 +30,7 @@ export default class Card extends React.Component {
 
   static defaultProps = {
     bgColor: '#fff',
-    cardLabels: []
+    cardLabels: [{label: 'Blue', color: '#1c5fcc'}, {label: 'Red', color: '#cc1b53'}, {label: 'Green', color: '#1dcc1a'}]
   }
 
   getInitials (user) {
@@ -46,6 +47,7 @@ export default class Card extends React.Component {
       <div style={{...this.props.style}} ref={c => { this.card = c }} className='root'>
         <div className='editButton'><Button size='small' bgColor='rgba(0,0,0,0)' hoverBgColor='rgba(255,255,255,0.6)'><Icon name='edit' color='#444' /></Button></div>
         <div className='content'>{ this.props.content }</div>
+        {this.props.cardLabels.map(l => <li><Label labelText={l['label']} backgroundColor={l['color']} /></li>)}
         <div className='collaborators'>
           {
             this.props.collaborators.map(a => (

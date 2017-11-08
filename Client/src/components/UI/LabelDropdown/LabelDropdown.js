@@ -35,14 +35,14 @@ export default class LabelDropdown extends React.Component {
     borderRadius: '3px',
     fontSize: '12px',
     centeredText: true,
-    boardLabels: [{label: 'Blue', color: '#1c5fcc'}, {label: 'Red', color: '#cc1b53'}, {label: 'Green', color: '#1dcc1a'}]
+    boardLabels: []
   }
 
   constructor (props) {
     super(props)
     this.state = {
       displayLabelCreationForm: false,
-      boardLabels: props.boardLabels
+      boardLabels: this.props.board.labels
     }
     this.displayLabelForm = this.displayLabelForm.bind(this)
     this.addLabel = this.addLabel.bind(this)
@@ -106,7 +106,7 @@ export default class LabelDropdown extends React.Component {
       <div style={props.style}>
         <div>
           <ul>
-            {this.state.boardLabels.map(e => <LabelItem onAddCardLabel={this.props.onAddLabelCard} onDeleteLabel={this.deleteLabel} labelText={e['label']} backgroundColor={e['color']} />)}
+            {this.state.boardLabels.map(e => <LabelItem onAddCardLabel={this.props.onAddLabelCard} onDeleteLabel={this.deleteLabel} labelText={e['name']} backgroundColor={e['color']} />)}
           </ul>
         </div>
         <div>
@@ -115,7 +115,7 @@ export default class LabelDropdown extends React.Component {
             ? <div>
               <Input ref={(v) => { this.labelTitle = v } } placeholder='Label title'/>
               <Input ref={(v) => { this.labelColor = v } } placeholder='#c5c5c5'/>
-              <Button onClick={this.addLabel}>Add Label</Button>
+              <Button onClick={this.addLabelWithAxios}>Add Label</Button>
             </div> : null}
         </div>
       </div>
