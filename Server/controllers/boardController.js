@@ -188,7 +188,7 @@ boardController.refreshOneboard = function (action, boardId) {
         path: 'lists.cards'
       }, function (err, res) {
         if (err) { } else {
-          emit(boardId, action, res.lists)
+          emit(boardId, action, res)
         }
       })
     }
@@ -229,11 +229,41 @@ boardController.addCollaboratorEmail = (boardId, email, requesterId) => {
 
 boardController.removeCollaborator = (boardId, userId, requesterId) => {
   return new Promise((resolve, reject) => {
+    Board.findOne({ '_id': boardId }).populate('lists').exec((err, res) => {
+      if (err) {
+        err.status = 500
+        reject(err)
+      } else {
+        Card.populate(res, {
+          path: 'lists.cards'
+        }, function (err, res) {
+          if (err) {
+            reject(err)
+          } else {
+            let cards = []
+            res.lists.map((list) => list.cards.map((card) => {
+              card.collaborators.map((collaborator) => {
+                if (collaborator.toString() === userId.toString()) {
+                  Card.findOneAndUpdate({'_id': card._id}, {$pull: {collaborators: userId}}).exec()
+                }
+              })
+              if (card.responsible !== null && card.responsible !== undefined) {
+                if (card.responsible.toString() === userId.toString()) {
+                  Card.findOneAndUpdate({'_id': card._id}, {responsible: null}).exec()
+                }
+              }
+            }))
+            resolve(cards)
+          }
+        })
+      }
+    })
     Board.findOneAndUpdate({ '_id': boardId }, { $pull: { collaborators: userId } }, { new: true }).populate('collaborators').exec((err, res) => {
       if (err) {
         err.status = 500
         reject(err)
       } else {
+        boardController.refreshOneboard('COLLABORATOR_REMOVED', boardId)
         emit(boardId, 'UPDATE_COLLABORATORS', res.collaborators)
         resolve(res)
       }

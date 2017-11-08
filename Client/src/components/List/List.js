@@ -199,6 +199,7 @@ export default class List extends React.Component {
                   nbChecklists={card.checklists.length}
                   content={card.text}
                   collaborators={card.collaborators}
+                  responsible={card.responsible}
                   popoverManager={this.props.popoverManager} />
               </li>
             ))

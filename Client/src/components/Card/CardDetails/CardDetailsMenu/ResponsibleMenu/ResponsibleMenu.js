@@ -1,10 +1,9 @@
 import React from 'react'
-import { addMember, removeMember } from '../../../../../store/actions'
+import { updateResponsible, removeResponsible } from '../../../../../store/actions'
 import {connect} from 'react-redux'
 import Button from '../../../../UI/Button/Button'
 import DropDown from '../../../../UI/DropDown/DropDown'
 import AvatarThumbnail from '../../../../UI/AvatarThumbnail/AvatarThumbnail'
-import Icon from '../../../../UI/Icon/Icon'
 
 @connect(store => {
   return {
@@ -13,7 +12,7 @@ import Icon from '../../../../UI/Icon/Icon'
   }
 })
 
-export default class MembersMenu extends React.Component {
+export default class ResponsibleMenu extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -21,19 +20,19 @@ export default class MembersMenu extends React.Component {
       enableAdd: false,
       inputValue: ''
     }
-    this.addMember = this.addMember.bind(this)
+    this.updateResponsible = this.updateResponsible.bind(this)
     this.onChange = this.onChange.bind(this)
     this.setInputValue = this.setInputValue.bind(this)
     this.getInitials = this.getInitials.bind(this)
-    this.isCardMember = this.isCardMember.bind(this)
   }
 
-  isCardMember (collaborator) {
-    return (this.props.members.find(member => member._id === collaborator._id) !== undefined)
+  isResponsible (collaborator) {
+    if (this.props.responsible) return this.props.responsible.email === collaborator.email
+    else return false
   }
 
-  addMember () {
-    addMember(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId, this.email.value)
+  updateResponsible () {
+    updateResponsible(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId, this.email.value)
     this.setState({
       inputValue: '',
       enableAdd: false,
@@ -41,13 +40,8 @@ export default class MembersMenu extends React.Component {
     })
   }
 
-  removeMember (user) {
-    removeMember(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId, user._id)
-    this.setState({
-      inputValue: '',
-      enableAdd: false,
-      matchingBoardCollaborators: this.props.board.collaborators
-    })
+  removeResponsible () {
+    removeResponsible(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.cardId)
   }
 
   getMatchingCollaborators (email) {
@@ -103,18 +97,11 @@ export default class MembersMenu extends React.Component {
           />
         </div>
         <div className='user-infos'>
-          <div className='user-username'>
-            {user.username}
-          </div>
+          <div className='user-username'>{user.username}</div>
           <div className='user-email'>{user.email}</div>
-          {this.isCardMember(user)
-            ? <div className='remove-icon'><Icon color='#999' name='minus-circle' fontSize='30px' /></div>
-            : null
-          }
         </div>
         <style jsx>{`
           .user-infos {
-            position: relative;
             float: right;
             display: inline-block;
             padding: 0 10px;
@@ -128,28 +115,18 @@ export default class MembersMenu extends React.Component {
           }
 
           .user-username {
-            width:100%;
             font-weight: bold;
             text-align: left;
             color: #000;
-            text-overflow: ellipsis;   
           }
 
           .user-email {
-            width:100%;
             font-style: italic;
+            text-align: left;
             padding: 5px 0;
             font-size: 10px;
-            color: #999;
-            text-overflow: ellipsis;   
+            color: #999;        
           }
-
-          .remove-icon {
-            position: absolute;
-            top: 10px;
-            right: 0;
-          }
-          
         `}</style>
       </div>
     )
@@ -158,9 +135,10 @@ export default class MembersMenu extends React.Component {
   render () {
     let menuElements = this.state.matchingBoardCollaborators.map(collaborator => {
       return {
-        action: this.isCardMember(collaborator) ? this.removeMember.bind(this, collaborator) : this.setInputValue.bind(this, collaborator.email),
+        action: this.setInputValue.bind(this, collaborator.email),
         placeholder: this.renderUserinMenu(collaborator),
-        closer: !this.isCardMember(collaborator)
+        closer: true,
+        disabled: this.isResponsible(collaborator)
       }
     })
 
@@ -170,7 +148,7 @@ export default class MembersMenu extends React.Component {
           layout='custom'
           orientation={this.props.orientation}
           button={this.props.button}
-          title='Members'>
+          title='Responsible'>
           <div style={{ width: '300px' }}>
             <ul>
               <li className='element'>
@@ -188,12 +166,25 @@ export default class MembersMenu extends React.Component {
                   <Button
                     bgColor='#5AAC44'
                     block
-                    onClick={this.addMember}
+                    onClick={this.updateResponsible}
                     disabled={!this.state.enableAdd}
                   >
-                  Add
+                  Set Responsible
                   </Button>
                 </div>
+                {
+                  this.props.responsible
+                    ? <div className='element-button'>
+                      <Button
+                        bgColor='#e60000'
+                        block
+                        onClick={() => this.removeResponsible(this.props.responsible)}
+                      >
+                      Remove
+                      </Button>
+                    </div>
+                    : null
+                }
               </li>
             </ul>
           </div>

@@ -5,18 +5,28 @@ const {boardExists, isOwner} = require('../../config/middlewares/boardAuthorizat
 module.exports = (router, controller) => {
   /**
     * @swagger
-    * /boards/{boardId}/collaborators/{userId}:
+    * /boards/{boardId}/lists/{listId}/cards/{cardId}/collaborators/{userId}:
     *   delete:
     *     tags:
-    *       - Boards
-    *     description: Add a collaborator in a board
-    *     summary: Add a collaborator in a Board
+    *       - Cards
+    *     description: Remove a collaborator from a card
+    *     summary: Remove a collaborator from a card
     *     produces:
     *       - application/json
     *     parameters:
     *       - name: boardId
     *         type: string
     *         description: The board id where we want to remove the collaborator
+    *         in: path
+    *         required: true
+    *       - name: listId
+    *         type: string
+    *         description: The list id where we want to remove the collaborator
+    *         in: path
+    *         required: true
+    *       - name: cardId
+    *         type: string
+    *         description: The Card id where we want to remove the collaborator
     *         in: path
     *         required: true
     *       - name: userId
@@ -30,15 +40,15 @@ module.exports = (router, controller) => {
     *       500:
     *         description: Internal error
     */
-  router.delete('/boards/:boardId/collaborators/:userId', [requiresLogin, boardExists, isOwner], function (req, res) {
-    let requiredParameter = ['boardId', 'userId']
+  router.delete('/boards/:boardId/lists/:listId/cards/:cardId/collaborators/:userId', [requiresLogin, boardExists, isOwner], function (req, res) {
+    let requiredParameter = ['cardId', 'boardId', 'listId', 'userId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
       let stringMessage = requiredParameter.join(',')
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-    controller.removeCollaborator(req.params.boardId, req.params.userId, req.user._id).then((data) => {
+    controller.removeCollaborator(req.params.boardId, req.params.listId, req.params.cardId, req.params.userId).then((data) => {
       res.status(200).json('Successfully removed')
     }).catch((err) => {
       res.status(err.status).json(err)

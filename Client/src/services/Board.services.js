@@ -40,3 +40,13 @@ export function addCollaboratorDistant (board, email) {
     })
   })
 }
+
+export function removeCollaboratorDistant (board, userId) {
+  return new Promise((resolve, reject) => {
+    axios.delete(`${Config.API_URL}/boards/${board}/collaborators/${userId}`).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}

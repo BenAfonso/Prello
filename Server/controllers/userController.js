@@ -84,9 +84,23 @@ userController.login = (userToConnect) => {
     })
   })
 }
+
 userController.getUserTeams = function (userId) {
   return new Promise((resolve, reject) => {
     Team.find({ 'users': userId }).populate('boards').exec(function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+
+userController.updateUser = (userId, body) => {
+  return new Promise((resolve, reject) => {
+    delete body.email
+    User.findOneAndUpdate('_id', body, { new: true }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
