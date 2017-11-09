@@ -146,6 +146,7 @@ export default class ProfilePage extends React.Component {
               {this.renderUserAvatar(this.props.currentUser)}
               <span className='nameSpan'>{this.props.currentUser.name}</span>
               <span className='usernameSpan'>@{this.props.currentUser.username}</span>
+              <div className='biopicDiv'>{this.props.currentUser.bio}</div>
               <div className='modifyButton'>
                 <Button onClick={this.displayModifyProfileForm}
                   bgColor='#E2E4E6'
@@ -153,6 +154,7 @@ export default class ProfilePage extends React.Component {
                   color='black'
                   fontSize='12px'
                   bold
+                  block
                   shadow><Icon name='pencil' fontSize='10px' style={{marginRight: '5px'}}/>Edit
                 </Button>
               </div>

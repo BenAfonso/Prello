@@ -11,13 +11,17 @@ export default `
 .editProfilePart,
 .profileInfos {
     margin-left: 30%;
+    width: 40%;
+    min-width: 100px;
+}
+.biopicDiv {
+    margin-bottom: 20px;
+    width: 100%;
+    word-wrap: break-word;
 }
 .buttons {
     margin-top: 2%;
     margin-left: 3%;
-}
-.modifyButton {
-    margin-left: 50px;
 }
 .saveButton {
     margin-right: 5px;
@@ -68,7 +72,6 @@ label {
 .avatar {
     display: inline-block;
     vertical-align: middle;
-    margin-left: 50px;
     margin-top: 10px;
     margin-bottom: 10px;
     margin-right: 30px;
