@@ -30,10 +30,8 @@ export default `
     resize: none;
     font-family: Arial;
 }
-.teamLine {
-    margin-bottom: 40px;
-}
-.teamsTitle {
+.teamsTitle,
+.activityTitle {
     font-size: 120%;
     font-weight: bold;
 }
@@ -62,6 +60,7 @@ label {
 .nameSpan,
 .biopicDiv,
 .teamsTitle,
+.activityTitle,
 .teamLi,
 label {
     color: white;
@@ -110,6 +109,12 @@ label {
     background-color: rgb(174, 77, 123);
     color: white;
     width: 80%;
+}
+.titleAndContentSeparator {
+    margin-left: 2%;
+    width: 80%;
+    margin-top: 10px;
+    margin-bottom: 40px;
 }
 .teamSeparator {
     margin-left: 50px;

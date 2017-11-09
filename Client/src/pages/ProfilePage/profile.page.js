@@ -1,8 +1,6 @@
 import PageLayout from '../../layouts/page'
 import React from 'react'
 import { connect } from 'react-redux'
-// import Image from '../../components/UI/Image/Image'
-// import Input from '../../components/UI/Input/Input'
 import Button from '../../components/UI/Button/Button'
 import Icon from '../../components/UI/Icon/Icon'
 import styles from './profilePage.style'
@@ -30,6 +28,7 @@ export default class ProfilePage extends React.Component {
     this.hideModifyProfileForm = this.hideModifyProfileForm.bind(this)
     this.updateProfile = this.updateProfile.bind(this)
     this.renderUserAvatar = this.renderUserAvatar.bind(this)
+    this.renderTeamPart = this.renderTeamPart.bind(this)
   }
 
   componentDidMount () {
@@ -121,6 +120,56 @@ export default class ProfilePage extends React.Component {
     return initials
   }
 
+  renderTeamPart () {
+    return (
+      <div className='teamPart'>
+        <div className='teamLine'>
+          <Icon name='users'
+            fontSize='24px'
+            color='white'
+            style={{marginTop: '10%', marginLeft: '2%', marginRight: '20px'}}/>
+          <span className='teamsTitle'>My teams</span>
+        </div>
+        <hr className='titleAndContentSeparator'/>
+        <ul>
+          {this.props.teamslist.teams.map(team => (
+            <div>
+              <Link to={`/teams/${team._id}`}>
+                <li key={team._id} className='teamLi'>{team.name}
+                  {team.visibility === 'Private'
+                    ? <Icon name='lock' fontSize='12px' style={{marginLeft: '5px'}}/>
+                    : <Icon name='truc' fontSize='12px' style={{marginLeft: '5px'}}/>
+                  }
+                </li>
+              </Link>
+              <hr className='teamSeparator'/>
+            </div>
+          ))}
+        </ul>
+        <style jsx>
+          {styles}
+        </style>
+      </div>
+    )
+  }
+
+  // Not implemented yet
+  renderActivityPart () {
+    return (
+      <div className = 'activityDiv'>
+        <Icon name='calendar-o'
+          fontSize='24px'
+          color='white'
+          style={{marginTop: '10%', marginLeft: '2%', marginRight: '20px'}}/>
+        <span className='activityTitle'>Activity feed</span>
+        <hr className='titleAndContentSeparator'/>
+        <style jsx>
+          {styles}
+        </style>
+      </div>
+    )
+  }
+
   renderUserAvatar (user) {
     return (
       <div className='avatar' onClick={this.onAvatarClick}>
@@ -164,30 +213,8 @@ export default class ProfilePage extends React.Component {
               {this.renderModifyProfileForm()}
             </div>
           }
-          <div className='teamPart'>
-            <div className='teamLine'>
-              <Icon name='users'
-                fontSize='24px'
-                color='white'
-                style={{marginTop: '10%', marginLeft: '2%', marginRight: '20px'}}/>
-              <span className='teamsTitle'>My teams</span>
-            </div>
-            <ul>
-              {this.props.teamslist.teams.map(team => (
-                <div>
-                  <Link to={`/teams/${team._id}`}>
-                    <li key={team._id} className='teamLi'>{team.name}
-                      {team.visibility === 'Private'
-                        ? <Icon name='lock' fontSize='12px' style={{marginLeft: '5px'}}/>
-                        : <Icon name='truc' fontSize='12px' style={{marginLeft: '5px'}}/>
-                      }
-                    </li>
-                  </Link>
-                  <hr className='teamSeparator'/>
-                </div>
-              ))}
-            </ul>
-          </div>
+          {this.renderTeamPart()}
+          {this.renderActivityPart()}
         </PageLayout>
         <style jsx>
           {styles}
