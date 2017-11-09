@@ -107,7 +107,14 @@ label {
 .activityLine {
     margin-top: 30px;
 }
+.teamsList {
+    display: flex;
+    justify-content: center;
+}
 
+.teamLi {
+    display: inline-block;
+}
 .boardLi,
 .teamLi {
     margin-left: 50px;

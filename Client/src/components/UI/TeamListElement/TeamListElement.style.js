@@ -11,7 +11,7 @@ export default `
   width: 80%;
 }
 .header {
-  height: 30px;
+  height: 40px;
   padding: 5px 10px;
 }
 .header .name {
@@ -22,10 +22,11 @@ export default `
 .header .membersNumber {
   display: inline-block;
   float: right;
+  vertical-aglin: middle;
 }
 .content {
   border-radius: 5px;
-  height: 240px;
+  height: 180px;
   background-color: #FFCE75;
   overflow-y: auto;
 }

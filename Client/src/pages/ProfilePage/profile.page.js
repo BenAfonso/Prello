@@ -157,7 +157,7 @@ export default class ProfilePage extends React.Component {
             <span className='teamsTitle'>My teams</span>
           </div>
           <hr className='titleAndContentSeparator'/>
-          <ul>
+          <ul className='teamsList'>
             {this.props.teamslist.teams.map(team => (
               <li className='teamLi'><Link to={`teams/${team._id}`}><TeamListElement team={team}/></Link></li>
             ))}
