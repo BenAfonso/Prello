@@ -11,6 +11,7 @@ import AvatarThumbnail from '../../components/UI/AvatarThumbnail/AvatarThumbnail
 import { Link } from 'react-router-dom'
 import Tabs from '../../components/UI/Tabs/Tabs'
 import TabPanel from '../../components/UI/TabPanel/TabPanel'
+import TeamListElement from '../../components/UI/TeamListElement/TeamListElement'
 
 @connect(store => {
   return {
@@ -39,11 +40,11 @@ export default class ProfilePage extends React.Component {
 
   componentDidMount () {
     setBoardslist(this.props.dispatch).then(() => {
-      console.log(this.props.boardslist)
     }).catch(err => {
       console.error(err)
     })
     setTeamslist(this.props.dispatch).then(() => {
+      console.log(this.props.teamslist)
     }).catch(err => {
       console.error(err)
     })
@@ -114,7 +115,7 @@ export default class ProfilePage extends React.Component {
           </div>
         </div>
         <div className='formDiv'>
-          <label>Biopic : (facultative)</label>
+          <label>Bio : (facultative)</label>
           <textarea className='textarea' defaultValue={this.props.currentUser.bio} ref={e => { this.biopicInput = e }} rows='5'/>
         </div>
         <div className='buttons'>
@@ -158,17 +159,7 @@ export default class ProfilePage extends React.Component {
           <hr className='titleAndContentSeparator'/>
           <ul>
             {this.props.teamslist.teams.map(team => (
-              <div>
-                <Link to={`/teams/${team._id}`}>
-                  <li key={team._id} className='teamLi'>{team.name}
-                    {team.visibility === 'Private'
-                      ? <Icon name='lock' fontSize='12px' style={{marginLeft: '5px'}}/>
-                      : <Icon name='truc' fontSize='12px' style={{marginLeft: '5px'}}/>
-                    }
-                  </li>
-                </Link>
-                <hr className='teamSeparator'/>
-              </div>
+              <li className='teamLi'><Link to={`teams/${team._id}`}><TeamListElement team={team}/></Link></li>
             ))}
           </ul>
         </div>

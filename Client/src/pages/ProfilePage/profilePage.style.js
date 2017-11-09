@@ -36,13 +36,6 @@ export default `
     font-size: 120%;
     font-weight: bold;
 }
-
-.input {
-    width: 200%;
-}
-.textarea {
-    width: 250%;
-}
 .input,
 .textarea {
     margin-left: 3%;
@@ -50,9 +43,10 @@ export default `
     border-radius: 3px;
     border: 1px solid #bec5d1;
     padding: 4px 10px;
-    background-color: #e2e4e6;
+    background-color: white;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
     font-size: 14px;
+    width: 200%;
 }
 label {
     font-weight: bold;
@@ -63,7 +57,6 @@ label {
 .teamsTitle,
 .activityTitle,
 .boardsTitle,
-.teamLi,
 .boardLi,
 label {
     color: white;
@@ -115,26 +108,24 @@ label {
     margin-top: 30px;
 }
 
-.teamLi,
-.boardLi {
+.boardLi,
+.teamLi {
     margin-left: 50px;
     margin-bottom: 10px;
     margin-top: 10px;
-    width: 80%;
 }
-.teamLi:hover,
+
 .boardLi:hover {
     background-color: rgb(174, 77, 123);
     color: white;
     width: 80%;
 }
 .titleAndContentSeparator {
-    margin-left: 2%;
-    margin-right: 2%;
+    margin-left: 20%;
+    margin-right: 20%;
     margin-top: 10px;
     margin-bottom: 40px;
 }
-.teamSeparator,
 .boardSeparator {
     margin-left: 50px;
     width: 80%;
