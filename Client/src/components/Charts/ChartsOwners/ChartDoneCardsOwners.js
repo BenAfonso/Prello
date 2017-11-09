@@ -1,7 +1,14 @@
 import React from 'react'
+// import { getOwnersAnlytics } from '../../../services/Charts.services'
 import { BarChart, CartesianGrid, YAxis, XAxis, Bar, Legend, Tooltip } from 'recharts'
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
 
+@connect(store => {
+  return {
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
+  }
+})
 export default class ChartDoneCardsOwners extends React.Component {
   constructor (props) {
     super(props)
@@ -9,6 +16,7 @@ export default class ChartDoneCardsOwners extends React.Component {
   }
   getDoneCardsOwners () {
     // make axios call with boardId to get analytics data
+    // const data = getOwnersAnlytics(this.props.board._id)
     const data = [{owner: 'Ana', doneCards: 11, pastDueCards: 10}, {owner: 'Jack', doneCards: 3, pastDueCards: 20}]
     return data
   }
