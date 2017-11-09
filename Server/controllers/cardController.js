@@ -176,7 +176,13 @@ cardController.getOneCard = (cardId) => {
           if (err) {
             reject(err)
           } else {
-            resolve(res)
+            modificationController.findCardHistory(cardId).then((item) => {
+              res.modifications = item
+              resolve(res)
+            }).catch((err) => {
+              err.status = 500
+              reject(err)
+            })
           }
         })
       }

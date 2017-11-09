@@ -185,5 +185,15 @@ modificationController.findBoardHistory = (boardId) => {
     })
   })
 }
+modificationController.findCardHistory = (cardId) => {
+  return new Promise((resolve, reject) => {
+    Modification.find({'card': cardId}).populate('user fromList toList targetUser comment list', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).sort({timestamp: 'desc'}).exec((err, items) => {
+      if (err) {
+        reject(err)
+      }
+      resolve(items)
+    })
+  })
+}
 
 module.exports = modificationController
