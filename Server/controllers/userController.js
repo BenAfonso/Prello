@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
+const Team = mongoose.model('Team')
+
 const userController = {}
 const secretKey = require('../config').secretKey
 const jwt = require('jsonwebtoken')
@@ -82,6 +84,19 @@ userController.login = (userToConnect) => {
     })
   })
 }
+
+userController.getUserTeams = function (userId) {
+  return new Promise((resolve, reject) => {
+    Team.find({ 'users': userId }).populate('boards users admins', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+
 userController.updateUser = (userId, body) => {
   return new Promise((resolve, reject) => {
     delete body.email
@@ -94,4 +109,5 @@ userController.updateUser = (userId, body) => {
     })
   })
 }
+
 module.exports = userController
