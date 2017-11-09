@@ -7,13 +7,15 @@ import Button from '../../components/UI/Button/Button'
 import Icon from '../../components/UI/Icon/Icon'
 import styles from './profilePage.style'
 import { updateProfile } from '../../services/User.services'
-import { updateProfileAction } from '../../store/actions'
+import { updateProfileAction, setTeamslist } from '../../store/actions'
 import { updateProfileLocalStorage } from '../../services/Authentication.services'
 import AvatarThumbnail from '../../components/UI/AvatarThumbnail/AvatarThumbnail'
+import { Link } from 'react-router-dom'
 
 @connect(store => {
   return {
-    currentUser: store.currentUser
+    currentUser: store.currentUser,
+    teamslist: store.teamslist
   }
 })
 export default class ProfilePage extends React.Component {
@@ -28,6 +30,14 @@ export default class ProfilePage extends React.Component {
     this.hideModifyProfileForm = this.hideModifyProfileForm.bind(this)
     this.updateProfile = this.updateProfile.bind(this)
     this.renderUserAvatar = this.renderUserAvatar.bind(this)
+  }
+
+  componentDidMount () {
+    setTeamslist(this.props.dispatch).then(() => {
+      console.log(this.props.teamslist.teams)
+    }).catch(err => {
+      console.error(err)
+    })
   }
 
   displayModifyProfileForm () {
@@ -152,6 +162,30 @@ export default class ProfilePage extends React.Component {
               {this.renderModifyProfileForm()}
             </div>
           }
+          <div className='teamPart'>
+            <div className='teamLine'>
+              <Icon name='users'
+                fontSize='24px'
+                color='grey'
+                style={{marginTop: '10%', marginLeft: '2%', marginRight: '20px'}}/>
+              <span className='teamsTitle'>My teams</span>
+            </div>
+            <ul>
+              {this.props.teamslist.teams.map(team => (
+                <div>
+                  <Link to={`/teams/${team._id}`}>
+                    <li key={team._id} className='teamLi'>{team.name}
+                      {team.visibility === 'Private'
+                        ? <Icon name='lock' fontSize='12px' style={{marginLeft: '5px'}}/>
+                        : <Icon name='truc' fontSize='12px' style={{marginLeft: '5px'}}/>
+                      }
+                    </li>
+                  </Link>
+                  <hr className='teamSeparator'/>
+                </div>
+              ))}
+            </ul>
+          </div>
         </PageLayout>
         <style jsx>
           {styles}
