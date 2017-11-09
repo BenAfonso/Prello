@@ -63,7 +63,6 @@ module.exports = (router, userController) => {
               }
             })
           } else {
-            console.log(error)
             return res.status(400).send(error)
           }
         })
@@ -164,5 +163,16 @@ module.exports = (router, userController) => {
     }).catch(err => {
       return res.status(400).send(err)
     })
+  })
+  router.put('/users/:userId', requiresLogin, function (req, res) {
+    if (req.params.userId === req.user._id) {
+      userController.updateUser(req.params.userId, req.body).then(user => {
+        return res.status(200).send(user)
+      }).catch(err => {
+        return res.status(400).send(err)
+      })
+    } else {
+      return res.status(403).send('Wrong user')
+    }
   })
 }

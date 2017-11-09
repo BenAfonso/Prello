@@ -12,7 +12,6 @@ export default class LoginPage extends React.Component {
   }
 
   loginWithGoogle (googleResponse) {
-    console.log(googleResponse)
     loginGoogle(googleResponse.code).then((response) => {
       storeToken(response.token)
       this.setState({ redirectToReferrer: true })

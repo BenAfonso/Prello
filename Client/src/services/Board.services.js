@@ -3,7 +3,6 @@ import axios from 'axios'
 
 export function addBoardDistant (payload) {
   return new Promise((resolve, reject) => {
-    console.log(payload.color)
     axios.post(`${Config.API_URL}/boards`, {
       title: payload.title,
       background: payload.color
@@ -35,6 +34,16 @@ export function addCollaboratorDistant (board, email) {
     axios.post(`${Config.API_URL}/boards/${board}/collaborators`, {
       email: email
     }).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function removeCollaboratorDistant (board, userId) {
+  return new Promise((resolve, reject) => {
+    axios.delete(`${Config.API_URL}/boards/${board}/collaborators/${userId}`).then(res => {
       resolve(res.data)
     }).catch(err => {
       reject(err)

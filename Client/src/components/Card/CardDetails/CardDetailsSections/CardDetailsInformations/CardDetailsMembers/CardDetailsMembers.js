@@ -6,7 +6,8 @@ import MembersMenu from '../../../CardDetailsMenu/MembersMenu/MembersMenu'
 
 @connect(store => {
   return {
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 
@@ -39,7 +40,7 @@ export default class CardDetailsInformations extends React.Component {
           {`
             .avatar {
               display: inline-block
-              padding: 5px 5px
+              padding: 0px 5px 5px 0px
               cursor: pointer;            
             }        
           `}
@@ -63,6 +64,7 @@ export default class CardDetailsInformations extends React.Component {
         </div>
         <div className='buttonSection'>
           <MembersMenu
+            title='Members'
             members={members}
             cardId={cardId}
             listIndex={this.props.listIndex}
@@ -82,9 +84,6 @@ export default class CardDetailsInformations extends React.Component {
               overflow-y: auto;
             }
 
-            .buttonSection {
-              padding: 5px 0;
-            }
 
             .addButton {
               height: 30px;

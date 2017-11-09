@@ -78,7 +78,8 @@ const listTarget = {
 
 @connect(store => {
   return {
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 // List can be hovered by another dragged list
@@ -189,11 +190,16 @@ export default class List extends React.Component {
                 <Card
                   index={card.index}
                   id={card._id}
+                  checklists={card.checklists}
+                  bgColor={this.props.primaryColor}
                   listId={this.props.id}
                   shadowColor={this.props.shadowColor}
                   listIndex={this.props.index}
+                  nbComments={card.comments.length}
+                  nbChecklists={card.checklists.length}
                   content={card.text}
                   collaborators={card.collaborators}
+                  responsible={card.responsible}
                   popoverManager={this.props.popoverManager} />
               </li>
             ))

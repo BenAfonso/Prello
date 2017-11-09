@@ -63,7 +63,8 @@ const cardTarget = {
 
 @connect(store => {
   return {
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 @DropTarget(ItemTypes.CARD, cardTarget, connect => ({
@@ -79,13 +80,29 @@ export default class CardComponent extends React.Component {
     id: PropTypes.any,
     listId: PropTypes.any,
     connectCardDragSource: PropTypes.func.isRequired,
+    checklists: PropTypes.arrayOf(PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      index: PropTypes.number,
+      items: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.any,
+        index: PropTypes.number,
+        text: PropTypes.string.isRequired,
+        isChecked: PropTypes.boolean,
+        doneDate: PropTypes.instanceOf(Date)
+      }))
+    })),
     content: PropTypes.string.isRequired,
     shadowColor: PropTypes.any,
     isDragging: PropTypes.bool.isRequired,
     index: PropTypes.number.isRequired,
     collaborators: PropTypes.arrayOf(PropTypes.any),
+    responsible: PropTypes.any,
     bgColor: PropTypes.any,
     listIndex: PropTypes.number
+  }
+
+  static defaultProps = {
+    checklists: []
   }
 
   componentDidMount () {
@@ -102,8 +119,21 @@ export default class CardComponent extends React.Component {
   }
 
   render () {
-    const { id, index, bgColor, shadowColor, listIndex, isDragging, content, connectCardDropTarget, connectCardDragSource, collaborators } = this.props
-
+    const {
+      id,
+      checklists,
+      index,
+      nbChecklists,
+      nbComments,
+      bgColor,
+      shadowColor,
+      listIndex,
+      isDragging,
+      content,
+      connectCardDropTarget,
+      connectCardDragSource,
+      collaborators,
+      responsible } = this.props
     return connectCardDropTarget(connectCardDragSource(
       <div className='host' style={{position: 'relative'}} onClick={this.displayCardDetails.bind(this)}>
         <div className='overlay' style={{
@@ -118,10 +148,20 @@ export default class CardComponent extends React.Component {
           index={index}
           listIndex={listIndex}
           content={content}
+          nbComments={nbComments}
+          nbChecklists={nbChecklists}
+          checklists={checklists}
           collaborators={
             collaborators.map(c => c._id
               ? c
               : this.props.board.collaborators.filter(c2 => c === c2._id)[0])
+          }
+          responsible={
+            responsible
+              ? responsible._id
+                ? responsible
+                : this.props.board.collaborators.filter(c => c._id === responsible)[0]
+              : undefined
           } />
         <style jsx>{`
           .overlay {

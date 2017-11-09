@@ -2,6 +2,9 @@ import React from 'react'
 import CardDetailsSection from '../../CardDetailsSection/CardDetailsSection'
 import CardDetailsMembers from './CardDetailsMembers/CardDetailsMembers'
 import CardDetailsLabels from './CardDetailsLabels/CardDetailsLabels'
+import CardDetailsResponsible from './CardDetailsResponsible/CardDetailsResponsible'
+import CardDetailsDueDate from './CardDetailsDueDate/CardDetailsDueDate'
+
 import {connect} from 'react-redux'
 import Button from '../../../../UI/Button/Button'
 import {updateCardDescription} from '../../../../../services/Card.services'
@@ -9,7 +12,8 @@ import Markdown from 'react-markdown'
 
 @connect(store => {
   return {
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 export default class CardDetailsInformations extends React.Component {
@@ -71,6 +75,22 @@ export default class CardDetailsInformations extends React.Component {
               </div>
               <CardDetailsLabels />
             </div>
+            <div className='responsible'>
+              <div className='subsectionTitle'>
+                Responsible
+              </div>
+              <CardDetailsResponsible listIndex={this.props.listIndex} id={fullCard._id} />
+            </div>
+            {
+              fullCard.dueDate !== undefined
+                ? <div className='dueDate'>
+                  <div className='subsectionTitle'>
+                      Due Date
+                  </div>
+                  <CardDetailsDueDate listIndex={this.props.listIndex} id={fullCard._id}/>
+                </div>
+                : null
+            }
           </div>
           {
             this.state.editDescriptionFormDisplayed
@@ -108,9 +128,18 @@ export default class CardDetailsInformations extends React.Component {
       margin-top: 20px;
       margin-bottom: 20px;
       display: flex;
+      flex-wrap: wrap;
     }
     
     .members {
+      margin-right: 20px;
+    }
+
+    .labels {
+      margin-right: 20px;
+    }
+
+    .responsible {
       margin-right: 20px;
     }
     

@@ -60,7 +60,6 @@ userController.getUser = (id) => {
 }
 
 userController.login = (userToConnect) => {
-  console.log(userToConnect)
   return new Promise((resolve, reject) => {
     User.load({
       where: { email: userToConnect.email },
@@ -79,6 +78,18 @@ userController.login = (userToConnect) => {
         }
       } else {
         return reject(new Error('User not found'))
+      }
+    })
+  })
+}
+userController.updateUser = (userId, body) => {
+  return new Promise((resolve, reject) => {
+    delete body.email
+    User.findOneAndUpdate('_id', body, { new: true }).exec(function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
       }
     })
   })

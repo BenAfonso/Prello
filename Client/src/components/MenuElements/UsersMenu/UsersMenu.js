@@ -3,10 +3,13 @@ import {connect} from 'react-redux'
 import Icon from '../../UI/Icon/Icon'
 import AvatarThumbnail from '../../UI/AvatarThumbnail/AvatarThumbnail'
 import AddCollaboratorMenu from './AddCollaboratorMenu/AddCollaboratorMenu'
+import DropDown from '../../UI/DropDown/DropDown'
+import { removeCollaborator } from '../../../store/actions'
 
 @connect(store => {
   return {
-    board: store.board
+    currentboard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 
@@ -15,7 +18,7 @@ export default class UsersMenu extends React.Component {
     super(props)
     this.getInitials = this.getInitials.bind(this)
     this.renderUserAvatar = this.renderUserAvatar.bind(this)
-    this.onAvatarClick = this.onAvatarClick.bind(this)
+    this.removeCollaborator = this.removeCollaborator.bind(this)
   }
 
   getInitials (name) {
@@ -24,13 +27,13 @@ export default class UsersMenu extends React.Component {
     return initials
   }
 
-  onAvatarClick () {
-    // Not Implemented Yet
+  removeCollaborator (userId) {
+    removeCollaborator(this.props.board._id, userId)
   }
 
   renderUserAvatar (user) {
     return (
-      <div className='avatar' onClick={this.onAvatarClick}>
+      <div className='avatar'>
         <AvatarThumbnail
           size='30px'
           fontSize=''
@@ -70,7 +73,29 @@ export default class UsersMenu extends React.Component {
                     {
                       user._id === owner._id ? <div className='ownerIcon'><Icon color='#ffff00' name='star' fontSize='20px' /></div> : null
                     }
-                    {this.renderUserAvatar(user)}
+                    <div className='collaborator-menu'>
+                      <DropDown
+                        orientation='right'
+                        menuElements={[
+                          {
+                            action: null,
+                            placeholder: <div className='collaborator-menu-element-title'>Modify permissions...<div className='collaborator-menu-element-infos'>(Permission lvl)</div></div>
+                          },
+                          {
+                            action: null,
+                            placeholder: <div className='collaborator-menu-element-title'>Show activity feed</div>,
+                            closer: true
+                          },
+                          {
+                            action: () => this.removeCollaborator(user._id),
+                            placeholder: <div className='collaborator-menu-element-title'>Remove from board</div>,
+                            closer: true,
+                            disabled: user._id === this.props.board.owner._id
+                          }
+                        ]}
+                        input={this.renderUserAvatar(user)}
+                      />
+                    </div>
                   </div>))
               }
             </li>
@@ -105,10 +130,20 @@ export default class UsersMenu extends React.Component {
             height: auto;            
           }
 
+          .collaborator-menu {
+            z-index: 1000;
+          }
+
+          .collaborator-menu-element-infos {
+            font-size: 12px;
+            color: #999;
+          }
+
           .ownerIcon {
             position: absolute;
             right: 0px;
             top: -5px;
+            z-index: 500;
           }
 
           

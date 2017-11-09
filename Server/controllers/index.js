@@ -4,6 +4,7 @@ const cardController = require('./cardController')
 const userController = require('./userController')
 const commentController = require('./commentController')
 const attachmentController = require('./attachmentController')
+const checklistController = require('./checklistController')
 
 module.exports = {
   boardController: boardController,
@@ -11,5 +12,6 @@ module.exports = {
   cardController: cardController,
   userController: userController,
   commentController: commentController,
-  attachmentController: attachmentController
+  attachmentController: attachmentController,
+  checklistController: checklistController
 }

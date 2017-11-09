@@ -13,7 +13,8 @@ import MultiBackend from 'react-dnd-multi-backend'
 
 @connect(store => {
   return {
-    board: store.board
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
 @DragDropContext(MultiBackend(HTML5toTouch))
@@ -136,7 +137,7 @@ export default class Board extends React.Component {
 
     return <div className='host' style={boardStyle} >
 
-      <h1 className='boardTitle'>{this.props.board.title}</h1>
+      <h1 className='boardTitle'>{this.props.currentBoard.title}</h1>
       <CustomDragLayer snapToGrid={false} />
       <ul>
         {

@@ -1,6 +1,6 @@
-import { fetchBoards, addBoardDistant, addCollaboratorDistant } from '../services/Board.services'
+import { fetchBoards, addBoardDistant, addCollaboratorDistant, removeCollaboratorDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
-import { moveCard, addMemberDistant, updateCard } from '../services/Card.services'
+import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
 
 import store from '../store/store'
@@ -19,6 +19,26 @@ export function addListLocal (list) {
       payload: list
     })
   }
+}
+
+export function addNotification (notification) {
+  store.dispatch({
+    type: 'ADD_NOTIFICATION',
+    payload: { ...notification, id: Math.floor(Math.random() * 1000000) }
+  })
+}
+
+export function removeNotification (index) {
+  store.dispatch({
+    type: 'REMOVE_NOTIFICATION',
+    payload: index
+  })
+}
+
+export function removeLastNotification () {
+  store.dispatch({
+    type: 'REMOVE_NOTIFICATION'
+  })
 }
 
 export function updateCardAction (listId, card) {
@@ -184,11 +204,55 @@ export function addCollaborator (dispatch, boardId, email) {
   })
 }
 
+export function removeCollaborator (boardId, userId) {
+  removeCollaboratorDistant(boardId, userId).then((board) => {
+  }).catch(err => {
+    return err
+  })
+}
+
 export function replaceCollaboratorsLocal (users) {
   if (users) {
     store.dispatch({
       type: 'UPDATE_COLLABORATORS',
       payload: users
+    })
+  }
+}
+
+export function addChecklistAction (cardId, title) {
+  if (cardId && title.length > 0) {
+    store.dispatch({
+      type: 'ADD_CHECKLIST',
+      payload: {
+        cardId: cardId,
+        title: title
+      }
+    })
+  }
+}
+
+export function removeChecklist (cardId, checklistIndex) {
+  if (cardId && checklistIndex > -1) {
+    store.dispatch({
+      type: 'DELETE_CHECKLIST',
+      payload: {
+        cardId: cardId,
+        checklistIndex: checklistIndex
+      }
+    })
+  }
+}
+
+export function addChecklistItem (cardId, checklistIndex, content) {
+  if (cardId && checklistIndex > -1 && content.length > 0) {
+    store.dispatch({
+      type: 'ADD_CHECKLIST_ITEM',
+      payload: {
+        cardId: cardId,
+        checklistIndex: checklistIndex,
+        content: content
+      }
     })
   }
 }
@@ -203,8 +267,64 @@ export function fetchMatchingUsers (email) {
   })
 }
 
-export function addMember (dispatch, boardId, listId, cardId, email) {
+export function updateChecklistItem (cardId, checklistIndex, itemIndex, content, doneDate = null) {
+  if (cardId && checklistIndex > -1 && content.length > 0) {
+    store.dispatch({
+      type: 'UPDATE_CHECKLIST_ITEM',
+      payload: {
+        cardId: cardId,
+        checklistIndex: checklistIndex,
+        itemIndex: itemIndex,
+        content: content,
+        doneDate: doneDate
+      }
+    })
+  }
+}
+
+export function deleteChecklistItem (cardId, checklistIndex, itemIndex) {
+  if (cardId && checklistIndex > -1 && itemIndex > -1) {
+    store.dispatch({
+      type: 'DELETE_CHECKLIST_ITEM',
+      payload: {
+        cardId: cardId,
+        checklistIndex: checklistIndex,
+        itemIndex: itemIndex
+      }
+    })
+  }
+}
+
+export function addMember (boardId, listId, cardId, email) {
   addMemberDistant(boardId, listId, cardId, email)
+}
+
+export function removeMember (boardId, listId, cardId, userId) {
+  removeMemberDistant(boardId, listId, cardId, userId)
+}
+
+export function updateResponsible (boardId, listId, cardId, email) {
+  updateResponsibleDistant(boardId, listId, cardId, email)
+}
+
+export function removeResponsible (boardId, listId, cardId, email) {
+  removeResponsibleDistant(boardId, listId, cardId)
+}
+
+export function updateCardDueDate (boardId, listId, card, dueDate) {
+  let newCard = { ...card, dueDate: dueDate }
+  updateCard(boardId, listId, card._id, newCard)
+}
+
+export function removeCardDueDate (boardId, listId, card) {
+  let newCard = { ...card, dueDate: null, validated: false }
+  console.log(newCard)
+  updateCard(boardId, listId, card._id, newCard)
+}
+
+export function updateCardValidated (boardId, listId, card, validated) {
+  let newCard = { ...card, validated: validated }
+  updateCard(boardId, listId, card._id, newCard)
 }
 
 export function archiveCard (boardId, listId, card) {
