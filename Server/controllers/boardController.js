@@ -192,7 +192,7 @@ boardController.moveList = function (req) {
 }
 
 boardController.refreshOneboard = function (action, boardId) {
-  Board.findOne({ '_id': boardId }).populate('owner lists collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+  Board.findOne({ '_id': boardId }).populate('owner lists collaborators attachments', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
     if (err) { } else {
       Card.populate(res, {
         path: 'lists.cards'
