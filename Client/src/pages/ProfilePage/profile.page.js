@@ -168,7 +168,7 @@ export default class ProfilePage extends React.Component {
             <div className='teamLine'>
               <Icon name='users'
                 fontSize='24px'
-                color='grey'
+                color='white'
                 style={{marginTop: '10%', marginLeft: '2%', marginRight: '20px'}}/>
               <span className='teamsTitle'>My teams</span>
             </div>

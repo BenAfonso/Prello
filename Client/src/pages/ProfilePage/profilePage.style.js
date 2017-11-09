@@ -2,7 +2,7 @@ export default `
 .profilePage {
     width: 100%;
     height: 100%;
-    background-color: #EDEFF0;
+    background-color: #cd5a91;
 }
 .profileForm {
     display: inline-block;
@@ -58,6 +58,14 @@ export default `
 label {
     font-weight: bold;
 }
+.usernameSpan,
+.nameSpan,
+.biopicDiv,
+.teamsTitle,
+.teamLi,
+label {
+    color: white;
+}
 .nameSpan {
     display: inline-block;
     vertical-align: middle;
@@ -99,7 +107,7 @@ label {
     width: 80%;
 }
 .teamLi:hover {
-    background-color: #3e7fe8;
+    background-color: rgb(174, 77, 123);
     color: white;
     width: 80%;
 }
