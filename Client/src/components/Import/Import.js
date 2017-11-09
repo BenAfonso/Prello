@@ -16,19 +16,19 @@ export default class Import extends React.Component {
       .catch((error) => {
         console.log(error)
       })
+      .then((json) => {
+        this.sendBoardToServer(json)
+      })
   }
 
   importTrelloBoard (files) {
     const trelloBoard = files[0]
     const blobURL = trelloBoard.preview
-    const jsonContent = this.fetchBoardJSON(blobURL)
-    console.log(jsonContent)
-    console.log('Board imported!')
-    console.log(trelloBoard)
+    this.fetchBoardJSON(blobURL)
   }
 
   sendBoardToServer (board) {
-    console.log('Sending board to server...')
+    console.log(board)
   }
 
   render () {
