@@ -109,6 +109,8 @@ label {
 }
 .teamsList {
     display: flex;
+    flex-wrap: wrap; 
+    word-break: break-all;
     justify-content: center;
 }
 

@@ -11,13 +11,14 @@ export default `
   width: 80%;
 }
 .header {
-  height: 40px;
+  height: 50px;
   padding: 5px 10px;
 }
 .header .name {
   display: inline-block;
   float: left;
   font-weight: bold;
+  font-size: 150%;
 }
 .header .membersNumber {
   display: inline-block;
@@ -26,9 +27,10 @@ export default `
 }
 .content {
   border-radius: 5px;
-  height: 180px;
   background-color: #FFCE75;
   overflow-y: auto;
+  min-height: 180px;
+  max-height: 300px;
 }
 .descriptionTeam {
   overflow-wrap: break-word;
