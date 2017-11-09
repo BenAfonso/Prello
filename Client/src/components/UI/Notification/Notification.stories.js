@@ -17,7 +17,7 @@ storiesOf('Notification', module)
         right: '10px'
       }}>
         <Notification
-          title={text('title','Information')}
+          title={text('title', 'Information')}
           content={text('content', 'A new user just connected')}
           type={select('type', ['info', 'success', 'warning', 'error'], 'info')}
         />
