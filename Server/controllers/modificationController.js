@@ -1,105 +1,188 @@
-// const mongoose = require('mongoose')
-// const Modification = mongoose.model('Modification')
+const mongoose = require('mongoose')
+const Modification = mongoose.model('Modification')
 
 const modificationController = {}
 
-modificationController.MOVED_CARD = (boardId, user, fromList, toList) => {
+modificationController.MOVED_CARD = (boardId, userId, fromListId, toListId) => {
   return new Promise((resolve, reject) => {
-    if (fromList._id === toList._id) {
-      return reject(new Error('Same lists'))
+    if (fromListId !== toListId) {
+      let modificationToAdd = Modification({type: 'MOVED_CARD', board: boardId, user: userId, fromList: fromListId, toList: toListId})
+      modificationToAdd.save((err, result) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(result)
+        }
+      })
     }
-    resolve(true)
+    reject(new Error('Same list'))
   })
 }
 
-modificationController.ADDED_COLLABORATOR_BOARD = (boardId, user, targetUser) => {
+modificationController.ADDED_COLLABORATOR_BOARD = (boardId, userId, targetUserID) => {
   return new Promise((resolve, reject) => {
-    resolve(true)
+    let modificationToAdd = Modification({type: 'ADDED_COLLABORATOR_BOARD', board: boardId, user: userId, targetUser: targetUserID})
+    modificationToAdd.save((err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
   })
 }
 
-modificationController.REMOVED_COLLABORATOR_BOARD = (boardId, user, targetUser) => {
+modificationController.REMOVED_COLLABORATOR_BOARD = (boardId, userId, targetUserID) => {
   return new Promise((resolve, reject) => {
-    resolve(true)
+    let modificationToAdd = Modification({type: 'REMOVED_COLLABORATOR_BOARD', board: boardId, user: userId, targetUser: targetUserID})
+    modificationToAdd.save((err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
   })
 }
 
-modificationController.SET_RESPONSABLE = (boardId, user, card, responsable) => {
+modificationController.SET_RESPONSABLE = (boardId, userId, cardId, responsableId) => {
   return new Promise((resolve, reject) => {
-    resolve(true)
+    let modificationToAdd = Modification({type: 'SET_RESPONSABLE', board: boardId, user: userId, card: cardId, responsable: responsableId})
+    modificationToAdd.save((err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
   })
 }
 
-modificationController.JOINED_RESPONSABLE = (boardId, user, card) => {
+modificationController.ADDED_USER_CARD = (boardId, userId, cardId, targetUserID) => {
   return new Promise((resolve, reject) => {
-    resolve(true)
+    let modificationToAdd = Modification({type: 'ADDED_USER_CARD', board: boardId, user: userId, card: cardId, targetUser: targetUserID})
+    modificationToAdd.save((err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
   })
 }
 
-modificationController.ADDED_USER_CARD = (boardId, user, card, targetUser) => {
+modificationController.REMOVED_USER_CARD = (boardId, userId, cardId, targetUserID) => {
   return new Promise((resolve, reject) => {
-    resolve(true)
+    let modificationToAdd = Modification({type: 'REMOVED_USER_CARD', board: boardId, user: userId, card: cardId, targetUser: targetUserID})
+    modificationToAdd.save((err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
   })
 }
 
-modificationController.REMOVED_USER_CARD = (boardId, user, card, targetUser) => {
+modificationController.ADDED_COMMENT = (boardId, userId, cardId, commentId) => {
   return new Promise((resolve, reject) => {
-    resolve(true)
+    let modificationToAdd = Modification({type: 'ADDED_COMMENT', board: boardId, user: userId, card: cardId, comment: commentId})
+    modificationToAdd.save((err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
   })
 }
 
-modificationController.JOINED_CARD = (boardId, user, card) => {
+modificationController.ADDED_ATTACHMENT = (boardId, userId, cardId, attachmentId) => {
   return new Promise((resolve, reject) => {
-    resolve(true)
+    let modificationToAdd = Modification({type: 'ADDED_ATTACHMENT', board: boardId, user: userId, card: cardId, attachment: attachmentId})
+    modificationToAdd.save((err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
   })
 }
 
-modificationController.LEFT_CARD = (boardId, user, card) => {
+modificationController.ARCHIVED_LIST = (boardId, userId, listId) => {
   return new Promise((resolve, reject) => {
-    resolve(true)
+    let modificationToAdd = Modification({type: 'ARCHIVED_LIST', board: boardId, user: userId, list: listId})
+    modificationToAdd.save((err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
   })
 }
 
-modificationController.ADDED_COMMENT = (boardId, user, card, comment) => {
+modificationController.ARCHIVED_CARD = (boardId, userId, cardId) => {
   return new Promise((resolve, reject) => {
-    console.log(`USER ${user} COMMENTED ${comment} ON CARD ${card}.`)
-    resolve(true)
+    let modificationToAdd = Modification({type: 'ARCHIVED_CARD', board: boardId, user: userId, card: cardId})
+    modificationToAdd.save((err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
   })
 }
 
-modificationController.ADDED_ATTACHMENT = (boardId, user, card, attachment) => {
+modificationController.ADDED_DUE_DATE = (boardId, userId, cardId, dueDate) => {
   return new Promise((resolve, reject) => {
-    resolve(true)
+    let modificationToAdd = Modification({type: 'ADDED_DUE_DATE', board: boardId, user: userId, dueDate: dueDate})
+    modificationToAdd.save((err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
   })
 }
 
-modificationController.ARCHIVED_LIST = (boardId, user, list) => {
+modificationController.MARKED_DUE_DATE_COMPLETE = (boardId, userId, cardId) => {
   return new Promise((resolve, reject) => {
-    resolve(true)
+    let modificationToAdd = Modification({type: 'MARKED_DUE_DATE_COMPLETE', board: boardId, user: userId})
+    modificationToAdd.save((err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
   })
 }
 
-modificationController.ARCHIVED_CARD = (boardId, user, card) => {
+modificationController.MARKED_DUE_DATE_INCOMPLETE = (boardId, userId, cardId) => {
   return new Promise((resolve, reject) => {
-    resolve(true)
+    let modificationToAdd = Modification({type: 'MARKED_DUE_DATE_INCOMPLETE', board: boardId, user: userId})
+    modificationToAdd.save((err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
   })
 }
 
-modificationController.ADDED_DUE_DATE = (boardId, user, card, dueDate) => {
+modificationController.findBoardHistory = (boardId) => {
   return new Promise((resolve, reject) => {
-    resolve(true)
-  })
-}
-
-modificationController.MARKED_DUE_DATE_COMPLETE = (boardId, user, card) => {
-  return new Promise((resolve, reject) => {
-    resolve(true)
-  })
-}
-
-modificationController.MARKED_DUE_DATE_INCOMPLETE = (boardId, user, card) => {
-  return new Promise((resolve, reject) => {
-    resolve(true)
+    Modification.find({'board': boardId}).populate('user fromList toList targetUser card comment list', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).sort({timestamp: 'desc'}).exec((err, items) => {
+      if (err) {
+        reject(err)
+      }
+      resolve(items)
+    })
   })
 }
 

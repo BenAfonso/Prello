@@ -4,6 +4,7 @@ const User = mongoose.model('User')
 const Card = mongoose.model('Card')
 const Util = require('./Util')
 const emit = require('../controllers/sockets').emit
+const modificationController = require('./modificationController')
 const boardController = {}
 
 /**
@@ -135,7 +136,13 @@ boardController.getOneboard = function (boardId, userId) {
               err.status = 500
               reject(err)
             } else {
-              resolve(res)
+              modificationController.findBoardHistory(boardId).then((item) => {
+                res.modifications = item
+                resolve(res)
+              }).catch((err) => {
+                err.status = 500
+                reject(err)
+              })
             }
           })
         }
@@ -202,6 +209,9 @@ boardController.addCollaborator = (boardId, userId, requesterId) => {
         reject(err)
       } else {
         emit(boardId, 'UPDATE_COLLABORATORS', res.collaborators)
+        modificationController.ADDED_COLLABORATOR_BOARD(boardId, requesterId, userId).catch((err) => {
+          reject(err)
+        })
         resolve(res)
       }
     })
@@ -265,6 +275,9 @@ boardController.removeCollaborator = (boardId, userId, requesterId) => {
       } else {
         boardController.refreshOneboard('COLLABORATOR_REMOVED', boardId)
         emit(boardId, 'UPDATE_COLLABORATORS', res.collaborators)
+        modificationController.REMOVED_COLLABORATOR_BOARD(boardId, requesterId, userId).catch((err) => {
+          reject(err)
+        })
         resolve(res)
       }
     })

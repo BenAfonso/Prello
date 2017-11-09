@@ -29,7 +29,8 @@ const ModificationSchema = new Schema({
   targetUser: {type: Schema.Types.ObjectId, ref: 'User'},
   card: {type: Schema.Types.ObjectId, ref: 'Card'},
   comment: {type: Schema.Types.ObjectId, ref: 'Comment'},
-  list: {type: Schema.Types.ObjectId, ref: 'List'}
+  list: {type: Schema.Types.ObjectId, ref: 'List'},
+  board: {type: Schema.Types.ObjectId, ref: 'Board'}
 })
 
 mongoose.model('Modification', ModificationSchema)
