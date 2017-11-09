@@ -1,1 +1,22 @@
-<div>Hello world</div>
+<div>
+  <div>
+      <h2>
+        Log-in to your Prello account
+      </h2>
+      <form action="<%= redirect_uri %>" method="post">
+          <div class="ui stacked segment">
+              <div>
+                  <div>
+                      <input type="text" name="email" placeholder="E-mail address" value="<%= email %>">
+                  </div>
+              </div>
+              <div>
+                  <div>
+                      <input type="password" name="password" placeholder="Password">
+                  </div>
+              </div>
+          </div>
+        <button type='submit'>Login</button>
+      </form>
+  </div>
+</div>

@@ -39,8 +39,24 @@ module.exports = function (app) {
 
   app.get('/oauth/prello/login', (req, res) => {
     return res.render('login', {
-      redirect_uri: 'zaezae',
+      redirect_uri: req.url,
       email: ''
+    })
+  })
+
+  app.post('/oauth/prello/login', (req, res, next) => {
+    const user = {email: req.body.email, password: req.body.password}
+    userController.login(user).then(token => {
+      const auth = `Bearer ${token}`
+      req.method = 'get'
+      req.headers['authorization'] = auth
+      req.url = `/authorize?client_id=${req.query.client_id}&redirect_uri=${req.query.redirect_uri}`
+      next()
+    }).catch(err => {
+      return res.render('login', { // views: login
+        redirect_uri: req.redirect_uri,
+        email: req.body.email || ''
+      })
     })
   })
 
@@ -97,12 +113,13 @@ module.exports = function (app) {
   })
 
   app.get('/authorize', [requiresLogin], (req, res) => {
+    console.log(req.query)
     crypto.randomBytes(15, (err, buffer) => {
       if (err) { return res.status(err.code || 500).json(err) }
       const code = buffer.toString('hex')
       OAuthClient.findOne({
         client_id: req.query.client_id,
-        redirect_uri: req.query.redirect_uri
+        redirectUris: req.query.redirect_uri
       }, ['id'])
       .then(client => {
         const oauthCode = new OAuthAuthorizationCode({
@@ -123,4 +140,22 @@ module.exports = function (app) {
       })
     })
   })
+
+  const redirectLogin = function(req, res) {
+    if (req.query.redirect) {
+        let redirect = `${req.query.redirect_uri}`
+        if (!redirect.startsWith('/')) {
+            redirect = `/${redirect}`
+        }
+        if (req.query.client_id && req.query.redirect_uri) {
+            return res.redirect(
+                `${redirect}?client_id=${req.query.client_id}&redirect_uri=${req.query.redirect_uri}`
+            )
+        } else {
+            return res.redirect(redirect)
+        }
+    } else {
+        return res.redirect(`/${config.loginDefaultRedirect}`)
+    }
+}
 }
