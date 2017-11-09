@@ -48,7 +48,7 @@ listController.updateList = (req) => {
         return reject(err)
       } else {
         if (req.body.isArchived && (!item.isArchived || item.isArchived === undefined)) {
-          modificationController.ARCHIVED_LIST(req.params.boardId, req.user._id, req.params.cardId).catch((err) => {
+          modificationController.ARCHIVED_LIST(req.params.boardId, req.user._id, req.params.listId).catch((err) => {
             reject(err)
           })
         }
