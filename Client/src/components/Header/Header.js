@@ -25,6 +25,10 @@ export default class Header extends React.Component {
     color: 'white'
   }
 
+  goToDashboard () {
+    window.location = '/dashboard'
+  }
+
   render () {
     return <div className='host' style={{
       backgroundColor: this.props.bgColor,
@@ -65,6 +69,10 @@ export default class Header extends React.Component {
                   {
                     action: logout,
                     placeholder: 'Logout'
+                  },
+                  {
+                    action: this.goToDashboard.bind(this),
+                    placeholder: 'Dashboard'
                   }
                 ]}>
                 <div className='user button'>
