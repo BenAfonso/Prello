@@ -23,7 +23,8 @@ export default class ProfilePage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      displayModifyProfileForm: false
+      displayModifyProfileForm: false,
+      avatarUrl: ''
     }
 
     this.renderModifyProfileForm = this.renderModifyProfileForm.bind(this)
@@ -33,6 +34,7 @@ export default class ProfilePage extends React.Component {
     this.renderUserAvatar = this.renderUserAvatar.bind(this)
     this.renderProfileTab = this.renderProfileTab.bind(this)
     this.renderBoardsTab = this.renderBoardsTab.bind(this)
+    this.onAvatarInputChange = this.onAvatarInputChange.bind(this)
   }
 
   componentDidMount () {
@@ -53,6 +55,10 @@ export default class ProfilePage extends React.Component {
 
   hideModifyProfileForm () {
     this.setState({ displayModifyProfileForm: false })
+  }
+
+  onAvatarInputChange () {
+    this.setState({ avatarUrl: this.avatarInput.value })
   }
 
   updateProfile () {
@@ -76,6 +82,12 @@ export default class ProfilePage extends React.Component {
     }
   }
 
+  getInitials (name) {
+    const matches = name.match(/\b(\w)/g)
+    const initials = matches.join('').toUpperCase()
+    return initials
+  }
+
   renderModifyProfileForm () {
     return (
       <form className='profileForm'>
@@ -89,7 +101,17 @@ export default class ProfilePage extends React.Component {
         </div>
         <div className='formDiv'>
           <label>Avatar URL : </label>
-          <input className='input' defaultValue={this.props.currentUser.picture} ref={e => { this.avatarInput = e }}/>
+          <input className='input' defaultValue={this.props.currentUser.picture} ref={e => { this.avatarInput = e }} onChange={this.onAvatarInputChange}/>
+          <div className='avatarPreview'>
+            <AvatarThumbnail
+              size='50px'
+              fontSize='30px'
+              thumbnail={this.state.avatarUrl === '' ? this.props.currentUser.picture : this.state.avatarUrl }
+              initials={this.getInitials(this.props.currentUser.name)}
+              bgColor={this.props.currentUser.bgColor}
+              color='black'
+            />
+          </div>
         </div>
         <div className='formDiv'>
           <label>Biopic : (facultative)</label>
@@ -122,15 +144,9 @@ export default class ProfilePage extends React.Component {
     )
   }
 
-  getInitials (name) {
-    const matches = name.match(/\b(\w)/g)
-    const initials = matches.join('').toUpperCase()
-    return initials
-  }
-
   renderProfileTab () {
     return (
-      <div>
+      <div className='profileTab'>
         <div className='teamPart'>
           <div className='teamLine'>
             <Icon name='users'
@@ -157,11 +173,13 @@ export default class ProfilePage extends React.Component {
           </ul>
         </div>
         <div className = 'activityDiv'>
-          <Icon name='calendar-o'
-            fontSize='24px'
-            color='white'
-            style={{marginTop: '10%', marginLeft: '2%', marginRight: '20px'}}/>
-          <span className='activityTitle'>Activity feed</span>
+          <div className='activityLine'>
+            <Icon name='calendar-o'
+              fontSize='24px'
+              color='white'
+              style={{marginLeft: '2%', marginRight: '20px'}}/>
+            <span className='activityTitle'>Activity feed</span>
+          </div>
           <hr className='titleAndContentSeparator'/>
         </div>
         <style jsx>
@@ -189,12 +207,14 @@ export default class ProfilePage extends React.Component {
 
   renderBoardsTab () {
     return (
-      <div>
-        <Icon name='bars'
-          fontSize='24px'
-          color='white'
-          style={{marginLeft: '2%', marginRight: '20px'}}/>
-        <span className='boardsTitle'>My boards</span>
+      <div className='boardsTab'>
+        <div className='boardsLine'>
+          <Icon name='bars'
+            fontSize='24px'
+            color='white'
+            style={{marginLeft: '2%', marginRight: '20px'}}/>
+          <span className='boardsTitle'>My boards</span>
+        </div>
         <hr className='titleAndContentSeparator'/>
         <ul>
           {this.props.boardslist.boards.map(board => (

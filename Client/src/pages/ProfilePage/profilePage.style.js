@@ -68,6 +68,9 @@ label {
 label {
     color: white;
 }
+.avatarPreview {
+    margin-top: 10px;
+}
 .nameSpan {
     display: inline-block;
     vertical-align: middle;
@@ -101,6 +104,16 @@ label {
 .textarea:focus {
     
 }
+.teamLine,
+.activityLine,
+.boardsLine { 
+    display: flex;
+    justify-content: center;
+}
+
+.activityLine {
+    margin-top: 30px;
+}
 
 .teamLi,
 .boardLi {
@@ -117,7 +130,7 @@ label {
 }
 .titleAndContentSeparator {
     margin-left: 2%;
-    width: 80%;
+    margin-right: 2%;
     margin-top: 10px;
     margin-bottom: 40px;
 }
