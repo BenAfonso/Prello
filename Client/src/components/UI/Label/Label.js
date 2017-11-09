@@ -1,5 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Button from '../Button/Button'
+import Icon from '../Icon/Icon'
+import styles from './Label.styles'
 
 export default class Label extends React.Component {
   constructor () {
@@ -12,11 +15,13 @@ export default class Label extends React.Component {
   }
   static propTypes = {
     labelText: PropTypes.string,
+    labelId: PropTypes.string,
     width: PropTypes.string,
     style: PropTypes.object,
     color: PropTypes.string,
     backgroundColor: PropTypes.string,
-    fontWeight: PropTypes.string
+    fontWeight: PropTypes.string,
+    isItem: PropTypes.bool
   }
 
   static defaultProps = {
@@ -27,7 +32,8 @@ export default class Label extends React.Component {
     fontWeight: 'bold',
     borderRadius: '3px',
     fontSize: '12px',
-    centeredText: true
+    centeredText: true,
+    isItem: false
   }
 
   expandLabel () {
@@ -52,7 +58,7 @@ export default class Label extends React.Component {
 
     props.style = {
       width,
-      height: this.state.isExpanded ? '16px' : '8px',
+      height: (this.state.isExpanded || this.state.isItem) ? '16px' : '16px',
       fontSize,
       fontWeight,
       backgroundColor,
@@ -61,7 +67,25 @@ export default class Label extends React.Component {
       textAlign: centeredText ? 'center' : 'left',
       ...props.style
     }
-    if (this.state.isExpanded) return <div style={props.style} onClick={this.expandLabel} checked>{this.props.labelText}</div>
-    else return <div style={props.style} onClick={this.expandLabel} />
+    if (this.state.isExpanded && !this.props.isItem) return <div style={props.style} onClick={this.expandLabel}>{this.props.labelText}</div>
+    else if (!this.state.isExpanded && !this.props.isItem) return <div style={props.style} onClick={this.expandLabel} />
+    else if (this.props.isItem) {
+      return (
+        <div className='labelItem'>
+          <div style={props.style}>{this.props.labelText}</div>
+          <div>
+            <Button
+              onClick={null}
+              bgColor='rgba(0,0,0,0)'
+              color='#70727c'
+              hoverBgColor='#ddd'
+              size='small'>
+              <Icon name='times' color='#70727c' />
+            </Button>
+          </div>
+          <style jsx>{styles}</style>
+        </div>
+      )
+    }
   }
 }

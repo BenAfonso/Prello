@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Button from '../Button/Button'
 import Input from '../Input/Input'
-import LabelItem from '../LabelItem/LabelItem'
+import Label from '../Label/Label'
 import { addLabel, getBoardLabels } from '../../../services/Label.services'
 
 @connect(store => {
@@ -20,6 +20,7 @@ export default class LabelDropdown extends React.Component {
     backgroundColor: PropTypes.string,
     fontWeight: PropTypes.string,
     boardLabels: PropTypes.arrayOf(PropTypes.shape({
+      _id: PropTypes.string,
       title: PropTypes.string,
       color: PropTypes.string
     })),
@@ -41,9 +42,9 @@ export default class LabelDropdown extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      displayLabelCreationForm: false,
-      boardLabels: this.props.board.labels
+      displayLabelCreationForm: false
     }
+
     this.displayLabelForm = this.displayLabelForm.bind(this)
     this.addLabel = this.addLabel.bind(this)
     this.deleteLabel = this.deleteLabel.bind(this)
@@ -57,7 +58,7 @@ export default class LabelDropdown extends React.Component {
   }
 
   addLabel () {
-    let newBoardLabels = this.state.boardLabels.slice()
+    let newBoardLabels = this.props.boardLabels.slice()
     newBoardLabels.push({label: this.labelTitle.input.value, color: this.labelColor.input.value})
     this.setState({
       displayLabelCreationForm: !this.state.displayLabelCreationForm,
@@ -82,6 +83,8 @@ export default class LabelDropdown extends React.Component {
   }
 
   render () {
+    console.log('CHECK BOARD LABELS')
+    console.log(this.props.board.labels)
     const {
       height,
       width,
@@ -106,7 +109,7 @@ export default class LabelDropdown extends React.Component {
       <div style={props.style}>
         <div>
           <ul>
-            {this.state.boardLabels.map(e => <LabelItem onAddCardLabel={this.props.onAddLabelCard} onDeleteLabel={this.deleteLabel} labelText={e['name']} backgroundColor={e['color']} />)}
+            {this.props.board.labels.map(e => <Label isItem={ true } labelId={e['_id']} labelText={e['name']} backgroundColor={e['color']} />)}
           </ul>
         </div>
         <div>
