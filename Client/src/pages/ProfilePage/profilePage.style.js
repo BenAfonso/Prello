@@ -31,7 +31,8 @@ export default `
     font-family: Arial;
 }
 .teamsTitle,
-.activityTitle {
+.activityTitle,
+.boardsTitle {
     font-size: 120%;
     font-weight: bold;
 }
@@ -61,7 +62,9 @@ label {
 .biopicDiv,
 .teamsTitle,
 .activityTitle,
+.boardsTitle,
 .teamLi,
+.boardLi,
 label {
     color: white;
 }
@@ -99,13 +102,15 @@ label {
     
 }
 
-.teamLi {
+.teamLi,
+.boardLi {
     margin-left: 50px;
     margin-bottom: 10px;
     margin-top: 10px;
     width: 80%;
 }
-.teamLi:hover {
+.teamLi:hover,
+.boardLi:hover {
     background-color: rgb(174, 77, 123);
     color: white;
     width: 80%;
@@ -116,8 +121,15 @@ label {
     margin-top: 10px;
     margin-bottom: 40px;
 }
-.teamSeparator {
+.teamSeparator,
+.boardSeparator {
     margin-left: 50px;
     width: 80%;
+}
+.tabSection {
+    margin-top: 80px;
+    display: flex;
+    background: #cd5a91;
+    border-top: 1px white solid;
 }
 `

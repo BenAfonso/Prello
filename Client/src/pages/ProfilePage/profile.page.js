@@ -5,15 +5,18 @@ import Button from '../../components/UI/Button/Button'
 import Icon from '../../components/UI/Icon/Icon'
 import styles from './profilePage.style'
 import { updateProfile } from '../../services/User.services'
-import { updateProfileAction, setTeamslist } from '../../store/actions'
+import { updateProfileAction, setTeamslist, setBoardslist } from '../../store/actions'
 import { updateProfileLocalStorage } from '../../services/Authentication.services'
 import AvatarThumbnail from '../../components/UI/AvatarThumbnail/AvatarThumbnail'
 import { Link } from 'react-router-dom'
+import Tabs from '../../components/UI/Tabs/Tabs'
+import TabPanel from '../../components/UI/TabPanel/TabPanel'
 
 @connect(store => {
   return {
     currentUser: store.currentUser,
-    teamslist: store.teamslist
+    teamslist: store.teamslist,
+    boardslist: store.boardslist
   }
 })
 export default class ProfilePage extends React.Component {
@@ -28,12 +31,17 @@ export default class ProfilePage extends React.Component {
     this.hideModifyProfileForm = this.hideModifyProfileForm.bind(this)
     this.updateProfile = this.updateProfile.bind(this)
     this.renderUserAvatar = this.renderUserAvatar.bind(this)
-    this.renderTeamPart = this.renderTeamPart.bind(this)
+    this.renderProfileTab = this.renderProfileTab.bind(this)
+    this.renderBoardsTab = this.renderBoardsTab.bind(this)
   }
 
   componentDidMount () {
+    setBoardslist(this.props.dispatch).then(() => {
+      console.log(this.props.boardslist)
+    }).catch(err => {
+      console.error(err)
+    })
     setTeamslist(this.props.dispatch).then(() => {
-      console.log(this.props.teamslist.teams)
     }).catch(err => {
       console.error(err)
     })
@@ -120,49 +128,42 @@ export default class ProfilePage extends React.Component {
     return initials
   }
 
-  renderTeamPart () {
+  renderProfileTab () {
     return (
-      <div className='teamPart'>
-        <div className='teamLine'>
-          <Icon name='users'
+      <div>
+        <div className='teamPart'>
+          <div className='teamLine'>
+            <Icon name='users'
+              fontSize='24px'
+              color='white'
+              style={{marginLeft: '2%', marginRight: '20px'}}/>
+            <span className='teamsTitle'>My teams</span>
+          </div>
+          <hr className='titleAndContentSeparator'/>
+          <ul>
+            {this.props.teamslist.teams.map(team => (
+              <div>
+                <Link to={`/teams/${team._id}`}>
+                  <li key={team._id} className='teamLi'>{team.name}
+                    {team.visibility === 'Private'
+                      ? <Icon name='lock' fontSize='12px' style={{marginLeft: '5px'}}/>
+                      : <Icon name='truc' fontSize='12px' style={{marginLeft: '5px'}}/>
+                    }
+                  </li>
+                </Link>
+                <hr className='teamSeparator'/>
+              </div>
+            ))}
+          </ul>
+        </div>
+        <div className = 'activityDiv'>
+          <Icon name='calendar-o'
             fontSize='24px'
             color='white'
             style={{marginTop: '10%', marginLeft: '2%', marginRight: '20px'}}/>
-          <span className='teamsTitle'>My teams</span>
+          <span className='activityTitle'>Activity feed</span>
+          <hr className='titleAndContentSeparator'/>
         </div>
-        <hr className='titleAndContentSeparator'/>
-        <ul>
-          {this.props.teamslist.teams.map(team => (
-            <div>
-              <Link to={`/teams/${team._id}`}>
-                <li key={team._id} className='teamLi'>{team.name}
-                  {team.visibility === 'Private'
-                    ? <Icon name='lock' fontSize='12px' style={{marginLeft: '5px'}}/>
-                    : <Icon name='truc' fontSize='12px' style={{marginLeft: '5px'}}/>
-                  }
-                </li>
-              </Link>
-              <hr className='teamSeparator'/>
-            </div>
-          ))}
-        </ul>
-        <style jsx>
-          {styles}
-        </style>
-      </div>
-    )
-  }
-
-  // Not implemented yet
-  renderActivityPart () {
-    return (
-      <div className = 'activityDiv'>
-        <Icon name='calendar-o'
-          fontSize='24px'
-          color='white'
-          style={{marginTop: '10%', marginLeft: '2%', marginRight: '20px'}}/>
-        <span className='activityTitle'>Activity feed</span>
-        <hr className='titleAndContentSeparator'/>
         <style jsx>
           {styles}
         </style>
@@ -182,6 +183,32 @@ export default class ProfilePage extends React.Component {
           color='black'
         />
         <style jsx>{styles}</style>
+      </div>
+    )
+  }
+
+  renderBoardsTab () {
+    return (
+      <div>
+        <Icon name='bars'
+          fontSize='24px'
+          color='white'
+          style={{marginLeft: '2%', marginRight: '20px'}}/>
+        <span className='boardsTitle'>My boards</span>
+        <hr className='titleAndContentSeparator'/>
+        <ul>
+          {this.props.boardslist.boards.map(board => (
+            <div>
+              <Link to={`/boards/${board._id}`}>
+                <li key={board._id} className='boardLi'>{board.title}</li>
+              </Link>
+              <hr className='boardSeparator'/>
+            </div>
+          ))}
+        </ul>
+        <style jsx>
+          {styles}
+        </style>
       </div>
     )
   }
@@ -213,8 +240,16 @@ export default class ProfilePage extends React.Component {
               {this.renderModifyProfileForm()}
             </div>
           }
-          {this.renderTeamPart()}
-          {this.renderActivityPart()}
+          <div className='tabSection'>
+            <Tabs selected='0'>
+              <TabPanel label='Profile'>
+                {this.renderProfileTab()}
+              </TabPanel>
+              <TabPanel label='Boards'>
+                {this.renderBoardsTab()}
+              </TabPanel>
+            </Tabs>
+          </div>
         </PageLayout>
         <style jsx>
           {styles}
