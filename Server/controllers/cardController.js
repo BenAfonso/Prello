@@ -239,7 +239,6 @@ cardController.updateResponsible = (boardId, cardId, listId, userId) => {
 
 cardController.updateResponsibleEmail = (boardId, cardId, listId, email) => {
   return new Promise((resolve, reject) => {
-    console.log(email)
     User.findOne({ email: email }).then((res) => {
       if (res) {
         cardController.updateResponsible(boardId, cardId, listId, res._id).then(res => {
