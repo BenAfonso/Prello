@@ -1,4 +1,3 @@
-const Util = require('../../controllers/Util')
 const {requiresLogin} = require('../../config/middlewares/authorization')
 const {boardExists, canRead} = require('../../config/middlewares/boardAuthorizations')
 
