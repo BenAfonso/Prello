@@ -41,7 +41,6 @@ export default class ProfilePage extends React.Component {
 
   componentDidMount () {
     setBoardslist(this.props.dispatch).then(() => {
-      console.log(this.props.boardslist)
     }).catch(err => {
       console.error(err)
     })
@@ -127,7 +126,7 @@ export default class ProfilePage extends React.Component {
               fontSize='12px'
               bold
               shadow
-              color='black'><Icon name='check' fontSize='10px' style={{marginRight: '5px'}}/>Save
+              color='white'><Icon name='check' fontSize='10px' style={{marginRight: '5px'}} color='white'/>Save
             </Button>
           </span>
           <span className='cancelButton'>
@@ -160,7 +159,7 @@ export default class ProfilePage extends React.Component {
           <hr className='titleAndContentSeparator'/>
           <ul className='teamsList'>
             {this.props.teamslist.teams.map(team => (
-              <li className='teamLi'><Link to={`teams/${team._id}`}><TeamListElement team={team}/></Link></li>
+              <li key={team._id} className='teamLi'><Link to={`teams/${team._id}`}><TeamListElement team={team}/></Link></li>
             ))}
           </ul>
         </div>
@@ -210,13 +209,11 @@ export default class ProfilePage extends React.Component {
         <hr className='titleAndContentSeparator'/>
         <ul className='boardsList'>
           {this.props.boardslist.boards.map(board => (
-            <div>
-              <li key={board._id} className='boardLi'>
-                <Link to={`/boards/${board._id}`}>
-                  <BoardThumbnail index={0} id={board._id} title={board.title} background={board.background}/>
-                </Link>
-              </li>
-            </div>
+            <li key={board._id} className='boardLi'>
+              <Link to={`/boards/${board._id}`}>
+                <BoardThumbnail index={0} id={board._id} title={board.title} background={board.background}/>
+              </Link>
+            </li>
           ))}
         </ul>
         <style jsx>

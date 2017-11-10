@@ -22,12 +22,12 @@ export default class TeamListElement extends React.Component {
           <div className='name'>
             {this.props.team.name}
             {this.props.team.visibility === 'Private'
-              ? <Icon name='lock' fontSize='16px' style={{marginLeft: '5px'}}/>
-              : <Icon name='truc' fontSize='16px' style={{marginLeft: '5px'}}/>
+              ? <Icon name='lock' fontSize='19px' style={{marginLeft: '5px', marginBottom: '3px'}}/>
+              : <Icon name='truc' fontSize='19px' style={{marginLeft: '5px', marginBottom: '3px'}}/>
             }
           </div>
           <div className='membersNumber'>
-            <Icon name='users' fontSize='18px' styles={{marginRight: '5px'}}/> {this.props.team.users.length}
+            <Icon name='users' fontSize='16px' styles={{marginRight: '5px'}}/> {this.props.team.users.length}
           </div>
         </div>
         <div className='content'>
@@ -39,14 +39,14 @@ export default class TeamListElement extends React.Component {
                 initials={this.getInitials(this.props.owner.name)}
                 bgColor={this.props.team.owner.bgColor}
                 color='black' />
-              : <span>No owner</span>
+              : ''
             }
           </div>
           <div className='boardsNumber'>
-            <Icon name='bars' fontSize='18px' styles={{marginRight: '5px'}}/> {this.props.team.boards.length} boards
+            <Icon name='bars' fontSize='18px' styles={{marginRight: '5px'}}/> {this.props.team.boards.length} <span>boards</span>
           </div>
           <div className='descriptionTeam'>
-            {this.props.team.description ? this.props.team.description : 'No description' }
+            {this.props.team.description ? this.props.team.description : '' }
           </div>
         </div>
         <style jsx>

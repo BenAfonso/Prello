@@ -129,7 +129,6 @@ label {
 .boardLi:hover {
     background-color: rgb(174, 77, 123);
     color: white;
-    width: 80%;
 }
 .titleAndContentSeparator {
     margin-left: 20%;

@@ -21,22 +21,22 @@ export default `
 }
 .header .name {
   display: inline-block;
-  vertical-align: middle;
   float: left;
   font-weight: bold;
   font-size: 150%;
+  vertical-align: bottom;
 }
 .header .membersNumber {
   display: inline-block;
   float: right;
-  vertical-align: middle;
+  margin-top: 5px;
 }
 .content {
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px;
   background-color: #FFCE75;
   overflow-y: auto;
-  min-height: 180px;
+  min-height: 80px;
   max-height: 300px;
 }
 .descriptionTeam {
