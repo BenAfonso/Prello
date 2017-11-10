@@ -66,8 +66,7 @@ teamController.addCollaboratorEmail = (teamId, email) => {
  */
 teamController.removeCollaboratorFromTeam = function (teamId, userId) {
   return new Promise((resolve, reject) => {
-    console.log('teamId', teamId)
-    console.log('userId', userId)
+
     Team.findOneAndUpdate({ '_id': teamId }, { $pull: { users: userId } }, { new: true }, function (err, res) {
       if (err) {
         reject(err)
@@ -94,11 +93,47 @@ teamController.updateTeam = function (teamId, body) {
 teamController.getOneTeam = function (teamId) {
   return new Promise((resolve, reject) => {
     Team.findOne({ '_id': teamId }).populate('boards users admins', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
-      console.log(res)
       if (err) {
         reject(err)
       } else {
         resolve(res)
+      }
+    })
+  })
+}
+teamController.setAdmin = function (teamId, userId) {
+  return new Promise((resolve, reject) => {
+    Team.findOneAndUpdate({ '_id': teamId }, { $push: { admins: userId } }, { new: true }).populate('boards admins users').exec((err, res) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+teamController.unsetAdmin = function (teamId, userId) {
+  return new Promise((resolve, reject) => {
+    Team.findOneAndUpdate({ '_id': teamId }, { $pull: { admins: userId } }, { new: true }).populate('boards admins users').exec((err, res) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+teamController.removeAdmin = function (teamId, userId) {
+  return new Promise((resolve, reject) => {
+    Team.findOneAndUpdate({ '_id': teamId }, { $pull: { admins: userId } }, { new: true }).populate('boards admins users').exec((err, res) => {
+      if (err) {
+        reject(err)
+      } else {
+        teamController.removeCollaboratorFromTeam(teamId, userId).then((result) => {
+          resolve(result)
+        }).catch((err) => {
+          reject(err)
+        })
       }
     })
   })

@@ -116,7 +116,7 @@ boardController.removeListFromBoard = function (boardId, listId) {
  */
 boardController.getOneboard = function (boardId, userId) {
   return new Promise((resolve, reject) => {
-    Board.findOne({ '_id': boardId }).populate('owner lists collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+    Board.findOne({ '_id': boardId }).populate('owner lists collaborators teams', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         err.status = 500
         reject(err)
@@ -265,6 +265,20 @@ boardController.removeCollaborator = (boardId, userId, requesterId) => {
       } else {
         boardController.refreshOneboard('COLLABORATOR_REMOVED', boardId)
         emit(boardId, 'UPDATE_COLLABORATORS', res.collaborators)
+        resolve(res)
+      }
+    })
+  })
+}
+
+boardController.addTeam = (boardId, teamId) => {
+  return new Promise((resolve, reject) => {
+    Board.findOneAndUpdate({ '_id': boardId }, { $push: { teams: teamId } }, { new: true }).populate('teams').exec((err, res) => {
+      if (err) {
+        err.status = 500
+        reject(err)
+      } else {
+        emit(boardId, 'UPDATE_TEAMS', res.teams)
         resolve(res)
       }
     })

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Board = mongoose.model('Board')
-
+const userController = require('../../controllers/userController')
 module.exports.boardExists = (req, res, next) => {
   Board.findOne({'_id': req.params.boardId}).exec((err, result) => {
     if (err) {
@@ -25,7 +25,19 @@ module.exports.isCollaborator = (req, res, next) => {
     if (collaborators.length > 0) {
       next()
     } else {
-      return res.status(403).send('Forbidden: You aren\'t a collaborator of this board')
+      userController.getUserTeams(req.params.userId).then((teams) => {
+        Board.findOne({'_id': req.params.boardId, 'teams': {$in: teams}}).exec((err, result) => {
+          if (err) {
+            return res.status(500).send(err)
+          }
+          if (result !== null) {
+            next()
+          }
+          return res.status(403).send('Forbidden: You aren\'t a collaborator of this board')
+        })
+      }).catch((err) => {
+        return res.status(500).send(err)
+      })
     }
   })
 }
