@@ -3,10 +3,10 @@ const Modification = mongoose.model('Modification')
 
 const modificationController = {}
 
-modificationController.MOVED_CARD = (boardId, userId, fromListId, toListId) => {
+modificationController.MOVED_CARD = (boardId, userId, cardId, fromListId, toListId) => {
   return new Promise((resolve, reject) => {
     if (fromListId !== toListId) {
-      let modificationToAdd = Modification({type: 'MOVED_CARD', board: boardId, user: userId, fromList: fromListId, toList: toListId})
+      let modificationToAdd = Modification({type: 'MOVED_CARD', board: boardId, user: userId, card: cardId, fromList: fromListId, toList: toListId})
       modificationToAdd.save((err, result) => {
         if (err) {
           reject(err)
@@ -138,7 +138,7 @@ modificationController.ARCHIVED_CARD = (boardId, userId, cardId) => {
 
 modificationController.ADDED_DUE_DATE = (boardId, userId, cardId, dueDate) => {
   return new Promise((resolve, reject) => {
-    let modificationToAdd = Modification({type: 'ADDED_DUE_DATE', board: boardId, user: userId, dueDate: dueDate})
+    let modificationToAdd = Modification({type: 'ADDED_DUE_DATE', board: boardId, user: userId, card: cardId, dueDate: dueDate})
     modificationToAdd.save((err, result) => {
       if (err) {
         reject(err)
@@ -151,7 +151,7 @@ modificationController.ADDED_DUE_DATE = (boardId, userId, cardId, dueDate) => {
 
 modificationController.MARKED_DUE_DATE_COMPLETE = (boardId, userId, cardId) => {
   return new Promise((resolve, reject) => {
-    let modificationToAdd = Modification({type: 'MARKED_DUE_DATE_COMPLETE', board: boardId, user: userId})
+    let modificationToAdd = Modification({type: 'MARKED_DUE_DATE_COMPLETE', board: boardId, user: userId, card: cardId})
     modificationToAdd.save((err, result) => {
       if (err) {
         reject(err)
@@ -164,7 +164,7 @@ modificationController.MARKED_DUE_DATE_COMPLETE = (boardId, userId, cardId) => {
 
 modificationController.MARKED_DUE_DATE_INCOMPLETE = (boardId, userId, cardId) => {
   return new Promise((resolve, reject) => {
-    let modificationToAdd = Modification({type: 'MARKED_DUE_DATE_INCOMPLETE', board: boardId, user: userId})
+    let modificationToAdd = Modification({type: 'MARKED_DUE_DATE_INCOMPLETE', board: boardId, user: userId, card: cardId})
     modificationToAdd.save((err, result) => {
       if (err) {
         reject(err)
