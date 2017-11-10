@@ -15,7 +15,6 @@ export default `
   .content {
     display: inline-block;
     height: 100%;
-    overflow-y: auto;
     width: calc(100% - 60px);
     background-color: #EEE;
   }
@@ -68,5 +67,7 @@ export default `
 
   .content .informations {
     padding: 20px;
+    height: calc(100% - 50px);
+    overflow-y: auto;
   }
 `

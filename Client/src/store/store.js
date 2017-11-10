@@ -37,7 +37,8 @@ export const defaultBoardState = {
     visibility: '',
     isArchived: false,
     background: '#fff',
-    collaborators: []
+    collaborators: [],
+    modifications: []
   }
 }
 
