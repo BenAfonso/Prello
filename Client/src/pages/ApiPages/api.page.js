@@ -2,14 +2,38 @@ import React from 'react'
 import PageLayout from '../../layouts/page'
 import GenerateKeysPage from './generateKeys.page'
 import RegisteredApplicationPage from './registeredApplication.page'
+import { getOAuthClients } from '../../services/OAuthClient.service'
+import {connect} from 'react-redux'
+import {setOAuthClients} from '../../store/actions'
 
+@connect(store => {
+  return {
+    developers: store.developers
+  }
+})
 export default class APIPage extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      renderedIndex: 1
+      renderedIndex: 2
     }
-    this.menuItems = [
+    this.renderItemAtIndex = this.renderItemAtIndex.bind(this)
+  }
+
+  componentDidMount () {
+    getOAuthClients().then(clients => {
+      setOAuthClients(clients)
+    })
+  }
+
+  renderItemAtIndex (i) {
+    this.setState({
+      renderedIndex: i
+    })
+  }
+
+  render () {
+    let menuItems = [
       {
         type: 'title',
         text: <h3>Get started</h3>
@@ -21,37 +45,30 @@ export default class APIPage extends React.Component {
       },
       {
         type: 'link',
-        text: 'Register application',
+        text: 'Register client',
         component: <GenerateKeysPage />
       },
       {
         type: 'title',
         text: <h3>OAuth Applications</h3>
-      },
-      {
-        type: 'link',
-        text: '22Prello',
-        component: <RegisteredApplicationPage />
       }
     ]
-    this.renderItemAtIndex = this.renderItemAtIndex.bind(this)
-  }
 
-  renderItemAtIndex (i) {
-    if (!this.menuItems[i]) { return }
-    this.setState({
-      renderedIndex: i
+    this.props.developers.oauthClients.map(c => {
+      menuItems.push({
+        type: 'link',
+        text: c.name,
+        component: <RegisteredApplicationPage {...c} />
+      })
     })
-  }
 
-  render () {
     return (
       <PageLayout>
         <div className='container'>
           <ul className='leftMenu'>
             <li className='mainTitle'><h2>Developers API</h2></li>
             {
-              this.menuItems.map((item, i) => (
+              menuItems.map((item, i) => (
                 <li className={item.type} onClick={() => { if (item.type === 'link') { this.renderItemAtIndex(i) } else { return null } }}>
                   {item.text}
                 </li>
@@ -59,7 +76,7 @@ export default class APIPage extends React.Component {
             }
           </ul>
           <div className='content'>
-            { this.menuItems[this.state.renderedIndex].component }
+            { menuItems[this.state.renderedIndex].component }
           </div>
         </div>
         <style jsx>{`
@@ -79,6 +96,7 @@ export default class APIPage extends React.Component {
           height: 100%;
           width: 300px;
           background-color: white;
+          overflow-y: auto;
         }
 
         .leftMenu li {

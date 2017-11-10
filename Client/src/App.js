@@ -35,7 +35,7 @@ class App extends Component {
             <Route path='/register' component={RegisterPage} />
             <PrivateRoute exact path='/boards' component={BoardsPage} />
             <PrivateRoute exact path='/boards/:id' component={BoardPage} />
-            <PrivateRoute exact path='/api' component={ApiPage} />
+            <PrivateRoute exact path='/developers' component={ApiPage} />
             <Route exact path='/loading' component={LoadingPage} />
           </div>
         </Provider>

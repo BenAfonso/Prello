@@ -92,7 +92,7 @@ module.exports = function (app) {
     })
   })
 
-  app.post('/new_client', [requiresLogin], (req, res) => {
+  app.post('/oauth/clients', [requiresLogin], (req, res) => {
     crypto.randomBytes(10, (err, buffer) => {
       if (err) { }
       const clientId = buffer.toString('hex')
@@ -143,5 +143,16 @@ module.exports = function (app) {
         return res.status(err.code || 500).json(err)
       })
     })
+  })
+
+  app.get('/oauth/clients', [requiresLogin], (req, res) => {
+    OAuthClient.find({ User: req.user._id }).then(clients => {
+      res.status(200).send(clients)
+    }).catch((err) =>
+      res.status(400).send({
+        status: '400',
+        message: err.message
+      })
+    )
   })
 }
