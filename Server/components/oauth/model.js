@@ -33,7 +33,9 @@ function getClient (clientId, clientSecret) {
   return OAuthClient
     .findOne(options)
     .then(client => {
-      if (!client) return new Error('client not found')
+      if (!client) {
+        return new Error('client not found')
+      }
       let clientWithGrants = {
         _id: client._id,
         User: client.User,

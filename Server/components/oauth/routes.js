@@ -54,6 +54,7 @@ module.exports = function (app) {
       req.url = `/authorize?client_id=${req.query.client_id}&redirect_uri=${req.query.redirect_uri}`
       next()
     }).catch(err => {
+      console.error(err)
       return res.render('login', { // views: login
         redirect_uri: req.redirect_uri,
         email: req.body.email || '',
@@ -93,8 +94,10 @@ module.exports = function (app) {
 
   app.post('/new_client', [requiresLogin], (req, res) => {
     crypto.randomBytes(10, (err, buffer) => {
+      if (err) { }
       const clientId = buffer.toString('hex')
       crypto.randomBytes(10, (err, buffer) => {
+        if (err) { }
         const clientSecret = buffer.toString('hex')
         req.body.client_id = clientId
         req.body.client_secret = clientSecret
@@ -141,22 +144,4 @@ module.exports = function (app) {
       })
     })
   })
-
-  const redirectLogin = function (req, res) {
-    if (req.query.redirect) {
-      let redirect = `${req.query.redirect_uri}`
-      if (!redirect.startsWith('/')) {
-        redirect = `/${redirect}`
-      }
-      if (req.query.client_id && req.query.redirect_uri) {
-        return res.redirect(
-                `${redirect}?client_id=${req.query.client_id}&redirect_uri=${req.query.redirect_uri}`
-            )
-      } else {
-        return res.redirect(redirect)
-      }
-    } else {
-      return res.redirect(`/${config.loginDefaultRedirect}`)
-    }
-  }
 }
