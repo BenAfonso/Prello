@@ -8,6 +8,7 @@ import { updateProfile } from '../../services/User.services'
 import { updateProfileAction, setTeamslist, setBoardslist } from '../../store/actions'
 import { updateProfileLocalStorage } from '../../services/Authentication.services'
 import AvatarThumbnail from '../../components/UI/AvatarThumbnail/AvatarThumbnail'
+import BoardThumbnail from '../../components/BoardThumbnail/BoardThumbnail'
 import { Link } from 'react-router-dom'
 import Tabs from '../../components/UI/Tabs/Tabs'
 import TabPanel from '../../components/UI/TabPanel/TabPanel'
@@ -40,11 +41,11 @@ export default class ProfilePage extends React.Component {
 
   componentDidMount () {
     setBoardslist(this.props.dispatch).then(() => {
+      console.log(this.props.boardslist)
     }).catch(err => {
       console.error(err)
     })
     setTeamslist(this.props.dispatch).then(() => {
-      console.log(this.props.teamslist)
     }).catch(err => {
       console.error(err)
     })
@@ -207,13 +208,14 @@ export default class ProfilePage extends React.Component {
           <span className='boardsTitle'>My boards</span>
         </div>
         <hr className='titleAndContentSeparator'/>
-        <ul>
+        <ul className='boardsList'>
           {this.props.boardslist.boards.map(board => (
             <div>
-              <Link to={`/boards/${board._id}`}>
-                <li key={board._id} className='boardLi'>{board.title}</li>
-              </Link>
-              <hr className='boardSeparator'/>
+              <li key={board._id} className='boardLi'>
+                <Link to={`/boards/${board._id}`}>
+                  <BoardThumbnail index={0} id={board._id} title={board.title} background={board.background}/>
+                </Link>
+              </li>
             </div>
           ))}
         </ul>

@@ -1,21 +1,27 @@
 export default `
 .teamListElement {
-  background-color: #FFB93A;
   border-radius: 5px;
-  border-color: #FFB93A;
-  border-style: solid;
+  background-color: #FFFFFF;
   width: 250px;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+.teamListElement:hover {
+  transform: translateY(-10px) rotate(-3deg);
 }
 .teamSeparator {
   margin-left: 50px;
   width: 80%;
 }
 .header {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background-color: #FFB93A;
   height: 50px;
   padding: 5px 10px;
 }
 .header .name {
   display: inline-block;
+  vertical-align: middle;
   float: left;
   font-weight: bold;
   font-size: 150%;
@@ -23,10 +29,11 @@ export default `
 .header .membersNumber {
   display: inline-block;
   float: right;
-  vertical-aglin: middle;
+  vertical-align: middle;
 }
 .content {
-  border-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
   background-color: #FFCE75;
   overflow-y: auto;
   min-height: 180px;

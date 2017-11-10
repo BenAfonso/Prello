@@ -16,15 +16,14 @@ export default class TeamListElement extends React.Component {
   }
 
   render () {
-    console.log(this.props.team.admins)
     return (
       <div className='teamListElement'>
         <div className='header'>
           <div className='name'>
             {this.props.team.name}
             {this.props.team.visibility === 'Private'
-              ? <Icon name='lock' fontSize='12px' style={{marginLeft: '5px'}}/>
-              : <Icon name='truc' fontSize='12px' style={{marginLeft: '5px'}}/>
+              ? <Icon name='lock' fontSize='16px' style={{marginLeft: '5px'}}/>
+              : <Icon name='truc' fontSize='16px' style={{marginLeft: '5px'}}/>
             }
           </div>
           <div className='membersNumber'>

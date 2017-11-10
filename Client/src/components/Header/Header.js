@@ -67,12 +67,12 @@ export default class Header extends React.Component {
                 orientation='right'
                 menuElements={[
                   {
-                    action: logout,
-                    placeholder: 'Logout'
-                  },
-                  {
                     action: this.goToProfilePage.bind(this),
                     placeholder: 'Profile'
+                  },
+                  {
+                    action: logout,
+                    placeholder: 'Logout'
                   }
                 ]}>
                 <div className='user button'>

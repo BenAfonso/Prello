@@ -107,14 +107,16 @@ label {
 .activityLine {
     margin-top: 30px;
 }
-.teamsList {
+.teamsList,
+.boardsList {
     display: flex;
     flex-wrap: wrap; 
     word-break: break-all;
     justify-content: center;
 }
 
-.teamLi {
+.teamLi,
+.boardLi {
     display: inline-block;
 }
 .boardLi,
