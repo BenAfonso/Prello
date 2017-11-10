@@ -3,9 +3,8 @@ const Card = mongoose.model('Card')
 const List = mongoose.model('List')
 const User = mongoose.model('User')
 const boardController = require('./boardController')
-
 const listController = require('./listController')
-
+const modificationController = require('./modificationController')
 const emit = require('../controllers/sockets').emit
 
 const cardController = {}
@@ -57,11 +56,31 @@ cardController.updateCard = (req) => {
       delete req.body.dueDate
       Card.update({ '_id': req.params.cardId }, {$unset: {dueDate: ''}}).exec()
     }
-    Card.update({ '_id': req.params.cardId }, req.body, (err, item) => {
+    Card.findOneAndUpdate({ '_id': req.params.cardId }, req.body).exec((err, item) => {
       if (err) {
         reject(err)
       } else {
         cardController.refreshOneCard(req.params.boardId, req.params.listId, req.params.cardId).then((cardToEmit) => {
+          if (req.body.dueDate !== undefined && item.dueDate === undefined) {
+            modificationController.ADDED_DUE_DATE(req.params.boardId, req.user._id, req.params.cardId, req.body.dueDate).catch((err) => {
+              reject(err)
+            })
+          }
+          if (req.body.validated && !item.validated) {
+            modificationController.MARKED_DUE_DATE_COMPLETE(req.params.boardId, req.user._id, req.params.cardId).catch((err) => {
+              reject(err)
+            })
+          }
+          if (req.body.isArchived && (!item.isArchived || item.isArchived === undefined)) {
+            modificationController.ARCHIVED_CARD(req.params.boardId, req.user._id, req.params.cardId).catch((err) => {
+              reject(err)
+            })
+          }
+          if (!req.body.validated && item.validated) {
+            modificationController.MARKED_DUE_DATE_INCOMPLETE(req.params.boardId, req.user._id, req.params.cardId).catch((err) => {
+              reject(err)
+            })
+          }
           resolve(cardToEmit)
         })
         .catch((err) => {
@@ -107,6 +126,9 @@ cardController.moveCard = (req) => {
                     reject(error)
                   } else {
                     boardController.refreshOneboard('CARD_MOVED', boardId)
+                    modificationController.MOVED_CARD(boardId, req.user._id, oldListId, newListId).catch((err) => {
+                      reject(err)
+                    })
                     resolve(result.cards)
                   }
                 })
@@ -154,7 +176,14 @@ cardController.getOneCard = (cardId) => {
           if (err) {
             reject(err)
           } else {
-            resolve(res)
+            modificationController.findCardHistory(cardId).then((item) => {
+              let object = res._doc
+              object.modifications = item
+              resolve(res)
+            }).catch((err) => {
+              err.status = 500
+              reject(err)
+            })
           }
         })
       }
@@ -169,6 +198,9 @@ cardController.addCollaborator = (boardId, cardId, listId, userId, requesterId) 
         reject(err)
       } else {
         cardController.refreshOneCard(boardId, listId, cardId).then((cardToEmit) => {
+          modificationController.ADDED_USER_CARD(boardId, requesterId, cardId, userId).catch((err) => {
+            reject(err)
+          })
           resolve(cardToEmit)
         })
         .catch((err) => {
@@ -218,7 +250,7 @@ cardController.refreshOneCard = (boardId, listId, cardId) => {
   })
 }
 
-cardController.updateResponsible = (boardId, cardId, listId, userId) => {
+cardController.updateResponsible = (boardId, cardId, listId, userId, requesterId) => {
   return new Promise((resolve, reject) => {
     Card.findOneAndUpdate({ '_id': cardId }, { responsible: userId }, { new: true }).populate('responsible').exec((err, res) => {
       if (err) {
@@ -226,6 +258,9 @@ cardController.updateResponsible = (boardId, cardId, listId, userId) => {
         reject(err)
       } else {
         cardController.refreshOneCard(boardId, listId, cardId).then((cardToEmit) => {
+          modificationController.SET_RESPONSABLE(boardId, requesterId, cardId, userId).catch((err) => {
+            reject(err)
+          })
           resolve(cardToEmit)
         })
         .catch((err) => {
@@ -237,12 +272,11 @@ cardController.updateResponsible = (boardId, cardId, listId, userId) => {
   })
 }
 
-cardController.updateResponsibleEmail = (boardId, cardId, listId, email) => {
+cardController.updateResponsibleEmail = (boardId, cardId, listId, email, requesterId) => {
   return new Promise((resolve, reject) => {
-    console.log(email)
     User.findOne({ email: email }).then((res) => {
       if (res) {
-        cardController.updateResponsible(boardId, cardId, listId, res._id).then(res => {
+        cardController.updateResponsible(boardId, cardId, listId, res._id, requesterId).then(res => {
           resolve(res)
         }).catch(err => {
           err.status = 500
@@ -271,7 +305,7 @@ cardController.removeResponsible = (boardId, cardId, listId) => {
   })
 }
 
-cardController.removeCollaborator = (boardId, listId, cardId, userId) => {
+cardController.removeCollaborator = (boardId, listId, cardId, userId, requesterId) => {
   return new Promise((resolve, reject) => {
     Card.findOneAndUpdate({ '_id': cardId }, { $pull: { collaborators: userId } }, { new: true }).populate('collaborators').exec((err, res) => {
       if (err) {
@@ -279,6 +313,9 @@ cardController.removeCollaborator = (boardId, listId, cardId, userId) => {
         reject(err)
       } else {
         cardController.refreshOneCard(boardId, listId, cardId).then((cardToEmit) => {
+          modificationController.REMOVED_USER_CARD(boardId, requesterId, cardId, userId).catch((err) => {
+            reject(err)
+          })
           resolve(cardToEmit)
         })
         .catch((err) => {
