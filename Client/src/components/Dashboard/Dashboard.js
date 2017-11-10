@@ -8,6 +8,7 @@ import Icon from '../../components/UI/Icon/Icon'
 import ChartDoneCardsMembers from '../../components/Charts/ChartsMembers/ChartDoneCardsMembers'
 import ChartDoneCardsResponsibles from '../../components/Charts/ChartsResponsibles/ChartDoneCardsResponsibles'
 import ChartActiveMembers from '../../components/Charts/ChartsOverview/ChartActiveMembers'
+import ChartCardsPerList from '../../components/Charts/CharsLists/ChartCardsPerList'
 import { setBoard } from '../../store/actions'
 import { subscribeToBoard } from '../../services/api'
 
@@ -39,6 +40,7 @@ export default class Dashboard extends React.Component {
           <hr className='titleAndContentSeparator'/>
           <ul>
             <ChartActiveMembers data={this.props.board} />
+            <ChartCardsPerList data={this.props.board.lists} />
           </ul>
         </div>
         <div className = 'activityDiv'>
