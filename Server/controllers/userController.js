@@ -97,7 +97,6 @@ userController.login = (userToConnect) => {
           // TODO: refactor this
           if (err) { return reject(err) }
           let token = JSON.parse(body).accessToken
-          console.log(JSON.parse(body))
           if (token) {
             return resolve(token)
           } else {

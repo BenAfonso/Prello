@@ -115,7 +115,6 @@ module.exports = function (app) {
   })
 
   app.get('/authorize', [requiresLogin], (req, res) => {
-    console.log(req.query)
     crypto.randomBytes(15, (err, buffer) => {
       if (err) { return res.status(err.code || 500).json(err) }
       const code = buffer.toString('hex')
@@ -143,21 +142,21 @@ module.exports = function (app) {
     })
   })
 
-  const redirectLogin = function(req, res) {
+  const redirectLogin = function (req, res) {
     if (req.query.redirect) {
-        let redirect = `${req.query.redirect_uri}`
-        if (!redirect.startsWith('/')) {
-            redirect = `/${redirect}`
-        }
-        if (req.query.client_id && req.query.redirect_uri) {
-            return res.redirect(
+      let redirect = `${req.query.redirect_uri}`
+      if (!redirect.startsWith('/')) {
+        redirect = `/${redirect}`
+      }
+      if (req.query.client_id && req.query.redirect_uri) {
+        return res.redirect(
                 `${redirect}?client_id=${req.query.client_id}&redirect_uri=${req.query.redirect_uri}`
             )
-        } else {
-            return res.redirect(redirect)
-        }
+      } else {
+        return res.redirect(redirect)
+      }
     } else {
-        return res.redirect(`/${config.loginDefaultRedirect}`)
+      return res.redirect(`/${config.loginDefaultRedirect}`)
     }
-}
+  }
 }

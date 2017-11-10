@@ -95,7 +95,6 @@ function generateAccessToken (client, user, scope) {
   if (user._id) {
     let payload = { iss: 'Prello-OAuthServer', userId: user._id }
     let token = jwt.sign(payload, secretKey, { expiresIn: '7d' })
-    console.log(token)
     return token
   }
 }
