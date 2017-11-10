@@ -40,7 +40,8 @@ module.exports = function (app) {
   app.get('/oauth/prello/login', (req, res) => {
     return res.render('login', {
       redirect_uri: req.url,
-      email: ''
+      email: '',
+      error: ''
     })
   })
 
@@ -55,7 +56,8 @@ module.exports = function (app) {
     }).catch(err => {
       return res.render('login', { // views: login
         redirect_uri: req.redirect_uri,
-        email: req.body.email || ''
+        email: req.body.email || '',
+        error: 'Invalid credentials'
       })
     })
   })
