@@ -2,7 +2,7 @@ const Util = require('../../controllers/Util')
 const {requiresLogin} = require('../../config/middlewares/authorization')
 const {isOwner, boardExists} = require('../../config/middlewares/boardAuthorizations')
 
-module.exports = (router, controller) => {
+module.exports = (router, controller, modificationController) => {
   /**
     * @swagger
     * definitions:

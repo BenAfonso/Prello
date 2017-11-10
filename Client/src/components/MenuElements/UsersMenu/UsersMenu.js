@@ -47,8 +47,8 @@ export default class UsersMenu extends React.Component {
           .avatar {
             display: inline-block;
             padding: 5px 5px;
-            cursor: pointer;            
-          }        
+            cursor: pointer;
+          }
         `}
         </style>
       </div>

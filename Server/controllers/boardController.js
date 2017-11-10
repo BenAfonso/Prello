@@ -1,9 +1,12 @@
 const mongoose = require('mongoose')
 const Board = mongoose.model('Board')
 const User = mongoose.model('User')
+const Modification = mongoose.model('Modification')
+
 const Card = mongoose.model('Card')
 const Util = require('./Util')
 const emit = require('../controllers/sockets').emit
+const modificationController = require('./modificationController')
 const boardController = {}
 
 /**
@@ -202,6 +205,9 @@ boardController.addCollaborator = (boardId, userId, requesterId) => {
         reject(err)
       } else {
         emit(boardId, 'UPDATE_COLLABORATORS', res.collaborators)
+        modificationController.ADDED_COLLABORATOR_BOARD(boardId, requesterId, userId).catch((err) => {
+          reject(err)
+        })
         resolve(res)
       }
     })
@@ -265,6 +271,9 @@ boardController.removeCollaborator = (boardId, userId, requesterId) => {
       } else {
         boardController.refreshOneboard('COLLABORATOR_REMOVED', boardId)
         emit(boardId, 'UPDATE_COLLABORATORS', res.collaborators)
+        modificationController.REMOVED_COLLABORATOR_BOARD(boardId, requesterId, userId).catch((err) => {
+          reject(err)
+        })
         resolve(res)
       }
     })
@@ -273,6 +282,16 @@ boardController.removeCollaborator = (boardId, userId, requesterId) => {
 
 boardController.addCollaborators = (board, users) => {
 
+}
+boardController.getBoardHistory = (boardId, limit, skip) => {
+  return new Promise((resolve, reject) => {
+    Modification.find({'board': boardId}, { skip: skip, limit: limit }).populate('user fromList toList targetUser card comment list', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).sort({timestamp: 'desc'}).exec((err, items) => {
+      if (err) {
+        reject(err)
+      }
+      resolve(items)
+    })
+  })
 }
 
 module.exports = boardController
