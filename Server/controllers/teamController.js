@@ -66,7 +66,6 @@ teamController.addCollaboratorEmail = (teamId, email) => {
  */
 teamController.removeCollaboratorFromTeam = function (teamId, userId) {
   return new Promise((resolve, reject) => {
-
     Team.findOneAndUpdate({ '_id': teamId }, { $pull: { users: userId } }, { new: true }, function (err, res) {
       if (err) {
         reject(err)

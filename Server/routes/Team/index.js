@@ -15,5 +15,4 @@ module.exports = (router, controller) => {
   require('./setAdmin')(router, controller)
   require('./unsetAdmin')(router, controller)
   require('./removeAdmin')(router, controller)
-  
 }

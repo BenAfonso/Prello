@@ -2,6 +2,7 @@ const Util = require('../../controllers/Util')
 const {requiresLogin} = require('../../config/middlewares/authorization')
 const {hasCardInside} = require('../../config/middlewares/listAuthorizations')
 const {isCollaborator, hasListInside} = require('../../config/middlewares/boardAuthorizations')
+const modificationController = require('../../controllers/modificationController')
 
 module.exports = (router, controller) => {
   /**
@@ -59,10 +60,10 @@ module.exports = (router, controller) => {
     }
 
     controller.createComment(req).then((data) => {
+      modificationController.ADDED_COMMENT(req.params.boardId, req.user._id, req.params.cardId, data._id)
       res.status(201).json(data)
+    }).catch((err) => {
+      res.status(err.code).json(err.message)
     })
-      .catch((err) => {
-        res.status(err.code).json(err.message)
-      })
   })
 }

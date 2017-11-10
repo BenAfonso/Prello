@@ -59,7 +59,7 @@ module.exports = (router, controller) => {
       return
     }
 
-    controller.updateResponsibleEmail(req.params.boardId, req.params.cardId, req.params.listId, req.body.email).then((data) => {
+    controller.updateResponsibleEmail(req.params.boardId, req.params.cardId, req.params.listId, req.body.email, req.user._id).then((data) => {
       res.status(200).json(data)
     })
       .catch((err) => {
