@@ -45,9 +45,9 @@ modificationController.REMOVED_COLLABORATOR_BOARD = (boardId, userId, targetUser
   })
 }
 
-modificationController.SET_RESPONSABLE = (boardId, userId, cardId, responsableId) => {
+modificationController.SET_RESPONSABLE = (boardId, userId, cardId, targetUserID) => {
   return new Promise((resolve, reject) => {
-    let modificationToAdd = Modification({type: 'SET_RESPONSABLE', board: boardId, user: userId, card: cardId, responsable: responsableId})
+    let modificationToAdd = Modification({type: 'SET_RESPONSABLE', board: boardId, user: userId, card: cardId, targetUser: targetUserID})
     modificationToAdd.save((err, result) => {
       if (err) {
         reject(err)
