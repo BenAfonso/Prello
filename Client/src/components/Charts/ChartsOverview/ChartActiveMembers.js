@@ -1,16 +1,9 @@
 import React from 'react'
-// import { getOwnersAnlytics } from '../../../services/Charts.services'
 import { PieChart, Pie, Cell, Legend, Tooltip } from 'recharts'
-import { connect } from 'react-redux'
 
-@connect(store => {
-  return {
-    currentBoard: store.currentBoard,
-    board: store.currentBoard.board
-  }
-})
 export default class ChartActiveMembers extends React.Component {
   getActiveMembers () {
+    // const members = this.props.data.collaborators
     const data = [{name: 'Active', value: 30}, {name: 'Inactive', value: 70}]
     return data
   }

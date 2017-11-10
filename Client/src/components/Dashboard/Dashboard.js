@@ -1,6 +1,6 @@
 import PageLayout from '../../layouts/page'
 import React from 'react'
-import styles from './dashboard.styles'
+import styles from './Dashboard.styles'
 import { connect } from 'react-redux'
 import Tabs from '../../components/UI/Tabs/Tabs'
 import TabPanel from '../../components/UI/TabPanel/TabPanel'
@@ -8,14 +8,23 @@ import Icon from '../../components/UI/Icon/Icon'
 import ChartDoneCardsMembers from '../../components/Charts/ChartsMembers/ChartDoneCardsMembers'
 import ChartDoneCardsResponsibles from '../../components/Charts/ChartsResponsibles/ChartDoneCardsResponsibles'
 import ChartActiveMembers from '../../components/Charts/ChartsOverview/ChartActiveMembers'
+import { setBoard } from '../../store/actions'
+import { subscribeToBoard } from '../../services/api'
 
 @connect(store => {
   return {
-    currentUser: store.currentUser,
-    teamslist: store.teamslist
+    currentBoard: store.currentBoard,
+    board: store.currentBoard.board
   }
 })
-export default class DashboardPage extends React.Component {
+export default class Dashboard extends React.Component {
+  componentDidMount () {
+    setBoard(this.props.dispatch, this.props._id).then(board => {
+      subscribeToBoard(board)
+    }).catch(err => {
+      console.error(err)
+    })
+  }
   renderProfileTab () {
     return (
       <div className='profileTab'>
@@ -29,7 +38,7 @@ export default class DashboardPage extends React.Component {
           </div>
           <hr className='titleAndContentSeparator'/>
           <ul>
-            <ChartActiveMembers />
+            <ChartActiveMembers data={this.props.board} />
           </ul>
         </div>
         <div className = 'activityDiv'>
@@ -111,11 +120,11 @@ export default class DashboardPage extends React.Component {
           </div>
           <hr className='titleAndContentSeparator'/>
           <div className='profileTab'>
-            <div><ChartActiveMembers /></div>
+            <div><ChartActiveMembers data={this.props.board}/></div>
             <div><ChartDoneCardsResponsibles /></div>
           </div>
           <div className='profileTab'>
-            <div><ChartActiveMembers /></div>
+            <div><ChartActiveMembers data={this.props.board}/></div>
             <div><ChartDoneCardsMembers /></div>
           </div>
         </div>
@@ -127,6 +136,7 @@ export default class DashboardPage extends React.Component {
   }
 
   render () {
+    console.log(this.props.board)
     return (
       <PageLayout>
         <div className='dashboardPage'>
