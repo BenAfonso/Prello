@@ -3,8 +3,6 @@ const Board = mongoose.model('Board')
 const User = mongoose.model('User')
 const List = mongoose.model('List')
 const Card = mongoose.model('Card')
-const secretKey = require('../../config').secretKey
-const jwt = require('jsonwebtoken')
 const userController = require('../../controllers/userController')
 
 const mockedBoard = { title: 'Test board', visibility: 'private', background: '', owner: '' }

@@ -1,6 +1,4 @@
 const mongoose = require('mongoose')
-const secretKey = require('../../config').secretKey
-const jwt = require('jsonwebtoken')
 const Board = mongoose.model('Board')
 const User = mongoose.model('User')
 const userController = require('../../controllers/userController')
