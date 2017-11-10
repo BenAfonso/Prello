@@ -78,6 +78,47 @@ export default class DashboardPage extends React.Component {
             <ChartDoneCardsMembers />
           </ul>
         </div>
+        <div className = 'activityDiv'>
+          <div className='activityLine'>
+            <Icon name='users'
+              fontSize='24px'
+              color='white'
+              style={{marginLeft: '2%', marginRight: '20px'}}/>
+            <span className='activityTitle'>Lists</span>
+          </div>
+          <hr className='titleAndContentSeparator'/>
+          <ul>
+            <ChartDoneCardsMembers />
+          </ul>
+        </div>
+        <style jsx>
+          {styles}
+        </style>
+      </div>
+    )
+  }
+
+  renderListsTab () {
+    return (
+      <div className='profileTab'>
+        <div className='teamPart'>
+          <div className='teamLine'>
+            <Icon name='users'
+              fontSize='24px'
+              color='white'
+              style={{marginLeft: '2%', marginRight: '20px'}}/>
+            <span className='teamsTitle'>Cards done by members</span>
+          </div>
+          <hr className='titleAndContentSeparator'/>
+          <div className='profileTab'>
+            <div><ChartActiveMembers /></div>
+            <div><ChartDoneCardsResponsibles /></div>
+          </div>
+          <div className='profileTab'>
+            <div><ChartActiveMembers /></div>
+            <div><ChartDoneCardsMembers /></div>
+          </div>
+        </div>
         <style jsx>
           {styles}
         </style>
@@ -97,6 +138,9 @@ export default class DashboardPage extends React.Component {
               </TabPanel>
               <TabPanel label='Members'>
                 {this.renderMembersTab()}
+              </TabPanel>
+              <TabPanel label='Lists'>
+                {this.renderListsTab()}
               </TabPanel>
             </Tabs>
           </div>
