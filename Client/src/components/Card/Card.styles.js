@@ -42,12 +42,14 @@ input {
   position: relative;
   margin-top: 10px;
   display: flex;
+  width: 100%;
 }
 
 .collaborators {
   display: flex;
   width: calc(100% - 70px);
   justify-content: flex-end;
+  flex-wrap: wrap;
   float: right;
 }
 

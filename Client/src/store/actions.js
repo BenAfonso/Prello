@@ -299,6 +299,13 @@ export function updateTeamLocal (team) {
   }
 }
 
+export function setBoardHistory (history) {
+  store.dispatch({
+    type: 'SET_BOARD_HISTORY',
+    payload: history
+  })
+}
+
 export function addCollaborator (dispatch, boardId, email) {
   addCollaboratorDistant(boardId, email).then((board) => {
   }).catch(err => {

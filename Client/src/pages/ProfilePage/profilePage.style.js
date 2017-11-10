@@ -146,4 +146,11 @@ label {
     background: #cd5a91;
     border-top: 1px white solid;
 }
+.linkText {
+    color: white;
+    text-decoration: underline;
+}
+.linkText:hover {
+    cursor: pointer;
+}
 `

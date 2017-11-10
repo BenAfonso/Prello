@@ -7,6 +7,7 @@ import styles from './profilePage.style'
 import { updateProfile } from '../../services/User.services'
 import { updateProfileAction, setTeamslist, setBoardslist } from '../../store/actions'
 import { updateProfileLocalStorage } from '../../services/Authentication.services'
+import { displayNotification } from '../../services/Notification.service'
 import AvatarThumbnail from '../../components/UI/AvatarThumbnail/AvatarThumbnail'
 import BoardThumbnail from '../../components/BoardThumbnail/BoardThumbnail'
 import { Link } from 'react-router-dom'
@@ -26,7 +27,8 @@ export default class ProfilePage extends React.Component {
     super(props)
     this.state = {
       displayModifyProfileForm: false,
-      avatarUrl: ''
+      avatarUrl: '',
+      displayNewPasswordForm: false
     }
 
     this.renderModifyProfileForm = this.renderModifyProfileForm.bind(this)
@@ -37,10 +39,16 @@ export default class ProfilePage extends React.Component {
     this.renderProfileTab = this.renderProfileTab.bind(this)
     this.renderBoardsTab = this.renderBoardsTab.bind(this)
     this.onAvatarInputChange = this.onAvatarInputChange.bind(this)
+    this.renderOptionsTab = this.renderOptionsTab.bind(this)
+    this.displayNewPasswordForm = this.displayNewPasswordForm.bind(this)
+    this.hideNewPasswordForm = this.hideNewPasswordForm.bind(this)
+    this.renderNewPasswordForm = this.renderNewPasswordForm.bind(this)
+    this.updatePassword = this.updatePassword.bind(this)
   }
 
   componentDidMount () {
     setBoardslist(this.props.dispatch).then(() => {
+      console.log(this.props.boardslist)
     }).catch(err => {
       console.error(err)
     })
@@ -58,6 +66,14 @@ export default class ProfilePage extends React.Component {
     this.setState({ displayModifyProfileForm: false })
   }
 
+  displayNewPasswordForm () {
+    this.setState({ displayNewPasswordForm: true })
+  }
+
+  hideNewPasswordForm () {
+    this.setState({ displayNewPasswordForm: false })
+  }
+
   onAvatarInputChange () {
     this.setState({ avatarUrl: this.avatarInput.value })
   }
@@ -67,7 +83,7 @@ export default class ProfilePage extends React.Component {
     let username = this.usernameInput.value
     let picture = this.avatarInput.value
     let bio = this.biopicInput.value
-    if (name.length > 0 && username.length > 0 && picture.length > 0) {
+    if (name.length > 0 && username.length > 0) {
       const datas = {
         name,
         username,
@@ -76,10 +92,28 @@ export default class ProfilePage extends React.Component {
       }
       updateProfile(datas)
         .then(updatedUser => {
+          console.log(updatedUser)
           updateProfileLocalStorage(updatedUser)
           updateProfileAction(updatedUser)
         })
       this.hideModifyProfileForm()
+      displayNotification({type: 'success', title: 'Profile edited', content: 'Your profile has been well edited !'})
+    } else if (name.length === 0) {
+      displayNotification({type: 'error', title: 'Error', content: 'Full name is mandatory !'})
+    } else if (username.length === 0) {
+      displayNotification({type: 'error', title: 'Error', content: 'Username is mandatory !'})
+    }
+  }
+
+  updatePassword () {
+    if (this.newPasswordInput.value && this.confirmPasswordInput.value && this.newPasswordInput.value === this.confirmPasswordInput.value) {
+      const passwordHash = this.newPasswordInput.value
+      updateProfile({ passwordHash: passwordHash })
+        .then(updatedUser => {
+        })
+      this.hideNewPasswordForm()
+    } else {
+      displayNotification({type: 'error', title: 'Error', content: 'The new password and the confirmation must match !'})
     }
   }
 
@@ -145,6 +179,34 @@ export default class ProfilePage extends React.Component {
     )
   }
 
+  renderNewPasswordForm () {
+    return (
+      <form>
+        <label>New password :</label>
+        <input className='input' type='password' required ref={e => { this.newPasswordInput = e }}/>
+        <label>Confirm new password :</label>
+        <input className='input' type='password' required ref={e => { this.confirmPasswordInput = e }}/>
+        <Button bgColor='#5AAC44'
+          onClick={this.updatePassword}
+          hoverBgColor='#07a801'
+          fontSize='12px'
+          bold
+          shadow
+          color='white'><Icon name='check' fontSize='10px' style={{marginRight: '5px'}} color='white'/>Confirm
+        </Button>
+        <Button onClick={this.hideNewPasswordForm}
+          bgColor='#E2E4E6'
+          hoverBgColor='#d6d6d6'
+          color='black'
+          fontSize='12px'
+          bold
+          shadow><Icon name='ban' fontSize='10px' style={{marginRight: '5px'}}/>Cancel
+        </Button>
+        <style jsx>{styles}</style>
+      </form>
+    )
+  }
+
   renderProfileTab () {
     return (
       <div className='profileTab'>
@@ -173,6 +235,20 @@ export default class ProfilePage extends React.Component {
           </div>
           <hr className='titleAndContentSeparator'/>
         </div>
+        <style jsx>
+          {styles}
+        </style>
+      </div>
+    )
+  }
+
+  renderOptionsTab () {
+    return (
+      <div className='optionsTab'>
+        {!this.state.displayNewPasswordForm
+          ? <span className='linkText' onClick={this.displayNewPasswordForm}>Change password</span>
+          : this.renderNewPasswordForm()
+        }
         <style jsx>
           {styles}
         </style>
@@ -257,6 +333,9 @@ export default class ProfilePage extends React.Component {
               </TabPanel>
               <TabPanel label='Boards'>
                 {this.renderBoardsTab()}
+              </TabPanel>
+              <TabPanel label='Options'>
+                {this.renderOptionsTab()}
               </TabPanel>
             </Tabs>
           </div>
