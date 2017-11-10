@@ -126,7 +126,7 @@ cardController.moveCard = (req) => {
                     reject(error)
                   } else {
                     boardController.refreshOneboard('CARD_MOVED', boardId)
-                    modificationController.MOVED_CARD(boardId, req.user._id, oldListId, newListId).catch((err) => {
+                    modificationController.MOVED_CARD(boardId, req.user._id, cardId, oldListId, newListId).catch((err) => {
                       reject(err)
                     })
                     resolve(result.cards)
