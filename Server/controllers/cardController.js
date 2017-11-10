@@ -177,7 +177,8 @@ cardController.getOneCard = (cardId) => {
             reject(err)
           } else {
             modificationController.findCardHistory(cardId).then((item) => {
-              res.modifications = item
+              let object = res._doc
+              object.modifications = item
               resolve(res)
             }).catch((err) => {
               err.status = 500

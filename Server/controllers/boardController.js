@@ -136,13 +136,7 @@ boardController.getOneboard = function (boardId, userId) {
               err.status = 500
               reject(err)
             } else {
-              modificationController.findBoardHistory(boardId).then((item) => {
-                res.modifications = item
-                resolve(res)
-              }).catch((err) => {
-                err.status = 500
-                reject(err)
-              })
+              resolve(res)
             }
           })
         }
