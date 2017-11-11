@@ -60,6 +60,7 @@ export default class APIPage extends React.Component {
         text: c.name,
         component: <RegisteredApplicationPage {...c} />
       })
+      return c
     })
 
     return (

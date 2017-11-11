@@ -1,7 +1,6 @@
 import axios from 'axios'
 import Config from '../config'
 import { setConnectedUser } from '../store/actions'
-import qs from 'qs'
 
 export function storeToken (token) {
   window.localStorage.setItem('prello_access_token', token)
@@ -74,21 +73,6 @@ export function loginGoogle (code) {
     })
   })
 }
-export function loginPrello (code) {
-  return new Promise((resolve, reject) => {
-    axios.post(`${Config.API_URL}/oauth/token`, qs.stringify({
-      grant_type: 'authorization_code',
-      code: code
-    }), { headers: {
-      'authorization': 'Basic M2I1Njk2YTJmMGM4Zjc2N2ViMzQ6OWEzOTA0Mjg0ZGViMDJlMzJmZGY='
-    }}).then((res) => {
-      resolve(res.data)
-    }).catch((err) => {
-      console.error(err)
-      reject(err)
-    })
-  })
-}
 
 export function register (name, email, password, withLogin) {
   return new Promise((resolve, reject) => {
@@ -104,74 +88,6 @@ export function register (name, email, password, withLogin) {
       }).catch((err) => {
         reject(err)
       })
-  })
-}
-
-export function authGet (url) {
-  return new Promise((resolve, reject) => {
-    if (isAuthenticated()) {
-      axios.get(url, {
-        headers: { 'authorization': `Bearer ${extractToken()}` }
-      }).then((res) => {
-        resolve(res)
-      }).catch((err) => {
-        reject(err)
-      })
-    } else {
-      logout()
-      reject(new Error('Not logged in'))
-    }
-  })
-}
-
-export function authPost (url, body) {
-  return new Promise((resolve, reject) => {
-    if (isAuthenticated()) {
-      axios.post(url, body, {
-        headers: { 'authorization': `Bearer ${extractToken()}` }
-      }).then((res) => {
-        resolve(res)
-      }).catch((err) => {
-        reject(err)
-      })
-    } else {
-      logout()
-      reject(new Error('Not logged in'))
-    }
-  })
-}
-
-export function authPut (url, body) {
-  return new Promise((resolve, reject) => {
-    if (isAuthenticated()) {
-      axios.put(url, body, {
-        headers: { 'authorization': `Bearer ${extractToken()}` }
-      }).then((res) => {
-        resolve(res)
-      }).catch((err) => {
-        reject(err)
-      })
-    } else {
-      logout()
-      reject(new Error('Not logged in'))
-    }
-  })
-}
-
-export function authDelete (url) {
-  return new Promise((resolve, reject) => {
-    if (isAuthenticated()) {
-      axios.delete(url, {
-        headers: { 'authorization': `Bearer ${extractToken()}` }
-      }).then((res) => {
-        resolve(res)
-      }).catch((err) => {
-        reject(err)
-      })
-    } else {
-      logout()
-      reject(new Error('Not logged in'))
-    }
   })
 }
 
