@@ -41,7 +41,6 @@ export default class LabelDropdown extends React.Component {
     this.displayLabelForm = this.displayLabelForm.bind(this)
     this.addLabel = this.addLabel.bind(this)
     this.deleteLabel = this.deleteLabel.bind(this)
-    this.addLabelWithAxios = this.addLabelWithAxios.bind(this)
   }
 
   displayLabelForm () {
@@ -59,7 +58,7 @@ export default class LabelDropdown extends React.Component {
     })
   }
 
-  addLabelWithAxios () {
+  addLabelDistant () {
     this.props.onAddBoardLabel(this.labelTitle.input.value, this.labelColor.input.value)
   }
 
@@ -106,7 +105,7 @@ export default class LabelDropdown extends React.Component {
             ? <div>
               <Input ref={(v) => { this.labelTitle = v } } placeholder='Label title'/>
               <Input ref={(v) => { this.labelColor = v } } placeholder='#c5c5c5'/>
-              <Button onClick={this.addLabelWithAxios}>Save Label</Button>
+              <Button onClick={this.addLabelDistant}>Save Label</Button>
             </div> : null}
         </div>
       </div>
