@@ -89,8 +89,6 @@ export default class Card extends React.Component {
   }
 
   render () {
-    console.log(this.props.lists[this.props.listIndex].cards[this.props.index].labels)
-    console.log(this.props.board.labels)
     const list = this.props.board.lists[this.props.listIndex]
     const card = list.cards.filter(c => c._id === this.props.id)[0]
     const dueDate = this.getDueDate(card)
@@ -101,7 +99,6 @@ export default class Card extends React.Component {
     boardLabels.map((bLabel) => {
       cardLabels.map((cLabel) => {
         if (cLabel === bLabel._id) {
-          console.log('AHHHH')
           labelsToDisplay.push(bLabel)
         }
       })

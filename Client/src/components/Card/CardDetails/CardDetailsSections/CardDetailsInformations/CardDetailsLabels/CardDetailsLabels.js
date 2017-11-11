@@ -41,7 +41,7 @@ export default class CardDetailsLabels extends React.Component {
   render () {
     return (
       <ul>
-        {this.props.labels.map(l => <li><Label labelText={l['label']} backgroundColor={l['color']} /></li>)}
+        {this.props.cardLabels.map(label => <li><Label isThumbnail={true} labelText={label['name']} backgroundColor={label['color']} /></li>)}
         <li>
           <div className='addButton' onClick={this.displayLabelDropdown.bind(this)}>
             <Icon name='plus' fontSize='15px' color='#aaa' />

@@ -69,14 +69,14 @@ export default class Label extends React.Component {
   addCardLabel () {
     this.setState({
       addedToCard: !this.addedToCard
-    })
-    this.props.onAddCardLabel(this.props.labelId)
+    }, this.props.onAddCardLabel(this.props.labelId))
   }
 
   deleteCardLabel () {
-    alert('hello')
+    this.setState({
+      addedToCard: !this.addedToCard
+    }, this.props.onDeleteCardLabel(this.props.labelId))
   }
-
   render () {
     const {
       labelText,

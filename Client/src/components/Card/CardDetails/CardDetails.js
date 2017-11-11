@@ -14,7 +14,7 @@ import MembersMenu from './CardDetailsMenu/MembersMenu/MembersMenu'
 import DueDateMenu from './CardDetailsMenu/DueDateMenu/DueDateMenu'
 import { addChecklist } from '../../../services/Checklist.services'
 import { getCompleteCard } from '../../../services/Card.services'
-import { addLabel, deleteLabel, updateLabel, addCardLabel } from '../../../services/Label.services'
+import { addLabel, deleteLabel, updateLabel, addCardLabel, deleteCardLabel } from '../../../services/Label.services'
 import { archiveCard } from '../../../store/actions'
 import LabelDropdown from '../../UI/LabelDropdown/LabelDropdown'
 
@@ -70,7 +70,6 @@ export default class CardDetails extends React.Component {
   }
 
   updateBoardLabel (labelId, labelTitle, labelColor) {
-    console.log(labelId + ' ' + labelTitle + ' ' + labelColor)
     updateLabel(this.props.board._id, labelId, labelTitle, labelColor)
   }
 
@@ -78,12 +77,17 @@ export default class CardDetails extends React.Component {
     addCardLabel(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.id, labelId)
   }
 
+  deleteCardLabel (labelId) {
+    deleteCardLabel(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.id, labelId)
+  }
+
   render () {
     const card = this.props.lists[this.props.listIndex].cards[this.props.index]
+    const cardLabels = this.props.lists[this.props.listIndex].cards[this.props.index].labels
     return (
       <div className='host'>
         <div className='content'>
-          <CardDetailsInformations {...this.props} />
+          <CardDetailsInformations {...this.props} cardLabels={cardLabels} />
           <CardDetailsChecklists cardId={this.props.id} listIndex={this.props.listIndex} checklists={this.props.checklists}/>
           <CardDetailsComments {...this.props}/>
           <CardDetailsActivity labels={this.props.labels}/>
@@ -121,7 +125,7 @@ export default class CardDetails extends React.Component {
                 button={<Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>Labels</Button>
                 }>
                 <div style={{ width: '340px' }}>
-                  <LabelDropdown onAddCardLabel={this.addCardLabel.bind(this)} onUpdateBoardLabel={this.updateBoardLabel.bind(this)} onDeleteBoardLabel={this.deleteBoardLabel.bind(this)} labels={this.props.board.labels} onAddBoardLabel={this.addBoardLabel.bind(this)} />
+                  <LabelDropdown cardLabels={cardLabels} onDeleteCardLabel={this.deleteCardLabel.bind(this)} onAddCardLabel={this.addCardLabel.bind(this)} onUpdateBoardLabel={this.updateBoardLabel.bind(this)} onDeleteBoardLabel={this.deleteBoardLabel.bind(this)} labels={this.props.board.labels} onAddBoardLabel={this.addBoardLabel.bind(this)} />
                 </div>
               </DropDown>
             </li>

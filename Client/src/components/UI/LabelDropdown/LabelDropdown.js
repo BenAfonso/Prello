@@ -37,8 +37,6 @@ export default class LabelDropdown extends React.Component {
     }
 
     this.displayLabelForm = this.displayLabelForm.bind(this)
-    this.addLabel = this.addLabel.bind(this)
-    this.deleteLabel = this.deleteLabel.bind(this)
     this.addLabelDistant = this.addLabelDistant.bind(this)
   }
 
@@ -48,27 +46,12 @@ export default class LabelDropdown extends React.Component {
     })
   }
 
-  addLabel () {
-    let newBoardLabels = this.props.boardLabels.slice()
-    newBoardLabels.push({label: this.labelTitle.input.value, color: this.labelColor.input.value})
-    this.setState({
-      displayLabelCreationForm: !this.state.displayLabelCreationForm,
-      boardLabels: newBoardLabels
-    })
+  componentDidMount () {
   }
 
   addLabelDistant () {
     this.props.onAddBoardLabel(this.labelTitle.input.value, this.labelColor.input.value)
   }
-
-  deleteLabel (id) {
-    let newBoardLabels = this.state.boardLabels.slice().filter(label => label['label'] !== id)
-    this.setState({
-      displayLabelCreationForm: !this.state.displayLabelCreationForm,
-      boardLabels: newBoardLabels
-    })
-  }
-
   render () {
     const {
       height,
@@ -94,7 +77,7 @@ export default class LabelDropdown extends React.Component {
       <div style={props.style}>
         <div>
           <ul>
-            {this.props.labels.map(e => <li class='line'><Label onAddCardLabel={this.props.onAddCardLabel} onUpdateBoardLabel={this.props.onUpdateBoardLabel} onDeleteBoardLabel={this.props.onDeleteBoardLabel} isItem={ true } labelId={e['_id']} labelText={e['name']} backgroundColor={e['color']} /></li>)}
+            {this.props.labels.map(e => <li class='line'><Label cardLabels={this.props.cardLabels} onDeleteCardLabel={this.props.onDeleteCardLabel} onAddCardLabel={this.props.onAddCardLabel} onUpdateBoardLabel={this.props.onUpdateBoardLabel} onDeleteBoardLabel={this.props.onDeleteBoardLabel} isItem={ true } labelId={e['_id']} labelText={e['name']} backgroundColor={e['color']} /></li>)}
           </ul>
         </div>
         <div>

@@ -73,7 +73,7 @@ export default class CardDetailsInformations extends React.Component {
               <div className='subsectionTitle'>
                 Labels
               </div>
-              <CardDetailsLabels />
+              <CardDetailsLabels cardLabels={this.props.cardLabels} />
             </div>
             <div className='responsible'>
               <div className='subsectionTitle'>

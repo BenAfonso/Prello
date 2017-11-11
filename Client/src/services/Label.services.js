@@ -28,3 +28,7 @@ export function addCardLabel (boardId, listId, cardId, labelId) {
     labelId: labelId
   })
 }
+
+export function deleteCardLabel (boardId, listId, cardId, labelId) {
+  axios.delete(`${Config.API_URL}/boards/${boardId}/lists/${listId}/cards/${cardId}/labels/${labelId}`)
+}
