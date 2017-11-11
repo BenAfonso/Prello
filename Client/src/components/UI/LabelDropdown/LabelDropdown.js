@@ -50,7 +50,8 @@ export default class LabelDropdown extends React.Component {
   }
 
   addLabelDistant () {
-    this.props.onAddBoardLabel(this.labelTitle.input.value, this.labelColor.input.value)
+    this.displayLabelForm()
+    this.props.onAddBoardLabel(this.labelTitle.input.value, this.labelColor.value)
   }
   render () {
     const {
@@ -73,23 +74,37 @@ export default class LabelDropdown extends React.Component {
       borderRadius,
       fontSize
     }
-    return (
-      <div style={props.style}>
-        <div>
-          <ul>
-            {this.props.labels.map(e => <li class='line'><Label cardLabels={this.props.cardLabels} onDeleteCardLabel={this.props.onDeleteCardLabel} onAddCardLabel={this.props.onAddCardLabel} onUpdateBoardLabel={this.props.onUpdateBoardLabel} onDeleteBoardLabel={this.props.onDeleteBoardLabel} isItem={ true } labelId={e['_id']} labelText={e['name']} backgroundColor={e['color']} /></li>)}
-          </ul>
+
+    if (!this.state.displayLabelCreationForm) {
+      return (
+        <div style={props.style}>
+          <div style={{ marginLeft: '30%', marginTop: '30px' }}>
+            <div>
+              <ul>
+                {this.props.labels.map(e => <li class='line'><Label cardLabels={this.props.cardLabels} onDeleteCardLabel={this.props.onDeleteCardLabel} onAddCardLabel={this.props.onAddCardLabel} onUpdateBoardLabel={this.props.onUpdateBoardLabel} onDeleteBoardLabel={this.props.onDeleteBoardLabel} isItem={ true } labelId={e['_id']} labelText={e['name']} backgroundColor={e['color']} /></li>)}
+              </ul>
+            </div>
+            <div>
+              <Button bgColor='#28AF28' onClick={this.displayLabelForm}>New label</Button>
+            </div>
+          </div>
         </div>
-        <div>
-          <Button onClick={this.displayLabelForm}>Create label</Button>
-          {this.state.displayLabelCreationForm
-            ? <div>
+      )
+    } else if (this.state.displayLabelCreationForm) {
+      return (
+        <div style={props.style}>
+          <div>
+            <div>
               <Input ref={(v) => { this.labelTitle = v } } placeholder='Label title'/>
-              <Input ref={(v) => { this.labelColor = v } } placeholder='#c5c5c5'/>
-              <Button onClick={this.addLabelDistant}>Save Label</Button>
-            </div> : null}
+              <input type='color' ref={(v) => { this.labelColor = v } } placeholder='#c5c5c5'/>
+            </div>
+            <div style={{ display: 'flex' }}>
+              <Button bgColor='#28AF28'onClick={this.addLabelDistant}>Save</Button>
+              <Button bgColor='#e73333' onClick={this.displayLabelForm}>Cancel</Button>
+            </div>
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
 }

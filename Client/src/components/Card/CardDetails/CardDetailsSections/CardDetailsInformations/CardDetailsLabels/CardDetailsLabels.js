@@ -45,10 +45,10 @@ export default class CardDetailsLabels extends React.Component {
         <li>
           <div className='addButton' onClick={this.displayLabelDropdown.bind(this)}>
             <Icon name='plus' fontSize='15px' color='#aaa' />
-            <div style={{ width: '340px' }}>
+            <div style={{ width: '340px', height: '500px' }}>
               {
                 this.state.showDropdown
-                  ? <LabelDropdown onAddLabelCard={this.onAddLabelCard} />
+                  ? <LabelDropdown cardLabels={this.props.cardLabels} labels={this.props.labels} onDeleteCardLabel={this.props.onDeleteCardLabel} onAddCardLabel={this.props.onAddCardLabel} onUpdateBoardLabel={this.props.onUpdateBoardLabel} onDeleteBoardLabel={this.props.onDeleteBoardLabel} onAddBoardLabel={this.props.onAddBoardLabel} />
                   : null
               }
             </div>

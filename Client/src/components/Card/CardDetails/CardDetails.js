@@ -87,7 +87,7 @@ export default class CardDetails extends React.Component {
     return (
       <div className='host'>
         <div className='content'>
-          <CardDetailsInformations {...this.props} cardLabels={cardLabels} />
+          <CardDetailsInformations {...this.props} cardLabels={cardLabels} onDeleteCardLabel={this.deleteCardLabel.bind(this)} onAddCardLabel={this.addCardLabel.bind(this)} onUpdateBoardLabel={this.updateBoardLabel.bind(this)} onDeleteBoardLabel={this.deleteBoardLabel.bind(this)} labels={this.props.board.labels} onAddBoardLabel={this.addBoardLabel.bind(this)} />
           <CardDetailsChecklists cardId={this.props.id} listIndex={this.props.listIndex} checklists={this.props.checklists}/>
           <CardDetailsComments {...this.props}/>
           <CardDetailsActivity labels={this.props.labels}/>
@@ -124,7 +124,7 @@ export default class CardDetails extends React.Component {
                 layout='custom'
                 button={<Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>Labels</Button>
                 }>
-                <div style={{ width: '340px' }}>
+                <div style={{ width: '100%' }}>
                   <LabelDropdown cardLabels={cardLabels} onDeleteCardLabel={this.deleteCardLabel.bind(this)} onAddCardLabel={this.addCardLabel.bind(this)} onUpdateBoardLabel={this.updateBoardLabel.bind(this)} onDeleteBoardLabel={this.deleteBoardLabel.bind(this)} labels={this.props.board.labels} onAddBoardLabel={this.addBoardLabel.bind(this)} />
                 </div>
               </DropDown>

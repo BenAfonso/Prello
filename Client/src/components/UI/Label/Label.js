@@ -63,7 +63,8 @@ export default class Label extends React.Component {
   }
 
   updateBoardLabel () {
-    this.props.onUpdateBoardLabel(this.props.labelId, this.newlabelTitle.input.value, this.newlabelColor.input.value)
+    this.props.onUpdateBoardLabel(this.props.labelId, this.newlabelTitle.input.value, this.newlabelColor.value)
+    this.displayLabelEditForm()
   }
 
   addCardLabel () {
@@ -74,7 +75,7 @@ export default class Label extends React.Component {
 
   deleteCardLabel () {
     this.setState({
-      addedToCard: !this.addedToCard
+      addedToCard: false
     }, this.props.onDeleteCardLabel(this.props.labelId))
   }
   render () {
@@ -102,7 +103,21 @@ export default class Label extends React.Component {
       textAlign: centeredText ? 'center' : 'left',
       ...props.style
     }
-    if (!this.props.isItem) return <div style={props.style}>{this.props.labelText}</div>
+
+    if (this.state.displayLabelEditForm) {
+      return (
+        <div>
+          <div>
+            <Input ref={(v) => { this.newlabelTitle = v } } placeholder='Label title'/>
+            <input type='color' defaultValue="green" ref={(v) => { this.newlabelColor = v } } placeholder='#c5c5c5'/>
+          </div>
+          <div style={{ display: 'flex' }}>
+            <Button bgColor='#28AF28' onClick={this.updateBoardLabel}>Save</Button>
+            <Button bgColor='#e73333' onClick={this.displayLabelEditForm}>Cancel</Button>
+          </div>
+        </div>
+      )
+    } else if (!this.props.isItem) return <div style={props.style}>{this.props.labelText}</div>
     else if (this.props.isItem && this.state.addedToCard) {
       return (
         <div className='labelItem'>
@@ -126,12 +141,6 @@ export default class Label extends React.Component {
               size='small'>
               <Icon name='pencil' color='#70727c' />
             </Button>
-            {this.state.displayLabelEditForm
-              ? <div>
-                <Input ref={(v) => { this.newlabelTitle = v } } placeholder='Label title'/>
-                <Input ref={(v) => { this.newlabelColor = v } } placeholder='#c5c5c5'/>
-                <Button onClick={this.updateBoardLabel}>Save Label</Button>
-              </div> : null}
           </div>
           <style jsx>{styles}</style>
         </div>
@@ -163,7 +172,7 @@ export default class Label extends React.Component {
               ? <div>
                 <Input ref={(v) => { this.newlabelTitle = v } } placeholder='Label title'/>
                 <Input ref={(v) => { this.newlabelColor = v } } placeholder='#c5c5c5'/>
-                <Button onClick={this.updateBoardLabel}>Save Label</Button>
+                <Button bgColor='#28AF28' onClick={this.updateBoardLabel}>Save Label</Button>
               </div> : null}
           </div>
           <style jsx>{styles}</style>
