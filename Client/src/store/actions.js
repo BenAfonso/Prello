@@ -1,5 +1,5 @@
-import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDistant } from '../services/Team.services'
-import { fetchBoards, addBoardDistant, addCollaboratorDistant, removeCollaboratorDistant } from '../services/Board.services'
+import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDistant, removeTeamAdminDistant, setTeamAdminDistant, unsetTeamAdminDistant } from '../services/Team.services'
+import { fetchBoards, addBoardDistant, addTeamBoardDistant, addCollaboratorDistant, removeCollaboratorDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
@@ -189,6 +189,14 @@ export function addBoard (dispatch, payload) {
   })
 }
 
+export function addTeamBoard (dispatch, payload) {
+  addTeamBoardDistant(payload).then((board) => {
+    // <= HANDLED FROM SOCKETS
+  }).catch(err => {
+    return err
+  })
+}
+
 export function addBoardLocal (board) {
   if (board) {
     store.dispatch({
@@ -277,6 +285,48 @@ export function removeTeamMemberLocal (userId) {
   if (userId) {
     store.dispatch({
       type: 'REMOVE_MEMBER',
+      payload: userId
+    })
+  }
+}
+
+export function removeTeamAdmin (teamId, userId) {
+  removeTeamAdminDistant(teamId, userId).then((res) => {
+    removeTeamAdminLocal(userId)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function removeTeamAdminLocal (userId) {
+  if (userId) {
+    store.dispatch({
+      type: 'REMOVE_ADMIN',
+      payload: userId
+    })
+  }
+}
+
+export function setTeamAdmin (teamId, userId) {
+  setTeamAdminDistant(teamId, userId).then((res) => {
+    updateTeamLocal(res)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function unsetTeamAdmin (teamId, userId) {
+  unsetTeamAdminDistant(teamId, userId).then((res) => {
+    updateTeamLocal(res)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function updateTeamAdminsLocal (userId) {
+  if (userId) {
+    store.dispatch({
+      type: 'UPDATE_ADMINS',
       payload: userId
     })
   }

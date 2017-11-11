@@ -37,6 +37,16 @@ export default (state = defaultTeamState, action) => {
         }
       }
     }
+    case 'REMOVE_ADMIN': {
+      return {
+        ...state,
+        team: {
+          ...state.team,
+          users: state.team.users.filter(u => u._id !== action.payload),
+          admins: state.team.admins.filter(u => u._id !== action.payload)
+        }
+      }
+    }
     case 'UPDATE_TEAM': {
       return {
         ...state,

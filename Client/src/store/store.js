@@ -20,7 +20,8 @@ export const defaultCurrentUserState = {
   _id: '',
   username: '',
   name: '',
-  picture: ''
+  picture: '',
+  teams: []
 }
 
 export const defaultNotificationsState = {
