@@ -1,4 +1,4 @@
-import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDistant, removeTeamAdminDistant, setTeamAdminDistant, unsetTeamAdminDistant } from '../services/Team.services'
+import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDistant, removeTeamAdminDistant, setTeamAdminDistant, unsetTeamAdminDistant, updateTeamDistant } from '../services/Team.services'
 import { fetchBoards, addBoardDistant, addTeamBoardDistant, addCollaboratorDistant, removeCollaboratorDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
@@ -332,9 +332,25 @@ export function updateTeamAdminsLocal (userId) {
   }
 }
 
+export function updateTeam (teamId, payload) {
+  updateTeamDistant(teamId, payload).then((res) => {
+    updateTeamInfosLocal(payload)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function updateTeamInfosLocal (payload) {
+  if (payload) {
+    store.dispatch({
+      type: 'UPDATE_INFOS',
+      payload: payload
+    })
+  }
+}
+
 export function updateTeamLocal (team) {
   if (team) {
-    console.log('team', team)
     store.dispatch({
       type: 'UPDATE_TEAM',
       payload: team

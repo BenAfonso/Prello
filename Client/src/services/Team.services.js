@@ -74,3 +74,16 @@ export function unsetTeamAdminDistant (team, userId) {
     })
   })
 }
+
+export function updateTeamDistant (teamId, payload) {
+  return new Promise((resolve, reject) => {
+    axios.put(`${Config.API_URL}/teams/${teamId}`, {
+      name: payload.name,
+      visibility: payload.visibility
+    }).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}

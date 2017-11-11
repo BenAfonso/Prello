@@ -53,6 +53,16 @@ export default (state = defaultTeamState, action) => {
         team: action.payload
       }
     }
+    case 'UPDATE_INFOS': {
+      return {
+        ...state,
+        team: {
+          ...state.team,
+          name: action.payload.name,
+          visibility: action.payload.visibility
+        }
+      }
+    }
     default:
       return {
         ...state

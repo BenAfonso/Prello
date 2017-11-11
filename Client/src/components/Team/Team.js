@@ -11,7 +11,7 @@ import TabPanel from '../UI/TabPanel/TabPanel'
 import MembersTab from './TabsContent/MembersTabs/MembersTab'
 import NewBoardForm from '../CreateMenu/Forms/NewBoardForm/NewBoardForm'
 
-import { setTeam } from '../../store/actions'
+import { setTeam, updateTeam } from '../../store/actions'
 
 @connect(store => {
   return {
@@ -39,10 +39,13 @@ export default class Team extends React.Component {
     this.state = {
       tabIndex: tabIndex,
       editFormDisplayed: false,
-      inputName: this.props.team.name
+      inputName: this.props.team.name,
+      selected: this.props.team.visibility
     }
 
     this.displayEditForm = this.displayEditForm.bind(this)
+    this.undisplayEditForm = this.undisplayEditForm.bind(this)
+    this.updateTeam = this.updateTeam.bind(this)
   }
 
   componentDidMount () {
@@ -53,8 +56,13 @@ export default class Team extends React.Component {
     })
   }
 
-  componentWillUnmount () {
-    // resetTeam()
+  componentWillReceiveProps (nextProps) {
+    if (this.props.team !== nextProps.team) {
+      this.setState({
+        inputName: nextProps.team.name,
+        selected: nextProps.team.visibility
+      })
+    }
   }
 
   displayEditForm () {
@@ -63,6 +71,13 @@ export default class Team extends React.Component {
 
   undisplayEditForm () {
     this.setState({editFormDisplayed: false})
+  }
+
+  updateTeam () {
+    if (this.name.value !== '') {
+      updateTeam(this.props.team._id, { name: this.name.value, visibility: this.visibility.value })
+      this.setState({editFormDisplayed: false})
+    }
   }
 
   renderTeamProfile (team) {
@@ -113,6 +128,7 @@ export default class Team extends React.Component {
           padding-left: 20px;
           padding-bottom: 15px;  
         }
+        
         `}</style>
       </div>
     )
@@ -128,22 +144,71 @@ export default class Team extends React.Component {
           />
         </div>
         <div className='team-infos'>
-          <input className='team-name' value={this.state.inputName} />
-          <div className='team-privacy'><Icon color='white' name='lock' fontSize='15px' />&nbsp;({team.visibility})</div>
-          <div className='team-edit'>
+          <div className='team-title'>Name</div>
+          <input ref={(name) => { this.name = name }} defaultValue={this.state.inputName} />
+          <div className='team-title'>Visibility</div>
+          <select ref={(select) => { this.visibility = select }} defaultValue={this.state.selected}>
+            <option value='Public'>Public</option>
+            <option value='Private'>Private</option>
+          </select>
+          <div className='team-buttons'>
+            <Button
+              bgColor='#5AAC44'
+              color='white'
+              shadow
+              onClick={this.updateTeam}
+            >
+              Save
+            </Button>
             <Button
               bgColor='#eee'
               color='#444'
               hoverBgColor='#ccc'
-              block
               shadow
-              onClick={this.displayEditForm}
+              onClick={this.undisplayEditForm}
             >
-              <Icon color='#000' name='edit' fontSize='20px' /> Edit Team Profile
+              Cancel
             </Button>
           </div>
         </div>
         <style jsx>{`
+        input {
+          width: 100%;
+          padding: 8px;
+          border-radius: 3px;
+        }
+
+        select {
+          width: 100%;
+          border-radius: 3px;
+          padding: 8px;
+        }
+
+        .edit-form {
+          display: flex;
+          align-items: center;
+        }
+
+        .team-avatar {
+          display: inline-block;
+        }
+        
+        .team-infos {
+          display: inline-block;
+          padding-left: 20px;
+        }
+
+        .team-title {
+          font-weight: bold;
+          padding-top: 10px;
+          padding-bottom: 5px;          
+        }
+
+        .team-buttons {
+          display: flex;
+          justify-content: space-between;
+          padding: 10px 0;
+        }
         `}</style>
       </div>
     )
