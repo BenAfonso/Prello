@@ -8,7 +8,7 @@ import Icon from '../../components/UI/Icon/Icon'
 import ChartDoneCardsMembers from '../../components/Charts/ChartsMembers/ChartDoneCardsMembers'
 import ChartDoneCardsResponsibles from '../../components/Charts/ChartsResponsibles/ChartDoneCardsResponsibles'
 import ChartActiveMembers from '../../components/Charts/ChartsOverview/ChartActiveMembers'
-import ChartCardsPerList from '../../components/Charts/CharsLists/ChartCardsPerList'
+import ChartCardsPerList from '../../components/Charts/ChartsLists/ChartCardsPerList'
 import { setBoard } from '../../store/actions'
 import { subscribeToBoard } from '../../services/api'
 

@@ -10,11 +10,7 @@ import { connect } from 'react-redux'
   }
 })
 export default class ChartCardsPerList extends React.Component {
-  constructor (props) {
-    super(props)
-    this.getDoneCardsOwners = this.getDoneCardsOwners.bind(this)
-  }
-  getDoneCardsOwners () {
+  getCardsPerList () {
     // make axios call with boardId to get analytics data
     // const data = getOwnersAnlytics(this.props.board._id)
     let listData = []
@@ -35,7 +31,7 @@ export default class ChartCardsPerList extends React.Component {
     return listData
   }
   render () {
-    const data = this.getDoneCardsOwners()
+    const data = this.getCardsPerList()
     return (
       <div>
         <div>Number of cards per list</div>
