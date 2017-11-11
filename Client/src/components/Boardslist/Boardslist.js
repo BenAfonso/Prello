@@ -92,7 +92,7 @@ export default class Boardslist extends React.Component {
           ))
         }
         <li>
-          <NewBoardForm teams={this.props.currentUser.teams} self/>
+          <NewBoardForm self/>
         </li>
       </ul>
 
@@ -153,7 +153,7 @@ export default class Boardslist extends React.Component {
                     ))
                   }
                   <li>
-                    <NewBoardForm currentTeam={team} teams={this.props.currentUser.teams} />
+                    <NewBoardForm currentTeam={team} />
                   </li>
                 </ul>
               </div>

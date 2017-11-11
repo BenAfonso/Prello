@@ -358,6 +358,12 @@ export function updateTeamLocal (team) {
   }
 }
 
+export function addTeamToBoard (team) {
+}
+
+export function removeTeamFromBoard (team) {
+}
+
 export function setBoardHistory (history) {
   store.dispatch({
     type: 'SET_BOARD_HISTORY',
