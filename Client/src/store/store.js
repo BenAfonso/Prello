@@ -28,6 +28,10 @@ export const defaultNotificationsState = {
   elements: []
 }
 
+export const defaultDevelopersState = {
+  oauthClients: []
+}
+
 export const defaultBoardState = {
   fetching: false,
   fetched: false,
@@ -39,7 +43,8 @@ export const defaultBoardState = {
     visibility: '',
     isArchived: false,
     background: '#fff',
-    collaborators: []
+    collaborators: [],
+    modifications: []
   }
 }
 
@@ -64,5 +69,5 @@ export const defaultTeamslistState = {
   teams: []
 }
 
-export const defaultState = Object.assign(defaultCurrentUserState, defaultBoardState, defaultBoardslistState, defaultTeamState, defaultTeamslistState)
+export const defaultState = Object.assign(defaultCurrentUserState, defaultBoardState, defaultBoardslistState, defaultTeamState, defaultTeamslistState, defaultNotificationsState, defaultDevelopersState)
 export default createStore(reducer, { ...defaultState }, enhancer)

@@ -299,8 +299,10 @@ boardController.addCollaborators = (board, users) => {
 }
 boardController.getBoardHistory = (boardId, limit, skip) => {
   return new Promise((resolve, reject) => {
-    Modification.find({'board': boardId}, { skip: skip, limit: limit }).populate('user fromList toList targetUser card comment list', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).sort({timestamp: 'desc'}).exec((err, items) => {
+    Modification.find({'board': boardId}).populate('user fromList toList targetUser card comment list', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).sort({timestamp: 'desc'}).exec((err, items) => {
       if (err) {
+        err.status = 500
+        console.log(err)
         reject(err)
       }
       resolve(items)

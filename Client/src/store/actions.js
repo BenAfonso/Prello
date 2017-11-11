@@ -342,6 +342,13 @@ export function updateTeamLocal (team) {
   }
 }
 
+export function setBoardHistory (history) {
+  store.dispatch({
+    type: 'SET_BOARD_HISTORY',
+    payload: history
+  })
+}
+
 export function addCollaborator (dispatch, boardId, email) {
   addCollaboratorDistant(boardId, email).then((board) => {
   }).catch(err => {
@@ -515,5 +522,26 @@ export function restoreList (boardId, list) {
   store.dispatch({
     type: 'UPDATE_LIST',
     payload: newList
+  })
+}
+
+export function setOAuthClients (clients) {
+  store.dispatch({
+    type: 'SET_OAUTHCLIENTS',
+    payload: clients
+  })
+}
+
+export function addOAuthClient (client) {
+  store.dispatch({
+    type: 'ADD_OAUTHCLIENT',
+    payload: client
+  })
+}
+
+export function removeOAuthClient (client) {
+  store.dispatch({
+    type: 'REMOVE_OAUTHCLIENT',
+    payload: client._id
   })
 }
