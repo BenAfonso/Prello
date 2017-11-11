@@ -3,8 +3,30 @@ import { PieChart, Pie, Cell, Legend, Tooltip } from 'recharts'
 
 export default class ChartActiveMembers extends React.Component {
   getActiveMembers () {
-    // const members = this.props.data.collaborators
-    const data = [{name: 'Active', value: 30}, {name: 'Inactive', value: 70}]
+    console.log(this.props.data)
+    let boardCollaborators = []
+    this.props.data.collaborators.map((collaborator) => {
+      boardCollaborators.push(collaborator._id)
+    })
+    console.log(boardCollaborators)
+
+    let cardsCollaborators = []
+    this.props.data.lists.map((list) => {
+      list.cards.map((card) => {
+        if (!card.isArchived) {
+          card.collaborators.map((coll) => {
+            cardsCollaborators.push(coll)
+          })
+        }
+      })
+    })
+    cardsCollaborators = cardsCollaborators.filter((item, pos, arr) => {
+      return arr.indexOf(item) === pos
+    })
+    console.log(cardsCollaborators)
+    const activeMembers = cardsCollaborators.length
+    const inactiveMembers = boardCollaborators.length - activeMembers
+    const data = [{name: 'Active', value: activeMembers}, {name: 'Inactive', value: inactiveMembers}]
     return data
   }
   render () {
