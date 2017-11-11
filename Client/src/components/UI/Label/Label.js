@@ -25,13 +25,13 @@ export default class Label extends React.Component {
   }
 
   static defaultProps = {
-    height: '1pc',
-    width: '150px',
+    height: '15px',
+    width: '90px',
     color: '#fff',
     backgroundColor: '#000',
     fontWeight: 'bold',
     borderRadius: '3px',
-    fontSize: '12px',
+    fontSize: '10px',
     centeredText: true,
     isItem: false
   }
@@ -58,7 +58,7 @@ export default class Label extends React.Component {
 
     props.style = {
       width,
-      height: (this.state.isExpanded || this.state.isItem) ? '16px' : '16px',
+      height,
       fontSize,
       fontWeight,
       backgroundColor,
@@ -67,8 +67,7 @@ export default class Label extends React.Component {
       textAlign: centeredText ? 'center' : 'left',
       ...props.style
     }
-    if (this.state.isExpanded && !this.props.isItem) return <div style={props.style} onClick={this.expandLabel}>{this.props.labelText}</div>
-    else if (!this.state.isExpanded && !this.props.isItem) return <div style={props.style} onClick={this.expandLabel} />
+    if (!this.props.isItem) return <div style={props.style}>{this.props.labelText}</div>
     else if (this.props.isItem) {
       return (
         <div className='labelItem'>

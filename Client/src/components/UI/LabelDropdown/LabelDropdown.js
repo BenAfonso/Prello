@@ -1,17 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import Button from '../Button/Button'
 import Input from '../Input/Input'
 import Label from '../Label/Label'
-import { addLabel, getBoardLabels } from '../../../services/Label.services'
+import styles from './LabelDropdown.styles'
 
-@connect(store => {
-  return {
-    currentBoard: store.currentBoard,
-    board: store.currentBoard.board
-  }
-})
 export default class LabelDropdown extends React.Component {
   static propTypes = {
     width: PropTypes.string,
@@ -67,11 +60,7 @@ export default class LabelDropdown extends React.Component {
   }
 
   addLabelWithAxios () {
-    addLabel(this.props.board._id, this.labelTitle.input.value, this.labelColor.input.value)
-  }
-
-  getLabels () {
-    console.log(getBoardLabels(this.props.board._id))
+    this.props.onAddBoardLabel(this.labelTitle.input.value, this.labelColor.input.value)
   }
 
   deleteLabel (id) {
@@ -83,8 +72,6 @@ export default class LabelDropdown extends React.Component {
   }
 
   render () {
-    console.log('CHECK BOARD LABELS')
-    console.log(this.props.board.labels)
     const {
       height,
       width,
@@ -109,8 +96,9 @@ export default class LabelDropdown extends React.Component {
       <div style={props.style}>
         <div>
           <ul>
-            {this.props.board.labels.map(e => <Label isItem={ true } labelId={e['_id']} labelText={e['name']} backgroundColor={e['color']} />)}
+            {this.props.labels.map(e => <li class='line'><Label isItem={ true } labelId={e['_id']} labelText={e['name']} backgroundColor={e['color']} /></li>)}
           </ul>
+          <style jsx>{styles}</style>
         </div>
         <div>
           <Button onClick={this.displayLabelForm}>Create label</Button>
@@ -118,7 +106,7 @@ export default class LabelDropdown extends React.Component {
             ? <div>
               <Input ref={(v) => { this.labelTitle = v } } placeholder='Label title'/>
               <Input ref={(v) => { this.labelColor = v } } placeholder='#c5c5c5'/>
-              <Button onClick={this.addLabelWithAxios}>Add Label</Button>
+              <Button onClick={this.addLabelWithAxios}>Save Label</Button>
             </div> : null}
         </div>
       </div>

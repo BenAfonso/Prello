@@ -13,6 +13,7 @@ import CardDetailsChecklists from './CardDetailsSections/CardDetailsChecklists/C
 import MembersMenu from './CardDetailsMenu/MembersMenu/MembersMenu'
 import { addChecklist } from '../../../services/Checklist.services'
 import { getCompleteCard } from '../../../services/Card.services'
+import { addLabel } from '../../../services/Label.services'
 import { archiveCard } from '../../../store/actions'
 import LabelDropdown from '../../UI/LabelDropdown/LabelDropdown'
 
@@ -59,6 +60,10 @@ export default class CardDetails extends React.Component {
     getCompleteCard(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.id)
   }
 
+  addBoardLabel (labelText, labelColor) {
+    addLabel(this.props.board._id, labelText, labelColor)
+  }
+
   render () {
     const card = this.props.lists[this.props.listIndex].cards[this.props.index]
     return (
@@ -101,7 +106,7 @@ export default class CardDetails extends React.Component {
                 button={<Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>Labels</Button>
                 }>
                 <div style={{ width: '340px' }}>
-                  <LabelDropdown />
+                  <LabelDropdown labels={this.props.board.labels} onAddBoardLabel={this.addBoardLabel.bind(this)} />
                 </div>
               </DropDown>
             </li>
