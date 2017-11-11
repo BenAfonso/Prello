@@ -47,8 +47,8 @@ export default class UsersMenu extends React.Component {
           .avatar {
             display: inline-block;
             padding: 5px 5px;
-            cursor: pointer;            
-          }        
+            cursor: pointer;
+          }
         `}
         </style>
       </div>
@@ -65,41 +65,38 @@ export default class UsersMenu extends React.Component {
           List of collaborators
         </div>
         <div className='usermenu-collaborators'>
-          <ul className='collaborators-content'>
-            <li className='collaborators'>
-              {
-                collaborators.map((user, i) => (
-                  <div className='collaborator' key={i}>
-                    {
-                      user._id === owner._id ? <div className='ownerIcon'><Icon color='#ffff00' name='star' fontSize='20px' /></div> : null
-                    }
-                    <div className='collaborator-menu'>
-                      <DropDown
-                        orientation='right'
-                        menuElements={[
-                          {
-                            action: null,
-                            placeholder: <div className='collaborator-menu-element-title'>Modify permissions...<div className='collaborator-menu-element-infos'>(Permission lvl)</div></div>
-                          },
-                          {
-                            action: null,
-                            placeholder: <div className='collaborator-menu-element-title'>Show activity feed</div>,
-                            closer: true
-                          },
-                          {
-                            action: () => this.removeCollaborator(user._id),
-                            placeholder: <div className='collaborator-menu-element-title'>Remove from board</div>,
-                            closer: true,
-                            disabled: user._id === this.props.board.owner._id
-                          }
-                        ]}
-                        input={this.renderUserAvatar(user)}
-                      />
-                    </div>
-                  </div>))
-              }
-            </li>
-
+          <ul className='collaborators'>
+            {
+              collaborators.map((user, i) => (
+                <div className='collaborator' key={i}>
+                  {
+                    user._id === owner._id ? <div className='ownerIcon'><Icon color='#ffff00' name='star' fontSize='20px' /></div> : null
+                  }
+                  <div className='collaborator-menu'>
+                    <DropDown
+                      orientation='right'
+                      menuElements={[
+                        {
+                          action: null,
+                          placeholder: <div className='collaborator-menu-element-title'>Modify permissions...<div className='collaborator-menu-element-infos'>(Permission lvl)</div></div>
+                        },
+                        {
+                          action: null,
+                          placeholder: <div className='collaborator-menu-element-title'>Show activity feed</div>,
+                          closer: true
+                        },
+                        {
+                          action: () => this.removeCollaborator(user._id),
+                          placeholder: <div className='collaborator-menu-element-title'>Remove from board</div>,
+                          closer: true,
+                          disabled: user._id === this.props.board.owner._id
+                        }
+                      ]}
+                      input={this.renderUserAvatar(user)}
+                    />
+                  </div>
+                </div>))
+            }
           </ul>
         </div>
         <div className='usermenu-separator' />
@@ -118,13 +115,14 @@ export default class UsersMenu extends React.Component {
           }
 
           .collaborators {
+            display: flex;
+            flex-wrap: wrap;
             padding: 10px 5px
             max-height: 100px;
             overflow-y: auto;
           }
 
           .collaborator {
-            display:inline-block;
             position: relative;
             width: auto;
             height: auto;            

@@ -50,7 +50,7 @@ attachmentController.createAttachment = function (req) {
               Card.findOneAndUpdate({'_id': req.params.cardId}, {$push: {attachments: item._id}}).exec()
             }
             Board.findOneAndUpdate({'_id': req.params.boardId}, {$push: {attachments: item._id}}).exec()
-            resolve(result)
+            resolve(item)
           }).catch(err => {
             Attachment.findOneAndRemove({'_id': item._id}).exec()
             reject(err)

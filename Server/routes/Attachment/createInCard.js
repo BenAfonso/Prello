@@ -14,6 +14,7 @@ module.exports = (router, controller) => {
         return res.status(400).send('Error: expect files to upload').end()
       }
       controller.createAttachment(req).then(result => {
+        controller.refreshOneCard(req.params.boardId, req.params.listId, req.params.cardId)
         return res.status(201).send(result)
       }).catch(err => {
         return res.status(500).send(err)

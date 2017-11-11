@@ -11,7 +11,8 @@ const BoardSchema = new Schema({
   visibility: {type: String, enum: ['public', 'private', 'team']},
   attachments: [{type: Schema.Types.ObjectId, ref: 'Attachment'}],
   createdAt: {type: Date, default: Date.now},
-  isArchived: {type: Boolean, default: false}
+  isArchived: {type: Boolean, default: false},
+  modifications: [{type: Schema.Types.ObjectId, ref: 'Modification'}]
 })
 
 mongoose.model('Board', BoardSchema)

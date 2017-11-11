@@ -89,7 +89,13 @@ export default class BoardLayout extends React.Component {
               })}
             </div>
             <div name='sidebar' ref={(s) => { this.sidebar = s }} className='sideMenu'>
-              <SideMenu handleCloseAction={this.closeDrawer} />
+              <SideMenu
+                handleCloseAction={this.closeDrawer}
+                popoverManager={{
+                  setRenderedComponent: this.props.setRenderedComponent,
+                  displayPopover: this.props.displayPopover,
+                  dismissPopover: this.props.dismissPopover
+                }}/>
             </div>
           </div>
         </div>

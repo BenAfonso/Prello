@@ -1,7 +1,7 @@
 require('dotenv').config()
 require('./models/index')
+require('./components/oauth/models/index')
 require('./controllers/index')
-
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
@@ -11,6 +11,7 @@ const swaggerSpec = require('./config/swagger')
 const config = require('./config')
 const logger = require('morgan')
 require('./controllers/sockets')
+require('./components/oauth/routes')(app)
 
 if (process.env.NODE_ENV !== 'test') { // Not logging while testing
   app.use(logger('dev'))

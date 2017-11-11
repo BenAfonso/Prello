@@ -18,7 +18,7 @@ FileUploader.uploadFile = (boardId, attachmentId, file) => {
     minioClient.putObject(bucketName, `${boardId}/${attachmentId}.${ext}`, file.buffer, file.mimetype, (err, etag) => {
       if (err) { return reject(err) }
       // TODO: REPLACE WITH ENV
-      resolve({ etag: etag, url: `http://localhost:3000/boards/${boardId}/attachments/${attachmentId}.${ext}` })
+      resolve({ etag: etag, url: `${process.env.PRELLO_APIURL}/boards/${boardId}/attachments/${attachmentId}.${ext}` })
     })
   })
 }
