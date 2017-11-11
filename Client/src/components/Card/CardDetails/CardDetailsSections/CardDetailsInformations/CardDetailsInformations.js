@@ -4,11 +4,11 @@ import CardDetailsMembers from './CardDetailsMembers/CardDetailsMembers'
 import CardDetailsLabels from './CardDetailsLabels/CardDetailsLabels'
 import CardDetailsResponsible from './CardDetailsResponsible/CardDetailsResponsible'
 import CardDetailsDueDate from './CardDetailsDueDate/CardDetailsDueDate'
-
 import {connect} from 'react-redux'
 import Button from '../../../../UI/Button/Button'
 import {updateCardDescription} from '../../../../../services/Card.services'
 import Markdown from 'react-markdown'
+// import { getAttachment } from '../../../../../services/Attachment.services'
 
 @connect(store => {
   return {
@@ -63,13 +63,13 @@ export default class CardDetailsInformations extends React.Component {
             <Markdown source={fullCard.description} />
           </div>
 
-          <ul className='attachments'>
+          { /* <ul className='attachments'>
             {
               fullCard.attachments.map(a => (
-                <li>{a.name}</li>
+                <li onClick={() => { getAttachment(this.props.board._id, a) }}>{a.name}</li>
               ))
             }
-          </ul>
+          </ul> */ }
 
           <div className='sections'>
             <div className='members'>

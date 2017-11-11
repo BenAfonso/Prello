@@ -45,7 +45,7 @@ export default class CardDetails extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      fileUploaderDisplayed: true
+      fileUploaderDisplayed: false
     }
     this.createChecklist = this.createChecklist.bind(this)
   }
@@ -69,7 +69,7 @@ export default class CardDetails extends React.Component {
 
   renderFileUploader () {
     return (
-      <div className='overlay'>
+      <div className='overlay' onClick={this.dismissFileUploader.bind(this)}>
         <div className='uploader'>
           <Uploader
             api={`http://localhost:3333/boards/${this.props.board._id}/lists/${this.props.lists[this.props.listIndex]._id}/cards/${this.props.id}/attachments`}
@@ -192,7 +192,7 @@ export default class CardDetails extends React.Component {
                 </Button>} />
             </li>
             <li>
-              <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>
+              <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small' onClick={this.displayFileUploader.bind(this)}>
                 Attachment
               </Button>
             </li>
