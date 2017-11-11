@@ -15,6 +15,7 @@ import DueDateMenu from './CardDetailsMenu/DueDateMenu/DueDateMenu'
 import { addChecklist } from '../../../services/Checklist.services'
 import { getCompleteCard } from '../../../services/Card.services'
 import { archiveCard } from '../../../store/actions'
+import Uploader from '../../Uploader/Uploader'
 
 @connect(store => {
   return {
@@ -43,7 +44,56 @@ export default class CardDetails extends React.Component {
   }
   constructor (props) {
     super(props)
+    this.state = {
+      fileUploaderDisplayed: true
+    }
     this.createChecklist = this.createChecklist.bind(this)
+  }
+
+  displayFileUploader () {
+    this.setState({
+      fileUploaderDisplayed: true
+    })
+  }
+
+  dismissFileUploader () {
+    this.setState({
+      fileUploaderDisplayed: false
+    })
+  }
+
+  onUploadComplete (c) {
+    this.dismissFileUploader()
+    console.log(c)
+  }
+
+  renderFileUploader () {
+    return (
+      <div className='overlay'>
+        <div className='uploader'>
+          <Uploader
+            api={`http://localhost:3333/boards/${this.props.board._id}/lists/${this.props.lists[this.props.listIndex]._id}/cards/${this.props.id}/attachments`}
+            uploadedImage={this.onUploadComplete.bind(this)} />
+        </div>
+        <style jsx>{`
+          .overlay {
+            position: fixed;
+            z-index: 1000;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background-color: rgba(0,0,0,0.5);
+          }
+
+          .uploader {
+            position: absolute;
+            left: calc(50% - 100px);
+            top: calc(50% - 100px);
+          }
+        `}</style>
+      </div>
+    )
   }
 
   createChecklist () {
@@ -58,6 +108,11 @@ export default class CardDetails extends React.Component {
     const card = this.props.lists[this.props.listIndex].cards[this.props.index]
     return (
       <div className='host'>
+        {
+          this.state.fileUploaderDisplayed
+            ? this.renderFileUploader()
+            : null
+        }
         <div className='content'>
           <CardDetailsInformations {...this.props} />
           <CardDetailsChecklists cardId={this.props.id} listIndex={this.props.listIndex} checklists={this.props.checklists}/>

@@ -46,6 +46,7 @@
     "react-dnd-html5-backend": "^2.5.3",
     "react-dnd-multi-backend": "^3.0.4",
     "react-dom": "^16.0.0",
+    "react-dropzone": "^4.2.1",
     "react-google-login": "^2.11.3",
     "react-gsap-enhancer": "^0.3.0",
     "react-markdown": "^2.5.0",

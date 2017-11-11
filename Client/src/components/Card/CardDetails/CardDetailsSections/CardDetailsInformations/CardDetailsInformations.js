@@ -62,6 +62,15 @@ export default class CardDetailsInformations extends React.Component {
           <div className='description'>
             <Markdown source={fullCard.description} />
           </div>
+
+          <ul className='attachments'>
+            {
+              fullCard.attachments.map(a => (
+                <li>{a.name}</li>
+              ))
+            }
+          </ul>
+
           <div className='sections'>
             <div className='members'>
               <div className='subsectionTitle'>
