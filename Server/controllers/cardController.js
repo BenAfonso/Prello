@@ -164,7 +164,7 @@ cardController.removeCommentFromCard = (cardId, commentId) => {
     })
   })
 }
-cardController.getOneCard = (cardId) => {
+cardController.getOneCard = (cardId) => {  
   return new Promise((resolve, reject) => {
     Card.findOne({ '_id': cardId }).populate('comments responsible collaborators attachments', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
