@@ -100,7 +100,7 @@ userController.getUserTeams = function (userId) {
 userController.updateUser = (userId, body) => {
   return new Promise((resolve, reject) => {
     delete body.email
-    User.findOneAndUpdate('_id', body, { new: true }).exec(function (err, res) {
+    User.findOneAndUpdate({'_id': userId}, body, { new: true }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
