@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import Button from '../Button/Button'
 import Input from '../Input/Input'
 import Label from '../Label/Label'
-import styles from './LabelDropdown.styles'
 
 export default class LabelDropdown extends React.Component {
   static propTypes = {
@@ -98,7 +97,6 @@ export default class LabelDropdown extends React.Component {
           <ul>
             {this.props.labels.map(e => <li class='line'><Label isItem={ true } labelId={e['_id']} labelText={e['name']} backgroundColor={e['color']} /></li>)}
           </ul>
-          <style jsx>{styles}</style>
         </div>
         <div>
           <Button onClick={this.displayLabelForm}>Create label</Button>
