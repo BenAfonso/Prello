@@ -78,7 +78,7 @@ export default class LabelDropdown extends React.Component {
     if (!this.state.displayLabelCreationForm) {
       return (
         <div style={props.style}>
-          <div style={{ marginLeft: '30%', marginTop: '30px' }}>
+          <div style={{ marginLeft: '30%', marginTop: '30px', position: 'absolute' }}>
             <div>
               <ul>
                 {this.props.labels.map(e => <li class='line'><Label cardLabels={this.props.cardLabels} onDeleteCardLabel={this.props.onDeleteCardLabel} onAddCardLabel={this.props.onAddCardLabel} onUpdateBoardLabel={this.props.onUpdateBoardLabel} onDeleteBoardLabel={this.props.onDeleteBoardLabel} isItem={ true } labelId={e['_id']} labelText={e['name']} backgroundColor={e['color']} /></li>)}

@@ -20,6 +20,7 @@ export default class Label extends React.Component {
     this.updateBoardLabel = this.updateBoardLabel.bind(this)
     this.addCardLabel = this.addCardLabel.bind(this)
     this.deleteCardLabel = this.deleteCardLabel.bind(this)
+    this.addedLabel = this.addedLabel.bind(this)
   }
   static propTypes = {
     labelText: PropTypes.string,
@@ -77,6 +78,26 @@ export default class Label extends React.Component {
     this.setState({
       addedToCard: false
     }, this.props.onDeleteCardLabel(this.props.labelId))
+  }
+
+  shouldComponentUpdate (nextState) {
+    return this.state.addedToCard !== nextState.addedToCard
+  }
+
+  componentDidMount () {
+    this.addedLabel()
+  }
+
+  addedLabel () {
+    if (this.props.cardLabels) {
+      this.props.cardLabels.map((label) => {
+        if (label['_id'] === this.props.labelId) {
+          this.setState({
+            addedToCard: !this.state.addedToCard
+          })
+        }
+      })
+    }
   }
   render () {
     const {
