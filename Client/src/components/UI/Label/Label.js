@@ -16,6 +16,7 @@ export default class Label extends React.Component {
     this.expandLabel = this.expandLabel.bind(this)
     this.onDeleteBoardLabel = this.onDeleteBoardLabel.bind(this)
     this.displayLabelEditForm = this.displayLabelEditForm.bind(this)
+    this.updateBoardLabel = this.updateBoardLabel.bind(this)
   }
   static propTypes = {
     labelText: PropTypes.string,
@@ -52,8 +53,12 @@ export default class Label extends React.Component {
 
   displayLabelEditForm () {
     this.setState({
-      displayLabelEditForm: !this.displayLabelEditForm
+      displayLabelEditForm: !this.state.displayLabelEditForm
     })
+  }
+
+  updateBoardLabel () {
+    this.props.onUpdateBoardLabel(this.props.labelId, this.newlabelTitle.input.value, this.newlabelColor.input.value)
   }
 
   render () {
@@ -98,7 +103,7 @@ export default class Label extends React.Component {
           </div>
           <div>
             <Button
-              onClick={this.onDeleteBoardLabel}
+              onClick={this.displayLabelEditForm}
               bgColor='rgba(0,0,0,0)'
               color='#70727c'
               hoverBgColor='#ddd'
@@ -107,9 +112,9 @@ export default class Label extends React.Component {
             </Button>
             {this.state.displayLabelEditForm
               ? <div>
-                <Input ref={(v) => { this.labelTitle = v } } placeholder='Label title'/>
-                <Input ref={(v) => { this.labelColor = v } } placeholder='#c5c5c5'/>
-                <Button onClick={null}>Save Label</Button>
+                <Input ref={(v) => { this.newlabelTitle = v } } placeholder='Label title'/>
+                <Input ref={(v) => { this.newlabelColor = v } } placeholder='#c5c5c5'/>
+                <Button onClick={this.updateBoardLabel}>Save Label</Button>
               </div> : null}
           </div>
           <style jsx>{styles}</style>

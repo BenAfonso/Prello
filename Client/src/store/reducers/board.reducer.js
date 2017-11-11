@@ -186,6 +186,16 @@ export default (state = defaultBoardState, action) => {
         }
       }
     }
+    case 'UPDATE_LABEL': {
+      let newLabels = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          labels: newLabels
+        }
+      }
+    }
     case 'SET_BOARD_HISTORY': {
       return {
         ...state,

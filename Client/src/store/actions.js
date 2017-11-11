@@ -393,16 +393,11 @@ export function removeLabel (labels) {
   })
 }
 
-export function updateLabel (boardId, labelText, labelColor) {
-  if (labelText.length > 0 && labelColor.length > 0) {
-    store.dispatch({
-      type: 'UPDATE_LABEL',
-      payload: {
-        name: labelText,
-        color: labelColor
-      }
-    })
-  }
+export function updateLabel (labels) {
+  store.dispatch({
+    type: 'UPDATE_LABEL',
+    payload: labels
+  })
 }
 export function setOAuthClients (clients) {
   store.dispatch({
