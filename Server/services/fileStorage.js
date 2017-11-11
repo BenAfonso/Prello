@@ -30,6 +30,9 @@ FileUploader.getFile = (boardId, attachmentName) => {
       if (err) {
         reject(err)
       }
+      if (dataStream === undefined) {
+        reject(new Error('Missing datastream'))
+      }
       dataStream.on('data', (chunk) => {
         chunks.push(chunk)
       })
