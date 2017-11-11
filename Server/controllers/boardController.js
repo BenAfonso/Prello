@@ -15,7 +15,7 @@ const boardController = {}
  */
 boardController.getAllBoards = function () {
   return new Promise((resolve, reject) => {
-    Board.find().populate('owner lists collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+    Board.find().populate('owner lists labels collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
@@ -35,7 +35,7 @@ boardController.getAllBoards = function () {
 
 boardController.getUserBoards = function (userId) {
   return new Promise((resolve, reject) => {
-    Board.find({ $or: [{ 'owner': userId }, { 'collaborators': userId }] }).populate('owner lists collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+    Board.find({ $or: [{ 'owner': userId }, { 'collaborators': userId }] }).populate('owner lists labels collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
