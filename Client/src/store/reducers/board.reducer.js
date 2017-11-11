@@ -107,17 +107,23 @@ export default (state = defaultBoardState, action) => {
       }
     }
     case 'ADD_CARD': {
-      let newLists = state.board.lists.map((l) => {
-        if (l._id === action.payload.listId) {
-          l.cards.push(action.payload.card)
+      if (action.payload.card.text.length > 0) {
+        let newLists = state.board.lists.map((l) => {
+          if (l._id === action.payload.listId) {
+            l.cards.push(action.payload.card)
+          }
+          return l
+        })
+        return {
+          ...state,
+          board: {
+            ...state.board,
+            lists: newLists
+          }
         }
-        return l
-      })
-      return {
-        ...state,
-        board: {
-          ...state.board,
-          lists: newLists
+      } else {
+        return {
+          ...state
         }
       }
     }
