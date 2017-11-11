@@ -11,6 +11,7 @@ const BoardSchema = new Schema({
   visibility: {type: String, enum: ['public', 'private', 'team']},
   createdAt: {type: Date, default: Date.now},
   isArchived: {type: Boolean, default: false},
-  labels: [{type: Schema.Types.ObjectId, ref: 'Label'}]
+  labels: [{type: Schema.Types.ObjectId, ref: 'Label'}],
+  modifications: [{type: Schema.Types.ObjectId, ref: 'Modification'}]
 })
 mongoose.model('Board', BoardSchema)

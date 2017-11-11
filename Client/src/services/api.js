@@ -1,5 +1,5 @@
 import openSocket from 'socket.io-client'
-import {addBoardLocal, addListLocal, removeListLocal, moveListLocal, addCardLocal, moveCardLocal, updateCardAction, replaceCollaboratorsLocal, addLabel} from '../store/actions'
+import {addBoardLocal, addListLocal, removeListLocal, moveListLocal, addCardLocal, moveCardLocal, updateCardAction, replaceCollaboratorsLocal, addLabel, updateLabel, removeLabel} from '../store/actions'
 import Config from '../config'
 const socket = openSocket(Config.SOCKET_URL)
 
@@ -26,8 +26,8 @@ socket.on('REMOVE_LIST', (list) => {
 socket.on('LIST_MOVED', (lists) => {
   moveListLocal(lists)
 })
-socket.on('CARD_MOVED', (lists) => {
-  moveCardLocal(lists)
+socket.on('CARD_MOVED', (board) => {
+  moveCardLocal(board.lists)
 })
 
 socket.on('NEW_CARD', (newCard) => {
@@ -47,6 +47,13 @@ socket.on('UPDATE_COLLABORATORS', (collaborators) => {
 })
 
 socket.on('LABEL_CREATED', (labels) => {
-  console.log(labels)
   addLabel(labels)
+})
+
+socket.on('LABEL_REMOVED', (labels) => {
+  removeLabel(labels)
+})
+
+socket.on('LABEL_UPDATED', (labels) => {
+  updateLabel(labels)
 })

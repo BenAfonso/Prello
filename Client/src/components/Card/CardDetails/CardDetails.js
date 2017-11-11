@@ -11,8 +11,10 @@ import CardDetailsActivity from './CardDetailsSections/CardDetailsActivity/CardD
 import CardDetailsInformations from './CardDetailsSections/CardDetailsInformations/CardDetailsInformations'
 import CardDetailsChecklists from './CardDetailsSections/CardDetailsChecklists/CardDetailsChecklists'
 import MembersMenu from './CardDetailsMenu/MembersMenu/MembersMenu'
+import DueDateMenu from './CardDetailsMenu/DueDateMenu/DueDateMenu'
 import { addChecklist } from '../../../services/Checklist.services'
 import { getCompleteCard } from '../../../services/Card.services'
+import { addLabel, deleteLabel, updateLabel, addCardLabel, deleteCardLabel } from '../../../services/Label.services'
 import { archiveCard } from '../../../store/actions'
 import LabelDropdown from '../../UI/LabelDropdown/LabelDropdown'
 
@@ -59,12 +61,33 @@ export default class CardDetails extends React.Component {
     getCompleteCard(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.id)
   }
 
+  addBoardLabel (labelText, labelColor) {
+    addLabel(this.props.board._id, labelText, labelColor)
+  }
+
+  deleteBoardLabel (labelId) {
+    deleteLabel(this.props.board._id, labelId)
+  }
+
+  updateBoardLabel (labelId, labelTitle, labelColor) {
+    updateLabel(this.props.board._id, labelId, labelTitle, labelColor)
+  }
+
+  addCardLabel (labelId) {
+    addCardLabel(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.id, labelId)
+  }
+
+  deleteCardLabel (labelId) {
+    deleteCardLabel(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.id, labelId)
+  }
+
   render () {
     const card = this.props.lists[this.props.listIndex].cards[this.props.index]
+    const cardLabels = this.props.lists[this.props.listIndex].cards[this.props.index].labels
     return (
       <div className='host'>
         <div className='content'>
-          <CardDetailsInformations {...this.props} />
+          <CardDetailsInformations {...this.props} cardLabels={cardLabels} />
           <CardDetailsChecklists cardId={this.props.id} listIndex={this.props.listIndex} checklists={this.props.checklists}/>
           <CardDetailsComments {...this.props}/>
           <CardDetailsActivity labels={this.props.labels}/>
@@ -80,6 +103,7 @@ export default class CardDetails extends React.Component {
           <ul>
             <li>
               <MembersMenu
+                title='Members'
                 members={card.collaborators}
                 listIndex={this.props.listIndex}
                 cardId={card._id}
@@ -90,8 +114,8 @@ export default class CardDetails extends React.Component {
                   size='x-small'
                   block
                 >
-                  <Icon color='#000' name='user-plus' fontSize='12px' />
-                    Members
+                  <Icon color='#000' name='user-plus' fontSize='13px' />
+                  <div className='button-text'>Members</div>
                 </Button>} />
             </li>
             <li>
@@ -101,7 +125,7 @@ export default class CardDetails extends React.Component {
                 button={<Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>Labels</Button>
                 }>
                 <div style={{ width: '340px' }}>
-                  <LabelDropdown />
+                  <LabelDropdown cardLabels={cardLabels} onDeleteCardLabel={this.deleteCardLabel.bind(this)} onAddCardLabel={this.addCardLabel.bind(this)} onUpdateBoardLabel={this.updateBoardLabel.bind(this)} onDeleteBoardLabel={this.deleteBoardLabel.bind(this)} labels={this.props.board.labels} onAddBoardLabel={this.addBoardLabel.bind(this)} />
                 </div>
               </DropDown>
             </li>
@@ -112,28 +136,39 @@ export default class CardDetails extends React.Component {
                 button={<Button
                   bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>Checklist</Button>
                 }>
-                <div style={{ width: '340px' }}>
+                <div style={{ width: '300px' }}>
                   <ul>
-                    <li>
-                      <label className='newChecklistTitleInput'>Title: </label>
-                      <Input ref={ (e) => { this.checklistTitleInput = e }} placeholder='Title' />
-                    </li>
-                    <li>
-                      <Button
-                        bgColor='#3cb221'
-                        hoverBgColor='#148407'
-                        color='#FFF' onClick={this.createChecklist}>
+                    <li className='element'>
+                      <div className='element-input'>
+                        <Input ref={ (e) => { this.checklistTitleInput = e }} placeholder='Title' />
+                      </div>
+                      <div className='element-button'>
+                        <Button
+                          bgColor='#5AAC44'
+                          hoverBgColor='#148407'
+                          color='#FFF' block onClick={this.createChecklist}>
                         Save
-                      </Button>
+                        </Button>
+                      </div>
                     </li>
                   </ul>
                 </div>
               </DropDown>
             </li>
             <li>
-              <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>
-                Due Date
-              </Button>
+              <DueDateMenu
+                listIndex={this.props.listIndex}
+                cardId={card._id}
+                orientation='right'
+                button={<Button
+                  bgColor='#eee'
+                  hoverBgColor='#ddd'
+                  size='x-small'
+                  block
+                >
+                  <Icon color='#000' name='clock-o' fontSize='13px' />
+                  <div className='button-text'>Due Date</div>
+                </Button>} />
             </li>
             <li>
               <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>

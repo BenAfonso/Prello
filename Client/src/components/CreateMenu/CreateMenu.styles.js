@@ -1,17 +1,16 @@
 export default `
 .host {
-  display: inline-block;
+  font-size: 25px;
 }
 
 .headerButton {
-  margin-top: 5px;
-  margin-right : 5px;
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   border-radius: 5px;
   background: rgba(255,255,255,0.5);
-  line-height: 40px;
   text-align: center;
+  line-height: 30px;
+  margin-right: 8px;
   cursor: pointer;
 }
 

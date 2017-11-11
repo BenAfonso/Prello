@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 const List = mongoose.model('List')
 const boardController = require('./boardController')
+const modificationController = require('./modificationController')
 const listController = {}
 const emit = require('../controllers/sockets').emit
-
 listController.createList = (req) => {
   return new Promise((resolve, reject) => {
     const listToAdd = new List(req.body)
@@ -43,10 +43,15 @@ listController.removeList = (boardId, listId) => {
 }
 listController.updateList = (req) => {
   return new Promise((resolve, reject) => {
-    List.update({ '_id': req.params.listId }, req.body, (err, item) => {
+    List.findOneAndUpdate({ '_id': req.params.listId }, req.body, (err, item) => {
       if (err) {
         return reject(err)
       } else {
+        if (req.body.isArchived && (!item.isArchived || item.isArchived === undefined)) {
+          modificationController.ARCHIVED_LIST(req.params.boardId, req.user._id, req.params.listId).catch((err) => {
+            reject(err)
+          })
+        }
         boardController.refreshOneboard('LIST_UPDATED', req.params.boardId)
         // TODO: Log update to history
         return resolve(item)

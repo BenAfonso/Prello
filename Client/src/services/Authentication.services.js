@@ -43,9 +43,9 @@ export function removeToken () {
   window.localStorage.removeItem('prello_access_token')
 }
 
-// TODO: Use app state to make it??
 export function logout () {
   removeToken()
+  deleteProfileLocalStorage()
   window.location = '/login'
 }
 
@@ -91,80 +91,16 @@ export function register (name, email, password, withLogin) {
   })
 }
 
-export function authGet (url) {
-  return new Promise((resolve, reject) => {
-    if (isAuthenticated()) {
-      axios.get(url, {
-        headers: { 'authorization': `Bearer ${extractToken()}` }
-      }).then((res) => {
-        resolve(res)
-      }).catch((err) => {
-        reject(err)
-      })
-    } else {
-      logout()
-      reject(new Error('Not logged in'))
-    }
-  })
-}
-
-export function authPost (url, body) {
-  return new Promise((resolve, reject) => {
-    if (isAuthenticated()) {
-      axios.post(url, body, {
-        headers: { 'authorization': `Bearer ${extractToken()}` }
-      }).then((res) => {
-        resolve(res)
-      }).catch((err) => {
-        reject(err)
-      })
-    } else {
-      logout()
-      reject(new Error('Not logged in'))
-    }
-  })
-}
-
-export function authPut (url, body) {
-  return new Promise((resolve, reject) => {
-    if (isAuthenticated()) {
-      axios.put(url, body, {
-        headers: { 'authorization': `Bearer ${extractToken()}` }
-      }).then((res) => {
-        resolve(res)
-      }).catch((err) => {
-        reject(err)
-      })
-    } else {
-      logout()
-      reject(new Error('Not logged in'))
-    }
-  })
-}
-
-export function authDelete (url) {
-  return new Promise((resolve, reject) => {
-    if (isAuthenticated()) {
-      axios.delete(url, {
-        headers: { 'authorization': `Bearer ${extractToken()}` }
-      }).then((res) => {
-        resolve(res)
-      }).catch((err) => {
-        reject(err)
-      })
-    } else {
-      logout()
-      reject(new Error('Not logged in'))
-    }
-  })
-}
-
 const loadProfileFromLocalStorage = () => {
   return JSON.parse(window.localStorage.getItem('prello_profile'))
 }
 
 const storeProfileLocalStorage = (profile) => {
   window.localStorage.setItem('prello_profile', JSON.stringify(profile))
+}
+
+const deleteProfileLocalStorage = () => {
+  window.localStorage.removeItem('prello_profile')
 }
 
 const profileIsInLocalStorage = () => (

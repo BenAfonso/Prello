@@ -15,4 +15,7 @@ module.exports = (router, controller) => {
   require('./addCollaborator')(router, controller)
   require('./addLabel')(router, controller)
   require('./removeLabel')(router, controller)
+  require('./removeCollaborator')(router, controller)
+  require('./removeResponsible')(router, controller)
+  require('./updateResponsible')(router, controller)
 }

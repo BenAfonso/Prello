@@ -1,11 +1,13 @@
 const mongoose = require('mongoose')
 const Board = mongoose.model('Board')
 const User = mongoose.model('User')
-const Card = mongoose.model('Card')
 const Label = mongoose.model('Label')
+const Modification = mongoose.model('Modification')
 
+const Card = mongoose.model('Card')
 const Util = require('./Util')
 const emit = require('../controllers/sockets').emit
+const modificationController = require('./modificationController')
 const boardController = {}
 
 /**
@@ -15,7 +17,7 @@ const boardController = {}
  */
 boardController.getAllBoards = function () {
   return new Promise((resolve, reject) => {
-    Board.find().populate('owner lists collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+    Board.find().populate('owner lists labels collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
@@ -35,7 +37,7 @@ boardController.getAllBoards = function () {
 
 boardController.getUserBoards = function (userId) {
   return new Promise((resolve, reject) => {
-    Board.find({ $or: [{ 'owner': userId }, { 'collaborators': userId }] }).populate('owner lists collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+    Board.find({ $or: [{ 'owner': userId }, { 'collaborators': userId }] }).populate('owner lists labels collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
@@ -184,23 +186,16 @@ boardController.moveList = function (req) {
 }
 
 boardController.refreshOneboard = function (action, boardId) {
-  return new Promise((resolve, reject) => {
-    Board.findOne({ '_id': boardId }).populate('owner lists collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
-      if (err) {
-        reject(err)
-      } else {
-        Card.populate(res, {
-          path: 'lists.cards'
-        }, function (err, res) {
-          if (err) {
-            reject(err)
-          } else {
-            emit(boardId, action, res.lists)
-            resolve(res.lists)
-          }
-        })
-      }
-    })
+  Board.findOne({ '_id': boardId }).populate('owner lists labels collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+    if (err) { } else {
+      Card.populate(res, {
+        path: 'lists.cards'
+      }, function (err, res) {
+        if (err) { } else {
+          emit(boardId, action, res)
+        }
+      })
+    }
   })
 }
 boardController.addCollaborator = (boardId, userId, requesterId) => {
@@ -211,6 +206,9 @@ boardController.addCollaborator = (boardId, userId, requesterId) => {
         reject(err)
       } else {
         emit(boardId, 'UPDATE_COLLABORATORS', res.collaborators)
+        modificationController.ADDED_COLLABORATOR_BOARD(boardId, requesterId, userId).catch((err) => {
+          reject(err)
+        })
         resolve(res)
       }
     })
@@ -238,12 +236,45 @@ boardController.addCollaboratorEmail = (boardId, email, requesterId) => {
 
 boardController.removeCollaborator = (boardId, userId, requesterId) => {
   return new Promise((resolve, reject) => {
+    Board.findOne({ '_id': boardId }).populate('lists').exec((err, res) => {
+      if (err) {
+        err.status = 500
+        reject(err)
+      } else {
+        Card.populate(res, {
+          path: 'lists.cards'
+        }, function (err, res) {
+          if (err) {
+            reject(err)
+          } else {
+            let cards = []
+            res.lists.map((list) => list.cards.map((card) => {
+              card.collaborators.map((collaborator) => {
+                if (collaborator.toString() === userId.toString()) {
+                  Card.findOneAndUpdate({'_id': card._id}, {$pull: {collaborators: userId}}).exec()
+                }
+              })
+              if (card.responsible !== null && card.responsible !== undefined) {
+                if (card.responsible.toString() === userId.toString()) {
+                  Card.findOneAndUpdate({'_id': card._id}, {responsible: null}).exec()
+                }
+              }
+            }))
+            resolve(cards)
+          }
+        })
+      }
+    })
     Board.findOneAndUpdate({ '_id': boardId }, { $pull: { collaborators: userId } }, { new: true }).populate('collaborators').exec((err, res) => {
       if (err) {
         err.status = 500
         reject(err)
       } else {
+        boardController.refreshOneboard('COLLABORATOR_REMOVED', boardId)
         emit(boardId, 'UPDATE_COLLABORATORS', res.collaborators)
+        modificationController.REMOVED_COLLABORATOR_BOARD(boardId, requesterId, userId).catch((err) => {
+          reject(err)
+        })
         resolve(res)
       }
     })
@@ -252,6 +283,18 @@ boardController.removeCollaborator = (boardId, userId, requesterId) => {
 
 boardController.addCollaborators = (board, users) => {
 
+}
+boardController.getBoardHistory = (boardId, limit, skip) => {
+  return new Promise((resolve, reject) => {
+    Modification.find({'board': boardId}).populate('user fromList toList targetUser card comment list', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).sort({timestamp: 'desc'}).exec((err, items) => {
+      if (err) {
+        err.status = 500
+        console.log(err)
+        reject(err)
+      }
+      resolve(items)
+    })
+  })
 }
 boardController.createLabel = (req) => {
   return new Promise((resolve, reject) => {
@@ -317,5 +360,4 @@ boardController.removeLabel = (boardId, labelId) => {
     })
   })
 }
-
 module.exports = boardController

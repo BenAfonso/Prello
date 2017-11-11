@@ -16,33 +16,18 @@ const enhancer = composeEnhancers(
   // other store enhancers if any
 )
 
-/* export const defaultState = {
-  currentUser: {
-    username: '',
-    name: '',
-    picture: ''
-  },
-  fetching: false,
-  fetched: false,
-  error: null,
-  board: {
-    _id: '',
-    title: '',
-    lists: [],
-    visibility: '',
-    isArchived: false,
-    background: '#fff',
-    collaborators: []
-  },
-  boardslist: {
-    boards: []
-  }
-} */
-
 export const defaultCurrentUserState = {
   username: '',
   name: '',
   picture: ''
+}
+
+export const defaultNotificationsState = {
+  elements: []
+}
+
+export const defaultDevelopersState = {
+  oauthClients: []
 }
 
 export const defaultBoardState = {
@@ -57,7 +42,8 @@ export const defaultBoardState = {
     isArchived: false,
     background: '#fff',
     collaborators: [],
-    labels: []
+    labels: [],
+    modifications: []
   }
 }
 
@@ -65,5 +51,5 @@ export const defaultBoardslistState = {
   boards: []
 }
 
-export const defaultState = Object.assign(defaultCurrentUserState, defaultBoardState, defaultBoardslistState)
+export const defaultState = Object.assign(defaultCurrentUserState, defaultBoardState, defaultBoardslistState, defaultNotificationsState, defaultDevelopersState)
 export default createStore(reducer, { ...defaultState }, enhancer)

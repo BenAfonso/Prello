@@ -166,7 +166,6 @@ export default (state = defaultBoardState, action) => {
         }
       }
     }
-
     case 'ADD_LABEL': {
       const newLabels = action.payload
       return {
@@ -178,7 +177,7 @@ export default (state = defaultBoardState, action) => {
       }
     }
     case 'REMOVE_LABEL': {
-      let newLabels = state.board.labels.slice().filter(label => label['label'] !== action.payload.color)
+      let newLabels = action.payload
       return {
         ...state,
         board: {
@@ -187,7 +186,25 @@ export default (state = defaultBoardState, action) => {
         }
       }
     }
-
+    case 'UPDATE_LABEL': {
+      let newLabels = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          labels: newLabels
+        }
+      }
+    }
+    case 'SET_BOARD_HISTORY': {
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          modifications: action.payload
+        }
+      }
+    }
     default:
       return {
         ...state
