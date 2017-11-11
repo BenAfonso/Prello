@@ -287,6 +287,8 @@ boardController.removeCollaborator = (boardId, userId, requesterId) => {
 }
 
 boardController.addTeam = (boardId, teamId) => {
+  console.log(boardId)
+  console.log(teamId)
   return new Promise((resolve, reject) => {
     Board.findOneAndUpdate({ '_id': boardId }, { $push: { teams: teamId } }, { new: true }).populate('teams').exec((err, res) => {
       if (err) {

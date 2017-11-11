@@ -1,5 +1,5 @@
 import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDistant, removeTeamAdminDistant, setTeamAdminDistant, unsetTeamAdminDistant, updateTeamDistant } from '../services/Team.services'
-import { fetchBoards, addBoardDistant, addTeamBoardDistant, addCollaboratorDistant, removeCollaboratorDistant } from '../services/Board.services'
+import { fetchBoards, addBoardDistant, addTeamBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, removeTeamFromBoardDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
@@ -323,15 +323,6 @@ export function unsetTeamAdmin (teamId, userId) {
   })
 }
 
-export function updateTeamAdminsLocal (userId) {
-  if (userId) {
-    store.dispatch({
-      type: 'UPDATE_ADMINS',
-      payload: userId
-    })
-  }
-}
-
 export function updateTeam (teamId, payload) {
   updateTeamDistant(teamId, payload).then((res) => {
     updateTeamInfosLocal(payload)
@@ -358,10 +349,26 @@ export function updateTeamLocal (team) {
   }
 }
 
-export function addTeamToBoard (team) {
+export function addTeamToBoard (boardId, teamId) {
+  addTeamToBoardDistant(boardId, teamId).then((res) => {
+    // HANDLED FROM SOCKETS
+  }).catch(err => {
+    return err
+  })
 }
 
-export function removeTeamFromBoard (team) {
+export function updateTeams (teams) {
+  store.dispatch({
+    type: 'UPDATE_TEAMS',
+    payload: teams
+  })
+}
+
+export function removeTeamFromBoard (boardId, teamId) {
+  removeTeamFromBoardDistant(boardId, teamId).then((res) => {
+  }).catch(err => {
+    return err
+  })
 }
 
 export function setBoardHistory (history) {

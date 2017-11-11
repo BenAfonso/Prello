@@ -75,3 +75,27 @@ export function removeCollaboratorDistant (board, userId) {
     })
   })
 }
+
+export function addTeamToBoardDistant (boardId, teamId) {
+  return new Promise((resolve, reject) => {
+    axios.post(`${Config.API_URL}/boards/${boardId}/teams`, {
+      teamId: teamId
+    }).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function removeTeamFromBoardDistant (boardId, teamId) {
+  return new Promise((resolve, reject) => {
+    /* axios.delete(`${Config.API_URL}/boards/${boardId}/teams`, {
+      teamId: teamId
+    }).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    }) */
+  })
+}

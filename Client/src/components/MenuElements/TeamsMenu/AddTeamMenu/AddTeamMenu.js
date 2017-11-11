@@ -4,7 +4,7 @@ import Button from '../../../UI/Button/Button'
 import DropDown from '../../../UI/DropDown/DropDown'
 import Icon from '../../../UI/Icon/Icon'
 
-import { addTeamToBoard, removeTeamFromBoard } from '../../../../store/actions'
+import { addTeamToBoard, setTeamslist } from '../../../../store/actions'
 
 @connect(store => {
   return {
@@ -26,21 +26,27 @@ export default class AddTeamMenu extends React.Component {
     this.alreadyInBoard = this.alreadyInBoard.bind(this)
   }
 
+  componentDidMount () {
+    setTeamslist(this.props.dispatch).then(() => {
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (this.props.teams !== nextProps.teams) {
+      this.setState({
+        matchingTeams: nextProps.teams
+      })
+    }
+  }
+
   alreadyInBoard (team) {
     return (this.props.board.teams.find(inTeam => team._id === inTeam._id) !== undefined)
   }
 
   addTeam (teamId) {
-    addTeamToBoard(this.props.dispatch, this.props.boardId, teamId)
-    this.setState({
-      inputValue: '',
-      enableAdd: false,
-      matchingTeams: this.props.teams
-    })
-  }
-
-  removeTeam (teamId) {
-    removeTeamFromBoard(this.props.dispatch, this.props.boardId, teamId)
+    addTeamToBoard(this.props.board._id, teamId)
     this.setState({
       inputValue: '',
       enableAdd: false,

@@ -47,7 +47,7 @@ module.exports = (router, controller) => {
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-    controller.addTeam(req.params.boardId, req.body.email, req.body.teamId).then((data) => {
+    controller.addTeam(req.params.boardId, req.body.teamId).then((data) => {
       res.status(201).json(data)
     }).catch((err) => {
       res.status(err.status).json(err)

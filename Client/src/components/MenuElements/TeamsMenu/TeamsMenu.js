@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import Icon from '../../UI/Icon/Icon'
 import AddTeamMenu from './AddTeamMenu/AddTeamMenu'
+import { removeTeamFromBoard } from '../../../store/actions'
 
 @connect(store => {
   return {
@@ -12,6 +13,10 @@ import AddTeamMenu from './AddTeamMenu/AddTeamMenu'
 })
 
 export default class TeamsMenu extends React.Component {
+  removeTeam (teamId) {
+    removeTeamFromBoard(this.props.boardId, teamId)
+  }
+
   render () {
     const { teams } = this.props.board
     return (
@@ -19,44 +24,59 @@ export default class TeamsMenu extends React.Component {
         <div className='teammenu-title'>
           List of teams
         </div>
-        <div className='teammenu-separator' />
         <div className='teammenu-teams'>
           <ul className='teams'>
             {
               teams.map((team, i) => (
-                <div className='team' key={i}>
-                  <div className='team-name'>{team.name}</div>
-                  <div className='team-remove'><Icon color='#444' name='remove' fontSize='20px' /></div>
-                </div>))
+                <li className='team' key={i}>
+                  <div className='team-content'>
+                    <div className='team-name'>{team.name}</div>
+                    <div className='team-remove' onClick={() => this.removeTeam(team._id)}><Icon color='#444' name='remove' fontSize='20px' /></div>
+                  </div>
+                  <div className='teammenu-separator' />
+                </li>
+              ))
             }
           </ul>
         </div>
-        <div className='teammenu-separator' />
-        <AddTeamMenu board={this.props.board} />
+        <div className='add-team-button'>
+          <AddTeamMenu board={this.props.board} />
+        </div>
         <style jsx>
           {`
 
           .teammenu-separator {
             content: '';
             height: 1px;
-            padding: 0;
             background-color: #aaa;
-            width: 90%;
-            margin: 8px 0 8px 5%;
+            width: 100%;
+            margin: 8px 0 8px 0;
           }
 
           .teams {
             display: flex;
             flex-wrap: wrap;
-            padding: 10px 5px
+            padding: 10px 0;
             max-height: 100px;
             overflow-y: auto;
           }
 
           .team {
             width: 100%;
+          }
+
+          .team-content {
+            width: 100%;
             display: flex;
             justify-content: space-between;
+          }
+
+          .team-remove {
+            cursor: pointer;
+          }
+
+          .add-team-button {
+            padding: 10px 0;
           }
         `}
         </style>

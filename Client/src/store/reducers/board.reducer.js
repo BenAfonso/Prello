@@ -166,6 +166,16 @@ export default (state = defaultBoardState, action) => {
         }
       }
     }
+    case 'UPDATE_TEAMS': {
+      const newTeams = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          teams: newTeams
+        }
+      }
+    }
     case 'SET_BOARD_HISTORY': {
       return {
         ...state,
