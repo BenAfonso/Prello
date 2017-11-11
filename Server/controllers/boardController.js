@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Board = mongoose.model('Board')
 const User = mongoose.model('User')
+const Team = mongoose.model('Team')
 const Modification = mongoose.model('Modification')
 
 const Card = mongoose.model('Card')
@@ -66,6 +67,11 @@ boardController.createBoard = function (board) {
       if (err) {
         reject(err)
       } else {
+        if (item.teams !== undefined) {
+          item.teams.map((team) => {
+            Team.findOneAndUpdate({'_id': team}, {$push: {boards: item._id}}).exec()
+          })
+        }
         emit('testID', 'NEW_BOARD', item)
         resolve(item)
       }

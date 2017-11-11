@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Team = mongoose.model('Team')
 const User = mongoose.model('User')
+const Board = mongoose.model('Board')
 
 const teamController = {}
 /**
@@ -92,6 +93,23 @@ teamController.updateTeam = function (teamId, body) {
 teamController.getOneTeam = function (teamId) {
   return new Promise((resolve, reject) => {
     Team.findOne({ '_id': teamId }).populate('boards users admins', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        teamController.getBoardsTeam(teamId).then((result) => {
+          let teamToSend = res._doc
+          teamToSend.boards = result
+          resolve(teamToSend)
+        }).catch((err) => {
+          reject(err)
+        })
+      }
+    })
+  })
+}
+teamController.getBoardsTeam = function (teamId) {
+  return new Promise((resolve, reject) => {
+    Board.find({ 'teams': teamId }).populate('lists users admins', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {

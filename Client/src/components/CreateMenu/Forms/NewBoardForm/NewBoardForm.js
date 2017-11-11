@@ -24,7 +24,7 @@ export default class NewBoardForm extends React.Component {
 
   submit (title) {
     if (this.title.value !== '') {
-      if (this.teams.value === ['None']) {
+      if (this.teams === undefined) {
         addBoard(this.props.dispatch, {title: this.title.value, color: this.color.value})
       } else {
         addTeamBoard(this.props.dispatch, {title: this.title.value, color: this.color.value, teams: this.state.selected})
