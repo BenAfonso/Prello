@@ -195,8 +195,11 @@ export default class List extends React.Component {
                   listId={this.props.id}
                   shadowColor={this.props.shadowColor}
                   listIndex={this.props.index}
+                  nbComments={card.comments.length}
+                  nbChecklists={card.checklists.length}
                   content={card.text}
                   collaborators={card.collaborators}
+                  responsible={card.responsible}
                   popoverManager={this.props.popoverManager} />
               </li>
             ))

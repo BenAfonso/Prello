@@ -11,6 +11,7 @@ import CardDetailsActivity from './CardDetailsSections/CardDetailsActivity/CardD
 import CardDetailsInformations from './CardDetailsSections/CardDetailsInformations/CardDetailsInformations'
 import CardDetailsChecklists from './CardDetailsSections/CardDetailsChecklists/CardDetailsChecklists'
 import MembersMenu from './CardDetailsMenu/MembersMenu/MembersMenu'
+import DueDateMenu from './CardDetailsMenu/DueDateMenu/DueDateMenu'
 import { addChecklist } from '../../../services/Checklist.services'
 import { getCompleteCard } from '../../../services/Card.services'
 import { addLabel } from '../../../services/Label.services'
@@ -85,6 +86,7 @@ export default class CardDetails extends React.Component {
           <ul>
             <li>
               <MembersMenu
+                title='Members'
                 members={card.collaborators}
                 listIndex={this.props.listIndex}
                 cardId={card._id}
@@ -95,8 +97,8 @@ export default class CardDetails extends React.Component {
                   size='x-small'
                   block
                 >
-                  <Icon color='#000' name='user-plus' fontSize='12px' />
-                    Members
+                  <Icon color='#000' name='user-plus' fontSize='13px' />
+                  <div className='button-text'>Members</div>
                 </Button>} />
             </li>
             <li>
@@ -117,28 +119,39 @@ export default class CardDetails extends React.Component {
                 button={<Button
                   bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>Checklist</Button>
                 }>
-                <div style={{ width: '340px' }}>
+                <div style={{ width: '300px' }}>
                   <ul>
-                    <li>
-                      <label className='newChecklistTitleInput'>Title: </label>
-                      <Input ref={ (e) => { this.checklistTitleInput = e }} placeholder='Title' />
-                    </li>
-                    <li>
-                      <Button
-                        bgColor='#3cb221'
-                        hoverBgColor='#148407'
-                        color='#FFF' onClick={this.createChecklist}>
+                    <li className='element'>
+                      <div className='element-input'>
+                        <Input ref={ (e) => { this.checklistTitleInput = e }} placeholder='Title' />
+                      </div>
+                      <div className='element-button'>
+                        <Button
+                          bgColor='#5AAC44'
+                          hoverBgColor='#148407'
+                          color='#FFF' block onClick={this.createChecklist}>
                         Save
-                      </Button>
+                        </Button>
+                      </div>
                     </li>
                   </ul>
                 </div>
               </DropDown>
             </li>
             <li>
-              <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>
-                Due Date
-              </Button>
+              <DueDateMenu
+                listIndex={this.props.listIndex}
+                cardId={card._id}
+                orientation='right'
+                button={<Button
+                  bgColor='#eee'
+                  hoverBgColor='#ddd'
+                  size='x-small'
+                  block
+                >
+                  <Icon color='#000' name='clock-o' fontSize='13px' />
+                  <div className='button-text'>Due Date</div>
+                </Button>} />
             </li>
             <li>
               <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>

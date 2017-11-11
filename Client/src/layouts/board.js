@@ -7,11 +7,13 @@ import GSAP from 'react-gsap-enhancer'
 import Color from 'color'
 import {connect} from 'react-redux'
 import LoadingPage from '../pages/LoadingPage/loading.page'
+import Root from './root'
 
 @connect(store => {
   return {
     currentBoard: store.currentBoard,
     board: store.currentBoard.board,
+    currentUser: store.currentUser,
     fetching: store.fetching,
     fetched: store.fetched
   }
@@ -29,16 +31,14 @@ export default class BoardLayout extends React.Component {
   }
 
   toggleSidebarAnimation ({ target }) {
-    let sidebar = target.find({ name: 'sidebar' })
-    let content = target.find({ name: 'boardContainer' })
     if (this.state.sideMenuExpanded) {
       return new TimelineMax()
-        .to(sidebar, 0.5, {right: '0px'}, 0)
-        .to(content, 0.5, {width: '-=400'}, 0)
+        .to(this.sidebar, 0.5, {right: '0px'}, 0)
+        .to(this.boardContainer, 0.5, {width: '-=400'}, 0)
     } else {
       return new TimelineMax()
-        .to(sidebar, 0.5, {right: '-400px'}, 0)
-        .to(content, 0.5, {width: '100%'}, 0)
+        .to(this.sidebar, 0.5, {right: '-400px'}, 0)
+        .to(this.boardContainer, 0.5, {width: '100%'}, 0)
     }
   }
 
@@ -58,16 +58,23 @@ export default class BoardLayout extends React.Component {
       ? primaryColor.darken(0.2)
       : primaryColor.lighten(0.2)
     return (
-      <div style={{ position: 'relative', height: '100%' }}>
+      <Root>
         {
           this.props.fetching
             ? <div className='loading'><LoadingPage /></div>
             : null
         }
-        <div style={{ height: 'calc(100% - 50px)' }}>
-          <Header bgColor={secondaryColor} />
+        <div style={{ height: 'calc(100% - 40px)' }}>
+          <Header
+            bgColor={secondaryColor}
+            currentUser={this.props.currentUser}
+            createBoardButton
+            notificationsButton
+            backHomeButton
+          />
+
           <div className='content' style={{ display: 'flex', height: '100%' }}>
-            <div name='boardContainer' className='boardContainer'>
+            <div ref={(c) => { this.boardContainer = c }} className='boardContainer'>
               <div className='drawerButton' style={{ display: this.state.sideMenuExpanded ? 'none' : '' }} onClick={this.openDrawer}>
                 <Button bgColor='rgba(0,0,0,0)' size='x-small' hoverBgColor='rgba(0,0,0,0.1)'>Open menu...</Button>
               </div>
@@ -81,7 +88,7 @@ export default class BoardLayout extends React.Component {
                 }
               })}
             </div>
-            <div name='sidebar' className='sideMenu'>
+            <div name='sidebar' ref={(s) => { this.sidebar = s }} className='sideMenu'>
               <SideMenu handleCloseAction={this.closeDrawer} />
             </div>
           </div>
@@ -126,7 +133,7 @@ export default class BoardLayout extends React.Component {
       right: -400px;
     }
     `}</style>
-      </div>
+      </Root>
     )
   }
 }

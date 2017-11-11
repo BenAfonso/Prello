@@ -26,8 +26,8 @@ socket.on('REMOVE_LIST', (list) => {
 socket.on('LIST_MOVED', (lists) => {
   moveListLocal(lists)
 })
-socket.on('CARD_MOVED', (lists) => {
-  moveCardLocal(lists)
+socket.on('CARD_MOVED', (board) => {
+  moveCardLocal(board.lists)
 })
 
 socket.on('NEW_CARD', (newCard) => {

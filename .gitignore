@@ -1,3 +1,6 @@
 node_modules
 build
 .scannerwork
+.idea
+.vscode
+Client/storybook-build
