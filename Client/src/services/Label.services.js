@@ -22,3 +22,9 @@ export function updateLabel (boardId, labelId, labelTitle, labelColor) {
     color: labelColor
   })
 }
+
+export function addCardLabel (boardId, listId, cardId, labelId) {
+  axios.post(`${Config.API_URL}/boards/${boardId}/lists/${listId}/cards/${cardId}/label`, {
+    labelId: labelId
+  })
+}

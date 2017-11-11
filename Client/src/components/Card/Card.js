@@ -9,6 +9,12 @@ import Label from '../UI/Label/Label'
 
 @connect(store => {
   return {
+    lists: store.currentBoard.board.lists
+  }
+})
+
+@connect(store => {
+  return {
     currentBoard: store.currentBoard,
     board: store.currentBoard.board
   }
@@ -23,17 +29,12 @@ export default class Card extends React.Component {
     index: PropTypes.number.isRequired,
     listIndex: PropTypes.number.isRequired,
     collaborators: PropTypes.arrayOf(PropTypes.any),
-    cardLabels: PropTypes.arrayOf(PropTypes.shape({
-      title: PropTypes.string,
-      color: PropTypes.string
-    })),
     responsible: PropTypes.any,
     id: PropTypes.any
   }
 
   static defaultProps = {
     bgColor: '#fff',
-    cardLabels: [{label: 'Blue', color: '#1c5fcc'}, {label: 'Red', color: '#cc1b53'}, {label: 'Green', color: '#1dcc1a'}],
     nbComments: 0,
     nbChecklists: 0
   }
@@ -88,16 +89,32 @@ export default class Card extends React.Component {
   }
 
   render () {
+    console.log(this.props.lists[this.props.listIndex].cards[this.props.index].labels)
+    console.log(this.props.board.labels)
     const list = this.props.board.lists[this.props.listIndex]
     const card = list.cards.filter(c => c._id === this.props.id)[0]
     const dueDate = this.getDueDate(card)
     const formattedDate = this.getFormattedDueDate(dueDate)
-
+    const cardLabels = this.props.lists[this.props.listIndex].cards[this.props.index].labels
+    const boardLabels = this.props.board.labels
+    let labelsToDisplay = []
+    boardLabels.map((bLabel) => {
+      cardLabels.map((cLabel) => {
+        if (cLabel === bLabel._id) {
+          console.log('AHHHH')
+          labelsToDisplay.push(bLabel)
+        }
+      })
+    })
     return (
       <div style={{...this.props.style}} ref={c => { this.card = c }} className='root'>
         <div className='editButton'><Button size='small' bgColor='rgba(0,0,0,0)' hoverBgColor='rgba(255,255,255,0.6)'><Icon name='edit' color='#444' /></Button></div>
         <div className='content'>{ this.props.content }</div>
-        {this.props.cardLabels.map(l => <li><Label labelText={l['label']} backgroundColor={l['color']} /></li>)}
+        <div>
+          <ul>
+            { labelsToDisplay.map((label) => <li><Label isThumbnail={true} labelText={label['name']} backgroundColor={label['color']} /></li>) }
+          </ul>
+        </div>
         <div className='numbers'>
           { this.props.nbComments > 0
             ? <div className='number'>
