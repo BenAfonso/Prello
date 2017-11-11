@@ -342,7 +342,7 @@ boardController.removeLabel = (boardId, labelId) => {
         res.map((card) => {
           Card.findOneAndUpdate({'_id': card._id}, {$pull: {'labels': labelId}}).exec()
         })
-        Board.findOneAndUpdate({'_id': boardId}, {$pull: {'labels': labelId}}).populate('labels').exec(function (err, res) {
+        Board.findOneAndUpdate({'_id': boardId}, {$pull: {'labels': labelId}}, { new: true }).populate('labels').exec(function (err, res) {
           if (err) {
             reject(err)
           } else {

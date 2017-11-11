@@ -14,7 +14,7 @@ import MembersMenu from './CardDetailsMenu/MembersMenu/MembersMenu'
 import DueDateMenu from './CardDetailsMenu/DueDateMenu/DueDateMenu'
 import { addChecklist } from '../../../services/Checklist.services'
 import { getCompleteCard } from '../../../services/Card.services'
-import { addLabel } from '../../../services/Label.services'
+import { addLabel, deleteLabel } from '../../../services/Label.services'
 import { archiveCard } from '../../../store/actions'
 import LabelDropdown from '../../UI/LabelDropdown/LabelDropdown'
 
@@ -65,6 +65,10 @@ export default class CardDetails extends React.Component {
     addLabel(this.props.board._id, labelText, labelColor)
   }
 
+  deleteBoardLabel (labelId) {
+    deleteLabel(this.props.board._id, labelId)
+  }
+
   render () {
     const card = this.props.lists[this.props.listIndex].cards[this.props.index]
     return (
@@ -108,7 +112,7 @@ export default class CardDetails extends React.Component {
                 button={<Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>Labels</Button>
                 }>
                 <div style={{ width: '340px' }}>
-                  <LabelDropdown labels={this.props.board.labels} onAddBoardLabel={this.addBoardLabel.bind(this)} />
+                  <LabelDropdown onDeleteBoardLabel={this.deleteBoardLabel.bind(this)} labels={this.props.board.labels} onAddBoardLabel={this.addBoardLabel.bind(this)} />
                 </div>
               </DropDown>
             </li>

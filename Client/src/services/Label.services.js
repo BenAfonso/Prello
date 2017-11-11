@@ -11,3 +11,7 @@ export function addLabel (boardId, labelTitle, labelColor) {
 export function getBoardLabels (boardId) {
   axios.get(`${Config.API_URL}/boards/${boardId}/labels`)
 }
+
+export function deleteLabel (boardId, labelId) {
+  axios.delete(`${Config.API_URL}/boards/${boardId}/labels/${labelId}`)
+}

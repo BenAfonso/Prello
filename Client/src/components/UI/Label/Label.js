@@ -12,6 +12,7 @@ export default class Label extends React.Component {
       labelTitle: ''
     }
     this.expandLabel = this.expandLabel.bind(this)
+    this.onDeleteBoardLabel = this.onDeleteBoardLabel.bind(this)
   }
   static propTypes = {
     labelText: PropTypes.string,
@@ -40,6 +41,10 @@ export default class Label extends React.Component {
     this.setState({
       isExpanded: !this.state.isExpanded
     })
+  }
+
+  onDeleteBoardLabel () {
+    this.props.onDeleteBoardLabel(this.props.labelId)
   }
 
   render () {
@@ -74,7 +79,7 @@ export default class Label extends React.Component {
           <div style={props.style}>{this.props.labelText}</div>
           <div>
             <Button
-              onClick={null}
+              onClick={this.onDeleteBoardLabel}
               bgColor='rgba(0,0,0,0)'
               color='#70727c'
               hoverBgColor='#ddd'

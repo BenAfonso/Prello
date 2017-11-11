@@ -177,7 +177,7 @@ export default (state = defaultBoardState, action) => {
       }
     }
     case 'REMOVE_LABEL': {
-      let newLabels = state.board.labels.slice().filter(label => label['label'] !== action.payload.color)
+      let newLabels = action.payload
       return {
         ...state,
         board: {

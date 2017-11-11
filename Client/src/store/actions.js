@@ -386,16 +386,11 @@ export function addLabel (labels) {
   })
 }
 
-export function removeLabel (labelText, labelColor) {
-  if (labelText.length > 0 && labelColor.length > 0) {
-    store.dispatch({
-      type: 'REMOVE_LABEL',
-      payload: {
-        name: labelText,
-        color: labelColor
-      }
-    })
-  }
+export function removeLabel (labels) {
+  store.dispatch({
+    type: 'REMOVE_LABEL',
+    payload: labels
+  })
 }
 
 export function updateLabel (boardId, labelText, labelColor) {
