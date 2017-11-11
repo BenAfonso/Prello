@@ -2986,7 +2986,7 @@ debug@2.6.8:
   dependencies:
     ms "2.0.0"
 
-debug@^3.0.1:
+debug@^3.0.0, debug@^3.0.1:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
   dependencies:
@@ -4100,6 +4100,20 @@ fbjs@^0.8.12, fbjs@^0.8.16, fbjs@^0.8.9:
     promise "^7.1.1"
     setimmediate "^1.0.5"
     ua-parser-js "^0.7.9"
+
+feathers-authentication-popups@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/feathers-authentication-popups/-/feathers-authentication-popups-0.1.2.tgz#3df3755750f092266b1ecdbec90299e1bde74948"
+  dependencies:
+    debug "^2.2.0"
+    events "^1.1.1"
+    feathers-errors "^2.4.0"
+
+feathers-errors@^2.4.0:
+  version "2.9.2"
+  resolved "https://registry.yarnpkg.com/feathers-errors/-/feathers-errors-2.9.2.tgz#96ca0e5fe50cc56f0eccc90ce3fa5e1f8840828d"
+  dependencies:
+    debug "^3.0.0"
 
 figures@^1.3.5:
   version "1.7.0"
@@ -7932,7 +7946,7 @@ qs@6.5.0:
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.0.tgz#8d04954d364def3efc55b5a0793e1e2c8b1e6e49"
 
-qs@6.5.1, qs@^6.4.0, qs@~6.5.1:
+qs@6.5.1, qs@^6.4.0, qs@^6.5.1, qs@~6.5.1:
   version "6.5.1"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.1.tgz#349cdf6eef89ec45c12d7d5eb3fc0c870343a6d8"
 
@@ -8231,6 +8245,10 @@ react-portal@next:
   resolved "https://registry.yarnpkg.com/react-portal/-/react-portal-4.0.0-beta.2.tgz#c25112a87fa209cc14776c739664101e3e9d3732"
   dependencies:
     prop-types "^15.5.8"
+
+"react-prello-login@github:BenAfonso/react-prello-login":
+  version "1.0.0"
+  resolved "https://codeload.github.com/BenAfonso/react-prello-login/tar.gz/ac18c6c938d70e4272b3251face9903a7f34f7a9"
 
 react-redux@^5.0.6:
   version "5.0.6"

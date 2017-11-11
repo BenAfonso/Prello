@@ -1,6 +1,7 @@
 import axios from 'axios'
 import Config from '../config'
 import { setConnectedUser } from '../store/actions'
+import qs from 'qs'
 
 export function storeToken (token) {
   window.localStorage.setItem('prello_access_token', token)
@@ -69,6 +70,21 @@ export function loginGoogle (code) {
     }).then((res) => {
       resolve(res.data)
     }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+export function loginPrello (code) {
+  return new Promise((resolve, reject) => {
+    axios.post(`${Config.API_URL}/oauth/token`, qs.stringify({
+      grant_type: 'authorization_code',
+      code: code
+    }), { headers: {
+      'authorization': 'Basic M2I1Njk2YTJmMGM4Zjc2N2ViMzQ6OWEzOTA0Mjg0ZGViMDJlMzJmZGY='
+    }}).then((res) => {
+      resolve(res.data)
+    }).catch((err) => {
+      console.error(err)
       reject(err)
     })
   })

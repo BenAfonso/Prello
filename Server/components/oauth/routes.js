@@ -33,6 +33,7 @@ module.exports = function (app) {
       .then(token => {
         return res.json(token)
       }).catch(err => {
+        console.error(err)
         return res.status(err.status).json(err)
       })
   })
@@ -101,6 +102,7 @@ module.exports = function (app) {
         const clientSecret = buffer.toString('hex')
         req.body.client_id = clientId
         req.body.client_secret = clientSecret
+        req.body.grant_types = 'authorization_code'
         req.body.User = req.user._id
         const client = new OAuthClient(req.body)
         client.save()
@@ -135,7 +137,7 @@ module.exports = function (app) {
           OAuthClient: client.id
         })
         oauthCode.save().then(code => {
-          res.status(200).send({authorization_code: code.authorization_code})
+          res.redirect(`${req.query.redirect_uri}?code=${code.authorization_code}`)
         }).catch(err => {
           return res.status(err.code || 500).json(err)
         })

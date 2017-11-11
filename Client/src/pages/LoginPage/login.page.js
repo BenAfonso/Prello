@@ -1,7 +1,8 @@
 import React from 'react'
-import { login, storeToken, loginGoogle } from '../../services/Authentication.services'
+import { login, storeToken, loginGoogle, loginPrello } from '../../services/Authentication.services'
 import GoogleLogin from 'react-google-login'
 import { Redirect } from 'react-router-dom'
+import PrelloLogin from 'react-prello-login/dist/PrelloLogin'
 
 export default class LoginPage extends React.Component {
   constructor (props) {
@@ -14,6 +15,17 @@ export default class LoginPage extends React.Component {
   loginWithGoogle (googleResponse) {
     loginGoogle(googleResponse.code).then((response) => {
       storeToken(response.token)
+      this.setState({ redirectToReferrer: true })
+    }).catch((err) => {
+      console.error(err)
+    })
+  }
+
+  /** To implement for oAuth clients */
+  loginWithPrello (prelloResponse) {
+    loginPrello(prelloResponse.code, 'http://localhost:3000').then((response) => {
+      console.log(response)
+      storeToken(response.accessToken)
       this.setState({ redirectToReferrer: true })
     }).catch((err) => {
       console.error(err)
@@ -67,6 +79,13 @@ export default class LoginPage extends React.Component {
           responseType='code'
           onSuccess={this.loginWithGoogle.bind(this)}
         />
+        <PrelloLogin
+          clientId='3b5696a2f0c8f767eb34'
+          redirectUri='http://localhost:3000'
+          scope=''
+          onSuccess={this.loginWithPrello.bind(this)}
+          onFailure={(err) => { console.log(err) }}
+        >Login with Prello</PrelloLogin>
         <style jsx>
           {`
       .host {
