@@ -166,7 +166,6 @@ export default (state = defaultBoardState, action) => {
         }
       }
     }
-
     case 'ADD_LABEL': {
       const newLabels = action.payload
       return {
@@ -187,7 +186,15 @@ export default (state = defaultBoardState, action) => {
         }
       }
     }
-
+    case 'SET_BOARD_HISTORY': {
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          modifications: action.payload
+        }
+      }
+    }
     default:
       return {
         ...state

@@ -1,8 +1,7 @@
 const mongoose = require('mongoose')
-const secretKey = require('../../config').secretKey
-const jwt = require('jsonwebtoken')
 const Board = mongoose.model('Board')
 const User = mongoose.model('User')
+const userController = require('../../controllers/userController')
 const mockedBoard = { title: 'Test board', visibility: 'private', background: '', owner: '' }
 const mockedUser1 = { name: 'Test Test', email: 'test@test.com', password: '1234567', username: 'testUser' }
 const mockedUser2 = { name: 'Test2 Test2', email: 'test2@test.com', password: '1234567', username: 'testUser2' }
@@ -217,23 +216,35 @@ function initData (mockedUser1, mockedUser2, mockedBoard) {
     // User1 owns board1
     // User2 owns board2
     // User1 is collaborator on board3
-    Board.remove({}).then(() => {
-      User.remove({}).then(() => {
-        User.create(mockedUser1).then(u1 => {
-          user1 = u1
-          token = generateToken(user1)
-          User.create(mockedUser2).then(u2 => {
-            user2 = u2
-            mockedBoard.owner = user1._id
-            Board.create(mockedBoard).then(b1 => {
-              board1 = b1
-              mockedBoard.owner = user2._id
-              Board.create(mockedBoard).then(b2 => {
-                board2 = b2
-                mockedBoard.collaborators = [u1._id]
-                Board.create(mockedBoard).then(b3 => {
-                  board3 = b3
-                  resolve({user1, user2, board1, board2, board3, token})
+    const OAuthClient = mongoose.model('OAuthClient')
+    let oAuthClientToAdd = new OAuthClient({'name': 'TestApp',
+      'redirectUris': [
+        'http://localhost:3333/',
+        'http://localhost:3000/'
+      ],
+      'client_id': 'e8a49d489ce39e9f1db0',
+      'client_secret': 'ff681e5ea1d88d664700'})
+    oAuthClientToAdd.save().then(() => {
+      Board.remove({}).then(() => {
+        User.remove({}).then(() => {
+          User.create(mockedUser1).then(u1 => {
+            userController.login(u1).then((tokenToUser) => {
+              token = tokenToUser
+              user1 = u1
+              User.create(mockedUser2).then(u2 => {
+                user2 = u2
+                mockedBoard.owner = user1._id
+                Board.create(mockedBoard).then(b1 => {
+                  board1 = b1
+                  mockedBoard.owner = user2._id
+                  Board.create(mockedBoard).then(b2 => {
+                    board2 = b2
+                    mockedBoard.collaborators = [u1._id]
+                    Board.create(mockedBoard).then(b3 => {
+                      board3 = b3
+                      resolve({user1, user2, board1, board2, board3, token})
+                    })
+                  })
                 })
               })
             })
@@ -242,8 +253,4 @@ function initData (mockedUser1, mockedUser2, mockedBoard) {
       })
     })
   })
-}
-
-function generateToken (user) {
-  return jwt.sign({ id: user._id }, secretKey, { expiresIn: '60s' })
 }
