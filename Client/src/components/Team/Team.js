@@ -32,9 +32,7 @@ export default class Team extends React.Component {
     super(props)
     let tabIndex
     this.props.tab
-      ? this.props.tab === 'members'
-        ? tabIndex = 1
-        : tabIndex = 2
+      ? tabIndex = 1
       : tabIndex = 0
     this.state = {
       tabIndex: tabIndex,
@@ -261,11 +259,6 @@ export default class Team extends React.Component {
                 <MembersTab
                   currentUserId={currentUser._id}
                 />
-              </div>
-            </TabPanel>
-            <TabPanel label="Settings">
-              <div>
-                This is my tab 3 contents!
               </div>
             </TabPanel>
           </Tabs>
