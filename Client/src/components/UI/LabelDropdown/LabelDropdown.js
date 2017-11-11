@@ -41,6 +41,7 @@ export default class LabelDropdown extends React.Component {
     this.displayLabelForm = this.displayLabelForm.bind(this)
     this.addLabel = this.addLabel.bind(this)
     this.deleteLabel = this.deleteLabel.bind(this)
+    this.addLabelDistant = this.addLabelDistant.bind(this)
   }
 
   displayLabelForm () {
