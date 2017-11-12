@@ -97,13 +97,15 @@ boardController.importTrelloBoard = function (board) {
         reject(err)
       } else {
         const listOne = board.lists[0]
-        const newList = new List({name: listOne.name})
-        newList.save((err, item) => {
-          if (err) {
-            reject(err)
-          } else {
-            boardController.addListToBoard(boardToImport._id, newList)
-          }
+        board.lists.map((list) => {
+          let newList = new List({name: list.name})
+          newList.save((err, item) => {
+            if (err) {
+              reject(err)
+            } else {
+              boardController.addListToBoard(boardToImport._id, newList)
+            }
+          })
         })
         emit('trelloImport', 'IMPORTED_BOARD', item)
         resolve(item)
