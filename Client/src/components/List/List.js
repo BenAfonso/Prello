@@ -200,6 +200,7 @@ export default class List extends React.Component {
                   content={card.text}
                   collaborators={card.collaborators}
                   responsible={card.responsible}
+                  labels={card.labels}
                   popoverManager={this.props.popoverManager} />
               </li>
             ))

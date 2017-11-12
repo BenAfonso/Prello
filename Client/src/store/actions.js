@@ -379,7 +379,26 @@ export function restoreList (boardId, list) {
     payload: newList
   })
 }
+export function addLabel (labels) {
+  store.dispatch({
+    type: 'ADD_LABEL',
+    payload: labels
+  })
+}
 
+export function removeLabel (labels) {
+  store.dispatch({
+    type: 'REMOVE_LABEL',
+    payload: labels
+  })
+}
+
+export function updateLabel (labels) {
+  store.dispatch({
+    type: 'UPDATE_LABEL',
+    payload: labels
+  })
+}
 export function setOAuthClients (clients) {
   store.dispatch({
     type: 'SET_OAUTHCLIENTS',
