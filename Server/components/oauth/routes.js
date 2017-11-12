@@ -107,9 +107,12 @@ module.exports = function (app) {
           }).catch(err => {
             console.error(err)
             return res.render('login', { // views: login
-              redirect_uri: req.redirect_uri,
+              redirect_uri: redirectUri,
+              displayedForm: true,
+              client_id: clientId,
+              scope: req.body.scope,
               email: req.body.email || '',
-              errors: ['Invalid credentials']
+              errors: ['Error generating token']
             })
           })
         })
