@@ -1,14 +1,16 @@
 export default `
-.dashboardPage {
-  width: 100%;
-  height: 100%;
+.host {
   background-color: #cd5a91;
+  padding: 20px;
+  color: white;
 }
+
 .profilePage {
   width: 100%;
   height: 100%;
   background-color: #cd5a91;
 }
+
 .profileForm {
   display: inline-block;
   vertical-align: top;
@@ -150,5 +152,6 @@ label {
 
 .profileTab {
   display: flex;
+  flex-wrap: wrap;
 }
 `

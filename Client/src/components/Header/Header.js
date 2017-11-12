@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './Header.styles'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { isAuthenticated, logout } from '../../services/Authentication.services'
 import Icon from '../UI/Icon/Icon'
 import AvatarThumbnail from '../UI/AvatarThumbnail/AvatarThumbnail'
@@ -25,11 +25,31 @@ export default class Header extends React.Component {
     color: 'white'
   }
 
+  constructor (props) {
+    super(props)
+    this.state = {
+      redirectTo: ''
+    }
+    this.redirectTo = this.redirectTo.bind(this)
+  }
+
+  redirectTo (url) {
+    this.setState({
+      redirectTo: url
+    })
+  }
+
   render () {
     return <div className='host' style={{
       backgroundColor: this.props.bgColor,
       color: this.props.color
     }}>
+
+      {
+        this.state.redirectTo !== ''
+          ? <Redirect to={this.state.redirectTo} />
+          : null
+      }
 
       <Link to='/'>
         <div className='brand' />
@@ -65,6 +85,10 @@ export default class Header extends React.Component {
                   {
                     action: logout,
                     placeholder: 'Logout'
+                  },
+                  {
+                    action: () => { this.redirectTo('/dashboard') },
+                    placeholder: 'Dashboard'
                   }
                 ]}>
                 <div className='user button'>

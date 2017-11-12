@@ -1,11 +1,12 @@
 import React from 'react'
-import Dashboard from '../components/Dashboard/Dashboard'
+import DashboardBoards from '../components/Dashboard/Boards/Boards'
 import PopupManager from '../components/PopupManager/PopupManager'
+import PageLayout from '../layouts/page'
 
 export default (props) => (
   <PopupManager>
-    <Dashboard
-      _id={props.match.params.id}
-    />
+    <PageLayout>
+      <DashboardBoards />
+    </PageLayout>
   </PopupManager>
 )

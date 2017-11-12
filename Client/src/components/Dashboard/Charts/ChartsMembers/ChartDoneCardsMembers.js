@@ -2,13 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { BarChart, CartesianGrid, YAxis, XAxis, Bar, Legend, Tooltip } from 'recharts'
 // import { getMembersAnalytics } from '../../../services/Charts.services'
-import Button from '../../../components/UI/Button/Button'
+import Button from '../../../../components/UI/Button/Button'
 import { connect } from 'react-redux'
 
 @connect(store => {
   return {
-    currentBoard: store.currentBoard,
-    board: store.currentBoard.board
+    board: store.analytics.board
   }
 })
 export default class ChartDoneCardsMembers extends React.Component {
