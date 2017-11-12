@@ -57,7 +57,7 @@ export default class TeamsMenu extends React.Component {
             display: flex;
             flex-wrap: wrap;
             padding: 10px 0;
-            max-height: 100px;
+            max-height: 800px;
             overflow-y: auto;
           }
 
