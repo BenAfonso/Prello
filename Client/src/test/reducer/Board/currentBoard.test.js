@@ -121,6 +121,33 @@ describe('Current board reducer tests', () => {
     }
 
     expect(reducer(previousState, action)).toEqual(previousState)
+  })
 
+  it('should add a checklist to a card', () => {
+    const previousState = {
+      ...defaultBoardState,
+      board: {
+        ...defaultBoardState.board,
+        lists: [{_id: '0',
+          name: 'List',
+          archived: false,
+          cards: [
+            {text: '', checklists: []}
+          ]}]
+      }
+    }
+
+    const nextState = {
+
+    }
+
+    const action = {
+      type: 'ADD_CHECKLIST',
+      payload: {
+
+      }
+    }
+
+    expect(reducer(previousState, action)).toEqual(nextState)
   })
 })

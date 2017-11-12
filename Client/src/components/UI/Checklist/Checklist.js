@@ -7,13 +7,17 @@ import Icon from '../Icon/Icon'
 import Markdown from 'react-markdown'
 export default class Checklist extends React.Component {
   static propTypes = {
-    listIndex: PropTypes.string,
+    listIndex: PropTypes.number,
     cardId: PropTypes.string,
     id: PropTypes.string,
     items: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string,
       text: PropTypes.string,
-      isChecked: PropTypes.bool
+      isChecked: PropTypes.bool,
+      doneDate: PropTypes.oneOf([
+        PropTypes.instanceOf(Date),
+        PropTypes.string
+      ])
     })),
     title: PropTypes.string.isRequired,
     percentageDone: PropTypes.number
@@ -159,6 +163,7 @@ export default class Checklist extends React.Component {
             <div className='actualProgressBar' style={actualProgressBarStyle} />
           </div>
         </div>
+        {console.log(this.props.items)}
         {/* Display checklist items */}
         {items.map((item) => (
           <ChecklistItem
@@ -167,7 +172,8 @@ export default class Checklist extends React.Component {
             isChecked={item.isChecked}
             text={item.text}
             onChange={this.updateItem}
-            onDelete={this.deleteItem} />
+            onDelete={this.deleteItem}
+            doneDate={Date.parse(item.doneDate)} />
         ))}
 
         {!this.state.displayNewItemForm

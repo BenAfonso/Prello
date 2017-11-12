@@ -33,7 +33,7 @@ export default class CardDetails extends React.Component {
     checklists: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.Any,
       index: PropTypes.number,
-      title: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired,
       items: PropTypes.array
     }))
   }
