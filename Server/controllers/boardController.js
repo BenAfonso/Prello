@@ -17,7 +17,7 @@ const boardController = {}
  */
 boardController.getAllBoards = function () {
   return new Promise((resolve, reject) => {
-    Board.find().populate('owner lists collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+    Board.find().populate('owner lists collaborators teams', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
@@ -37,20 +37,22 @@ boardController.getAllBoards = function () {
 
 boardController.getUserBoards = function (userId) {
   return new Promise((resolve, reject) => {
-    Board.find({ $or: [{ 'owner': userId }, { 'collaborators': userId }] }).populate('owner lists collaborators teams', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
-      if (err) {
-        reject(err)
-      } else {
-        Card.populate(res, {
-          path: 'lists.cards'
-        }, function (err, res) {
-          if (err) {
-            reject(err)
-          } else {
-            resolve(res)
-          }
-        })
-      }
+    Team.find({ 'users': userId }).then((teams) => {
+      Board.find({$or: [{ 'owner': userId }, { 'collaborators': userId }, {'teams': {$in: teams}}]}).populate('owner lists collaborators teams', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+        if (err) {
+          reject(err)
+        } else {
+          Card.populate(res, {
+            path: 'lists.cards'
+          }, function (err, res) {
+            if (err) {
+              reject(err)
+            } else {
+              resolve(res)
+            }
+          })
+        }
+      })
     })
   })
 }
@@ -287,14 +289,27 @@ boardController.removeCollaborator = (boardId, userId, requesterId) => {
 }
 
 boardController.addTeam = (boardId, teamId) => {
-  console.log(boardId)
-  console.log(teamId)
   return new Promise((resolve, reject) => {
     Board.findOneAndUpdate({ '_id': boardId }, { $push: { teams: teamId } }, { new: true }).populate('teams').exec((err, res) => {
       if (err) {
         err.status = 500
         reject(err)
       } else {
+        Team.findOneAndUpdate({ '_id': teamId }, { $push: { boards: boardId } }, { new: true }).exec()
+        emit(boardId, 'UPDATE_TEAMS', res.teams)
+        resolve(res)
+      }
+    })
+  })
+}
+boardController.removeTeam = (boardId, teamId) => {
+  return new Promise((resolve, reject) => {
+    Board.findOneAndUpdate({ '_id': boardId }, { $pull: { teams: teamId } }, { new: true }).populate('teams').exec((err, res) => {
+      if (err) {
+        err.status = 500
+        reject(err)
+      } else {
+        Team.findOneAndUpdate({ '_id': teamId }, { $pull: { boards: boardId } }, { new: true }).exec()
         emit(boardId, 'UPDATE_TEAMS', res.teams)
         resolve(res)
       }

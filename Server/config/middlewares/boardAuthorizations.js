@@ -25,7 +25,7 @@ module.exports.isCollaborator = (req, res, next) => {
     if (collaborators.length > 0) {
       next()
     } else {
-      userController.getUserTeams(req.params.userId).then((teams) => {
+      userController.getUserTeams(req.user._id).then((teams) => {
         Board.findOne({'_id': req.params.boardId, 'teams': {$in: teams}}).exec((err, result) => {
           if (err) {
             return res.status(500).send(err)
