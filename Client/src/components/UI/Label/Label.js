@@ -92,9 +92,10 @@ export default class Label extends React.Component {
     if (this.props.cardLabels) {
       this.props.cardLabels.map((label) => {
         if (label['_id'] === this.props.labelId) {
-          this.setState({
-            addedToCard: !this.state.addedToCard
-          })
+          return (
+            this.setState({
+              addedToCard: !this.state.addedToCard
+            }))
         }
       })
     }
