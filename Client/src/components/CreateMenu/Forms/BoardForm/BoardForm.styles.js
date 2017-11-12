@@ -66,6 +66,10 @@ export default `
   border-radius: 3px;
 }
 
+.newBoardForm .checkbox {
+  width: 20px;
+}
+
 .newBoardFormButtons {
   margin-top: 8px;
   margin-left: 10px;
@@ -78,5 +82,10 @@ export default `
 
 .newBoardFormButtons div:nth-child(1) {
   margin-right: 10px;
+}
+
+.normalTextInsideBoardCreation {
+  color: black;
+  font-size: 14px;
 }
 `

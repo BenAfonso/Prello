@@ -121,6 +121,5 @@ describe('Current board reducer tests', () => {
     }
 
     expect(reducer(previousState, action)).toEqual(previousState)
-
   })
 })

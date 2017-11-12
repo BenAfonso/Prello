@@ -47,11 +47,12 @@ export default class BoardForm extends React.Component {
               <input type='text' placeholder='Add a board...' ref={(t) => { this.title = t }} />
               <input type='color' defaultValue='#cd5a91' ref={(input) => { this.color = input }} />
               <p className='boardFormItemTitle'>Templates</p>
-              <input type='checkbox' className='checkbox' onChange={this.updateScrumCheckboxStatus} ref={input => { this.scrumCheckbox = input }} /><span>SCRUM board</span>
+              <input type='checkbox' className='checkbox' onChange={this.updateScrumCheckboxStatus} ref={input => { this.scrumCheckbox = input }} />
+              <span className='normalTextInsideBoardCreation'>SCRUM board</span>
               {this.state.scrumToggled
                 ? <div>
-                  <label>Sprints : </label>
-                  <input type='number' step='1' min='1' max='100' ref={input => { this.sprintsInput = input }} />
+                  <label className='normalTextInsideBoardCreation'>Sprints : </label>
+                  <input type='number' step='1' min='1' max='100' defaultValue='1' ref={input => { this.sprintsInput = input }} />
                 </div>
                 : null}
             </form>
