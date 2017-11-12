@@ -61,3 +61,7 @@ export function removeCollaboratorDistant (board, userId) {
     })
   })
 }
+
+export function importTrelloBoardDistant (board) {
+  axios.post(`${Config.API_URL}/boards/import`, board)
+}

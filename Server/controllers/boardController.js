@@ -3,7 +3,7 @@ const Board = mongoose.model('Board')
 const User = mongoose.model('User')
 const Label = mongoose.model('Label')
 const Modification = mongoose.model('Modification')
-
+const List = mongoose.model('List')
 const Card = mongoose.model('Card')
 const Util = require('./Util')
 const emit = require('../controllers/sockets').emit
@@ -67,6 +67,16 @@ boardController.createBoard = function (board) {
       if (err) {
         reject(err)
       } else {
+        const fakeList = {name: 'List A'}
+        const listToAdd = new List(fakeList)
+        console.log(listToAdd)
+        listToAdd.save((err, item) => {
+          if (err) {
+            reject(err)
+          } else {
+            boardController.addListToBoard(boardToAdd._id, listToAdd)
+          }
+        })
         emit('testID', 'NEW_BOARD', item)
         resolve(item)
       }
@@ -74,6 +84,14 @@ boardController.createBoard = function (board) {
   })
 }
 
+/**
+ *
+ * @param {any} board
+ * @returns
+ */
+boardController.importTrelloBoard = function (board) {
+  console.log(board)
+}
 /**
  *
  *
