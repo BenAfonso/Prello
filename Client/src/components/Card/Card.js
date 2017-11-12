@@ -5,7 +5,7 @@ import styles from './Card.styles'
 import AvatarThumbnail from '../UI/AvatarThumbnail/AvatarThumbnail'
 import Button from '../UI/Button/Button'
 import Icon from '../UI/Icon/Icon'
-import Label from '../UI/Label/Label'
+import LabelThumbnail from '../UI/Label/LabelThumbnail'
 
 @connect(store => {
   return {
@@ -93,7 +93,10 @@ export default class Card extends React.Component {
     const card = list.cards.filter(c => c._id === this.props.id)[0]
     const dueDate = this.getDueDate(card)
     const formattedDate = this.getFormattedDueDate(dueDate)
-    const cardLabels = this.props.lists[this.props.listIndex].cards[this.props.index].labels
+    let cardLabels = []
+    if (this.props.lists[this.props.listIndex].cards[this.props.index]) {
+      cardLabels = this.props.lists[this.props.listIndex].cards[this.props.index].labels
+    }
     const boardLabels = this.props.board.labels
     let labelsToDisplay = []
     boardLabels.map((bLabel) => {
@@ -107,10 +110,8 @@ export default class Card extends React.Component {
       <div style={{...this.props.style}} ref={c => { this.card = c }} className='root'>
         <div className='editButton'><Button size='small' bgColor='rgba(0,0,0,0)' hoverBgColor='rgba(255,255,255,0.6)'><Icon name='edit' color='#444' /></Button></div>
         <div className='content'>{ this.props.content }</div>
-        <div>
-          <ul>
-            { labelsToDisplay.map((label) => <li><Label isThumbnail={true} labelText={label['name']} backgroundColor={label['color']} /></li>) }
-          </ul>
+        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+          { labelsToDisplay.map((label) => <div key={label['_id']}><LabelThumbnail labelText={label['name']} backgroundColor={label['color']} /></div>) }
         </div>
         <div className='numbers'>
           { this.props.nbComments > 0
