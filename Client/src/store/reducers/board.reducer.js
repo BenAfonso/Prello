@@ -98,6 +98,7 @@ export default (state = defaultBoardState, action) => {
       }
     }
     case 'MOVE_LIST': {
+      console.log(action.payload)
       return {
         ...state,
         board: {
@@ -137,17 +138,27 @@ export default (state = defaultBoardState, action) => {
       }
     }
     case 'UPDATE_CARD': {
-      let newLists = state.board.lists.slice()
-      let updatedList = newLists.filter(l => l._id === action.payload.listId)
-      let updatedCard = updatedList[0].cards.filter(c => c._id === action.payload.card._id)
-      let listIndex = newLists.indexOf(updatedList[0])
-      let cardIndex = updatedList[0].cards.indexOf(updatedCard[0])
-      newLists[listIndex].cards[cardIndex] = action.payload.card
-      return {
-        ...state,
-        board: {
-          ...state.board,
-          lists: newLists
+      const canUpdate = action.payload.card.text.length > 0 && ((action.payload.card.checklists && action.payload.card.checklists.length > 0 &&
+        action.payload.card.checklists[action.payload.card.checklists.length - 1].text.length > 0) ||
+        (action.payload.card.checklists && action.payload.card.checklists.length === 0) || !action.payload.card.checklists)
+      if (canUpdate) {
+        console.log(action.payload)
+        let newLists = state.board.lists.slice()
+        let updatedList = newLists.filter(l => l._id === action.payload.listId)
+        let updatedCard = updatedList[0].cards.filter(c => c._id === action.payload.card._id)
+        let listIndex = newLists.indexOf(updatedList[0])
+        let cardIndex = updatedList[0].cards.indexOf(updatedCard[0])
+        newLists[listIndex].cards[cardIndex] = action.payload.card
+        return {
+          ...state,
+          board: {
+            ...state.board,
+            lists: newLists
+          }
+        }
+      } else {
+        return {
+          ...state
         }
       }
     }

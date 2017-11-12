@@ -41,6 +41,73 @@ describe('Current board reducer tests', () => {
     expect(reducer(defaultBoardState, action)).not.toEqual(newState)
   })
 
+  it('should delete a list of the board', () => {
+    const previousState = {
+      ...defaultBoardState,
+      board: {
+        ...defaultBoardState.board,
+        lists: [{_id: '0', name: '', archived: false}]
+      }
+    }
+
+    const action = {
+      type: 'REMOVE_LIST',
+      payload: {
+        _id: '0'
+      }
+    }
+
+    expect(reducer(previousState, action)).toEqual(defaultBoardState)
+  })
+
+  it('should NOT change the state when deleting a list with an invalid id of the board', () => {
+    const previousState = {
+      ...defaultBoardState,
+      board: {
+        ...defaultBoardState.board,
+        lists: [{_id: '0', name: '', archived: false}]
+      }
+    }
+
+    const action = {
+      type: 'REMOVE_LIST',
+      payload: {
+        _id: 'toto'
+      }
+    }
+
+    expect(reducer(previousState, action)).toEqual(previousState)
+  })
+
+  it('should update a list when changing its title', () => {
+    const previousState = {
+      ...defaultBoardState,
+      board: {
+        ...defaultBoardState.board,
+        lists: [{_id: '0', name: 'Before title', archived: false}]
+      }
+    }
+
+    const nextState = {
+      ...previousState,
+      board: {
+        ...previousState.board,
+        lists: [{_id: '0', name: 'After title', archived: false}]
+      }
+    }
+
+    const action = {
+      type: 'UPDATE_LIST',
+      payload: {
+        _id: '0',
+        name: 'After title',
+        archived: false
+      }
+    }
+
+    expect(reducer(previousState, action)).toEqual(nextState)
+  })
+
   it('should add a card to a list of the current board', () => {
     const previousState = {
       ...defaultBoardState,
@@ -121,6 +188,162 @@ describe('Current board reducer tests', () => {
     }
 
     expect(reducer(previousState, action)).toEqual(previousState)
+  })
 
+  it('should update the title of a card', () => {
+    const previousState = {
+      ...defaultBoardState,
+      board: {
+        ...defaultBoardState.board,
+        lists: [{ _id: '0', name: 'List', archived: false, cards: [{_id: '0', text: 'Card'}] }]
+      }
+    }
+
+    const nextState = {
+      ...previousState,
+      board: {
+        ...previousState.board,
+        lists: [{ _id: '0', name: 'List', archived: false, cards: [{_id: '0', text: 'Updated card'}] }]
+      }
+    }
+
+    const action = {
+      type: 'UPDATE_CARD',
+      payload: {
+        listId: '0',
+        card: {
+          _id: '0',
+          text: 'Updated card'
+        }
+      }
+    }
+
+    expect(reducer(previousState, action)).toEqual(nextState)
+  })
+
+  it('should NOT update the title of a card if it is empty', () => {
+    const previousState = {
+      ...defaultBoardState,
+      board: {
+        ...defaultBoardState.board,
+        lists: [{ _id: '0', name: 'List', archived: false, cards: [{_id: '0', text: 'Card'}] }]
+      }
+    }
+
+    const action = {
+      type: 'UPDATE_CARD',
+      payload: {
+        listId: '0',
+        card: {
+          _id: '0',
+          text: ''
+        }
+      }
+    }
+
+    expect(reducer(previousState, action)).toEqual(previousState)
+  })
+
+  it('should move the position of a list inside a board', () => {
+    const previousState = {
+      ...defaultBoardState,
+      board: {
+        ...defaultBoardState.board,
+        lists: [{ _id: '0', name: 'List', archived: false, cards: [] },
+          { _id: '1', name: 'List2', archived: false, cards: [] }]
+      }
+    }
+
+    const nextState = {
+      ...previousState,
+      board: {
+        ...previousState.board,
+        lists: [{ _id: '1', name: 'List2', archived: false, cards: [] },
+          { _id: '0', name: 'List', archived: false, cards: [] }]
+      }
+    }
+
+    const action = {
+      type: 'MOVE_CARD',
+      payload: [{ _id: '1', name: 'List2', archived: false, cards: [] },
+        { _id: '0', name: 'List', archived: false, cards: [] }]
+    }
+
+    expect(reducer(previousState, action)).toEqual(nextState)
+  })
+
+  it('should add a checklist to a card', () => {
+    const previousState = {
+      ...defaultBoardState,
+      board: {
+        ...defaultBoardState.board,
+        lists: [{ _id: '0', name: 'List', archived: false, cards: [{_id: '0', text: 'Card', checklists: []}] }]
+      }
+    }
+
+    const nextState = {
+      ...previousState,
+      board: {
+        ...previousState.board,
+        lists: [{ _id: '0',
+          name: 'List',
+          archived: false,
+          cards: [{_id: '0',
+            text: 'Card',
+            checklists: [{
+              _id: '0',
+              text: 'Checklist',
+              items: []
+            }]
+          }]
+        }]
+      }
+    }
+
+    const action = {
+      type: 'UPDATE_CARD',
+      payload: {
+        listId: '0',
+        card: {
+          _id: '0',
+          text: 'Card',
+          checklists: [{
+            _id: '0',
+            text: 'Checklist',
+            items: []
+          }]
+        }
+      }
+    }
+
+    expect(reducer(previousState, action)).toEqual(nextState)
+  })
+
+  it('should NOT add a cheklist with an empty text to a card', () => {
+    const previousState = {
+      ...defaultBoardState,
+      board: {
+        ...defaultBoardState.board,
+        lists: [{ _id: '0', name: 'List', archived: false, cards: [{_id: '0', text: 'Card', checklists: []}] }]
+      }
+    }
+
+    const action = {
+      type: 'UPDATE_CARD',
+      payload: {
+        listId: '0',
+        card: {
+          _id: '0',
+          text: 'Card',
+          checklists: [{
+            _id: '0',
+            text: '',
+            items: []
+          }]
+        }
+      }
+    }
+
+    expect(reducer(previousState, action)).toEqual(previousState)
   })
 })
