@@ -481,3 +481,43 @@ export function restoreList (boardId, list) {
     payload: newList
   })
 }
+export function addLabel (labels) {
+  store.dispatch({
+    type: 'ADD_LABEL',
+    payload: labels
+  })
+}
+
+export function removeLabel (labels) {
+  store.dispatch({
+    type: 'REMOVE_LABEL',
+    payload: labels
+  })
+}
+
+export function updateLabel (labels) {
+  store.dispatch({
+    type: 'UPDATE_LABEL',
+    payload: labels
+  })
+}
+export function setOAuthClients (clients) {
+  store.dispatch({
+    type: 'SET_OAUTHCLIENTS',
+    payload: clients
+  })
+}
+
+export function addOAuthClient (client) {
+  store.dispatch({
+    type: 'ADD_OAUTHCLIENT',
+    payload: client
+  })
+}
+
+export function removeOAuthClient (client) {
+  store.dispatch({
+    type: 'REMOVE_OAUTHCLIENT',
+    payload: client._id
+  })
+}

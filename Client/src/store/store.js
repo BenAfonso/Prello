@@ -28,6 +28,10 @@ export const defaultNotificationsState = {
   elements: []
 }
 
+export const defaultDevelopersState = {
+  oauthClients: []
+}
+
 export const defaultBoardState = {
   fetching: false,
   fetched: false,
@@ -40,6 +44,7 @@ export const defaultBoardState = {
     isArchived: false,
     background: '#fff',
     collaborators: [],
+    labels: [],
     modifications: []
   }
 }

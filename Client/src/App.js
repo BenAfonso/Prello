@@ -7,6 +7,7 @@ import TeamPage from './pages/team.page'
 import RegisterPage from './pages/RegisterPage/register.page'
 import LoadingPage from './pages/LoadingPage/loading.page'
 import ProfilePage from './pages/ProfilePage/profile.page'
+import ApiPage from './pages/ApiPages/api.page'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store/store'
@@ -38,6 +39,7 @@ class App extends Component {
             <PrivateRoute exact path='/boards/:id' component={BoardPage} />
             <PrivateRoute exact path='/teams/:id' component={TeamPage} />
             <PrivateRoute exact path='/teams/:id/:tab' component={TeamPage} />
+            <PrivateRoute exact path='/developers' component={ApiPage} />
             <Route exact path='/loading' component={LoadingPage} />
             <PrivateRoute exact path='/profile' component={ProfilePage} />
           </div>

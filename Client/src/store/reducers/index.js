@@ -5,6 +5,7 @@ import currentUser from './currentUser.reducer'
 import currentTeam from './team.reducer'
 import teamslist from './teamslist.reducer'
 import notifications from './notifications.reducer'
+import developers from './developers.reducer'
 
 export default combineReducers({
   currentUser,
@@ -12,5 +13,6 @@ export default combineReducers({
   boardslist,
   currentTeam,
   teamslist,
-  notifications
+  notifications,
+  developers
 })

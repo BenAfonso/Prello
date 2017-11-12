@@ -165,7 +165,7 @@ cardController.removeCommentFromCard = (cardId, commentId) => {
 }
 cardController.getOneCard = (cardId) => {
   return new Promise((resolve, reject) => {
-    Card.findOne({ '_id': cardId }).populate('comments responsible collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+    Card.findOne({ '_id': cardId }).populate('comments responsible collaborators labels', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
@@ -236,6 +236,7 @@ cardController.addCollaboratorEmail = (boardId, cardId, listId, email, requester
 cardController.refreshOneCard = (boardId, listId, cardId) => {
   return new Promise((resolve, reject) => {
     cardController.getOneCard(cardId).then((cardToEmit) => {
+      console.log(cardToEmit)
       let payload = {
         listId: listId,
         card: cardToEmit
@@ -244,6 +245,7 @@ cardController.refreshOneCard = (boardId, listId, cardId) => {
       resolve(cardToEmit)
     })
   .catch((err) => {
+    console.log(err)
     err.status = 500
     reject(err)
   })
@@ -316,6 +318,43 @@ cardController.removeCollaborator = (boardId, listId, cardId, userId, requesterI
           modificationController.REMOVED_USER_CARD(boardId, requesterId, cardId, userId).catch((err) => {
             reject(err)
           })
+          resolve(cardToEmit)
+        })
+        .catch((err) => {
+          err.status = 500
+          reject(err)
+        })
+      }
+    })
+  })
+}
+
+cardController.addLabel = (boardId, cardId, listId, labelId) => {
+  return new Promise((resolve, reject) => {
+    Card.findOneAndUpdate({ '_id': cardId }, { $push: { labels: labelId } }, { new: true }).exec((err, res) => {
+      if (err) {
+        err.status = 500
+        reject(err)
+      } else {
+        cardController.refreshOneCard(boardId, listId, cardId).then((cardToEmit) => {
+          resolve(cardToEmit)
+        })
+        .catch((err) => {
+          err.status = 500
+          reject(err)
+        })
+      }
+    })
+  })
+}
+cardController.removeLabel = (boardId, cardId, listId, labelId) => {
+  return new Promise((resolve, reject) => {
+    Card.findOneAndUpdate({ '_id': cardId }, { $pull: { labels: labelId } }, { new: true }).exec((err, res) => {
+      if (err) {
+        err.status = 500
+        reject(err)
+      } else {
+        cardController.refreshOneCard(boardId, listId, cardId).then((cardToEmit) => {
           resolve(cardToEmit)
         })
         .catch((err) => {
