@@ -1,5 +1,4 @@
 import React from 'react'
-import Icon from '../../../../../UI/Icon/Icon'
 import Label from '../../../../../UI/Label/Label'
 import PropTypes from 'prop-types'
 
@@ -10,7 +9,6 @@ export default class CardDetailsLabels extends React.Component {
       showDropdown: false,
       labels: props.labels
     }
-    this.onAddLabelCard = this.onAddLabelCard.bind(this)
   }
 
   static propTypes = {
@@ -29,23 +27,10 @@ export default class CardDetailsLabels extends React.Component {
       showDropdown: !this.state.showDropdown
     })
   }
-
-  onAddLabelCard (labelText, labelColor) {
-    let newBoardLabels = this.state.labels.slice()
-    newBoardLabels.push({label: labelText, color: labelColor})
-    this.setState({
-      labels: newBoardLabels
-    })
-  }
   render () {
     return (
       <ul>
         {this.props.cardLabels.map(label => <li><Label isThumbnail={true} labelText={label['name']} backgroundColor={label['color']} /></li>)}
-        <li>
-          <div className='addButton' onClick={null}>
-            <Icon name='plus' fontSize='15px' color='#aaa' />
-          </div>
-        </li>
         <style jsx>
           {`
       ul {
