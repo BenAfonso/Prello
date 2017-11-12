@@ -11,7 +11,6 @@ export default (state = defaultTeamslistState, action) => {
       }
     }
     case 'FETCH_TEAMSLIST_SUCCESS': {
-      console.log(action.payload)
       return {
         ...state.teamslist,
         teams: action.payload

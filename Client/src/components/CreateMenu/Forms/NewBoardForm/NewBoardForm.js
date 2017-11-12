@@ -146,6 +146,7 @@ export default class NewBoardForm extends React.Component {
 
     .element-text {
       padding: 8px 0px;
+      font-size: 15px;
     }
 
     .element-buttons {

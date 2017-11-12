@@ -41,7 +41,6 @@ export function fetchBoards () {
 export function getBoardHistory (boardId) {
   return new Promise((resolve, reject) => {
     axios.get(`${Config.API_URL}/boards/${boardId}/history?limit=20&skip=0`).then(res => {
-      console.log(res.data)
       resolve(res.data)
     }).catch(err => {
       reject(err)
