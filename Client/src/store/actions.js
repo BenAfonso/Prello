@@ -1,4 +1,4 @@
-import { fetchBoards, addBoardDistant, addCollaboratorDistant, removeCollaboratorDistant } from '../services/Board.services'
+import { fetchBoards, addBoardDistant, addScrumBoardDistant, addCollaboratorDistant, removeCollaboratorDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
@@ -183,6 +183,14 @@ export function setBoardslist (dispatch) {
 export function addBoard (dispatch, payload) {
   addBoardDistant(payload).then((board) => {
     // <= HANDLED FROM SOCKETS
+  }).catch(err => {
+    return err
+  })
+}
+
+export function addScrumBoard (dispatch, payload) {
+  addScrumBoardDistant(payload).then((board) => {
+
   }).catch(err => {
     return err
   })

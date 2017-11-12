@@ -1,21 +1,33 @@
 import React from 'react'
 import styles from './BoardForm.styles'
-import { addBoard } from '../../../../store/actions'
+import { addBoard, addScrumBoard } from '../../../../store/actions'
 import Button from '../../../UI/Button/Button'
 
 export default class BoardForm extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      shouldRedirect: false
+      shouldRedirect: false,
+      scrumToggled: false
     }
     this.submit = this.submit.bind(this)
+    this.updateScrumCheckboxStatus = this.updateScrumCheckboxStatus.bind(this)
+  }
+
+  updateScrumCheckboxStatus () {
+    this.setState({ scrumToggled: !this.state.scrumToggled })
   }
 
   submit (title) {
     if (this.title.value !== '') {
-      addBoard(this.props.dispatch, {title: this.title.value, color: this.color.value})
-      this.props.onSubmit()
+      if (!this.scrumCheckbox.checked) {
+        addBoard(this.props.dispatch, {title: this.title.value, color: this.color.value})
+        this.props.onSubmit()
+      } else {
+        // CREATE BOARD SCRUM
+        addScrumBoard(this.props.dispatch, {title: this.title.value, color: this.color.value, sprints: this.sprintsInput.value})
+        this.props.onSubmit()
+      }
     }
   }
 
@@ -34,6 +46,14 @@ export default class BoardForm extends React.Component {
             <form onSubmit={this.submit}>
               <input type='text' placeholder='Add a board...' ref={(t) => { this.title = t }} />
               <input type='color' defaultValue='#cd5a91' ref={(input) => { this.color = input }} />
+              <p className='boardFormItemTitle'>Templates</p>
+              <input type='checkbox' className='checkbox' onChange={this.updateScrumCheckboxStatus} ref={input => { this.scrumCheckbox = input }} /><span>SCRUM board</span>
+              {this.state.scrumToggled
+                ? <div>
+                  <label>Sprints : </label>
+                  <input type='number' step='1' min='1' max='100' ref={input => { this.sprintsInput = input }} />
+                </div>
+                : null}
             </form>
           </li>
 
