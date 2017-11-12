@@ -249,7 +249,7 @@ export default class Team extends React.Component {
                     ))
                   }
                   <li>
-                    <NewBoardForm currentTeam={team} teams={currentUser.teams} />
+                    <NewBoardForm currentTeam={team} />
                   </li>
                 </ul>
               </div>

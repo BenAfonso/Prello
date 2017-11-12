@@ -16,10 +16,10 @@ export default class NewBoardForm extends React.Component {
     super(props)
     this.state = {
       enableAdd: false,
-      selected: this.props.self ? ['None'] : [this.props.currentTeam._id]
+      selected: this.props.self ? [] : [this.props.currentTeam._id]
     }
     this.submit = this.submit.bind(this)
-    this.onChange = this.onChange.bind(this)
+    this.onTeamCheck = this.onTeamCheck.bind(this)
   }
 
   componentDidMount () {
@@ -29,9 +29,17 @@ export default class NewBoardForm extends React.Component {
     })
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (this.props.currentTeam !== nextProps.currentTeam) {
+      this.setState({
+        selected: this.props.self ? [] : [nextProps.currentTeam._id]
+      })
+    }
+  }
+
   submit (title) {
     if (this.title.value !== '') {
-      if (this.state.selected[0] === 'None') {
+      if (this.state.selected === []) {
         addBoard(this.props.dispatch, {title: this.title.value, color: this.color.value})
       } else {
         addTeamBoard(this.props.dispatch, {title: this.title.value, color: this.color.value, teams: this.state.selected})
@@ -39,25 +47,19 @@ export default class NewBoardForm extends React.Component {
     }
   }
 
-  onChange () {
-    let selected
-    if (this.teams.value[0] === 'None') {
-      selected = ['None']
+  onTeamCheck (event, teamId) {
+    if (event.target.checked) {
+      let newSelected = this.state.selected.slice()
+      newSelected.push(teamId)
+      this.setState({selected: newSelected})
     } else {
-      if (this.state.selected.filter(team => team === this.teams.value)[0] !== undefined) {
-        selected = this.state.selected.filter(team => team !== this.teams.value[0])
-      } else {
-        let newSelected = this.state.selected.slice()
-        newSelected.push(this.teams.value)
-        selected = newSelected
-      }
+      let newSelected = this.state.selected.filter(team => team !== teamId)
+      this.setState({selected: newSelected})
     }
-    this.setState({selected: selected})
   }
 
   render () {
-    const { currentTeam, teams } = this.props
-
+    const { teams } = this.props
     return (
       <div className='host'>
         <DropDown
@@ -95,12 +97,22 @@ export default class NewBoardForm extends React.Component {
                   teams.length >= 1
                     ? <div className='element-input'>
                       <form>
-                        <select autofocus value={this.state.selected} ref={(select) => { this.teams = select }} defaultValue={this.props.self ? ['None'] : currentTeam._id} multiple onChange={this.onChange}>
+                        <ul>
+                          {
+                            teams.map((team, i) =>
+                              <li key={i} className='team'>
+                                <input type='checkbox' className='team-checkbox' defaultChecked={this.state.selected.filter(teamId => teamId === team._id)[0]} onChange={event => this.onTeamCheck(event, team._id)}/>
+                                <div className='team-name'>{team.name}</div>
+                              </li>
+                            )
+                          }
+                        </ul>
+                        {/* <select ref={(select) => { this.teams = select }} defaultValue={this.props.self ? ['None'] : [currentTeam._id]} onChange={this.onChange}>
                           <option value='None' disabled={this.state.selected[0] !== 'None'}>None</option>
                           {
                             teams.map((team, i) => <option key={i} value={team._id} disabled={this.state.selected[0] === 'None'} >{team.name}</option>)
                           }
-                        </select>
+                        </select> */}
                       </form>
                     </div>
                     : <div className='element-text'>You have no team yet.</div>
@@ -108,26 +120,16 @@ export default class NewBoardForm extends React.Component {
               </li>
               <li className='separator' />
               <li className='element'>
-                <div className='element-buttons'>
-                  <div className='add-button'>
-                    <Button
-                      bgColor={'#5AAC44'}
-                      gradient
-                      bold
-                      shadow
-                      onClick={this.submit}>
-                      Add
-                    </Button>
-                  </div>
-                  <div className='cancel-button'>
-                    <Button
-                      bgColor={'#444'}
-                      gradient
-                      shadow
-                      onClick={this.props.cancel}>
-                      Cancel
-                    </Button>
-                  </div>
+                <div className='add-button'>
+                  <Button
+                    bgColor={'#5AAC44'}
+                    gradient
+                    bold
+                    shadow
+                    block
+                    onClick={this.submit}>
+                    Add
+                  </Button>
                 </div>
               </li>
             </ul>
@@ -160,9 +162,19 @@ export default class NewBoardForm extends React.Component {
       font-size: 15px;
     }
 
-    .element-buttons {
+    .team {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    .team-name {
+      input-size: 15px;
+      padding-left: 5px;
+    }
+
+    .add-button {
+      width: 100%;
     }
 
     input {
@@ -170,6 +182,15 @@ export default class NewBoardForm extends React.Component {
       width: 100%;
       padding: 8px;
       border-radius: 3px;
+    }
+
+    input[type=checkbox] {
+      height: 20px;
+      width: 20px;
+    }
+
+    input[type=color] {
+      height: 50px;
     }
 
     select {
