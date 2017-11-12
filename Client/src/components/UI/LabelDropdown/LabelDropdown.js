@@ -18,9 +18,10 @@ export default class LabelDropdown extends React.Component {
   }
 
   static defaultProps = {
-    height: '459px',
+    height: '175px',
     width: '302px',
     color: '#fff',
+    overflow: 'scroll',
     backgroundColor: null,
     fontWeight: 'bold',
     borderRadius: '3px',
@@ -61,6 +62,7 @@ export default class LabelDropdown extends React.Component {
       fontWeight,
       borderRadius,
       fontSize,
+      overflow,
       ...props
     } = this.props
 
@@ -71,13 +73,14 @@ export default class LabelDropdown extends React.Component {
       backgroundColor,
       fontWeight,
       borderRadius,
-      fontSize
+      fontSize,
+      overflow
     }
 
     if (!this.state.displayLabelCreationForm) {
       return (
         <div style={props.style}>
-          <div style={{ marginLeft: '7%', marginTop: '30px', position: 'absolute' }}>
+          <div style={{ marginLeft: '7%', marginTop: '30px' }}>
             <div style={{}}>
               {this.props.labels.map(e => <div key={e['_id']}><Label cardLabels={this.props.cardLabels} onDeleteCardLabel={this.props.onDeleteCardLabel} onAddCardLabel={this.props.onAddCardLabel} onUpdateBoardLabel={this.props.onUpdateBoardLabel} onDeleteBoardLabel={this.props.onDeleteBoardLabel} isItem={ true } labelId={e['_id']} labelText={e['name']} backgroundColor={e['color']} /></div>)}
             </div>
@@ -94,11 +97,11 @@ export default class LabelDropdown extends React.Component {
             <div>
               <div>
                 <h3 style={{ color: 'black', marginLeft: '10%' }}>Label name</h3>
-                <input style={{ width: '75%', height: '40px', marginLeft: '10%', marginTop: '5%', borderRadius: '3%', textAlign: 'center' }} type='text' autoFocus ref={(v) => { this.labelTitle = v } } placeholder='Label title'/>
+                <input style={{ width: '75%', height: '30px', marginLeft: '10%', marginTop: '5%', borderRadius: '3%', textAlign: 'center' }} type='text' autoFocus ref={(v) => { this.labelTitle = v } } placeholder='Label title'/>
               </div>
               <div>
                 <h3 style={{ color: 'black', marginLeft: '10%' }}>Label color</h3>
-                <input style={{ width: '75%', height: '40px', marginLeft: '10%', marginTop: '5%', borderRadius: '3%' }} type='color' ref={(v) => { this.labelColor = v } } placeholder='#c5c5c5'/>
+                <input style={{ width: '75%', height: '15px', marginLeft: '10%', marginTop: '5%', borderRadius: '3%' }} type='color' ref={(v) => { this.labelColor = v } } placeholder='#c5c5c5'/>
               </div>
             </div>
             <div style={{ display: 'flex', marginTop: '5%', marginLeft: '10%' }}>

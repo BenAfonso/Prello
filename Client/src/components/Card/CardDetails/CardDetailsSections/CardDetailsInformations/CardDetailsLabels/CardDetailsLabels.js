@@ -18,9 +18,6 @@ export default class CardDetailsLabels extends React.Component {
     }))
   }
 
-  static defaultProps = {
-    labels: [{label: 'Blue', color: '#1c5fcc'}, {label: 'Red', color: '#cc1b53'}, {label: 'Green', color: '#1dcc1a'}]
-  }
   render () {
     return (
       <ul>

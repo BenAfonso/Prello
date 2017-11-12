@@ -83,7 +83,7 @@ export default class CardDetails extends React.Component {
 
   render () {
     const card = this.props.lists[this.props.listIndex].cards[this.props.index]
-    const cardLabels = this.props.lists[this.props.listIndex].cards[this.props.index].labels
+    const cardLabels = card.labels
     return (
       <div className='host'>
         <div className='content'>
