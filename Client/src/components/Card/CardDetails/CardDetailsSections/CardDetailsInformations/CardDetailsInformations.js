@@ -73,7 +73,7 @@ export default class CardDetailsInformations extends React.Component {
               <div className='subsectionTitle'>
                 Labels
               </div>
-              <CardDetailsLabels />
+              <CardDetailsLabels labels={this.props.board.labels} cardLabels={this.props.cardLabels} onDeleteCardLabel={this.props.onDeleteCardLabel} onAddCardLabel={this.props.onAddCardLabel} onUpdateBoardLabel={this.props.onUpdateBoardLabel} onDeleteBoardLabel={this.props.onDeleteBoardLabel} labels={this.props.board.labels} onAddBoardLabel={this.props.onAddBoardLabel} />
             </div>
             <div className='responsible'>
               <div className='subsectionTitle'>
