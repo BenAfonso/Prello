@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './SideMenu.styles'
 import Icon from '../Icon/Icon'
 import UsersMenu from '../../MenuElements/UsersMenu/UsersMenu'
+import TeamsMenu from '../../MenuElements/TeamsMenu/TeamsMenu'
 import ActivityMenu from '../../MenuElements/ActivityMenu/ActivityMenu'
 import ArchivedMenu from '../../MenuElements/ArchivedMenu/ArchivedMenu'
 
@@ -10,6 +11,11 @@ const elements = [
     icon: 'user-o',
     description: 'People',
     component: UsersMenu
+  },
+  {
+    icon: 'users',
+    description: 'Teams',
+    component: TeamsMenu
   },
   {
     icon: 'hashtag',

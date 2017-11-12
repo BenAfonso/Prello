@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Team = mongoose.model('Team')
 const User = mongoose.model('User')
+const Board = mongoose.model('Board')
 
 const teamController = {}
 /**
@@ -66,8 +67,6 @@ teamController.addCollaboratorEmail = (teamId, email) => {
  */
 teamController.removeCollaboratorFromTeam = function (teamId, userId) {
   return new Promise((resolve, reject) => {
-    console.log('teamId', teamId)
-    console.log('userId', userId)
     Team.findOneAndUpdate({ '_id': teamId }, { $pull: { users: userId } }, { new: true }, function (err, res) {
       if (err) {
         reject(err)
@@ -80,9 +79,11 @@ teamController.removeCollaboratorFromTeam = function (teamId, userId) {
 }
 teamController.updateTeam = function (teamId, body) {
   return new Promise((resolve, reject) => {
+    console.log(body)
     delete body.users
     delete body.createdAt
-    Team.findOneAndUpdate({ '_id': teamId }, { body }, { new: true }, function (err, res) {
+    Team.findOneAndUpdate({ '_id': teamId }, { name: body.name, visibility: body.visibility, picture: body.picture }, { new: true }, function (err, res) {
+      console.log(res)
       if (err) {
         reject(err)
       } else {
@@ -94,11 +95,64 @@ teamController.updateTeam = function (teamId, body) {
 teamController.getOneTeam = function (teamId) {
   return new Promise((resolve, reject) => {
     Team.findOne({ '_id': teamId }).populate('boards users admins', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
-      console.log(res)
+      if (err) {
+        reject(err)
+      } else {
+        teamController.getBoardsTeam(teamId).then((result) => {
+          let teamToSend = res._doc
+          teamToSend.boards = result
+          resolve(teamToSend)
+        }).catch((err) => {
+          reject(err)
+        })
+      }
+    })
+  })
+}
+teamController.getBoardsTeam = function (teamId) {
+  return new Promise((resolve, reject) => {
+    Board.find({ 'teams': teamId }).populate('lists users admins', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
         resolve(res)
+      }
+    })
+  })
+}
+teamController.setAdmin = function (teamId, userId) {
+  return new Promise((resolve, reject) => {
+    Team.findOneAndUpdate({ '_id': teamId }, { $push: { admins: userId } }, { new: true }).populate('boards admins users').exec((err, res) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+teamController.unsetAdmin = function (teamId, userId) {
+  return new Promise((resolve, reject) => {
+    Team.findOneAndUpdate({ '_id': teamId }, { $pull: { admins: userId } }, { new: true }).populate('boards admins users').exec((err, res) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+teamController.removeAdmin = function (teamId, userId) {
+  return new Promise((resolve, reject) => {
+    Team.findOneAndUpdate({ '_id': teamId }, { $pull: { admins: userId } }, { new: true }).populate('boards admins users').exec((err, res) => {
+      if (err) {
+        reject(err)
+      } else {
+        teamController.removeCollaboratorFromTeam(teamId, userId).then((result) => {
+          resolve(result)
+        }).catch((err) => {
+          reject(err)
+        })
       }
     })
   })

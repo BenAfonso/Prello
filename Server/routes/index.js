@@ -44,6 +44,22 @@ router.get(['/boards', '/boards/*', '/me/boards', '/me/boards/*'], [authenticate
   next()
 })
 
+router.post(['/teams', '/teams/*'], [authenticate({scope: 'teams:write'})], (req, res, next) => {
+  next()
+})
+
+router.put('/teams/*', [authenticate({scope: 'teams:write'})], (req, res, next) => {
+  next()
+})
+
+router.delete('/teams/*', [authenticate({scope: 'teams:write'})], (req, res, next) => {
+  next()
+})
+
+router.get(['/teams', '/teams/*', '/me/teams', '/me/teams/*'], [authenticate({scope: 'teams:read'})], (req, res, next) => {
+  next()
+})
+
 router.get('/me', [authenticate({scope: 'users.profile:read'})], (req, res, next) => {
   next()
 })
@@ -58,6 +74,7 @@ require('./Card')(router, controllers.cardController)
 require('./User')(router, controllers.userController)
 require('./Comment')(router, controllers.commentController)
 require('./Checklist')(router, controllers.checklistController)
+require('./Team')(router, controllers.teamController)
 require('./Label')(router, controllers)
 
 router.get('/', (req, res) => {

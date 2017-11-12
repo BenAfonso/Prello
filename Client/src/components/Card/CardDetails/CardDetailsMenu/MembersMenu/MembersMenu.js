@@ -17,7 +17,7 @@ export default class MembersMenu extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      matchingBoardCollaborators: this.props.board.collaborators.slice(0, 10),
+      matchingBoardCollaborators: this.props.board.collaborators,
       enableAdd: false,
       inputValue: ''
     }
@@ -26,6 +26,23 @@ export default class MembersMenu extends React.Component {
     this.setInputValue = this.setInputValue.bind(this)
     this.getInitials = this.getInitials.bind(this)
     this.isCardMember = this.isCardMember.bind(this)
+    this.getCollaborators = this.getCollaborators.bind(this)
+  }
+
+  componentDidMount () {
+    const matchingBoardCollaborators = this.getCollaborators()
+    this.setState({matchingBoardCollaborators: matchingBoardCollaborators})
+  }
+
+  getCollaborators () {
+    let matchingBoardCollaborators = []
+    this.props.board.collaborators.map(collaborator => matchingBoardCollaborators.push(collaborator))
+    this.props.board.teams.map(team => team.users.map(user =>
+      matchingBoardCollaborators.filter(collaborator => collaborator._id === user._id)[0] !== undefined
+        ? null
+        : matchingBoardCollaborators.push(user)
+    ))
+    return matchingBoardCollaborators
   }
 
   isCardMember (collaborator) {
@@ -37,7 +54,7 @@ export default class MembersMenu extends React.Component {
     this.setState({
       inputValue: '',
       enableAdd: false,
-      matchingBoardCollaborators: this.props.board.collaborators
+      matchingBoardCollaborators: this.getCollaborators()
     })
   }
 
@@ -46,7 +63,7 @@ export default class MembersMenu extends React.Component {
     this.setState({
       inputValue: '',
       enableAdd: false,
-      matchingBoardCollaborators: this.props.board.collaborators
+      matchingBoardCollaborators: this.getCollaborators()
     })
   }
 
@@ -57,12 +74,24 @@ export default class MembersMenu extends React.Component {
     return matchingCollaborators.slice(0, 10)
   }
 
+  getMatchingTeamMembers () {
+    const reg = new RegExp(this.email.value, 'i')
+    let matchingTeamMembers = []
+    this.props.board.teams.map(team => team.users.map(user => user.email.match(reg) ? matchingTeamMembers.push(user) : null))
+    return matchingTeamMembers.slice(0, 10)
+  }
+
   onChange () {
     this.setState({
       enableAdd: false
     })
     if (this.email.value !== '') {
-      const newmatchingBoardCollaborators = this.getMatchingCollaborators(this.email.value)
+      let newmatchingBoardCollaborators = []
+      this.getMatchingCollaborators(this.email.value).map(collaborator => newmatchingBoardCollaborators.push(collaborator))
+      this.getMatchingTeamMembers().map(user =>
+        newmatchingBoardCollaborators.filter(collaborator => collaborator._id === user._id)[0] !== undefined
+          ? null
+          : newmatchingBoardCollaborators.push(user))
       this.setState({
         inputValue: this.email.value,
         matchingBoardCollaborators: newmatchingBoardCollaborators

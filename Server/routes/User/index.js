@@ -122,6 +122,15 @@ module.exports = (router, userController) => {
       return res.status(400).send(err)
     })
   })
+
+  router.get('/users/:userId/teams', requiresLogin, function (req, res) {
+    userController.getUserTeams(req.params.userId).then(teams => {
+      return res.status(200).send(teams)
+    }).catch(err => {
+      return res.status(400).send(err)
+    })
+  })
+
   router.put('/users/:userId', requiresLogin, function (req, res) {
     if (req.params.userId === req.user._id) {
       userController.updateUser(req.params.userId, req.body).then(user => {

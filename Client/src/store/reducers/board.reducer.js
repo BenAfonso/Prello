@@ -172,6 +172,16 @@ export default (state = defaultBoardState, action) => {
         }
       }
     }
+    case 'UPDATE_TEAMS': {
+      const newTeams = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          teams: newTeams
+        }
+      }
+    }
     case 'ADD_LABEL': {
       const newLabels = action.payload
       return {
