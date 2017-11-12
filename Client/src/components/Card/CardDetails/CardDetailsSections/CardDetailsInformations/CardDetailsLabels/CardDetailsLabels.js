@@ -7,7 +7,7 @@ export default class CardDetailsLabels extends React.Component {
     super(props)
     this.state = {
       showDropdown: false,
-      labels: props.labels
+      cLabels: []
     }
   }
 
@@ -21,16 +21,10 @@ export default class CardDetailsLabels extends React.Component {
   static defaultProps = {
     labels: [{label: 'Blue', color: '#1c5fcc'}, {label: 'Red', color: '#cc1b53'}, {label: 'Green', color: '#1dcc1a'}]
   }
-
-  displayLabelDropdown () {
-    this.setState({
-      showDropdown: !this.state.showDropdown
-    })
-  }
   render () {
     return (
       <ul>
-        {this.props.cardLabels.map(label => <li><Label isThumbnail={true} labelText={label['name']} backgroundColor={label['color']} /></li>)}
+        {this.props.cardLabels.map((label, index) => <li key={index}><Label isThumbnail={true} labelText={label['name']} backgroundColor={label['color']} /></li>)}
         <style jsx>
           {`
       ul {

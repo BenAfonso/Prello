@@ -111,7 +111,7 @@ export default class Card extends React.Component {
         <div className='editButton'><Button size='small' bgColor='rgba(0,0,0,0)' hoverBgColor='rgba(255,255,255,0.6)'><Icon name='edit' color='#444' /></Button></div>
         <div className='content'>{ this.props.content }</div>
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-          { labelsToDisplay.map((label) => <div><LabelThumbnail labelText={label['name']} backgroundColor={label['color']} /></div>) }
+          { labelsToDisplay.map((label) => <div key={label['_id']}><LabelThumbnail labelText={label['name']} backgroundColor={label['color']} /></div>) }
         </div>
         <div className='numbers'>
           { this.props.nbComments > 0

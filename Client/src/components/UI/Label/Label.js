@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Button from '../Button/Button'
-import Input from '../Input/Input'
+// import Input from '../Input/Input'
 import Icon from '../Icon/Icon'
 import styles from './Label.styles'
 
@@ -64,7 +64,7 @@ export default class Label extends React.Component {
   }
 
   updateBoardLabel () {
-    this.props.onUpdateBoardLabel(this.props.labelId, this.newlabelTitle.input.value, this.newlabelColor.value)
+    this.props.onUpdateBoardLabel(this.props.labelId, this.newlabelTitle.value, this.newlabelColor.value)
     this.displayLabelEditForm()
   }
 
@@ -114,34 +114,40 @@ export default class Label extends React.Component {
     } = this.props
 
     props.style = {
-      width: this.props.isThumbnail ? '50px' : '90px',
+      width: this.props.isThumbnail ? '50px' : '200px',
       height: this.props.isThumbnail ? '15px' : '30px',
       fontSize,
       fontWeight,
       backgroundColor,
       borderRadius,
       color,
-      textAlign: centeredText ? 'center' : 'left',
+      textAlign: 'center',
       ...props.style
     }
 
     if (this.state.displayLabelEditForm) {
       return (
-        <div>
+        <div style={{ marginBottom: '10px' }}>
           <div>
-            <Input ref={(v) => { this.newlabelTitle = v } } placeholder='Label title'/>
-            <input type='color' defaultValue="green" ref={(v) => { this.newlabelColor = v } } placeholder='#c5c5c5'/>
+            <div>
+              <h3 style={{ color: 'black', marginLeft: '10%' }}>Label name</h3>
+              <input defaultValue={this.props.labelText} style={{ width: '75%', height: '40px', marginLeft: '10%', marginTop: '5%', borderRadius: '3%', textAlign: 'center' }} type='text' autoFocus ref={(v) => { this.newlabelTitle = v } } placeholder='Labelo title'/>
+            </div>
+            <div>
+              <h3 style={{ color: 'black', marginLeft: '10%' }}>Label color</h3>
+              <input defaultValue={this.props.backgroundColor} style={{ width: '75%', height: '40px', marginLeft: '10%', marginTop: '5%', borderRadius: '3%' }} type='color' ref={(v) => { this.newlabelColor = v } } placeholder='#c5c5c5'/>
+            </div>
           </div>
-          <div style={{ display: 'flex' }}>
-            <Button bgColor='#28AF28' onClick={this.updateBoardLabel}>Save</Button>
-            <Button bgColor='#e73333' onClick={this.displayLabelEditForm}>Cancel</Button>
+          <div style={{ display: 'flex', marginTop: '5%', marginLeft: '10%' }}>
+            <Button style={{ marginRight: '10px' }} bgColor='#28AF28'onClick={this.updateBoardLabel} size='x-small' >Save</Button>
+            <Button bgColor='#e73333' onClick={this.displayLabelEditForm} size='x-small' >Cancel</Button>
           </div>
         </div>
       )
     } else if (!this.props.isItem) return <div style={props.style}>{this.props.labelText}</div>
     else if (this.props.isItem && this.state.addedToCard) {
       return (
-        <div className='labelItem'>
+        <div className='labelItem' style={{ marginBottom: '3px' }}>
           <div style={props.style} onClick={ this.deleteCardLabel }>{this.props.labelText}<Icon name='check' color='70727c' /></div>
           <div>
             <Button
@@ -168,7 +174,7 @@ export default class Label extends React.Component {
       )
     } else if (this.props.isItem && !this.state.addedToCard) {
       return (
-        <div className='labelItem'>
+        <div className='labelItem' style={{ marginBottom: '3px' }}>
           <div style={props.style} onClick={ this.addCardLabel }>{this.props.labelText}</div>
           <div>
             <Button
@@ -191,9 +197,20 @@ export default class Label extends React.Component {
             </Button>
             {this.state.displayLabelEditForm
               ? <div>
-                <Input ref={(v) => { this.newlabelTitle = v } } placeholder='Label title'/>
-                <Input ref={(v) => { this.newlabelColor = v } } placeholder='#c5c5c5'/>
-                <Button bgColor='#28AF28' onClick={this.updateBoardLabel}>Save Label</Button>
+                <div>
+                  <div>
+                    <h3 style={{ color: 'black', marginLeft: '10%' }}>Label name</h3>
+                    <input style={{ width: '75%', height: '40px', marginLeft: '10%', marginTop: '5%', borderRadius: '3%', textAlign: 'center' }} type='text' autoFocus ref={(v) => { this.newlabelTitle = v } } placeholder='Labelo title'/>
+                  </div>
+                  <div>
+                    <h3 style={{ color: 'black', marginLeft: '10%' }}>Label color</h3>
+                    <input style={{ width: '75%', height: '40px', marginLeft: '10%', marginTop: '5%', borderRadius: '3%' }} type='color' ref={(v) => { this.newlabelColor = v } } placeholder='#c5c5c5'/>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', marginTop: '5%', marginLeft: '10%' }}>
+                  <Button style={{ marginRight: '10px' }} bgColor='#28AF28'onClick={this.updateBoardLabel} size='x-small' >Save</Button>
+                  <Button bgColor='#e73333' onClick={this.displayLabelEditForm} size='x-small' >Cancel</Button>
+                </div>
               </div> : null}
           </div>
           <style jsx>{styles}</style>
