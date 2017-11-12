@@ -78,6 +78,12 @@ export default class Team extends React.Component {
     }
   }
 
+  isCurrentUserAdmin () {
+    const isAdmin = this.props.team.admins.filter(admin => admin._id === this.props.currentUser._id)[0]
+    console.log(isAdmin !== undefined)
+    return isAdmin !== undefined
+  }
+
   renderTeamProfile (team) {
     return (
       <div className='team-profile'>
@@ -90,20 +96,29 @@ export default class Team extends React.Component {
         <div className='team-infos'>
           <div className='team-name'>{team.name}</div>
           <div className='team-privacy'><Icon color='white' name='lock' fontSize='15px' />&nbsp;({team.visibility})</div>
-          <div className='team-edit'>
-            <Button
-              bgColor='#eee'
-              color='#444'
-              hoverBgColor='#ccc'
-              block
-              shadow
-              onClick={this.displayEditForm}
-            >
-              <Icon color='#000' name='edit' fontSize='20px' /> Edit Team Profile
-            </Button>
-          </div>
+          {
+            this.isCurrentUserAdmin()
+              ? <div className='team-edit'>
+                <Button
+                  bgColor='#eee'
+                  color='#444'
+                  hoverBgColor='#ccc'
+                  block
+                  shadow
+                  onClick={this.displayEditForm}
+                >
+                  <Icon color='#000' name='edit' fontSize='20px' /> Edit Team Profile
+                </Button>
+              </div>
+              : null
+          }
         </div>
         <style jsx>{`
+        .team-profile {
+          display: flex;
+          align-items: center;
+        }
+
         .team-avatar {
           display: inline-block;
         }
