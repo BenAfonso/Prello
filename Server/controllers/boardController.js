@@ -90,7 +90,26 @@ boardController.createBoard = function (board) {
  * @returns
  */
 boardController.importTrelloBoard = function (board) {
-  console.log(board)
+  return new Promise((resolve, reject) => {
+    const boardToImport = new Board({title: board.name, background: board.prefs.background, owner: board.owner, collaborators: board.collaborators})
+    boardToImport.save((err, item) => {
+      if (err) {
+        reject(err)
+      } else {
+        const listOne = board.lists[0]
+        const newList = new List({name: listOne.name})
+        newList.save((err, item) => {
+          if (err) {
+            reject(err)
+          } else {
+            boardController.addListToBoard(boardToImport._id, newList)
+          }
+        })
+        emit('trelloImport', 'IMPORTED_BOARD', item)
+        resolve(item)
+      }
+    })
+  })
 }
 /**
  *
