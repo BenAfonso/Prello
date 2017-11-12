@@ -10,6 +10,7 @@ const oauthModel = require('./model')
 const bodyParser = require('body-parser')
 const {requiresLogin} = require('../../config/middlewares/authorization')
 const userController = require('../../controllers/userController')
+const toParams = require('./util')
 
 module.exports = function (app) {
   app.all('/*', (req, res, next) => {
@@ -39,10 +40,28 @@ module.exports = function (app) {
   })
 
   app.get('/oauth/prello/login', (req, res) => {
+    if (!req.query.client_id || !req.query.scope || !req.query.redirect_uri) {
+      return res.render('login', { // views: login
+        redirect_uri: req.redirect_uri,
+        displayedForm: false,
+        client_id: req.query.client_id,
+        scope: req.query.scope,
+        email: req.body.email || '',
+        errors: [
+          req.query.client_id ? undefined : 'Missing client_id',
+          req.query.scope ? undefined : 'Missing scope',
+          req.query.redirect_uri ? undefined : 'Missing redirect_uri'
+        ].filter(c => c)
+      })
+    }
+
     return res.render('login', {
       redirect_uri: req.url,
+      displayedForm: true,
+      client_id: req.query.client_id,
+      scope: req.query.scope,
       email: '',
-      error: ''
+      errors: []
     })
   })
 
@@ -58,9 +77,45 @@ module.exports = function (app) {
       console.error(err)
       return res.render('login', { // views: login
         redirect_uri: req.redirect_uri,
+        displayedForm: true,
+        client_id: req.query.client_id,
+        scope: req.query.scope,
         email: req.body.email || '',
-        error: 'Invalid credentials'
+        errors: ['Invalid credentials']
       })
+    })
+  })
+
+  app.post('/oauth/google/login', (req, res, next) => {
+    let clientId = req.body.client_id
+    let redirectUri = req.body.redirect_uri.split(';')[1].split('=')[1]
+    oauthModel.validateGoogleCode(req.body.code, req.headers.origin).then(result => {
+      userController.getOrCreateGoogleUser(result.profile, result.accessToken).then(user => {
+        oauthModel.getClient(process.env.PRELLO_CLIENTID, process.env.PRELLO_SECRET).then(client => {
+          let date = new Date()
+          let token = {
+            accessToken: oauthModel.generateAccessToken(client, user, 'boards:read boards:write users.profile:read users.profile:write teams:read teams:write').toString(),
+            accessTokenExpiresAt: date.setDate(date.getDate() + 7),
+            scope: 'boards:read boards:write users.profile:read users.profile:write teams:read teams:write'
+          }
+          oauthModel.saveToken(token, client, user).then(result => {
+            const auth = `Bearer ${result.accessToken}`
+            req.method = 'get'
+            req.headers['authorization'] = auth
+            req.url = `/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${req.body.scope}&redirect=true`
+            next()
+          }).catch(err => {
+            console.error(err)
+            return res.render('login', { // views: login
+              redirect_uri: req.redirect_uri,
+              email: req.body.email || '',
+              errors: ['Invalid credentials']
+            })
+          })
+        })
+      })
+    }).catch(err => {
+      return res.status(400).send(err) // Change code 400
     })
   })
 
@@ -121,6 +176,9 @@ module.exports = function (app) {
   })
 
   app.get('/authorize', [requiresLogin], (req, res) => {
+    if (!req.query.client_id || !req.query.redirect_uri) {
+      req.query = toParams(req.url.split('?')[1])
+    }
     crypto.randomBytes(15, (err, buffer) => {
       if (err) { return res.status(err.code || 500).json(err) }
       const code = buffer.toString('hex')
@@ -138,7 +196,10 @@ module.exports = function (app) {
           OAuthClient: client.id
         })
         oauthCode.save().then(code => {
-          res.redirect(`${req.query.redirect_uri}?code=${code.authorization_code}`)
+          if (req.query.redirect) {
+            return res.status(200).send({redirect: `${req.query.redirect_uri}?code=${code.authorization_code}`})
+          }
+          return res.redirect(`${req.query.redirect_uri}?code=${code.authorization_code}`)
         }).catch(err => {
           return res.status(err.code || 500).json(err)
         })

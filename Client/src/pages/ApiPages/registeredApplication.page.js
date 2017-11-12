@@ -26,6 +26,10 @@ export default class RegisteredApplication extends React.Component {
           <input type='text' disabled value={this.props.client_id} />
         </div>
         <div className='field'>
+          <label>Scope</label>
+          <input type='text' disabled value={this.props.scope} />
+        </div>
+        <div className='field'>
           <label>Client Secret</label>
           <input type={this.state.secretKeyHidden ? 'password' : 'text'} disabled value={this.props.client_secret} />
           <span>

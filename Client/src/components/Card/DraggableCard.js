@@ -81,14 +81,17 @@ export default class CardComponent extends React.Component {
     listId: PropTypes.any,
     connectCardDragSource: PropTypes.func.isRequired,
     checklists: PropTypes.arrayOf(PropTypes.shape({
-      title: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired,
       index: PropTypes.number,
       items: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.any,
         index: PropTypes.number,
         text: PropTypes.string.isRequired,
         isChecked: PropTypes.boolean,
-        doneDate: PropTypes.instanceOf(Date)
+        doneDate: PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.instanceOf(Date)
+        ])
       }))
     })),
     content: PropTypes.string.isRequired,
