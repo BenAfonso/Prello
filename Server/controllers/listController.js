@@ -23,6 +23,27 @@ listController.createList = (req) => {
     })
   })
 }
+
+listController.createScrumList = (boardId, name, position) => {
+  console.log(boardId, name)
+  return new Promise((resolve, reject) => {
+    const listToAdd = new List({name})
+    listToAdd.save((err, item) => {
+      if (err) {
+        reject(err)
+      } else {
+        boardController.addListToBoard(boardId, listToAdd)
+            .then((data) => {
+              resolve(item)
+            })
+            .catch((err) => {
+              reject(err)
+            })
+      }
+    })
+  })
+}
+
 listController.removeList = (boardId, listId) => {
   return new Promise((resolve, reject) => {
     List.findOneAndRemove({ '_id': listId }, (err, item) => {

@@ -87,6 +87,7 @@ boardController.addListToBoard = function (boardId, list) {
       if (err) {
         reject(err)
       } else {
+        console.log(res)
         resolve(res)
       }
     })
