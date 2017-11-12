@@ -70,8 +70,9 @@ module.exports = function (app) {
         oauthModel.getClient(process.env.PRELLO_CLIENTID, process.env.PRELLO_SECRET).then(client => {
           let date = new Date()
           let token = {
-            accessToken: oauthModel.generateAccessToken(client, user, '').toString(),
-            accessTokenExpiresAt: date.setDate(date.getDate() + 7)
+            accessToken: oauthModel.generateAccessToken(client, user, 'boards:read boards:write users.profile:read users.profile:write teams:read teams:write').toString(),
+            accessTokenExpiresAt: date.setDate(date.getDate() + 7),
+            scope: 'boards:read boards:write users.profile:read users.profile:write teams:read teams:write'
           }
           oauthModel.saveToken(token, client, user).then(result => {
             return res.status(200).send({ token: result.accessToken })

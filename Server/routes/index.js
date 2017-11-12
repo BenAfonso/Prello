@@ -28,7 +28,7 @@ router.get('/me/*', [requiresLogin], (req, res, next) => {
   next()
 })
 
-router.post('/boards/*', [authenticate({scope: 'boards:write'})], (req, res, next) => {
+router.post(['/boards', '/boards/*'], [authenticate({scope: 'boards:write'})], (req, res, next) => {
   next()
 })
 
@@ -40,7 +40,7 @@ router.delete('/boards/*', [authenticate({scope: 'boards:write'})], (req, res, n
   next()
 })
 
-router.get(['/boards', '/boards/*'], [authenticate({scope: 'boards:read'})], (req, res, next) => {
+router.get(['/boards', '/boards/*', '/me/boards', '/me/boards/*'], [authenticate({scope: 'boards:read'})], (req, res, next) => {
   next()
 })
 
