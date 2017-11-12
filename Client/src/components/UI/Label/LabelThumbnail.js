@@ -35,7 +35,8 @@ export default class LabelThumbnail extends React.Component {
     isThumbnail: false
   }
 
-  expandLabel () {
+  expandLabel (event) {
+    event.stopPropagation()
     this.setState({
       isExpanded: !this.state.isExpanded
     })
@@ -67,7 +68,7 @@ export default class LabelThumbnail extends React.Component {
       ...props.style
     }
 
-    if (this.state.isExpanded) return <div onClick={this.expandLabel} style={props.style}>{this.props.labelText}</div>
+    if (this.state.isExpanded) return <div onClick={(e) => this.expandLabel} style={props.style}>{this.props.labelText}</div>
     else return <div onClick={this.expandLabel} style={props.style}></div>
   }
 }
