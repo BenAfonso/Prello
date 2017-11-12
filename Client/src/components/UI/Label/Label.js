@@ -131,11 +131,11 @@ export default class Label extends React.Component {
           <div>
             <div>
               <h3 style={{ color: 'black', marginLeft: '10%' }}>Label name</h3>
-              <input defaultValue={this.props.labelText} style={{ width: '75%', height: '40px', marginLeft: '10%', marginTop: '5%', borderRadius: '3%', textAlign: 'center' }} type='text' autoFocus ref={(v) => { this.newlabelTitle = v } } placeholder='Labelo title'/>
+              <input defaultValue={this.props.labelText} style={{ width: '75%', height: '30px', marginLeft: '10%', marginTop: '5%', borderRadius: '3%', textAlign: 'center' }} type='text' autoFocus ref={(v) => { this.newlabelTitle = v } } placeholder='Labelo title'/>
             </div>
             <div>
               <h3 style={{ color: 'black', marginLeft: '10%' }}>Label color</h3>
-              <input defaultValue={this.props.backgroundColor} style={{ width: '75%', height: '40px', marginLeft: '10%', marginTop: '5%', borderRadius: '3%' }} type='color' ref={(v) => { this.newlabelColor = v } } placeholder='#c5c5c5'/>
+              <input defaultValue={this.props.backgroundColor} style={{ width: '75%', height: '15px', marginLeft: '10%', marginTop: '5%', borderRadius: '3%' }} type='color' ref={(v) => { this.newlabelColor = v } } placeholder='#c5c5c5'/>
             </div>
           </div>
           <div style={{ display: 'flex', marginTop: '5%', marginLeft: '10%' }}>
