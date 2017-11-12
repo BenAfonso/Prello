@@ -100,6 +100,7 @@ export default class CardComponent extends React.Component {
     index: PropTypes.number.isRequired,
     collaborators: PropTypes.arrayOf(PropTypes.any),
     responsible: PropTypes.any,
+    labels: PropTypes.any,
     bgColor: PropTypes.any,
     listIndex: PropTypes.number
   }
@@ -136,7 +137,8 @@ export default class CardComponent extends React.Component {
       connectCardDropTarget,
       connectCardDragSource,
       collaborators,
-      responsible } = this.props
+      responsible,
+      labels } = this.props
     return connectCardDropTarget(connectCardDragSource(
       <div className='host' style={{position: 'relative'}} onClick={this.displayCardDetails.bind(this)}>
         <div className='overlay' style={{
@@ -165,6 +167,11 @@ export default class CardComponent extends React.Component {
                 ? responsible
                 : this.props.board.collaborators.filter(c => c._id === responsible)[0]
               : undefined
+          }
+          labels={
+            labels.map(l => l._id
+              ? l
+              : this.props.board.labels.filter(l2 => l === l2._id)[0])
           } />
         <style jsx>{`
           .overlay {
