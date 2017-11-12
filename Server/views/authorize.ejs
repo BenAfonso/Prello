@@ -1,0 +1,26 @@
+<div class="ui middle aligned center aligned grid">
+  <div class="column">
+    <h2 class="ui header">
+      <div class="content">
+        Authorize <%= client.name %>
+      </div>
+    </h2>
+    <form class="ui large form" action="<%= redirect_uri %>" method="post">
+      <div class="ui stacked segment">
+        <p>Hi <%= user.username %>!</p>
+        <p><b><%= client.name %></b> is requesting access to your Prello account.</p>
+        <p>Do you approve?</p>
+        <div class="ui two column grid">
+          <div class="row">
+            <div class="column">
+              <input type="submit" value="Allow" id="allow" />
+            </div>
+            <div class="column">
+              <input type="submit" value="Deny" name="cancel" id="deny" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

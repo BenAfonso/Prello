@@ -9,17 +9,17 @@ const elements = [
   {
     icon: 'user-o',
     description: 'People',
-    component: <UsersMenu />
+    component: UsersMenu
   },
   {
     icon: 'hashtag',
     description: 'Activity',
-    component: <ActivityMenu />
+    component: ActivityMenu
   },
   {
     icon: 'archive',
     description: 'Archives',
-    component: <ArchivedMenu />
+    component: ArchivedMenu
   }
 ]
 
@@ -79,7 +79,12 @@ export default class SideMenu extends React.Component {
           {this.state.displayedElement.description}
         </div>
         <div className='informations'>
-          {this.state.displayedElement.component}
+          {this.state.displayedElement.component
+            ? React.createElement(this.state.displayedElement.component, {
+              popoverManager: this.props.popoverManager
+            })
+            : null
+          }
         </div>
       </div>
 
