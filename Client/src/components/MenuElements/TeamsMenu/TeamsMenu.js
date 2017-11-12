@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import Icon from '../../UI/Icon/Icon'
+import { Link } from 'react-router-dom'
 import AddTeamMenu from './AddTeamMenu/AddTeamMenu'
 import { removeTeamFromBoard } from '../../../store/actions'
 
@@ -14,7 +15,7 @@ import { removeTeamFromBoard } from '../../../store/actions'
 
 export default class TeamsMenu extends React.Component {
   removeTeam (teamId) {
-    removeTeamFromBoard(this.props.boardId, teamId)
+    removeTeamFromBoard(this.props.board._id, teamId)
   }
 
   render () {
@@ -30,7 +31,9 @@ export default class TeamsMenu extends React.Component {
               teams.map((team, i) => (
                 <li className='team' key={i}>
                   <div className='team-content'>
-                    <div className='team-name'>{team.name}</div>
+                    <Link to={`/teams/${team._id}`}>
+                      <div className='team-name'>{team.name}</div>
+                    </Link>
                     <div className='team-remove' onClick={() => this.removeTeam(team._id)}><Icon color='#444' name='remove' fontSize='20px' /></div>
                   </div>
                   <div className='teammenu-separator' />
@@ -59,6 +62,7 @@ export default class TeamsMenu extends React.Component {
             padding: 10px 0;
             max-height: 800px;
             overflow-y: auto;
+            font-weight: bold;
           }
 
           .team {

@@ -366,6 +366,7 @@ export function updateTeams (teams) {
 
 export function removeTeamFromBoard (boardId, teamId) {
   removeTeamFromBoardDistant(boardId, teamId).then((res) => {
+    // HANDLED FROM SOCKETS
   }).catch(err => {
     return err
   })

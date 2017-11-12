@@ -89,12 +89,10 @@ export function addTeamToBoardDistant (boardId, teamId) {
 
 export function removeTeamFromBoardDistant (boardId, teamId) {
   return new Promise((resolve, reject) => {
-    /* axios.delete(`${Config.API_URL}/boards/${boardId}/teams`, {
-      teamId: teamId
-    }).then(res => {
+    axios.delete(`${Config.API_URL}/boards/${boardId}/teams/${teamId}`).then(res => {
       resolve(res.data)
     }).catch(err => {
       reject(err)
-    }) */
+    })
   })
 }

@@ -13,7 +13,7 @@ module.exports = (router, controller) => {
     */
   /**
     * @swagger
-    * /boards/{boardId}/teams:
+    * /boards/{boardId}/teams/{teamId}:
     *   delete:
     *     tags:
     *       - Boards
@@ -39,15 +39,15 @@ module.exports = (router, controller) => {
     *       500:
     *         description: Internal error
     */
-  router.delete('/boards/:boardId/teams', [requiresLogin, boardExists, isOwner], function (req, res) {
-    let requiredBody = ['teamId']
-    requiredBody = Util.checkRequest(req.body, requiredBody)
-    if (requiredBody.length > 0) {
-      let stringMessage = requiredBody.join(',')
+  router.delete('/boards/:boardId/teams/:teamId', [requiresLogin, boardExists, isOwner], function (req, res) {
+    let requiredParameter = ['teamId']
+    requiredParameter = Util.checkRequest(req.params, requiredParameter)    
+    if (requiredParameter.length > 0) {
+      let stringMessage = requiredParameter.join(',')
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-    controller.addTeam(req.params.boardId, req.body.teamId).then((data) => {
+    controller.removeTeam(req.params.boardId, req.params.teamId).then((data) => {
       res.status(201).json(data)
     }).catch((err) => {
       res.status(err.status).json(err)
