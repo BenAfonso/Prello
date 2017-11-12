@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const controllers = require('../controllers')
 const { requiresLogin } = require('../config/middlewares/authorization')
+const authenticate = require('../components/oauth/authenticate')
+
    /**
      * @swagger
      * definitions:
@@ -23,6 +25,30 @@ router.get('/me/*', [requiresLogin], (req, res, next) => {
   request[0] = `/users/${req.user._id}`
   request = request.join('/')
   req.url = request
+  next()
+})
+
+router.post('/boards/*', [authenticate({scope: 'boards:write'})], (req, res, next) => {
+  next()
+})
+
+router.put('/boards/*', [authenticate({scope: 'boards:write'})], (req, res, next) => {
+  next()
+})
+
+router.delete('/boards/*', [authenticate({scope: 'boards:write'})], (req, res, next) => {
+  next()
+})
+
+router.get(['/boards', '/boards/*'], [authenticate({scope: 'boards:read'})], (req, res, next) => {
+  next()
+})
+
+router.get('/me', [authenticate({scope: 'users.profile:read'})], (req, res, next) => {
+  next()
+})
+
+router.put(['/me', '/users/:userId'], [authenticate({scope: 'users.profile:write'})], (req, res, next) => {
   next()
 })
 
