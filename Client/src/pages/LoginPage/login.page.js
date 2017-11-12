@@ -1,7 +1,7 @@
 import React from 'react'
 import { login, storeToken, loginGoogle } from '../../services/Authentication.services'
 import GoogleLogin from 'react-google-login'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 
 export default class LoginPage extends React.Component {
   constructor (props) {
@@ -67,9 +67,15 @@ export default class LoginPage extends React.Component {
           responseType='code'
           onSuccess={this.loginWithGoogle.bind(this)}
         />
+        <div className='register'>
+          Don't have an account yet? <span><Link to='/register'>Register</Link></span>
+        </div>
         <style jsx>
           {`
       .host {
+        position: absolute;
+        top: 0;
+        left: 0;
         padding: 10px;
         width: 380px;
         margin-left: calc(50% - 190px);
@@ -132,8 +138,17 @@ export default class LoginPage extends React.Component {
         line-height: 40px;
         padding: 10px;
         border-radius: 4px;
-
       }
+
+      .register {
+        padding-top: 20px;
+      }
+      
+      .register span {
+        font-weight: bold;
+        text-decoration: underline;
+      }
+
       `}
         </style>
       </div>
