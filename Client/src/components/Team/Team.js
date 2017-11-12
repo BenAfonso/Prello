@@ -73,7 +73,7 @@ export default class Team extends React.Component {
 
   updateTeam () {
     if (this.name.value !== '') {
-      updateTeam(this.props.team._id, { name: this.name.value, visibility: this.visibility.value })
+      updateTeam(this.props.team._id, { name: this.name.value, visibility: this.visibility.value, picture: this.props.team.picture })
       this.setState({editFormDisplayed: false})
     }
   }

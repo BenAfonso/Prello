@@ -79,7 +79,8 @@ export function updateTeamDistant (teamId, payload) {
   return new Promise((resolve, reject) => {
     axios.put(`${Config.API_URL}/teams/${teamId}`, {
       name: payload.name,
-      visibility: payload.visibility
+      visibility: payload.visibility,
+      picture: payload.picture
     }).then(res => {
       resolve(res.data)
     }).catch(err => {
