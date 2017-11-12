@@ -46,6 +46,19 @@ export const defaultBoardState = {
   }
 }
 
+export const defaultDashboardState = {
+  fetching: false,
+  fetched: false,
+  error: null,
+  boards: [],
+  board: {
+    _id: '',
+    title: '',
+    background: '#fff',
+    provider: ''
+  }
+}
+
 export const defaultBoardslistState = {
   boards: []
 }

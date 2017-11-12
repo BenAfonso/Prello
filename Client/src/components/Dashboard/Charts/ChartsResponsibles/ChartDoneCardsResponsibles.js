@@ -5,8 +5,7 @@ import { connect } from 'react-redux'
 
 @connect(store => {
   return {
-    currentBoard: store.currentBoard,
-    board: store.currentBoard.board
+    board: store.analytics.board
   }
 })
 export default class ChartDoneCardsResponsibles extends React.Component {

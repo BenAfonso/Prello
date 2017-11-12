@@ -5,8 +5,7 @@ import { connect } from 'react-redux'
 
 @connect(store => {
   return {
-    currentBoard: store.currentBoard,
-    board: store.currentBoard.board
+    board: store.analytics.board
   }
 })
 export default class ChartCardsPerList extends React.Component {
@@ -35,10 +34,10 @@ export default class ChartCardsPerList extends React.Component {
     return (
       <div>
         <div>Number of cards per list</div>
-        <BarChart width={730} height={250} data={data} barGap={0}>
+        <BarChart width={730} height={250} data={data} barGap={0} color='white'>
           <CartesianGrid strokeDasharray='3 3' />
-          <XAxis dataKey='name' />
-          <YAxis />
+          <XAxis dataKey='name' stroke='#fff' />
+          <YAxis stroke='#fff' />
           <Tooltip />
           <Legend />
           <Bar dataKey='cards' fill='#0366d6' barSize={50} />

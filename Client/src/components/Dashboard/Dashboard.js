@@ -5,28 +5,26 @@ import { connect } from 'react-redux'
 import Tabs from '../../components/UI/Tabs/Tabs'
 import TabPanel from '../../components/UI/TabPanel/TabPanel'
 import Icon from '../../components/UI/Icon/Icon'
-import ChartDoneCardsMembers from '../../components/Charts/ChartsMembers/ChartDoneCardsMembers'
-import ChartDoneCardsResponsibles from '../../components/Charts/ChartsResponsibles/ChartDoneCardsResponsibles'
-import ChartActiveMembers from '../../components/Charts/ChartsOverview/ChartActiveMembers'
-import ChartCardsPerList from '../../components/Charts/ChartsLists/ChartCardsPerList'
-import { setBoard } from '../../store/actions'
-import { subscribeToBoard } from '../../services/api'
+import ChartDoneCardsMembers from './Charts/ChartsMembers/ChartDoneCardsMembers'
+import ChartDoneCardsResponsibles from './Charts/ChartsResponsibles/ChartDoneCardsResponsibles'
+import ChartActiveMembers from './Charts/ChartsOverview/ChartActiveMembers'
+import ChartCardsPerList from './Charts/ChartsLists/ChartCardsPerList'
+import { setAnalyticsBoard } from '../../store/actions'
 
 @connect(store => {
   return {
-    currentBoard: store.currentBoard,
-    board: store.currentBoard.board
+    board: store.analytics.board
   }
 })
 export default class Dashboard extends React.Component {
   componentDidMount () {
-    setBoard(this.props.dispatch, this.props._id).then(board => {
-      subscribeToBoard(board)
+    setAnalyticsBoard(this.props._id).then(board => {
     }).catch(err => {
       console.error(err)
     })
   }
-  renderProfileTab () {
+
+  renderOverviewTab () {
     return (
       <div className='profileTab'>
         <div className='teamPart'>
@@ -35,23 +33,13 @@ export default class Dashboard extends React.Component {
               fontSize='24px'
               color='white'
               style={{marginLeft: '2%', marginRight: '20px'}}/>
-            <span className='teamsTitle'>Cards done by members</span>
+            <h2 className='teamsTitle'>Cards done by members</h2>
           </div>
           <hr className='titleAndContentSeparator'/>
           <ul>
             <ChartActiveMembers data={this.props.board} />
             <ChartCardsPerList data={this.props.board.lists} />
           </ul>
-        </div>
-        <div className = 'activityDiv'>
-          <div className='activityLine'>
-            <Icon name='calendar-o'
-              fontSize='24px'
-              color='white'
-              style={{marginLeft: '2%', marginRight: '20px'}}/>
-            <span className='activityTitle'>Activity feed</span>
-          </div>
-          <hr className='titleAndContentSeparator'/>
         </div>
         <style jsx>
           {styles}
@@ -69,7 +57,7 @@ export default class Dashboard extends React.Component {
               fontSize='24px'
               color='white'
               style={{marginLeft: '2%', marginRight: '20px'}}/>
-            <span className='teamsTitle'>Cards done by members</span>
+            <h2 className='teamsTitle'>Cards done by members</h2>
           </div>
           <hr className='titleAndContentSeparator'/>
           <ul>
@@ -82,7 +70,7 @@ export default class Dashboard extends React.Component {
               fontSize='24px'
               color='white'
               style={{marginLeft: '2%', marginRight: '20px'}}/>
-            <span className='activityTitle'>Active members</span>
+            <h2 className='activityTitle'>Active members</h2>
           </div>
           <hr className='titleAndContentSeparator'/>
           <ul>
@@ -95,7 +83,7 @@ export default class Dashboard extends React.Component {
               fontSize='24px'
               color='white'
               style={{marginLeft: '2%', marginRight: '20px'}}/>
-            <span className='activityTitle'>Lists</span>
+            <h2 className='activityTitle'>Lists</h2>
           </div>
           <hr className='titleAndContentSeparator'/>
           <ul>
@@ -138,15 +126,14 @@ export default class Dashboard extends React.Component {
   }
 
   render () {
-    console.log(this.props.board)
-    return (
-      <PageLayout>
-        <div className='dashboardPage'>
-          <div><h1>Analytics dashboard</h1></div>
+    if (this.props.board.title) {
+      return (<PageLayout>
+        <div className='host'>
+          <h1>Analytics dashboard for board {this.props.board.title}</h1>
           <div className='tabSection'>
             <Tabs selected='0'>
               <TabPanel label='Overview'>
-                {this.renderProfileTab()}
+                {this.renderOverviewTab()}
               </TabPanel>
               <TabPanel label='Members'>
                 {this.renderMembersTab()}
@@ -156,11 +143,13 @@ export default class Dashboard extends React.Component {
               </TabPanel>
             </Tabs>
           </div>
+          <style jsx>
+            {styles}
+          </style>
         </div>
-        <style jsx>
-          {styles}
-        </style>
-      </PageLayout>
-    )
+      </PageLayout>)
+    } else {
+      return null
+    }
   }
 }

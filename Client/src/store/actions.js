@@ -2,6 +2,7 @@ import { fetchBoards, addBoardDistant, addCollaboratorDistant, removeCollaborato
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
+import { fetchBoards as fetchAnalyticsBoards } from '../services/Analytics.services'
 
 import store from '../store/store'
 
@@ -398,5 +399,39 @@ export function removeOAuthClient (client) {
   store.dispatch({
     type: 'REMOVE_OAUTHCLIENT',
     payload: client._id
+  })
+}
+
+/**
+ *
+ * ANALYTICS
+ *
+ */
+
+export function setAnalyticsBoards () {
+  return new Promise((resolve, reject) => {
+    fetchAnalyticsBoards().then((data) => {
+      store.dispatch({
+        type: 'SET_ANALYTICS_BOARDS',
+        payload: data
+      })
+      resolve(data)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export function setAnalyticsBoard (id) {
+  return new Promise((resolve, reject) => {
+    fetchAnalyticsBoards().then((data) => {
+      store.dispatch({
+        type: 'SET_ANALYTICS_BOARD',
+        payload: data.filter(x => x._id === id)[0]
+      })
+      resolve(data.filter(x => x._id === id)[0])
+    }).catch((err) => {
+      reject(err)
+    })
   })
 }
