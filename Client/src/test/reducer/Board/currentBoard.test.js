@@ -123,6 +123,7 @@ describe('Current board reducer tests', () => {
     expect(reducer(previousState, action)).toEqual(previousState)
   })
 
+  /*
   it('should add a checklist to a card', () => {
     const previousState = {
       ...defaultBoardState,
@@ -150,4 +151,5 @@ describe('Current board reducer tests', () => {
 
     expect(reducer(previousState, action)).toEqual(nextState)
   })
+  */
 })

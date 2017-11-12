@@ -14,7 +14,7 @@ export default class Checklist extends React.Component {
       id: PropTypes.string,
       text: PropTypes.string,
       isChecked: PropTypes.bool,
-      doneDate: PropTypes.oneOf([
+      doneDate: PropTypes.oneOfType([
         PropTypes.instanceOf(Date),
         PropTypes.string
       ])
@@ -112,7 +112,7 @@ export default class Checklist extends React.Component {
       width: this.recalculatePercentageDone(items) + '%' // 80% width for the total progress bar in the CSS
     }
     return (
-      <div className='Checklist'>
+      <div className='Checklist' suppressContentEditableWarning='true'>
         {!this.state.displayEditTitleForm
         // Title
           ? <div className='title'>
@@ -163,7 +163,6 @@ export default class Checklist extends React.Component {
             <div className='actualProgressBar' style={actualProgressBarStyle} />
           </div>
         </div>
-        {console.log(this.props.items)}
         {/* Display checklist items */}
         {items.map((item) => (
           <ChecklistItem
@@ -173,11 +172,11 @@ export default class Checklist extends React.Component {
             text={item.text}
             onChange={this.updateItem}
             onDelete={this.deleteItem}
-            doneDate={Date.parse(item.doneDate)} />
+            doneDate={item.doneDate} />
         ))}
 
         {!this.state.displayNewItemForm
-          ? <div className='addItemDiv' >
+          ? <div className='addItemDiv' suppressContentEditableWarning='true'>
             <Button onClick={this.displayNewItemForm}
               color='#444'
               size='x-small'
