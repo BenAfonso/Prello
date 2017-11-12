@@ -51,6 +51,7 @@ export default class LabelThumbnail extends React.Component {
       backgroundColor,
       borderRadius,
       color,
+      marginRight,
       fontSize,
       centeredText,
       ...props
@@ -64,6 +65,7 @@ export default class LabelThumbnail extends React.Component {
       backgroundColor,
       borderRadius,
       color,
+      marginRight: '2px',
       textAlign: centeredText ? 'center' : 'left',
       ...props.style
     }
