@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import Icon from '../../UI/Icon/Icon'
 import { Link } from 'react-router-dom'
 import AddTeamMenu from './AddTeamMenu/AddTeamMenu'
+import AvatarThumbnail from '../../UI/AvatarThumbnail/AvatarThumbnail'
 import { removeTeamFromBoard } from '../../../store/actions'
 
 @connect(store => {
@@ -16,6 +17,36 @@ import { removeTeamFromBoard } from '../../../store/actions'
 export default class TeamsMenu extends React.Component {
   removeTeam (teamId) {
     removeTeamFromBoard(this.props.board._id, teamId)
+  }
+
+  getInitials (name) {
+    const matches = name.match(/\b(\w)/g)
+    const initials = matches.join('').toUpperCase()
+    return initials
+  }
+
+  renderUserAvatar (user) {
+    return (
+      <div className='avatar'>
+        <AvatarThumbnail
+          size='30px'
+          fontSize=''
+          thumbnail={user.picture}
+          initials={this.getInitials(user.name)}
+          bgColor={user.bgColor}
+          color='black'
+        />
+        <style jsx>
+          {`
+          .avatar {
+            display: inline-block;
+            padding: 5px 5px;
+            cursor: pointer;
+          }
+        `}
+        </style>
+      </div>
+    )
   }
 
   render () {
@@ -36,7 +67,16 @@ export default class TeamsMenu extends React.Component {
                     </Link>
                     <div className='team-remove' onClick={() => this.removeTeam(team._id)}><Icon color='#444' name='remove' fontSize='20px' /></div>
                   </div>
-                  <div className='teammenu-separator' />
+                  <ul className='team-users'>
+                    {
+                      team.users.map((user, i) =>
+                        <div className='user' key={i}>
+                          {this.renderUserAvatar(user)}
+                        </div>
+                      )
+                    }
+                  </ul>
+                  <div className='separator' />
                 </li>
               ))
             }
@@ -48,7 +88,7 @@ export default class TeamsMenu extends React.Component {
         <style jsx>
           {`
 
-          .teammenu-separator {
+          .separator {
             content: '';
             height: 1px;
             background-color: #aaa;
@@ -73,6 +113,25 @@ export default class TeamsMenu extends React.Component {
             width: 100%;
             display: flex;
             justify-content: space-between;
+          }
+
+          .team-users {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 10px 5px
+            max-height: 100px;
+            overflow-y: auto;
+          }
+
+          .user {
+            display: inline-block;
+            width: auto;
+            height: auto;
+          }
+
+          .user-name {
+            font-weight: normal;
+            font-size: 12px;
           }
 
           .team-remove {

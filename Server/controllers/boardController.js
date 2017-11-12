@@ -52,6 +52,16 @@ boardController.getUserBoards = function (userId) {
               resolve(res)
             }
           })
+          User.populate(res, {
+            path: 'teams.users'
+          }, function (err, res) {
+            if (err) {
+              err.status = 500
+              reject(err)
+            } else {
+              resolve(res)
+            }
+          })
         }
       })
     })
@@ -142,6 +152,16 @@ boardController.getOneboard = function (boardId, userId) {
         } else {
           Card.populate(res, {
             path: 'lists.cards'
+          }, function (err, res) {
+            if (err) {
+              err.status = 500
+              reject(err)
+            } else {
+              resolve(res)
+            }
+          })
+          User.populate(res, {
+            path: 'teams.users'
           }, function (err, res) {
             if (err) {
               err.status = 500
@@ -297,8 +317,17 @@ boardController.addTeam = (boardId, teamId) => {
         reject(err)
       } else {
         Team.findOneAndUpdate({ '_id': teamId }, { $push: { boards: boardId } }, { new: true }).exec()
-        emit(boardId, 'UPDATE_TEAMS', res.teams)
-        resolve(res)
+        User.populate(res, {
+          path: 'teams.users'
+        }, function (err, res) {
+          if (err) {
+            err.status = 500
+            reject(err)
+          } else {
+            emit(boardId, 'UPDATE_TEAMS', res.teams)
+            resolve(res)
+          }
+        })
       }
     })
   })
@@ -311,8 +340,17 @@ boardController.removeTeam = (boardId, teamId) => {
         reject(err)
       } else {
         Team.findOneAndUpdate({ '_id': teamId }, { $pull: { boards: boardId } }, { new: true }).exec()
-        emit(boardId, 'UPDATE_TEAMS', res.teams)
-        resolve(res)
+        User.populate(res, {
+          path: 'teams.users'
+        }, function (err, res) {
+          if (err) {
+            err.status = 500
+            reject(err)
+          } else {
+            emit(boardId, 'UPDATE_TEAMS', res.teams)
+            resolve(res)
+          }
+        })
       }
     })
   })
