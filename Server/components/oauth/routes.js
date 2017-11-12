@@ -40,7 +40,6 @@ module.exports = function (app) {
   })
 
   app.get('/oauth/prello/login', (req, res) => {
-
     if (!req.query.client_id || !req.query.scope || !req.query.redirect_uri) {
       return res.render('login', { // views: login
         redirect_uri: req.redirect_uri,
@@ -75,6 +74,7 @@ module.exports = function (app) {
       req.url = `/authorize?client_id=${req.query.client_id}&redirect_uri=${req.query.redirect_uri}`
       next()
     }).catch(err => {
+      console.error(err)
       return res.render('login', { // views: login
         redirect_uri: req.redirect_uri,
         displayedForm: true,
