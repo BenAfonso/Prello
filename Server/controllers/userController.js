@@ -83,7 +83,7 @@ userController.login = (userToConnect) => {
           grant_type: 'password',
           username: user.email,
           password: userToConnect.password,
-          scope: 'boards:write users.profile:read users.profile:write teams:read teams:write'
+          scope: 'boards:read boards:write users.profile:read users.profile:write teams:read teams:write'
         }
         let formData = querystring.stringify(form)
         request({
