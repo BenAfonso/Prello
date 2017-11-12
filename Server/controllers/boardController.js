@@ -8,6 +8,7 @@ const Card = mongoose.model('Card')
 const Util = require('./Util')
 const emit = require('../controllers/sockets').emit
 const modificationController = require('./modificationController')
+const listController = require('./listController')
 const boardController = {}
 
 /**
@@ -96,7 +97,6 @@ boardController.importTrelloBoard = function (board) {
       if (err) {
         reject(err)
       } else {
-        const listOne = board.lists[0]
         board.lists.map((list) => {
           let newList = new List({name: list.name})
           newList.save((err, item) => {
@@ -104,6 +104,18 @@ boardController.importTrelloBoard = function (board) {
               reject(err)
             } else {
               boardController.addListToBoard(boardToImport._id, newList)
+              board.cards.map((card) => {
+                if (card.idList === list.id) {
+                  let newCard = new Card({text: card.name, isArchived: card.closed})
+                  newCard.save((err, item) => {
+                    if (err) {
+                      reject(err)
+                    } else {
+                      listController.addCardToList(newList._id, newCard)
+                    }
+                  })
+                }
+              })
             }
           })
         })
