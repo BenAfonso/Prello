@@ -47,6 +47,4 @@ ul.boards {
   justify-content: center;
 }
 
-
-
 `

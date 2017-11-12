@@ -5,6 +5,13 @@ import styles from './Card.styles'
 import AvatarThumbnail from '../UI/AvatarThumbnail/AvatarThumbnail'
 import Button from '../UI/Button/Button'
 import Icon from '../UI/Icon/Icon'
+import LabelThumbnail from '../UI/Label/LabelThumbnail'
+
+@connect(store => {
+  return {
+    lists: store.currentBoard.board.lists
+  }
+})
 
 @connect(store => {
   return {
@@ -23,6 +30,7 @@ export default class Card extends React.Component {
     listIndex: PropTypes.number.isRequired,
     collaborators: PropTypes.arrayOf(PropTypes.any),
     responsible: PropTypes.any,
+    labels: PropTypes.any,
     id: PropTypes.any
   }
 
@@ -86,12 +94,16 @@ export default class Card extends React.Component {
     const card = list.cards.filter(c => c._id === this.props.id)[0]
     const dueDate = this.getDueDate(card)
     const formattedDate = this.getFormattedDueDate(dueDate)
-
+    // let labelsToDisplay = card.labels
     return (
       <div style={{...this.props.style}} ref={c => { this.card = c }} className='root'>
         <div className='editButton'><Button size='small' bgColor='rgba(0,0,0,0)' hoverBgColor='rgba(255,255,255,0.6)'><Icon name='edit' color='#444' /></Button></div>
         <div className='content'>{ this.props.content }</div>
-
+        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+          { this.props.labels
+            ? this.props.labels.map((label) => <div key={label['_id']}><LabelThumbnail labelText={label['name']} backgroundColor={label['color']} /></div>)
+            : null }
+        </div>
         <div className='numbers'>
           { this.props.nbComments > 0
             ? <div className='number'>

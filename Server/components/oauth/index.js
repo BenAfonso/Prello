@@ -10,7 +10,7 @@ OAuthClient.count({}).then(c => {
       client_secret: process.env.PRELLO_SECRET,
       redirectUris: [process.env.PRELLO_CLIENTURL],
       grant_types: 'password',
-      scope: ''
+      scope: 'boards:read boards:write users.profile:read users.profile:write teams:read teams:write'
     })
     defaultClient.save()
   }

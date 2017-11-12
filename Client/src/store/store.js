@@ -44,6 +44,7 @@ export const defaultBoardState = {
     isArchived: false,
     background: '#fff',
     collaborators: [],
+    labels: [],
     modifications: []
   }
 }
