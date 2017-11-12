@@ -258,7 +258,7 @@ function validateGoogleCode (code, origin) {
           return resolve({accessToken, profile})
         })
       } else {
-        return reject(error)
+        return reject(response.body)
       }
     })
   })

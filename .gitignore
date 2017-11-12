@@ -5,3 +5,4 @@ build
 .vscode
 Client/storybook-build
 yarn.lock
+.DS_Store

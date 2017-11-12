@@ -16,8 +16,9 @@ export default class AddNewClientForm extends React.Component {
       newClient: undefined
     }
   }
+
   addClient () {
-    createOAuthClient(this.name.value, this.redirectUri.value).then(client => {
+    createOAuthClient(this.name.value, this.redirectUri.value, this.scope.value).then(client => {
       addOAuthClient(client)
       this.setState({
         newClient: client
@@ -43,6 +44,8 @@ export default class AddNewClientForm extends React.Component {
         <div>{this.state.newClient.client_secret}</div>
         <label>Redirect URI</label>
         <div>{this.state.newClient.redirectUris[0]}</div>
+        <label>Scope</label>
+        <div>{this.state.newClient.scope}</div>
         <style jsx>{`
         .new-client {
           display: inline-block;
@@ -74,6 +77,12 @@ export default class AddNewClientForm extends React.Component {
               Redirect URI:
             </label>
             <input type='text' ref={r => { this.redirectUri = r }} placeholder='ex., https://themightyprello.igpolytech.fr' />
+          </div>
+          <div className='input'>
+            <label>
+              Scope:
+            </label>
+            <input type='text' ref={s => { this.scope = s }} placeholder='ex., boards:read boards:write user.profile:read' />
           </div>
           <Button
             bgColor={'#5AAC44'}
