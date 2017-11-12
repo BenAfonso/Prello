@@ -337,7 +337,7 @@ export default class MembersTab extends React.Component {
 
           .main {
             margin-left: 290px;
-            overflow-x: auto;  
+            overflow-x: auto;
           }
 
           .member {

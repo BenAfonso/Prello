@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 
 import Button from '../../../UI/Button/Button'
 import DropDown from '../../../UI/DropDown/DropDown'
-import { addBoard, addTeamBoard } from '../../../../store/actions'
+import { addBoard, addTeamBoard, setTeamslist } from '../../../../store/actions'
 
 @connect(store => {
   return {
@@ -22,6 +22,13 @@ export default class NewBoardForm extends React.Component {
     this.onChange = this.onChange.bind(this)
   }
 
+  componentDidMount () {
+    setTeamslist(this.props.dispatch).then(() => {
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
   submit (title) {
     if (this.title.value !== '') {
       if (this.state.selected[0] === 'None') {
@@ -37,9 +44,13 @@ export default class NewBoardForm extends React.Component {
     if (this.teams.value[0] === 'None') {
       selected = ['None']
     } else {
-      let newSelected = this.state.selected.slice()
-      newSelected.push(this.teams.value)
-      selected = newSelected
+      if (this.state.selected.filter(team => team === this.teams.value)[0] !== undefined) {
+        selected = this.state.selected.filter(team => team !== this.teams.value[0])
+      } else {
+        let newSelected = this.state.selected.slice()
+        newSelected.push(this.teams.value)
+        selected = newSelected
+      }
     }
     this.setState({selected: selected})
   }
@@ -84,7 +95,7 @@ export default class NewBoardForm extends React.Component {
                   teams.length >= 1
                     ? <div className='element-input'>
                       <form>
-                        <select value={this.state.selected} ref={(select) => { this.teams = select }} defaultValue={this.props.self ? ['None'] : currentTeam._id} multiple onChange={this.onChange}>
+                        <select autofocus value={this.state.selected} ref={(select) => { this.teams = select }} defaultValue={this.props.self ? ['None'] : currentTeam._id} multiple onChange={this.onChange}>
                           <option value='None' disabled={this.state.selected[0] !== 'None'}>None</option>
                           {
                             teams.map((team, i) => <option key={i} value={team._id} disabled={this.state.selected[0] === 'None'} >{team.name}</option>)
