@@ -2,8 +2,8 @@ const mongoose = require('mongoose')
 const Board = mongoose.model('Board')
 const User = mongoose.model('User')
 const List = mongoose.model('List')
-const secretKey = require('../../config').secretKey
-const jwt = require('jsonwebtoken')
+const userController = require('../../controllers/userController')
+
 const mockedBoard = { title: 'Test board', visibility: 'private', background: '', owner: '' }
 const mockedUser1 = { name: 'Test Test', email: 'test@test.com', password: '1234567', username: 'testUser' }
 const mockedUser2 = { name: 'Test2 Test2', email: 'test2@test.com', password: '1234567', username: 'testUser2' }
@@ -135,7 +135,7 @@ module.exports = (server, chai) => {
           .send({ name: 'Test list' })
           .set('authorization', `Bearer ${tokenU1}`)
           .end((err, res) => {
-            if (err) console.error(err)
+            if (err) {}
             res.should.have.status(201)
             done()
           })
@@ -226,33 +226,49 @@ function initData () {
     let tokenU1 = null
     let tokenU2 = null
     let tokenU3 = null
-    Board.remove({}).then(() => {
-      User.remove({}).then(() => {
-        User.create(mockedUser1).then(u1 => {
-          user1 = u1
-          tokenU1 = generateToken(user1)
-          User.create(mockedUser2).then(u2 => {
-            user2 = u2
-            tokenU2 = generateToken(user2)
-            List.create(mockedList).then(l1 => {
-              list1 = l1
-              mockedBoard.owner = user1._id
-              mockedBoard.lists = [list1._id]
-              mockedBoard.collaborators = [user1._id, user2._id]
-              Board.create(mockedBoard).then(b1 => {
-                board1 = b1
-                List.create(mockedList).then(l2 => {
-                  list2 = l2
-                  mockedBoard.owner = u2._id
-                  mockedBoard.lists = [l2._id]
-                  mockedBoard.visibility = 'public'
-                  mockedBoard.collaborators = []
-                  Board.create(mockedBoard).then(b2 => {
-                    board2 = b2
-                    User.create(mockedUser3).then(u3 => {
-                      user3 = u3
-                      tokenU3 = generateToken(user3)
-                      resolve({ user1, user2, user3, board1, board2, list1, list2, tokenU1, tokenU2, tokenU3 })
+    const OAuthClient = mongoose.model('OAuthClient')
+    let oAuthClientToAdd = new OAuthClient({'name': 'TestApp',
+      'redirectUris': [
+        'http://localhost:3333/',
+        'http://localhost:3000/'
+      ],
+      'client_id': 'e8a49d489ce39e9f1db0',
+      'client_secret': 'ff681e5ea1d88d664700'})
+    oAuthClientToAdd.save().then(() => {
+      Board.remove({}).then(() => {
+        User.remove({}).then(() => {
+          User.create(mockedUser1).then(u1 => {
+            user1 = u1
+            userController.login(u1).then((tokenToUser) => {
+              tokenU1 = tokenToUser
+              User.create(mockedUser2).then(u2 => {
+                user2 = u2
+                userController.login(u2).then((tokenToUser) => {
+                  tokenU2 = tokenToUser
+                  List.create(mockedList).then(l1 => {
+                    list1 = l1
+                    mockedBoard.owner = user1._id
+                    mockedBoard.lists = [list1._id]
+                    mockedBoard.collaborators = [user1._id, user2._id]
+                    Board.create(mockedBoard).then(b1 => {
+                      board1 = b1
+                      List.create(mockedList).then(l2 => {
+                        list2 = l2
+                        mockedBoard.owner = u2._id
+                        mockedBoard.lists = [l2._id]
+                        mockedBoard.visibility = 'public'
+                        mockedBoard.collaborators = []
+                        Board.create(mockedBoard).then(b2 => {
+                          board2 = b2
+                          User.create(mockedUser3).then(u3 => {
+                            user3 = u3
+                            userController.login(u3).then((tokenToUser) => {
+                              tokenU3 = tokenToUser
+                              resolve({ user1, user2, user3, board1, board2, list1, list2, tokenU1, tokenU2, tokenU3 })
+                            })
+                          })
+                        })
+                      })
                     })
                   })
                 })
@@ -263,8 +279,4 @@ function initData () {
       })
     })
   })
-}
-
-function generateToken (user) {
-  return jwt.sign({ id: user._id }, secretKey, { expiresIn: '60s' })
 }
