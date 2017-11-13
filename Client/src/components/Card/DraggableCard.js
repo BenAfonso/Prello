@@ -139,6 +139,26 @@ export default class CardComponent extends React.Component {
       collaborators,
       responsible,
       labels } = this.props
+    if (collaborators !== undefined) {
+      collaborators.map((c) => {
+        if (c._id === undefined) {
+          let filterCollab = this.props.board.collaborators.filter(c2 => c === c2._id)
+          if (filterCollab.length !== 0) {
+            return filterCollab[0]
+          }
+        }
+      })
+    }
+    let resp
+    if (responsible !== undefined) {
+      if (responsible._id === undefined) {
+        let filterCollab = this.props.board.collaborators.filter(c => responsible === c._id)
+        if (filterCollab.length !== 0) {
+          resp = filterCollab[0]
+        }
+      }
+    }
+
     return connectCardDropTarget(connectCardDragSource(
       <div className='host' style={{position: 'relative'}} onClick={this.displayCardDetails.bind(this)}>
         <div className='overlay' style={{
@@ -158,18 +178,9 @@ export default class CardComponent extends React.Component {
           checklists={checklists}
           collaborators={
             collaborators
-              ? collaborators.map(c => c._id
-                ? c
-                : this.props.board.collaborators.filter(c2 => c === c2._id)[0])
-              : null
-
           }
           responsible={
-            responsible
-              ? responsible._id
-                ? responsible
-                : this.props.board.collaborators.filter(c => c._id === responsible)[0]
-              : undefined
+            resp
           }
           labels={
             labels

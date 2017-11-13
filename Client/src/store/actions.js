@@ -507,7 +507,6 @@ export function updateCardDueDate (boardId, listId, card, dueDate) {
 
 export function removeCardDueDate (boardId, listId, card) {
   let newCard = { ...card, dueDate: null, validated: false }
-  console.log(newCard)
   updateCard(boardId, listId, card._id, newCard)
 }
 
