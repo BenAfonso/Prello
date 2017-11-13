@@ -41,7 +41,7 @@ class App extends Component {
             <PrivateRoute exact path='/teams/:id/:tab' component={TeamPage} />
             <PrivateRoute exact path='/developers' component={ApiPage} />
             <Route exact path='/loading' component={LoadingPage} />
-            <PrivateRoute exact path='/profile' component={ProfilePage} />
+            <PrivateRoute exact path='/users/:id/profile' component={ProfilePage} />
           </div>
         </Provider>
       </Router>

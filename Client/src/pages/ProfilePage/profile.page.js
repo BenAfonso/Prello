@@ -5,7 +5,7 @@ import Button from '../../components/UI/Button/Button'
 import Icon from '../../components/UI/Icon/Icon'
 import styles from './profilePage.style'
 import { updateProfile } from '../../services/User.services'
-import { updateProfileAction, setTeamslist, setBoardslist } from '../../store/actions'
+import { updateProfileAction, setTeamslist, setBoardslist, setFetchedUser } from '../../store/actions'
 import { updateProfileLocalStorage } from '../../services/Authentication.services'
 import { displayNotification } from '../../services/Notification.service'
 import AvatarThumbnail from '../../components/UI/AvatarThumbnail/AvatarThumbnail'
@@ -19,7 +19,8 @@ import TeamListElement from '../../components/UI/TeamListElement/TeamListElement
   return {
     currentUser: store.currentUser,
     teamslist: store.teamslist,
-    boardslist: store.boardslist
+    boardslist: store.boardslist,
+    userFetched: store.userFetched.user
   }
 })
 export default class ProfilePage extends React.Component {
@@ -47,8 +48,11 @@ export default class ProfilePage extends React.Component {
   }
 
   componentDidMount () {
+    setFetchedUser(this.props.match.params.id).then(() => {
+    }).catch(err => {
+      console.error(err)
+    })
     setBoardslist(this.props.dispatch).then(() => {
-      console.log(this.props.boardslist)
     }).catch(err => {
       console.error(err)
     })
@@ -128,29 +132,29 @@ export default class ProfilePage extends React.Component {
       <form className='profileForm'>
         <div className='formDiv'>
           <label>Full name : </label>
-          <input className='input' defaultValue={this.props.currentUser.name} ref={e => { this.nameInput = e }}/>
+          <input className='input' defaultValue={this.props.userFetched.name} ref={e => { this.nameInput = e }}/>
         </div>
         <div className='formDiv'>
           <label>User name : </label>
-          <input className='input' defaultValue={this.props.currentUser.username} ref={e => { this.usernameInput = e }}/>
+          <input className='input' defaultValue={this.props.userFetched.username} ref={e => { this.usernameInput = e }}/>
         </div>
         <div className='formDiv'>
           <label>Avatar URL : </label>
-          <input className='input' defaultValue={this.props.currentUser.picture} ref={e => { this.avatarInput = e }} onChange={this.onAvatarInputChange}/>
+          <input className='input' defaultValue={this.props.userFetched.picture} ref={e => { this.avatarInput = e }} onChange={this.onAvatarInputChange}/>
           <div className='avatarPreview'>
             <AvatarThumbnail
               size='50px'
               fontSize='30px'
-              thumbnail={this.state.avatarUrl === '' ? this.props.currentUser.picture : this.state.avatarUrl }
-              initials={this.getInitials(this.props.currentUser.name)}
-              bgColor={this.props.currentUser.bgColor}
+              thumbnail={this.state.avatarUrl === '' ? this.props.userFetched.picture : this.state.avatarUrl }
+              initials={this.getInitials(this.props.userFetched.name)}
+              bgColor={this.props.userFetched.bgColor}
               color='black'
             />
           </div>
         </div>
         <div className='formDiv'>
-          <label>Bio : (facultative)</label>
-          <textarea className='textarea' defaultValue={this.props.currentUser.bio} ref={e => { this.biopicInput = e }} rows='5'/>
+          <label>Bio : (optional)</label>
+          <textarea className='textarea' defaultValue={this.props.userFetched.bio} ref={e => { this.biopicInput = e }} rows='5'/>
         </div>
         <div className='buttons'>
           <span className='saveButton'>
@@ -216,7 +220,7 @@ export default class ProfilePage extends React.Component {
               fontSize='24px'
               color='white'
               style={{marginLeft: '2%', marginRight: '20px'}}/>
-            <span className='teamsTitle'>My teams</span>
+            <span className='teamsTitle'>Teams</span>
           </div>
           <hr className='titleAndContentSeparator'/>
           <ul className='teamsList'>
@@ -263,7 +267,7 @@ export default class ProfilePage extends React.Component {
           size='150px'
           fontSize='80px'
           thumbnail={user.picture}
-          initials={this.getInitials(user.name)}
+          initials={this.getInitials(user.name.length === 0 ? 'a' : user.name)} // Little cheat here as render begins before promises finish in componentDidMount
           bgColor={user.bgColor}
           color='black'
         />
@@ -305,24 +309,26 @@ export default class ProfilePage extends React.Component {
         <PageLayout>
           {!this.state.displayModifyProfileForm
             ? <div className='profileInfos'>
-              {this.renderUserAvatar(this.props.currentUser)}
-              <span className='nameSpan'>{this.props.currentUser.name}</span>
-              <span className='usernameSpan'>@{this.props.currentUser.username}</span>
-              <div className='biopicDiv'>{this.props.currentUser.bio}</div>
-              <div className='modifyButton'>
-                <Button onClick={this.displayModifyProfileForm}
-                  bgColor='#E2E4E6'
-                  hoverBgColor='#d6d6d6'
-                  color='black'
-                  fontSize='12px'
-                  bold
-                  block
-                  shadow><Icon name='pencil' fontSize='10px' style={{marginRight: '5px'}}/>Edit
-                </Button>
-              </div>
+              {this.renderUserAvatar(this.props.userFetched)}
+              <span className='nameSpan'>{this.props.userFetched.name}</span>
+              <span className='usernameSpan'>@{this.props.userFetched.username}</span>
+              <div className='biopicDiv'>{this.props.userFetched.bio}</div>
+              {this.props.currentUser.id === this.props.match.params.id
+                ? <div className='modifyButton'>
+                  <Button onClick={this.displayModifyProfileForm}
+                    bgColor='#E2E4E6'
+                    hoverBgColor='#d6d6d6'
+                    color='black'
+                    fontSize='12px'
+                    bold
+                    block
+                    shadow><Icon name='pencil' fontSize='10px' style={{marginRight: '5px'}}/>Edit
+                  </Button>
+                </div>
+                : null}
             </div>
             : <div className='editProfilePart'>
-              {this.renderUserAvatar(this.props.currentUser)}
+              {this.renderUserAvatar(this.props.userFetched)}
               {this.renderModifyProfileForm()}
             </div>
           }

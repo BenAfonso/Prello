@@ -26,7 +26,7 @@ export default class Header extends React.Component {
   }
 
   goToProfilePage () {
-    window.location = '/profile'
+    window.location = `/users/${this.props.currentUser.id}/profile`
   }
 
   render () {

@@ -25,6 +25,20 @@ export const defaultCurrentUserState = {
   teams: []
 }
 
+export const defaultFetchedUserState = {
+  fetching: false,
+  fetched: false,
+  error: null,
+  user: {
+    id: '',
+    username: '',
+    name: '',
+    picture: '',
+    bio: '',
+    teams: []
+  }
+}
+
 export const defaultNotificationsState = {
   elements: []
 }
@@ -71,5 +85,5 @@ export const defaultTeamslistState = {
   teams: []
 }
 
-export const defaultState = Object.assign(defaultCurrentUserState, defaultBoardState, defaultBoardslistState, defaultTeamState, defaultTeamslistState, defaultNotificationsState, defaultDevelopersState)
+export const defaultState = Object.assign(defaultCurrentUserState, defaultBoardState, defaultFetchedUserState, defaultBoardslistState, defaultTeamState, defaultTeamslistState, defaultNotificationsState, defaultDevelopersState)
 export default createStore(reducer, { ...defaultState }, enhancer)
