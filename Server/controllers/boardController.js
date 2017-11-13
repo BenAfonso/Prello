@@ -138,11 +138,7 @@ boardController.removeListFromBoard = function (boardId, listId) {
  */
 boardController.getOneboard = function (boardId, userId) {
   return new Promise((resolve, reject) => {
-<<<<<<< HEAD
-    Board.findOne({ '_id': boardId }).populate('owner lists collaborators attachments', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
-=======
-    Board.findOne({ '_id': boardId }).populate('owner lists labels collaborators teams', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
->>>>>>> master
+    Board.findOne({ '_id': boardId }).populate('owner lists labels collaborators teams attachments', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         err.status = 500
         reject(err)
@@ -228,11 +224,7 @@ boardController.moveList = function (req) {
 }
 
 boardController.refreshOneboard = function (action, boardId) {
-<<<<<<< HEAD
-  Board.findOne({ '_id': boardId }).populate('owner lists collaborators attachments', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
-=======
-  Board.findOne({ '_id': boardId }).populate('owner lists labels collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
->>>>>>> master
+  Board.findOne({ '_id': boardId }).populate('owner lists labels collaborators attachments', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
     if (err) { } else {
       Card.populate(res, {
         path: 'lists.cards'
