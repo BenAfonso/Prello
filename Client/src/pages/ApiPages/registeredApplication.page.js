@@ -159,7 +159,7 @@ export default class RegisteredApplication extends React.Component {
           {
             !this.state.editing
               ? this.state.newClient.redirectUris.map((r, i) => (
-                <input key={i} type='text' disabled value={r} />
+                <input style={{ display: 'block' }}key={i} type='text' disabled value={r} />
               ))
               : <div>
                 {
