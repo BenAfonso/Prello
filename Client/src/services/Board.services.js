@@ -37,6 +37,15 @@ export function fetchBoards () {
     })
   })
 }
+export function fetchBoard (boardId) {
+  return new Promise((resolve, reject) => {
+    axios.get(`${Config.API_URL}/boards/${boardId}`).then((res) => {
+      resolve(res.data)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
 
 export function getBoardHistory (boardId) {
   return new Promise((resolve, reject) => {

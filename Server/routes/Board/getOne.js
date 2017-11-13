@@ -36,9 +36,11 @@ module.exports = function (router, controller) {
       return
     }
     controller.getOneboard(req.params.boardId, req.user._id).then((data) => {
+      console.log(400)
       res.status(200).json(data)
     })
       .catch((err) => {
+        console.log(err)
         res.status(err.status).json(err)
       })
   })

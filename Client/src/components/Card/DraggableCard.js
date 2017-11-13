@@ -157,9 +157,12 @@ export default class CardComponent extends React.Component {
           nbChecklists={nbChecklists}
           checklists={checklists}
           collaborators={
-            collaborators.map(c => c._id
-              ? c
-              : this.props.board.collaborators.filter(c2 => c === c2._id)[0])
+            collaborators
+              ? collaborators.map(c => c._id
+                ? c
+                : this.props.board.collaborators.filter(c2 => c === c2._id)[0])
+              : null
+
           }
           responsible={
             responsible
@@ -169,9 +172,11 @@ export default class CardComponent extends React.Component {
               : undefined
           }
           labels={
-            labels.map(l => l._id
-              ? l
-              : this.props.board.labels.filter(l2 => l === l2._id)[0])
+            labels
+              ? labels.map(l => l._id
+                ? l
+                : this.props.board.labels.filter(l2 => l === l2._id)[0])
+              : null
           } />
         <style jsx>{`
           .overlay {
