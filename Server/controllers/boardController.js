@@ -5,11 +5,14 @@ const Label = mongoose.model('Label')
 const Modification = mongoose.model('Modification')
 const List = mongoose.model('List')
 const Card = mongoose.model('Card')
+const Checklist = mongoose.model('Checklist')
+const Item = mongoose.model('Item')
 const Util = require('./Util')
 const emit = require('../controllers/sockets').emit
 const modificationController = require('./modificationController')
 const listController = require('./listController')
 const cardController = require('./cardController')
+const checklistController = require('./checklistController')
 const boardController = {}
 
 /**
@@ -119,7 +122,7 @@ boardController.importTrelloBoard = function (board) {
               boardController.addListToBoard(boardToImport._id, newList)
               board.cards.map((card) => {
                 if (card.idList === list.id) {
-                  let newCard = new Card({text: card.name, isArchived: card.closed})
+                  let newCard = new Card({text: card.name, isArchived: card.closed, dueDate: card.due, description: card.desc})
                   newCard.save((err, item) => {
                     if (err) {
                       reject(err)
@@ -132,7 +135,28 @@ boardController.importTrelloBoard = function (board) {
                           }
                         })
                       })
-                      // import due dates
+                      board.checklists.map((checklist) => {
+                        if (card.id === checklist.idCard) {
+                          let newChecklist = new Checklist({text: checklist.name})
+                          newChecklist.save((err, item) => {
+                            if (err) {
+                              reject(err)
+                            } else {
+                              cardController.addChecklistToCard(newCard._id, newChecklist)
+                              checklist.checkItems.map((item) => {
+                                let newItem = new Item({text: item.name, isChecked: false})
+                                newItem.save((err, item) => {
+                                  if (err) {
+                                    reject(err)
+                                  } else {
+                                    checklistController.addItemToChecklist(newChecklist._id, newItem)
+                                  }
+                                })
+                              })
+                            }
+                          })
+                        }
+                      })
                     }
                   })
                 }

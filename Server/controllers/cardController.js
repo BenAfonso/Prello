@@ -329,6 +329,23 @@ cardController.removeCollaborator = (boardId, listId, cardId, userId, requesterI
   })
 }
 
+/**
+ * @param {any} cardId
+ * @param {any} labelId
+ * @returns
+ */
+cardController.addChecklistToCard = function (cardId, checklist) {
+  return new Promise((resolve, reject) => {
+    Card.findOneAndUpdate({ '_id': cardId }, { $push: { checklists: checklist } }, { new: true }, function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+
 cardController.addLabel = (boardId, cardId, listId, labelId) => {
   return new Promise((resolve, reject) => {
     Card.findOneAndUpdate({ '_id': cardId }, { $push: { labels: labelId } }, { new: true }).exec((err, res) => {

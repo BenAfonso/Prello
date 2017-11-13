@@ -40,3 +40,5 @@ CardSchema.methods = {
 }
 
 mongoose.model('Card', CardSchema)
+mongoose.model('Checklist', Checklist)
+mongoose.model('Item', Item)
