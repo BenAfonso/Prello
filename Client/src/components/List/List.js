@@ -57,7 +57,9 @@ const cardTarget = {
   drop (props, monitor) {
     const { id: draggedId, originalListIndex } = monitor.getItem()
     let card = props.cards.filter((e, i) => !e.isArchived && e._id === draggedId)[0]
-    moveCardDistant(props.board._id, card._id, props.board.lists[originalListIndex]._id, props.id, props.cards.indexOf(card))
+    if (card !== undefined) {
+      moveCardDistant(props.board._id, card._id, props.board.lists[originalListIndex]._id, props.id, props.cards.indexOf(card))
+    }
   }
 }
 
