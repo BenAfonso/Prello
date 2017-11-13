@@ -58,7 +58,7 @@ export default class APIPage extends React.Component {
       menuItems.push({
         type: 'link',
         text: c.name,
-        component: <RegisteredApplicationPage {...c} />
+        component: <RegisteredApplicationPage key={c._id} {...c} />
       })
       return c
     })
@@ -70,7 +70,7 @@ export default class APIPage extends React.Component {
             <li className='mainTitle'><h2>Developers API</h2></li>
             {
               menuItems.map((item, i) => (
-                <li className={item.type} onClick={() => { if (item.type === 'link') { this.renderItemAtIndex(i) } else { return null } }}>
+                <li key={i} className={item.type} onClick={() => { if (item.type === 'link') { this.renderItemAtIndex(i) } else { return null } }}>
                   {item.text}
                 </li>
               ))

@@ -39,6 +39,14 @@ module.exports = function (app) {
       })
   })
 
+  app.all('/me/*', [requiresLogin], (req, res, next) => {
+    let request = req.originalUrl.split('/').filter(e => e !== '')
+    request[0] = `/users/${req.user._id}`
+    request = request.join('/')
+    req.url = request
+    next()
+  })
+
   app.get('/oauth/prello/login', (req, res) => {
     if (!req.query.client_id || !req.query.scope || !req.query.redirect_uri) {
       return res.render('login', { // views: login
@@ -152,32 +160,6 @@ module.exports = function (app) {
     })
   })
 
-  app.post('/oauth/clients', [requiresLogin], (req, res) => {
-    crypto.randomBytes(10, (err, buffer) => {
-      if (err) { }
-      const clientId = buffer.toString('hex')
-      crypto.randomBytes(10, (err, buffer) => {
-        if (err) { }
-        const clientSecret = buffer.toString('hex')
-        req.body.client_id = clientId
-        req.body.client_secret = clientSecret
-        req.body.grant_types = 'authorization_code'
-        req.body.User = req.user._id
-        const client = new OAuthClient(req.body)
-        client.save()
-        .then((client) => {
-          res.status(201).send(client)
-        })
-        .catch((err) =>
-          res.status(400).send({
-            status: '400',
-            message: err.message
-          })
-        )
-      })
-    })
-  })
-
   app.get('/authorize', [requiresLogin], (req, res) => {
     if (!req.query.client_id || !req.query.redirect_uri) {
       req.query = toParams(req.url.split('?')[1])
@@ -212,7 +194,8 @@ module.exports = function (app) {
     })
   })
 
-  app.get('/oauth/clients', [requiresLogin], (req, res) => {
+  app.get('/users/:userId/oauth/clients', [requiresLogin], (req, res) => {
+    if (`${req.params.userId}` !== `${req.user._id}`) { return res.status(403).send({'message': 'Not authorized'}) }
     OAuthClient.find({ User: req.user._id }).then(clients => {
       res.status(200).send(clients)
     }).catch((err) =>
@@ -221,5 +204,50 @@ module.exports = function (app) {
         message: err.message
       })
     )
+  })
+
+  app.post('/users/:userId/oauth/clients', [requiresLogin], (req, res) => {
+    if (`${req.params.userId}` !== `${req.user._id}`) { return res.status(403).send({'message': 'Not authorized'}) }
+    crypto.randomBytes(10, (err, buffer) => {
+      if (err) { }
+      const clientId = buffer.toString('hex')
+      crypto.randomBytes(10, (err, buffer) => {
+        if (err) { }
+        const clientSecret = buffer.toString('hex')
+        req.body.client_id = clientId
+        req.body.client_secret = clientSecret
+        req.body.grant_types = 'authorization_code'
+        req.body.User = req.user._id
+        const client = new OAuthClient(req.body)
+        client.save()
+        .then((client) => {
+          res.status(201).send(client)
+        })
+        .catch((err) =>
+          res.status(400).send({
+            status: '400',
+            message: err.message
+          })
+        )
+      })
+    })
+  })
+
+  app.put('/users/:userId/oauth/clients/:clientId', [requiresLogin], (req, res) => {
+    if (`${req.params.userId}` !== `${req.user._id}`) { return res.status(403).send({'message': 'Not authorized'}) }
+    OAuthClient.findOneAndUpdate({'_id': req.params.clientId, 'User': req.user._id}, req.body, { new: true }).then(client => {
+      return res.status(200).send(client)
+    }).catch(err => {
+      return res.status(500).send(err.message)
+    })
+  })
+
+  app.delete('/users/:userId/oauth/clients/:clientId', [requiresLogin], (req, res) => {
+    if (`${req.params.userId}` !== `${req.user._id}`) { return res.status(403).send({'message': 'Not authorized'}) }
+    OAuthClient.findOneAndRemove({'_id': req.params.clientId, 'User': req.user._id}).then(result => {
+      return res.status(200).send({ message: 'Successfully deleted' })
+    }).catch(err => {
+      return res.status(500).send(err.message)
+    })
   })
 }

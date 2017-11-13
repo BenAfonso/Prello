@@ -600,3 +600,10 @@ export function removeOAuthClient (client) {
     payload: client._id
   })
 }
+
+export function updateOAuthClient (client) {
+  store.dispatch({
+    type: 'UPDATE_OAUTHCLIENT',
+    payload: client
+  })
+}
