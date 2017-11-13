@@ -65,6 +65,10 @@ export default class Header extends React.Component {
                   {
                     action: logout,
                     placeholder: 'Logout'
+                  },
+                  {
+                    action: () => { window.location = '/developers' },
+                    placeholder: 'Developers API'
                   }
                 ]}>
                 <div className='user button'>

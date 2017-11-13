@@ -16,6 +16,7 @@ import { addChecklist } from '../../../services/Checklist.services'
 import { getCompleteCard } from '../../../services/Card.services'
 import { addLabel, deleteLabel, updateLabel, addCardLabel, deleteCardLabel } from '../../../services/Label.services'
 import { archiveCard } from '../../../store/actions'
+import Uploader from '../../Uploader/Uploader'
 import LabelDropdown from '../../UI/LabelDropdown/LabelDropdown'
 
 @connect(store => {
@@ -50,7 +51,56 @@ export default class CardDetails extends React.Component {
   }
   constructor (props) {
     super(props)
+    this.state = {
+      fileUploaderDisplayed: false
+    }
     this.createChecklist = this.createChecklist.bind(this)
+  }
+
+  displayFileUploader () {
+    this.setState({
+      fileUploaderDisplayed: true
+    })
+  }
+
+  dismissFileUploader () {
+    this.setState({
+      fileUploaderDisplayed: false
+    })
+  }
+
+  onUploadComplete (c) {
+    this.dismissFileUploader()
+    console.log(c)
+  }
+
+  renderFileUploader () {
+    return (
+      <div className='overlay' onClick={this.dismissFileUploader.bind(this)}>
+        <div className='uploader'>
+          <Uploader
+            api={`http://localhost:3333/boards/${this.props.board._id}/lists/${this.props.lists[this.props.listIndex]._id}/cards/${this.props.id}/attachments`}
+            uploadedImage={this.onUploadComplete.bind(this)} />
+        </div>
+        <style jsx>{`
+          .overlay {
+            position: fixed;
+            z-index: 1000;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background-color: rgba(0,0,0,0.5);
+          }
+
+          .uploader {
+            position: absolute;
+            left: calc(50% - 100px);
+            top: calc(50% - 100px);
+          }
+        `}</style>
+      </div>
+    )
   }
 
   createChecklist () {
@@ -86,6 +136,11 @@ export default class CardDetails extends React.Component {
     const cardLabels = card.labels
     return (
       <div className='host'>
+        {
+          this.state.fileUploaderDisplayed
+            ? this.renderFileUploader()
+            : null
+        }
         <div className='content'>
           <CardDetailsInformations {...this.props} cardLabels={cardLabels} onDeleteCardLabel={this.deleteCardLabel.bind(this)} onAddCardLabel={this.addCardLabel.bind(this)} onUpdateBoardLabel={this.updateBoardLabel.bind(this)} onDeleteBoardLabel={this.deleteBoardLabel.bind(this)} labels={this.props.board.labels} onAddBoardLabel={this.addBoardLabel.bind(this)} />
           <CardDetailsChecklists cardId={this.props.id} listIndex={this.props.listIndex} checklists={this.props.checklists}/>
@@ -170,7 +225,7 @@ export default class CardDetails extends React.Component {
                 </Button>} />
             </li>
             <li>
-              <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small'>
+              <Button bgColor='#eee' hoverBgColor='#ddd' block size='x-small' onClick={this.displayFileUploader.bind(this)}>
                 Attachment
               </Button>
             </li>
