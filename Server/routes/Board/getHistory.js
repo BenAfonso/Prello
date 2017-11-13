@@ -1,5 +1,5 @@
 const {requiresLogin} = require('../../config/middlewares/authorization')
-const {boardExists, isCollaborator} = require('../../config/middlewares/boardAuthorizations')
+const {boardExists, canRead} = require('../../config/middlewares/boardAuthorizations')
 
 module.exports = function (router, controller) {
   /**
@@ -36,7 +36,7 @@ module.exports = function (router, controller) {
   *       500:
   *         description: Internal error
   */
-  router.get('/boards/:boardId/history', [requiresLogin, boardExists, isCollaborator], function (req, res) {
+  router.get('/boards/:boardId/history', [requiresLogin, boardExists, canRead], function (req, res) {
     controller.getBoardHistory(req.params.boardId, parseInt(req.query.limit), parseInt(req.query.skip)).then((data) => {
       res.status(200).json(data)
     })
