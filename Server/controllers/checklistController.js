@@ -101,13 +101,14 @@ checklistController.createChecklistItem = (req) => {
  * @param {any} labelId
  * @returns
  */
-checklistController.addItemToChecklist = function (checklistId, item) {
+checklistController.addItemToChecklist = function (cardId, checklistId, itemName) {
   return new Promise((resolve, reject) => {
-    Checklist.findOneAndUpdate({ '_id': checklistId }, { $push: { items: item } }, { new: true }, function (err, res) {
+    Card.findOne({ '_id': cardId }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
-        resolve(res)
+        res.checklists.id(checklistId).items.push({text: itemName})
+        res.save()
       }
     })
   })

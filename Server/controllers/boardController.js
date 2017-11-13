@@ -144,14 +144,7 @@ boardController.importTrelloBoard = function (board) {
                             } else {
                               cardController.addChecklistToCard(newCard._id, newChecklist)
                               checklist.checkItems.map((item) => {
-                                let newItem = new Item({text: item.name, isChecked: false})
-                                newItem.save((err, item) => {
-                                  if (err) {
-                                    reject(err)
-                                  } else {
-                                    checklistController.addItemToChecklist(newChecklist._id, newItem)
-                                  }
-                                })
+                                checklistController.addItemToChecklist(newCard._id, newChecklist._id, item.name)
                               })
                             }
                           })
