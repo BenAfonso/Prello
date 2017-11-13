@@ -143,6 +143,7 @@ export default (state = defaultBoardState, action) => {
       let listIndex = newLists.indexOf(updatedList[0])
       let cardIndex = updatedList[0].cards.indexOf(updatedCard[0])
       newLists[listIndex].cards[cardIndex] = action.payload.card
+      console.log(newLists[listIndex].cards[cardIndex])
       return {
         ...state,
         board: {

@@ -1,5 +1,5 @@
 import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDistant, removeTeamAdminDistant, setTeamAdminDistant, unsetTeamAdminDistant, updateTeamDistant } from '../services/Team.services'
-import { fetchBoards, addBoardDistant, addTeamBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, removeTeamFromBoardDistant } from '../services/Board.services'
+import { fetchBoards, fetchBoard, addBoardDistant, addTeamBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, removeTeamFromBoardDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
@@ -83,12 +83,19 @@ export function moveListLocal (list) {
 export function setBoard (dispatch, id) {
   return new Promise((resolve, reject) => {
     dispatch({type: 'FETCH_BOARD_START'})
-    fetchBoards().then((data) => {
+    fetchBoard(id).then((data) => {
+      data.teams.map(team => team.users.map(user => {
+        user.isTeamUser = true
+        return data.collaborators.filter(collaborator => collaborator._id === user._id)[0] !== undefined
+          ? null
+          : data.collaborators.push(user)
+      })
+      )
       dispatch({
         type: 'FETCH_BOARD_SUCCESS',
-        payload: data.filter(x => x._id === id)[0]
+        payload: data
       })
-      resolve(data.filter(x => x._id === id)[0])
+      resolve(data)
     }).catch((err) => {
       dispatch({
         type: 'FETCH_BOARD_ERROR',
