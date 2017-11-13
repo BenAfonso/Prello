@@ -5,7 +5,7 @@ import Button from '../../components/UI/Button/Button'
 import Icon from '../../components/UI/Icon/Icon'
 import styles from './profilePage.style'
 import { updateProfile } from '../../services/User.services'
-import { updateProfileAction, setTeamslist, setBoardslist, setFetchedUser } from '../../store/actions'
+import { updateProfileAction, updateProfilePageAction, setTeamslist, setBoardslist, setFetchedUser, setFetchedUserTeams, setFetchedUserBoards } from '../../store/actions'
 import { updateProfileLocalStorage } from '../../services/Authentication.services'
 import { displayNotification } from '../../services/Notification.service'
 import AvatarThumbnail from '../../components/UI/AvatarThumbnail/AvatarThumbnail'
@@ -49,6 +49,14 @@ export default class ProfilePage extends React.Component {
 
   componentDidMount () {
     setFetchedUser(this.props.match.params.id).then(() => {
+    }).catch(err => {
+      console.error(err)
+    })
+    setFetchedUserTeams(this.props.match.params.id).then(() => {
+    }).catch(err => {
+      console.error(err)
+    })
+    setFetchedUserBoards(this.props.match.params.id).then(() => {
     }).catch(err => {
       console.error(err)
     })
@@ -99,6 +107,7 @@ export default class ProfilePage extends React.Component {
           console.log(updatedUser)
           updateProfileLocalStorage(updatedUser)
           updateProfileAction(updatedUser)
+          updateProfilePageAction(updatedUser)
         })
       this.hideModifyProfileForm()
       displayNotification({type: 'success', title: 'Profile edited', content: 'Your profile has been well edited !'})
@@ -224,7 +233,7 @@ export default class ProfilePage extends React.Component {
           </div>
           <hr className='titleAndContentSeparator'/>
           <ul className='teamsList'>
-            {this.props.teamslist.teams.map(team => (
+            {this.props.userFetched.teams.map(team => (
               <li key={team._id} className='teamLi'><Link to={`teams/${team._id}`}><TeamListElement team={team}/></Link></li>
             ))}
           </ul>
@@ -249,9 +258,11 @@ export default class ProfilePage extends React.Component {
   renderOptionsTab () {
     return (
       <div className='optionsTab'>
-        {!this.state.displayNewPasswordForm
-          ? <span className='linkText' onClick={this.displayNewPasswordForm}>Change password</span>
-          : this.renderNewPasswordForm()
+        {this.props.currentUser.id === this.props.match.params.id
+          ? !this.state.displayNewPasswordForm
+            ? <span className='linkText' onClick={this.displayNewPasswordForm}>Change password</span>
+            : this.renderNewPasswordForm()
+          : ''
         }
         <style jsx>
           {styles}
@@ -284,11 +295,11 @@ export default class ProfilePage extends React.Component {
             fontSize='24px'
             color='white'
             style={{marginLeft: '2%', marginRight: '20px'}}/>
-          <span className='boardsTitle'>My boards</span>
+          <span className='boardsTitle'>Boards</span>
         </div>
         <hr className='titleAndContentSeparator'/>
         <ul className='boardsList'>
-          {this.props.boardslist.boards.map(board => (
+          {this.props.userFetched.boards.map(board => (
             <li key={board._id} className='boardLi'>
               <Link to={`/boards/${board._id}`}>
                 <BoardThumbnail index={0} id={board._id} title={board.title} background={board.background}/>

@@ -35,7 +35,8 @@ export const defaultFetchedUserState = {
     name: '',
     picture: '',
     bio: '',
-    teams: []
+    teams: [],
+    boards: []
   }
 }
 

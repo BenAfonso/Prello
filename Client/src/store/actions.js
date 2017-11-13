@@ -2,7 +2,7 @@ import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDista
 import { fetchBoards, addBoardDistant, addTeamBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, removeTeamFromBoardDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
-import { fetchMatchingUsersEmail, fetchUser, fetchUserTeams } from '../services/User.services'
+import { fetchMatchingUsersEmail, fetchUser, fetchUserTeams, fetchUserBoards } from '../services/User.services'
 
 import store from '../store/store'
 
@@ -638,5 +638,28 @@ export function setFetchedUserTeams (id) {
     }).catch(err => {
       reject(err)
     })
+  })
+}
+
+export function setFetchedUserBoards (id) {
+  return new Promise((resolve, reject) => {
+    fetchUserBoards(id).then(boards => {
+      console.log(boards)
+      store.dispatch({
+        type: 'SET_FETCHED_USER_BOARDS',
+        payload: boards
+      })
+    }).then(boards => {
+      resolve(boards)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function updateProfilePageAction (datas) {
+  store.dispatch({
+    type: 'UPDATE_USER_PROFILE_PAGE',
+    payload: datas
   })
 }

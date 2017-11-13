@@ -23,6 +23,17 @@ export function fetchUserTeams (id) {
   })
 }
 
+export function fetchUserBoards (id) {
+  return new Promise((resolve, reject) => {
+    axios.get(`${Config.API_URL}/users/${id}/boards`)
+      .then((res) => {
+        resolve(res.data)
+      }).catch((err) => {
+        reject(err)
+      })
+  })
+}
+
 export function fetchMatchingUsersEmail (email) {
   return new Promise((resolve, reject) => {
     axios.get(`${Config.API_URL}/users`, {
