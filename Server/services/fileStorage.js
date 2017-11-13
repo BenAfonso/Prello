@@ -13,7 +13,6 @@ const minioClient = new Minio.Client({
 
 FileUploader.uploadFile = (boardId, attachmentId, file) => {
   return new Promise((resolve, reject) => {
-    console.log(file)
     const ext = file.originalname.split('.')[file.originalname.split('.').length - 1]
     minioClient.putObject(bucketName, `${boardId}/${attachmentId}.${ext}`, file.buffer, file.mimetype, (err, etag) => {
       if (err) { return reject(err) }

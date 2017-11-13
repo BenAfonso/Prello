@@ -246,7 +246,6 @@ cardController.addCollaboratorEmail = (boardId, cardId, listId, email, requester
 cardController.refreshOneCard = (boardId, listId, cardId) => {
   return new Promise((resolve, reject) => {
     cardController.getOneCard(cardId).then((cardToEmit) => {
-      console.log(cardToEmit)
       let payload = {
         listId: listId,
         card: cardToEmit
