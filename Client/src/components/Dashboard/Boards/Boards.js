@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import BoardThumbnail from '../../BoardThumbnail/BoardThumbnail'
 import { Link } from 'react-router-dom'
 import { displayNotification } from '../../../services/Notification.service'
+import ThePrelloLogin from 'react-theprello-login/dist/PrelloLogin'
 
 @connect(store => {
   return {
@@ -26,7 +27,14 @@ export default class DashboardBoards extends React.Component {
           <h1>Analytics Boards</h1>
           <ul className='services'>
             <li className='service checked'>TheMightyPrello</li>
-            <li className='service unchecked' onClick={this.displayUnavailableOAuth}>ThePrello</li>
+            <li className='service unchecked' onClick={this.displayUnavailableOAuth}>
+              <ThePrelloLogin
+                className='oauth'
+                clientId='2d8ef2e3670006d59ca8'
+                redirectUri='http://localhost:3000/dashboard'
+                onSuccess={console.log}
+              >ThePrello</ThePrelloLogin>
+            </li>
             <li className='service unchecked' onClick={this.displayUnavailableOAuth}>PrelloG3</li>
           </ul>
         </div>
@@ -35,7 +43,7 @@ export default class DashboardBoards extends React.Component {
             this.props.analytics.boards.map(b => (
               <li>
                 <Link to={`/boards/${b._id}/dashboard`}>
-                  <BoardThumbnail id={b._id} title={b.title} />
+                  <BoardThumbnail provider={b.provider} id={b._id} title={b.title} />
                 </Link>
               </li>
             ))
@@ -64,6 +72,12 @@ export default class DashboardBoards extends React.Component {
           margin-top: 9px;
           height: 25px;
           line-height: 22px;
+        }
+
+        .oauth {
+          width: 100%;
+          height: 100%;
+          background-color: red;
         }
 
         .service {

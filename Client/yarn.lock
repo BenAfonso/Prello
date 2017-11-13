@@ -8388,6 +8388,10 @@ react-textarea-autosize@^4.3.0:
   dependencies:
     prop-types "^15.5.8"
 
+react-theprello-login@quentincrinon/react-theprello-login:
+  version "1.0.0"
+  resolved "https://codeload.github.com/quentincrinon/react-theprello-login/tar.gz/37cccef1ae2008d7034edac87a4b98fbe36b5c66"
+
 react-theprello-oauth@quentincrinon/react-theprello-oauth:
   version "0.0.1"
   resolved "https://codeload.github.com/quentincrinon/react-theprello-oauth/tar.gz/5d34f02a6e72a5d89014c47fd59a9acca5b244a6"

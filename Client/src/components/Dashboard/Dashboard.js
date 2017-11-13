@@ -18,7 +18,7 @@ import { setAnalyticsBoard } from '../../store/actions'
 })
 export default class Dashboard extends React.Component {
   componentDidMount () {
-    setAnalyticsBoard(this.props._id).then(board => {
+    setAnalyticsBoard(this.props.provider || 'TheMightyPrello', this.props._id).then(board => {
     }).catch(err => {
       console.error(err)
     })

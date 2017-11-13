@@ -408,9 +408,9 @@ export function removeOAuthClient (client) {
  *
  */
 
-export function setAnalyticsBoards () {
+export function setAnalyticsBoards (provider) {
   return new Promise((resolve, reject) => {
-    fetchAnalyticsBoards().then((data) => {
+    fetchAnalyticsBoards(provider).then((data) => {
       store.dispatch({
         type: 'SET_ANALYTICS_BOARDS',
         payload: data

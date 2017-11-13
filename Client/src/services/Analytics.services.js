@@ -10,7 +10,7 @@ export function getBaseUrl (provider) {
   }
 }
 
-export function fetchBoards () {
+export function fetchBoards (provider) {
   return new Promise((resolve, reject) => {
     let base = getBaseUrl('TheMightyPrello')
     axios.get(`${base}/me/boards`).then((res) => {
