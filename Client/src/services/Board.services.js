@@ -28,6 +28,18 @@ export function addTeamBoardDistant (payload) {
   })
 }
 
+export function updateBoardNameDistant (boardId, boardName) {
+  return new Promise((resolve, reject) => {
+    axios.put(`${Config.API_URL}/boards/${boardId}`, {
+      title: boardName
+    }).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
 export function fetchBoards () {
   return new Promise((resolve, reject) => {
     axios.get(`${Config.API_URL}/me/boards`).then((res) => {

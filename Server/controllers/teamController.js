@@ -83,7 +83,6 @@ teamController.updateTeam = function (teamId, body) {
     delete body.users
     delete body.createdAt
     Team.findOneAndUpdate({ '_id': teamId }, { name: body.name, visibility: body.visibility, picture: body.picture }, { new: true }, function (err, res) {
-      console.log(res)
       if (err) {
         reject(err)
       } else {

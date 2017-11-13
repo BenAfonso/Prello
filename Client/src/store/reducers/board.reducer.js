@@ -221,6 +221,15 @@ export default (state = defaultBoardState, action) => {
         }
       }
     }
+    case 'UPDATE_BOARD': {
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          title: action.payload.title
+        }
+      }
+    }
     default:
       return {
         ...state

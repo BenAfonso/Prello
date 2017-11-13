@@ -19,4 +19,5 @@ module.exports = function (router, controller) {
   require('./addTeams')(router, controller)
   require('./removeTeams')(router, controller)
   require('./getHistory')(router, controller)
+  require('./update')(router, controller)
 }

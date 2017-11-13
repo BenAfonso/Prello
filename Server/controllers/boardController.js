@@ -435,4 +435,16 @@ boardController.removeLabel = (boardId, labelId) => {
     })
   })
 }
+boardController.updateBoard = (boardId, body) => {
+  return new Promise((resolve, reject) => {
+    Board.findOneAndUpdate({ '_id': boardId }, body, { new: true }).exec(function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        emit(boardId, 'BOARD_UPDATED', res)
+        resolve(res)
+      }
+    })
+  })
+}
 module.exports = boardController
