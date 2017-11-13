@@ -4,7 +4,7 @@ const controllers = require('../controllers')
 const { requiresLogin } = require('../config/middlewares/authorization')
 const authenticate = require('../components/oauth/authenticate')
 
-router.get('/me/*', [requiresLogin], (req, res, next) => {
+router.all('/me/*', [requiresLogin], (req, res, next) => {
   let request = req.originalUrl.split('/').filter(e => e !== '')
   request[0] = `/users/${req.user._id}`
   request = request.join('/')

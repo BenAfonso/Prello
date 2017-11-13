@@ -500,7 +500,6 @@ export function updateCardDueDate (boardId, listId, card, dueDate) {
 
 export function removeCardDueDate (boardId, listId, card) {
   let newCard = { ...card, dueDate: null, validated: false }
-  console.log(newCard)
   updateCard(boardId, listId, card._id, newCard)
 }
 
@@ -592,5 +591,12 @@ export function removeOAuthClient (client) {
   store.dispatch({
     type: 'REMOVE_OAUTHCLIENT',
     payload: client._id
+  })
+}
+
+export function updateOAuthClient (client) {
+  store.dispatch({
+    type: 'UPDATE_OAUTHCLIENT',
+    payload: client
   })
 }
