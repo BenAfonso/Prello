@@ -4,6 +4,49 @@ const {listExists, hasCardInside} = require('../../config/middlewares/listAuthor
 const {isCollaborator} = require('../../config/middlewares/boardAuthorizations')
 
 module.exports = (router, controller) => {
+    /**
+    * @swagger
+    * /boards/{boardId}/lists/{listId}/cards/{cardId}/attachments/{attachmentId}:
+    *   put:
+    *     tags:
+    *       - Attachments
+    *     description: Update an attachment in a card
+    *     summary: Update an attachment in a card
+    *     produces:
+    *       - application/json
+    *     parameters:
+    *       - name: boardId
+    *         type: string
+    *         description: The board id where we want to update the attachment
+    *         in: path
+    *         required: true
+    *       - name: listId
+    *         type: string
+    *         description: The list id where the attachment is
+    *         in: path
+    *         required: true
+    *       - name: cardId
+    *         type: string
+    *         description: The card id where the attachment is
+    *         in: path
+    *         required: true
+    *       - name: attachmentId
+    *         type: string
+    *         description: The attachment id where we want to update the attachment
+    *         in: path
+    *         required: true
+    *       - name: body
+    *         description: The attachment object that needs to be update
+    *         in: body
+    *         required: true
+    *         schema:
+    *             $ref: '#/definitions/Attachment'
+    *     responses:
+    *       200:
+    *         description: Message confirming the attachment has been updated
+    *       500:
+    *         description: Internal error
+    */
   router.put('/boards/:boardId/lists/:listId/cards/:cardId/attachments', [requiresLogin, cardExists, listExists, hasCardInside, isCollaborator], (req, res) => {
     if (req.body.name === undefined) {
       res.status(400).send('Missing name')

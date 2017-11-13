@@ -7,17 +7,17 @@ module.exports = (router, controller) => {
     /**
     * @swagger
     * /boards/{boardId}/lists/{listId}/cards/{cardId}/comments/{commentId}/attachments/{attachmentId}:
-    *   delete:
+    *   put:
     *     tags:
     *       - Attachments
-    *     description: Remove an attachment inside a comment
-    *     summary: Remove an attachment inside a comment
+    *     description: Update an attachment in a comment
+    *     summary: Update an attachment in a comment
     *     produces:
     *       - application/json
     *     parameters:
     *       - name: boardId
     *         type: string
-    *         description: The board id where where the attachment is
+    *         description: The board id where we want to update the attachment
     *         in: path
     *         required: true
     *       - name: listId
@@ -37,18 +37,27 @@ module.exports = (router, controller) => {
     *         required: true
     *       - name: attachmentId
     *         type: string
-    *         description: The attachmentId we want to remove
+    *         description: The attachment id where we want to update the attachment
     *         in: path
     *         required: true
+    *       - name: body
+    *         description: The attachment object that needs to be update
+    *         in: body
+    *         required: true
+    *         schema:
+    *             $ref: '#/definitions/Attachment'
     *     responses:
     *       200:
-    *         description: Message confirming the attachment has been removed
+    *         description: Message confirming the attachment has been updated
     *       500:
     *         description: Internal error
     */
-  router.delete('/boards/:boardId/lists/:listId/cards/:cardId/comments/:commentId/attachments/:attachmentId', [requiresLogin, cardExists, listExists, hasCardInside, isCollaborator], (req, res) => {
-    controller.deleteAttachment(req).then(result => {
-      res.status(200).send('Attachment removed')
+  router.put('/boards/:boardId/lists/:listId/cards/:cardId/comments/:commentId/attachments', [requiresLogin, cardExists, listExists, hasCardInside, isCollaborator], (req, res) => {
+    if (req.body.name === undefined) {
+      res.status(400).send('Missing name')
+    }
+    controller.updateAttachment(req.params.boardId, req.params.attachmentId, req.body.name).then(result => {
+      res.status(200).send(result)
     }).catch(err => {
       res.status(500).send(err)
     })
