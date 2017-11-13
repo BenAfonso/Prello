@@ -25,7 +25,7 @@ export default class Card extends React.Component {
     createdAt: PropTypes.string,
     bgColor: PropTypes.any,
     comments: PropTypes.number,
-    checklists: PropTypes.number,
+    checklists: PropTypes.any,
     index: PropTypes.number.isRequired,
     listIndex: PropTypes.number.isRequired,
     collaborators: PropTypes.arrayOf(PropTypes.any),

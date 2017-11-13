@@ -139,15 +139,18 @@ export default class CardComponent extends React.Component {
       collaborators,
       responsible,
       labels } = this.props
-    if (collaborators) {
-      collaborators.map((c) => {
-        if (!c._id) {
-          let filterCollab = this.props.board.collaborators.filter(c2 => c === c2._id)
-          if (filterCollab.length !== 0) {
-            return filterCollab[0]
-          }
+    let col = collaborators.map((c) => {
+      if (!c._id) {
+        let filterCollab = this.props.board.collaborators.filter(c2 => c === c2._id)
+        if (filterCollab.length !== 0) {
+          return filterCollab[0]
         }
-      })
+      } else {
+        return c
+      }
+    })
+    if (col[0] === undefined) {
+      col = []
     }
     let resp
     if (responsible) {
@@ -179,7 +182,7 @@ export default class CardComponent extends React.Component {
           nbChecklists={nbChecklists}
           checklists={checklists}
           collaborators={
-            collaborators
+            col
           }
           responsible={
             resp

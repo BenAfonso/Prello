@@ -17,7 +17,6 @@ export function createOAuthClient (name, redirectUri, scope) {
 export function getOAuthClients () {
   return new Promise((resolve, reject) => {
     axios.get(`${Config.API_URL}/oauth/clients`).then(res => {
-      console.log(res.data)
       resolve(res.data)
     })
   })

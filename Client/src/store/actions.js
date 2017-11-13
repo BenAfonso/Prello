@@ -84,19 +84,19 @@ export function setBoard (dispatch, id) {
   return new Promise((resolve, reject) => {
     dispatch({type: 'FETCH_BOARD_START'})
     fetchBoard(id).then((data) => {
-      data.teams.map(team => team.users.map(user =>
-        data.collaborators.filter(collaborator => collaborator._id === user._id)[0] !== undefined
+      data.teams.map(team => team.users.map(user => {
+        user.isTeamUser = true
+        return data.collaborators.filter(collaborator => collaborator._id === user._id)[0] !== undefined
           ? null
           : data.collaborators.push(user)
-      ))
-      console.log(data)
+      })
+      )
       dispatch({
         type: 'FETCH_BOARD_SUCCESS',
         payload: data
       })
       resolve(data)
     }).catch((err) => {
-      console.log(err)
       dispatch({
         type: 'FETCH_BOARD_ERROR',
         payload: err

@@ -35,13 +35,7 @@ export default class MembersMenu extends React.Component {
   }
 
   getCollaborators () {
-    let matchingBoardCollaborators = []
-    this.props.board.collaborators.map(collaborator => matchingBoardCollaborators.push(collaborator))
-    this.props.board.teams.map(team => team.users.map(user =>
-      matchingBoardCollaborators.filter(collaborator => collaborator._id === user._id)[0] !== undefined
-        ? null
-        : matchingBoardCollaborators.push(user)
-    ))
+    let matchingBoardCollaborators = this.props.board.collaborators.slice()
     return matchingBoardCollaborators
   }
 
