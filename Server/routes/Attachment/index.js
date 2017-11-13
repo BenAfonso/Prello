@@ -2,7 +2,7 @@ module.exports = (router, controller) => {
     /**
    * @swagger
    * definitions:
-   *   Attachments:
+   *   Attachment:
    *     properties:
    *       name:
    *         type: string
