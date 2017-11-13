@@ -30,6 +30,7 @@ export default class Card extends React.Component {
     listIndex: PropTypes.number.isRequired,
     collaborators: PropTypes.arrayOf(PropTypes.any),
     responsible: PropTypes.any,
+    labels: PropTypes.any,
     id: PropTypes.any
   }
 
@@ -93,25 +94,15 @@ export default class Card extends React.Component {
     const card = list.cards.filter(c => c._id === this.props.id)[0]
     const dueDate = this.getDueDate(card)
     const formattedDate = this.getFormattedDueDate(dueDate)
-    let cardLabels = []
-    if (this.props.lists[this.props.listIndex].cards[this.props.index]) {
-      cardLabels = this.props.lists[this.props.listIndex].cards[this.props.index].labels
-    }
-    const boardLabels = this.props.board.labels
-    let labelsToDisplay = []
-    boardLabels.map((bLabel) => {
-      cardLabels.map((cLabel) => {
-        if (cLabel === bLabel._id) {
-          labelsToDisplay.push(bLabel)
-        }
-      })
-    })
+    // let labelsToDisplay = card.labels
     return (
       <div style={{...this.props.style}} ref={c => { this.card = c }} className='root'>
         <div className='editButton'><Button size='small' bgColor='rgba(0,0,0,0)' hoverBgColor='rgba(255,255,255,0.6)'><Icon name='edit' color='#444' /></Button></div>
         <div className='content'>{ this.props.content }</div>
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-          { labelsToDisplay.map((label) => <div key={label['_id']}><LabelThumbnail labelText={label['name']} backgroundColor={label['color']} /></div>) }
+          { this.props.labels
+            ? this.props.labels.map((label) => <div key={label['_id']}><LabelThumbnail labelText={label['name']} backgroundColor={label['color']} /></div>)
+            : null }
         </div>
         <div className='numbers'>
           { this.props.nbComments > 0

@@ -117,7 +117,6 @@ userController.login = (userToConnect) => {
   })
 }
 
-<<<<<<< HEAD
 userController.getUserTeams = function (userId) {
   return new Promise((resolve, reject) => {
     Team.find({ 'users': userId }).populate('boards users admins', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
@@ -133,13 +132,7 @@ userController.getUserTeams = function (userId) {
 userController.updateUser = (userId, body) => {
   return new Promise((resolve, reject) => {
     delete body.email
-    User.findOneAndUpdate({'_id': userId}, body, { new: true }).exec(function (err, res) {
-=======
-userController.updateUser = (userId, body) => {
-  return new Promise((resolve, reject) => {
-    delete body.email
-    User.findOneAndUpdate('_id', body, { new: true }).exec((err, res) => {
->>>>>>> master
+    User.findOneAndUpdate({'_id': userId}, body, { new: true }).exec((err, res) => {
       if (err) {
         reject(err)
       } else {

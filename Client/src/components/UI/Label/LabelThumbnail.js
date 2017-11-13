@@ -59,7 +59,7 @@ export default class LabelThumbnail extends React.Component {
 
     props.style = {
       width: '50px',
-      height: this.state.isExpanded ? '30px' : '15px',
+      height: '15px',
       fontSize,
       fontWeight,
       backgroundColor,
@@ -70,7 +70,7 @@ export default class LabelThumbnail extends React.Component {
       ...props.style
     }
 
-    if (this.state.isExpanded) return <div onClick={(e) => this.expandLabel} style={props.style}>{this.props.labelText}</div>
-    else return <div onClick={this.expandLabel} style={props.style}></div>
+    if (this.state.isExpanded) return <div onMouseLeave={this.expandLabel} style={props.style}>{this.props.labelText}</div>
+    else return <div onMouseEnter={this.expandLabel} style={props.style}></div>
   }
 }

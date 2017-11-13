@@ -17,7 +17,7 @@ module.exports = function (opt) {
     oauth.authenticate(request, response, options)
       .then(function (token) {
         // Request is authorized.
-        req.user = token
+        // req.user = token
         next()
       })
       .catch(function (err) {

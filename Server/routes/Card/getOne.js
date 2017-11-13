@@ -1,6 +1,6 @@
 const Util = require('../../controllers/Util')
 const {requiresLogin} = require('../../config/middlewares/authorization')
-const {boardExists, canRead, isCollaborator} = require('../../config/middlewares/boardAuthorizations')
+const {boardExists, isCollaborator} = require('../../config/middlewares/boardAuthorizations')
 const {cardExists} = require('../../config/middlewares/cardAuthorizations')
 const {listExists, hasCardInside} = require('../../config/middlewares/listAuthorizations')
 
@@ -39,7 +39,7 @@ module.exports = function (router, controller) {
   *       500:
   *         description: Internal error
   */
-  router.get('/boards/:boardId/lists/:listId/cards/:cardId', [requiresLogin, boardExists, canRead, cardExists, listExists, hasCardInside, isCollaborator], function (req, res) {
+  router.get('/boards/:boardId/lists/:listId/cards/:cardId', [requiresLogin, boardExists, cardExists, listExists, hasCardInside, isCollaborator], function (req, res) {
     let requiredParameter = ['boardId', 'listId', 'cardId']
     requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {

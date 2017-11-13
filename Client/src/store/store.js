@@ -21,7 +21,8 @@ export const defaultCurrentUserState = {
   username: '',
   name: '',
   picture: '',
-  bio: ''
+  bio: '',
+  teams: []
 }
 
 export const defaultNotificationsState = {
@@ -70,5 +71,5 @@ export const defaultTeamslistState = {
   teams: []
 }
 
-export const defaultState = Object.assign(defaultCurrentUserState, defaultBoardState, defaultBoardslistState, defaultTeamState, defaultTeamslistState)
+export const defaultState = Object.assign(defaultCurrentUserState, defaultBoardState, defaultBoardslistState, defaultTeamState, defaultTeamslistState, defaultNotificationsState, defaultDevelopersState)
 export default createStore(reducer, { ...defaultState }, enhancer)

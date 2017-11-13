@@ -4,6 +4,7 @@ export default `
   width: 100%;
   background-color: #cd5a91;
   padding: 30px 10px;
+  overflow-y: auto;  
 }
 
 .titleSection {
@@ -83,5 +84,11 @@ ul li {
 
 .teamBoards {
   width: 100%;
+  display: flex;
+  flex-wrap: wrap; 
+  align-items: center;
+  padding-right: 10px;
+  margin-top: 20px;
+  justify-content: center;
 }
 `

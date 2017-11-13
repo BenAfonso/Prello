@@ -95,7 +95,7 @@ function revokeToken (token) {
 
 function generateAccessToken (client, user, scope) {
   if (user._id) {
-    let payload = { iss: 'Prello-OAuthServer', userId: user._id }
+    let payload = { iss: 'Prello-OAuthServer', userId: user._id, scope: scope }
     let token = jwt.sign(payload, secretKey, { expiresIn: '7d' })
     return token
   }
@@ -258,7 +258,7 @@ function validateGoogleCode (code, origin) {
           return resolve({accessToken, profile})
         })
       } else {
-        return reject(error)
+        return reject(response.body)
       }
     })
   })

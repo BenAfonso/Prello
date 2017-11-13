@@ -109,6 +109,8 @@ label {
 }
 .teamsList,
 .boardsList {
+    width: 100%;
+    margin-right: 20px;
     display: flex;
     flex-wrap: wrap; 
     word-break: break-all;
@@ -121,9 +123,10 @@ label {
 }
 .boardLi,
 .teamLi {
-    margin-left: 50px;
+    margin-left: 20px;
     margin-bottom: 10px;
     margin-top: 10px;
+    margin-right: 20px;
 }
 
 .boardLi:hover {

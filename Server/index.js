@@ -21,8 +21,7 @@ app.get('/swagger.json', function (req, res) {
   res.setHeader('Content-Type', 'application/json')
   res.send(swaggerSpec)
 })
-
-app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '5mb'}))
 
 app.all('/*', (req, res, next) => {
   // CORS headers
@@ -39,7 +38,7 @@ app.all('/*', (req, res, next) => {
 
 // Serving doc files
 app.use('/api-docs', express.static('./api-doc'))
-
+app.use(express.static('public'))
 app.use('/', require('./routes'))
 
 app.use((req, res, next) => {
