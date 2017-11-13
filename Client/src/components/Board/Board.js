@@ -14,7 +14,8 @@ import MultiBackend from 'react-dnd-multi-backend'
 @connect(store => {
   return {
     currentBoard: store.currentBoard,
-    board: store.currentBoard.board
+    board: store.currentBoard.board,
+    currentUser: store.currentUser
   }
 })
 @DragDropContext(MultiBackend(HTML5toTouch))
@@ -52,6 +53,15 @@ export default class Board extends React.Component {
 
   componentWillUnmount () {
     resetBoard()
+  }
+
+  isCurrentUserOwner () {
+    if (this.props.board.owner !== undefined) {
+      const isAdmin = this.props.currentUser._id === this.props.board.owner._id
+      return isAdmin
+    } else {
+      return false
+    }
   }
 
   displayNewListForm () {
@@ -137,7 +147,7 @@ export default class Board extends React.Component {
 
     return <div className='host' style={boardStyle} >
 
-      <h1 className='boardTitle'>{this.props.currentBoard.title}</h1>
+      <h1 className='boardTitle' onClick={this.isCurrentUserOwner() ? this.displayRenameBoard : null}>{this.props.board.title}</h1>
       <CustomDragLayer snapToGrid={false} />
       <ul>
         {

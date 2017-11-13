@@ -9,7 +9,8 @@ import { removeCollaborator } from '../../../store/actions'
 @connect(store => {
   return {
     currentboard: store.currentBoard,
-    board: store.currentBoard.board
+    board: store.currentBoard.board,
+    currentUser: store.currentUser
   }
 })
 
@@ -19,6 +20,15 @@ export default class UsersMenu extends React.Component {
     this.getInitials = this.getInitials.bind(this)
     this.renderUserAvatar = this.renderUserAvatar.bind(this)
     this.removeCollaborator = this.removeCollaborator.bind(this)
+  }
+
+  isCurrentUserOwner () {
+    if (this.props.board.owner !== undefined) {
+      const isAdmin = this.props.currentUser._id === this.props.board.owner._id
+      return isAdmin
+    } else {
+      return false
+    }
   }
 
   getInitials (name) {
@@ -100,8 +110,11 @@ export default class UsersMenu extends React.Component {
           </ul>
         </div>
         <div className='usermenu-separator' />
-
-        <AddCollaboratorMenu boardId={boardId} collaborators={collaborators} />
+        {
+          this.isCurrentUserOwner()
+            ? <AddCollaboratorMenu boardId={boardId} collaborators={collaborators} />
+            : null
+        }
         <style jsx>
           {`
 

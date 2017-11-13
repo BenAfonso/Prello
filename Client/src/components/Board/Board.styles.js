@@ -7,7 +7,7 @@ export default `
 
   .boardTitle {
     color: white;
-    font-size: 18px;
+    font-size: 35px;
     margin-bottom: 15px;
     padding-left: 10px;
   }
