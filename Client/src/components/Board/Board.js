@@ -86,8 +86,9 @@ export default class Board extends React.Component {
     })
   }
 
-  undisplayRenameBoard () {
-    if (this.boardName.value !== '') {
+  undisplayRenameBoard (event) {
+    if (event) event.preventDefault()
+    if (this.boardName.value !== '' && this.boardName.value !== this.props.board.title) {
       this.updateBoardName(this.boardName.value)
     }
     this.setState({
@@ -142,7 +143,7 @@ export default class Board extends React.Component {
   renderRenameBoard () {
     return (
       <div className='rename-form'>
-        <form onSubmit={this.addList}>
+        <form onSubmit={this.undisplayRenameBoard}>
           <input autoFocus className='rename-input' defaultValue={this.props.board.title} ref={(name) => { this.boardName = name }} onFocus={this.handleFocus} />
         </form>
         <style jsx>{`
@@ -205,7 +206,7 @@ export default class Board extends React.Component {
       {
         this.state.renameBoardDisplayed
           ? this.renderRenameBoard()
-          : <h1 className='boardTitle' onClick={this.isCurrentUserOwner() ? this.displayRenameBoard : null}>{this.props.board.title}</h1>
+          : <div className='boardTitle' onClick={this.isCurrentUserOwner() ? this.displayRenameBoard : null}>{this.props.board.title}</div>
       }
       <CustomDragLayer snapToGrid={false} />
       <ul>

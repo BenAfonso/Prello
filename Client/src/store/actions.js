@@ -573,6 +573,16 @@ export function restoreList (boardId, list) {
     payload: newList
   })
 }
+
+export function updateListName (boardId, list, listName) {
+  let newList = { ...list, name: listName }
+  updateList(boardId, list._id, newList)
+  store.dispatch({
+    type: 'UPDATE_LIST',
+    payload: newList
+  })
+}
+
 export function addLabel (labels) {
   store.dispatch({
     type: 'ADD_LABEL',
