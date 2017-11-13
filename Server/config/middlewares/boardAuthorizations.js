@@ -36,7 +36,7 @@ module.exports.isCollaborator = (req, res, next) => {
             if (result !== null) {
               next()
             }
-            
+
             return res.status(403).send('Forbidden: You aren\'t a collaborator of this board')
           })
         }).catch((err) => {
