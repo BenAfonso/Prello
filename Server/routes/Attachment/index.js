@@ -18,5 +18,5 @@ module.exports = (router, controller) => {
   require('./delete')(router, controller)
   require('./update')(router, controller)
   require('./updateFromCard')(router, controller)
-  require('./updateFromComment')(router, controller) 
+  require('./updateFromComment')(router, controller)
 }
