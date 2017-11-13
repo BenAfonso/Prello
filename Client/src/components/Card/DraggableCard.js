@@ -139,9 +139,9 @@ export default class CardComponent extends React.Component {
       collaborators,
       responsible,
       labels } = this.props
-    if (collaborators !== undefined) {
+    if (collaborators) {
       collaborators.map((c) => {
-        if (c._id === undefined) {
+        if (!c._id) {
           let filterCollab = this.props.board.collaborators.filter(c2 => c === c2._id)
           if (filterCollab.length !== 0) {
             return filterCollab[0]
@@ -150,12 +150,14 @@ export default class CardComponent extends React.Component {
       })
     }
     let resp
-    if (responsible !== undefined) {
-      if (responsible._id === undefined) {
-        let filterCollab = this.props.board.collaborators.filter(c => responsible === c._id)
-        if (filterCollab.length !== 0) {
-          resp = filterCollab[0]
+    if (responsible) {
+      if (!responsible._id) {
+        let filterResp = this.props.board.collaborators.filter(c => responsible === c._id)
+        if (filterResp.length !== 0) {
+          resp = filterResp[0]
         }
+      } else {
+        resp = responsible
       }
     }
 
