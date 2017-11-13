@@ -347,6 +347,23 @@ cardController.addLabel = (boardId, cardId, listId, labelId) => {
     })
   })
 }
+
+/**
+ * @param {any} cardId
+ * @param {any} labelId
+ * @returns
+ */
+cardController.addLabelToCard = function (cardId, labelId) {
+  return new Promise((resolve, reject) => {
+    Card.findOneAndUpdate({ '_id': cardId }, { $push: { labels: labelId } }, { new: true }, function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
 cardController.removeLabel = (boardId, cardId, listId, labelId) => {
   return new Promise((resolve, reject) => {
     Card.findOneAndUpdate({ '_id': cardId }, { $pull: { labels: labelId } }, { new: true }).exec((err, res) => {

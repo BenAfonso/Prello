@@ -9,6 +9,7 @@ const Util = require('./Util')
 const emit = require('../controllers/sockets').emit
 const modificationController = require('./modificationController')
 const listController = require('./listController')
+const cardController = require('./cardController')
 const boardController = {}
 
 /**
@@ -97,8 +98,20 @@ boardController.importTrelloBoard = function (board) {
       if (err) {
         reject(err)
       } else {
+        let tempLabels = []
+        board.labels.map((label) => {
+          let newLabel = new Label({name: label.name, color: label.color})
+          newLabel.save((err, item) => {
+            if (err) {
+              reject(err)
+            } else {
+              tempLabels.push({id: label.id, mongoId: newLabel._id})
+              boardController.addLabelToBoard(boardToImport._id, newLabel)
+            }
+          })
+        })
         board.lists.map((list) => {
-          let newList = new List({name: list.name})
+          let newList = new List({name: list.name, isArchived: list.closed})
           newList.save((err, item) => {
             if (err) {
               reject(err)
@@ -112,6 +125,14 @@ boardController.importTrelloBoard = function (board) {
                       reject(err)
                     } else {
                       listController.addCardToList(newList._id, newCard)
+                      card.labels.map((cardLabel) => {
+                        tempLabels.map((tempLabel) => {
+                          if (cardLabel.id === tempLabel.id) {
+                            cardController.addLabelToCard(newCard._id, tempLabel.mongoId)
+                          }
+                        })
+                      })
+                      // import due dates
                     }
                   })
                 }
@@ -119,6 +140,7 @@ boardController.importTrelloBoard = function (board) {
             }
           })
         })
+        console.log('DONE IMPORTING')
         emit('trelloImport', 'IMPORTED_BOARD', item)
         resolve(item)
       }
@@ -135,6 +157,24 @@ boardController.importTrelloBoard = function (board) {
 boardController.addListToBoard = function (boardId, list) {
   return new Promise((resolve, reject) => {
     Board.findOneAndUpdate({ '_id': boardId }, { $push: { lists: list } }, { new: true }, function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+
+/**
+ *
+ * @param {any} boardId
+ * @param {any} label
+ * @returns
+ */
+boardController.addLabelToBoard = function (boardId, label) {
+  return new Promise((resolve, reject) => {
+    Board.findOneAndUpdate({ '_id': boardId }, { $push: { labels: label } }, { new: true }, function (err, res) {
       if (err) {
         reject(err)
       } else {
