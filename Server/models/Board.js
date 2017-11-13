@@ -12,7 +12,7 @@ const BoardSchema = new Schema({
   attachments: [{type: Schema.Types.ObjectId, ref: 'Attachment'}],
   createdAt: {type: Date, default: Date.now},
   isArchived: {type: Boolean, default: false},
+  labels: [{type: Schema.Types.ObjectId, ref: 'Label'}],
   modifications: [{type: Schema.Types.ObjectId, ref: 'Modification'}]
 })
-
 mongoose.model('Board', BoardSchema)

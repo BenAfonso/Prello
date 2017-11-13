@@ -107,17 +107,23 @@ export default (state = defaultBoardState, action) => {
       }
     }
     case 'ADD_CARD': {
-      let newLists = state.board.lists.map((l) => {
-        if (l._id === action.payload.listId) {
-          l.cards.push(action.payload.card)
+      if (action.payload.card.text.length > 0) {
+        let newLists = state.board.lists.map((l) => {
+          if (l._id === action.payload.listId) {
+            l.cards.push(action.payload.card)
+          }
+          return l
+        })
+        return {
+          ...state,
+          board: {
+            ...state.board,
+            lists: newLists
+          }
         }
-        return l
-      })
-      return {
-        ...state,
-        board: {
-          ...state.board,
-          lists: newLists
+      } else {
+        return {
+          ...state
         }
       }
     }
@@ -163,6 +169,46 @@ export default (state = defaultBoardState, action) => {
         board: {
           ...state.board,
           collaborators: newCollaborators
+        }
+      }
+    }
+    case 'UPDATE_TEAMS': {
+      const newTeams = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          teams: newTeams
+        }
+      }
+    }
+    case 'ADD_LABEL': {
+      const newLabels = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          labels: newLabels
+        }
+      }
+    }
+    case 'REMOVE_LABEL': {
+      let newLabels = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          labels: newLabels
+        }
+      }
+    }
+    case 'UPDATE_LABEL': {
+      let newLabels = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          labels: newLabels
         }
       }
     }

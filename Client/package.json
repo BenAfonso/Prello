@@ -87,7 +87,7 @@
     "storybook": "^1.0.0"
   },
   "scripts": {
-    "precommit": "yarn lint",
+    "precommit": "jest --verbose && yarn lint",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",

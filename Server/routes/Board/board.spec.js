@@ -223,7 +223,9 @@ function initData (mockedUser1, mockedUser2, mockedBoard) {
         'http://localhost:3000/'
       ],
       'client_id': 'e8a49d489ce39e9f1db0',
-      'client_secret': 'ff681e5ea1d88d664700'})
+      'client_secret': 'ff681e5ea1d88d664700',
+      'scope': 'boards:read boards:write users.profile:read users.profile:write teams:read teams:write'
+    })
     oAuthClientToAdd.save().then(() => {
       Board.remove({}).then(() => {
         User.remove({}).then(() => {
@@ -234,9 +236,11 @@ function initData (mockedUser1, mockedUser2, mockedBoard) {
               User.create(mockedUser2).then(u2 => {
                 user2 = u2
                 mockedBoard.owner = user1._id
+                mockedBoard.collaborators = [user1._id]
                 Board.create(mockedBoard).then(b1 => {
                   board1 = b1
                   mockedBoard.owner = user2._id
+                  mockedBoard.collaborators = [user2._id]
                   Board.create(mockedBoard).then(b2 => {
                     board2 = b2
                     mockedBoard.collaborators = [u1._id]

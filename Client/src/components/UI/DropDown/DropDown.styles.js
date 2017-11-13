@@ -40,6 +40,7 @@ button:hover {
 
 .dropdown-content {
   position: absolute;
+  color: #444;  
   background-color: #f9f9f9;
   min-width: 160px;
   max-width: 340px;

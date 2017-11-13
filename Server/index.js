@@ -38,7 +38,7 @@ app.all('/*', (req, res, next) => {
 
 // Serving doc files
 app.use('/api-docs', express.static('./api-doc'))
-
+app.use(express.static('public'))
 app.use('/', require('./routes'))
 
 app.use((req, res, next) => {

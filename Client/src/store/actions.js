@@ -1,4 +1,5 @@
-import { fetchBoards, addBoardDistant, addCollaboratorDistant, removeCollaboratorDistant } from '../services/Board.services'
+import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDistant, removeTeamAdminDistant, setTeamAdminDistant, unsetTeamAdminDistant, updateTeamDistant } from '../services/Team.services'
+import { fetchBoards, addBoardDistant, addTeamBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, removeTeamFromBoardDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
@@ -188,6 +189,14 @@ export function addBoard (dispatch, payload) {
   })
 }
 
+export function addTeamBoard (dispatch, payload) {
+  addTeamBoardDistant(payload).then((board) => {
+    // <= HANDLED FROM SOCKETS
+  }).catch(err => {
+    return err
+  })
+}
+
 export function addBoardLocal (board) {
   if (board) {
     store.dispatch({
@@ -195,6 +204,172 @@ export function addBoardLocal (board) {
       payload: board
     })
   }
+}
+
+export function setTeamslist (dispatch) {
+  return new Promise((resolve, reject) => {
+    dispatch({type: 'FETCH_TEAMSLIST_START'})
+    fetchTeams().then((data) => {
+      dispatch({
+        type: 'FETCH_TEAMSLIST_SUCCESS',
+        payload: data
+      })
+      resolve(data)
+    }).catch((err) => {
+      dispatch({
+        type: 'FETCH_TEAMSLIST_ERROR',
+        payload: err
+      })
+    })
+  })
+}
+
+export function addTeam (teamName) {
+  addTeamDistant(teamName).then((team) => {
+    if (team) {
+      store.dispatch({
+        type: 'ADD_TEAM',
+        payload: team
+      })
+    }
+  }).catch(err => {
+    return err
+  })
+}
+
+/* export function addTeamLocal (team) {
+  if (team) {
+    store.dispatch({
+      type: 'ADD_TEAM',
+      payload: team
+    })
+  }
+} */
+
+export function setTeam (dispatch, id) {
+  return new Promise((resolve, reject) => {
+    dispatch({type: 'FETCH_TEAM_START'})
+    fetchTeams().then((data) => {
+      dispatch({
+        type: 'FETCH_TEAM_SUCCESS',
+        payload: data.filter(x => x._id === id)[0]
+      })
+      resolve(data.filter(x => x._id === id)[0])
+    }).catch((err) => {
+      dispatch({
+        type: 'FETCH_TEAM_ERROR',
+        payload: err
+      })
+      reject(err)
+    })
+  })
+}
+
+export function addTeamMember (teamId, email) {
+  addTeamMemberDistant(teamId, email).then((team) => {
+    updateTeamLocal(team)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function removeTeamMember (teamId, userId) {
+  removeTeamMemberDistant(teamId, userId).then((res) => {
+    removeTeamMemberLocal(userId)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function removeTeamMemberLocal (userId) {
+  if (userId) {
+    store.dispatch({
+      type: 'REMOVE_MEMBER',
+      payload: userId
+    })
+  }
+}
+
+export function removeTeamAdmin (teamId, userId) {
+  removeTeamAdminDistant(teamId, userId).then((res) => {
+    removeTeamAdminLocal(userId)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function removeTeamAdminLocal (userId) {
+  if (userId) {
+    store.dispatch({
+      type: 'REMOVE_ADMIN',
+      payload: userId
+    })
+  }
+}
+
+export function setTeamAdmin (teamId, userId) {
+  setTeamAdminDistant(teamId, userId).then((res) => {
+    updateTeamLocal(res)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function unsetTeamAdmin (teamId, userId) {
+  unsetTeamAdminDistant(teamId, userId).then((res) => {
+    updateTeamLocal(res)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function updateTeam (teamId, payload) {
+  updateTeamDistant(teamId, payload).then((res) => {
+    updateTeamInfosLocal(payload)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function updateTeamInfosLocal (payload) {
+  if (payload) {
+    store.dispatch({
+      type: 'UPDATE_INFOS',
+      payload: payload
+    })
+  }
+}
+
+export function updateTeamLocal (team) {
+  if (team) {
+    store.dispatch({
+      type: 'UPDATE_TEAM',
+      payload: team
+    })
+  }
+}
+
+export function addTeamToBoard (boardId, teamId) {
+  addTeamToBoardDistant(boardId, teamId).then((res) => {
+    // HANDLED FROM SOCKETS
+  }).catch(err => {
+    return err
+  })
+}
+
+export function updateTeams (teams) {
+  store.dispatch({
+    type: 'UPDATE_TEAMS',
+    payload: teams
+  })
+}
+
+export function removeTeamFromBoard (boardId, teamId) {
+  removeTeamFromBoardDistant(boardId, teamId).then((res) => {
+    // HANDLED FROM SOCKETS
+  }).catch(err => {
+    return err
+  })
 }
 
 export function setBoardHistory (history) {
@@ -379,7 +554,26 @@ export function restoreList (boardId, list) {
     payload: newList
   })
 }
+export function addLabel (labels) {
+  store.dispatch({
+    type: 'ADD_LABEL',
+    payload: labels
+  })
+}
 
+export function removeLabel (labels) {
+  store.dispatch({
+    type: 'REMOVE_LABEL',
+    payload: labels
+  })
+}
+
+export function updateLabel (labels) {
+  store.dispatch({
+    type: 'UPDATE_LABEL',
+    payload: labels
+  })
+}
 export function setOAuthClients (clients) {
   store.dispatch({
     type: 'SET_OAUTHCLIENTS',

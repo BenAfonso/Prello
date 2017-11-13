@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Board = mongoose.model('Board')
-
+const userController = require('../../controllers/userController')
 module.exports.boardExists = (req, res, next) => {
   Board.findOne({'_id': req.params.boardId}).exec((err, result) => {
     if (err) {
@@ -20,12 +20,28 @@ module.exports.isCollaborator = (req, res, next) => {
     if (result === null) {
       return res.status(404).send('Board not found')
     }
-    let collaborators = result.collaborators
-    collaborators = collaborators.filter((c) => (c.toString() === req.user._id.toString()))
-    if (collaborators.length > 0) {
+    if (result.owner.toString !== req.user._id.toString) {
       next()
     } else {
-      return res.status(403).send('Forbidden: You aren\'t a collaborator of this board')
+      let collaborators = result.collaborators
+      collaborators = collaborators.filter((c) => (c.toString() === req.user._id.toString()))
+      if (collaborators.length > 0) {
+        next()
+      } else {
+        userController.getUserTeams(req.user._id).then((teams) => {
+          Board.findOne({'_id': req.params.boardId, 'teams': {$in: teams}}).exec((err, result) => {
+            if (err) {
+              return res.status(500).send(err)
+            }
+            if (result !== null) {
+              next()
+            }
+            return res.status(403).send('Forbidden: You aren\'t a collaborator of this board')
+          })
+        }).catch((err) => {
+          return res.status(500).send(err)
+        })
+      }
     }
   })
 }

@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 const Board = mongoose.model('Board')
 const User = mongoose.model('User')
+const Team = mongoose.model('Team')
+const Label = mongoose.model('Label')
 const Modification = mongoose.model('Modification')
 
 const Card = mongoose.model('Card')
@@ -16,7 +18,7 @@ const boardController = {}
  */
 boardController.getAllBoards = function () {
   return new Promise((resolve, reject) => {
-    Board.find().populate('owner lists collaborators attachments', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+    Board.find().populate('owner lists labels collaborators teams attachments', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
@@ -36,20 +38,32 @@ boardController.getAllBoards = function () {
 
 boardController.getUserBoards = function (userId) {
   return new Promise((resolve, reject) => {
-    Board.find({ $or: [{ 'owner': userId }, { 'collaborators': userId }] }).populate('owner lists collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
-      if (err) {
-        reject(err)
-      } else {
-        Card.populate(res, {
-          path: 'lists.cards'
-        }, function (err, res) {
-          if (err) {
-            reject(err)
-          } else {
-            resolve(res)
-          }
-        })
-      }
+    Team.find({ 'users': userId }).then((teams) => {
+      Board.find({$or: [{ 'owner': userId }, { 'collaborators': userId }, {'teams': {$in: teams}}]}).populate('owner lists collaborators labels teams', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+        if (err) {
+          reject(err)
+        } else {
+          Card.populate(res, {
+            path: 'lists.cards'
+          }, function (err, res) {
+            if (err) {
+              reject(err)
+            } else {
+              resolve(res)
+            }
+          })
+          User.populate(res, {
+            path: 'teams.users'
+          }, function (err, res) {
+            if (err) {
+              err.status = 500
+              reject(err)
+            } else {
+              resolve(res)
+            }
+          })
+        }
+      })
     })
   })
 }
@@ -66,6 +80,11 @@ boardController.createBoard = function (board) {
       if (err) {
         reject(err)
       } else {
+        if (item.teams !== undefined) {
+          item.teams.map((team) => {
+            Team.findOneAndUpdate({'_id': team}, {$push: {boards: item._id}}).exec()
+          })
+        }
         emit('testID', 'NEW_BOARD', item)
         resolve(item)
       }
@@ -119,7 +138,11 @@ boardController.removeListFromBoard = function (boardId, listId) {
  */
 boardController.getOneboard = function (boardId, userId) {
   return new Promise((resolve, reject) => {
+<<<<<<< HEAD
     Board.findOne({ '_id': boardId }).populate('owner lists collaborators attachments', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+=======
+    Board.findOne({ '_id': boardId }).populate('owner lists labels collaborators teams', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+>>>>>>> master
       if (err) {
         err.status = 500
         reject(err)
@@ -149,6 +172,16 @@ boardController.getOneboard = function (boardId, userId) {
                   resolve(res)
                 }
               })
+            }
+          })
+          User.populate(res, {
+            path: 'teams.users'
+          }, function (err, res) {
+            if (err) {
+              err.status = 500
+              reject(err)
+            } else {
+              resolve(res)
             }
           })
         }
@@ -195,7 +228,11 @@ boardController.moveList = function (req) {
 }
 
 boardController.refreshOneboard = function (action, boardId) {
+<<<<<<< HEAD
   Board.findOne({ '_id': boardId }).populate('owner lists collaborators attachments', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+=======
+  Board.findOne({ '_id': boardId }).populate('owner lists labels collaborators', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+>>>>>>> master
     if (err) { } else {
       Card.populate(res, {
         path: 'lists.cards'
@@ -290,6 +327,53 @@ boardController.removeCollaborator = (boardId, userId, requesterId) => {
   })
 }
 
+boardController.addTeam = (boardId, teamId) => {
+  return new Promise((resolve, reject) => {
+    Board.findOneAndUpdate({ '_id': boardId }, { $push: { teams: teamId } }, { new: true }).populate('teams').exec((err, res) => {
+      if (err) {
+        err.status = 500
+        reject(err)
+      } else {
+        Team.findOneAndUpdate({ '_id': teamId }, { $push: { boards: boardId } }, { new: true }).exec()
+        User.populate(res, {
+          path: 'teams.users'
+        }, function (err, res) {
+          if (err) {
+            err.status = 500
+            reject(err)
+          } else {
+            emit(boardId, 'UPDATE_TEAMS', res.teams)
+            resolve(res)
+          }
+        })
+      }
+    })
+  })
+}
+boardController.removeTeam = (boardId, teamId) => {
+  return new Promise((resolve, reject) => {
+    Board.findOneAndUpdate({ '_id': boardId }, { $pull: { teams: teamId } }, { new: true }).populate('teams').exec((err, res) => {
+      if (err) {
+        err.status = 500
+        reject(err)
+      } else {
+        Team.findOneAndUpdate({ '_id': teamId }, { $pull: { boards: boardId } }, { new: true }).exec()
+        User.populate(res, {
+          path: 'teams.users'
+        }, function (err, res) {
+          if (err) {
+            err.status = 500
+            reject(err)
+          } else {
+            emit(boardId, 'UPDATE_TEAMS', res.teams)
+            resolve(res)
+          }
+        })
+      }
+    })
+  })
+}
+
 boardController.addCollaborators = (board, users) => {
 
 }
@@ -305,5 +389,68 @@ boardController.getBoardHistory = (boardId, limit, skip) => {
     })
   })
 }
-
+boardController.createLabel = (req) => {
+  return new Promise((resolve, reject) => {
+    let labelToAdd = {name: req.body.name, color: req.body.color}
+    const labelObject = new Label(labelToAdd)
+    labelObject.save((err, label) => {
+      if (err) {
+        reject(err)
+      }
+      Board.findOneAndUpdate({ '_id': req.params.boardId }, {$push: {'labels': label._id}}, { new: true }).populate('labels').exec(function (err, res) {
+        if (err) {
+          reject(err)
+        } else {
+          emit(req.params.boardId, 'LABEL_CREATED', res.labels)
+          resolve(res.labels)
+        }
+      })
+    })
+  })
+}
+boardController.updateLabel = (req) => {
+  return new Promise((resolve, reject) => {
+    Label.findOneAndUpdate({'_id': req.params.labelId}, req.body).exec(function (err, result) {
+      if (err) {
+        reject(err)
+      } else {
+        Board.findOne({'_id': req.params.boardId}).populate('labels').exec(function (err, res) {
+          if (err) {
+            reject(err)
+          } else {
+            emit(req.params.boardId, 'LABEL_UPDATED', res.labels)
+            resolve(res.labels)
+          }
+        })
+      }
+    })
+  })
+}
+boardController.removeLabel = (boardId, labelId) => {
+  return new Promise((resolve, reject) => {
+    Card.find({'labels': labelId}).exec(function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        res.map((card) => {
+          Card.findOneAndUpdate({'_id': card._id}, {$pull: {'labels': labelId}}).exec()
+        })
+        Board.findOneAndUpdate({'_id': boardId}, {$pull: {'labels': labelId}}, { new: true }).populate('labels').exec(function (err, res) {
+          if (err) {
+            reject(err)
+          } else {
+            Label.findOneAndRemove({'_id': labelId}).exec(function (err, result) {
+              if (err) {
+                reject(err)
+              } else {
+                emit(boardId, 'LABEL_REMOVED', res.labels)
+                resolve(res.labels)
+              }
+            })
+          }
+        })
+      }
+    })
+  })
+}
 module.exports = boardController

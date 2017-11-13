@@ -1,13 +1,13 @@
 import axios from 'axios'
 import Config from '../config'
 
-export function createOAuthClient (name, redirectUri) {
+export function createOAuthClient (name, redirectUri, scope) {
   return new Promise((resolve, reject) => {
     axios.post(`${Config.API_URL}/oauth/clients`, {
       name: name,
       redirectUris: [redirectUri],
       grant_type: 'authorization_code',
-      scope: ''
+      scope: scope
     }).then(res => {
       resolve(res.data)
     })

@@ -95,7 +95,7 @@ function revokeToken (token) {
 
 function generateAccessToken (client, user, scope) {
   if (user._id) {
-    let payload = { iss: 'Prello-OAuthServer', userId: user._id }
+    let payload = { iss: 'Prello-OAuthServer', userId: user._id, scope: scope }
     let token = jwt.sign(payload, secretKey, { expiresIn: '7d' })
     return token
   }
@@ -213,14 +213,29 @@ function getRefreshToken (refreshToken) {
     })
 }
 
-/* function validateScope (token, client, scope) {
-  console.log('validateScope', token, client, scope)
-  return (token.scope === client.scope) ? scope : false
-} */
+const VALID_SCOPES = [
+  'boards:read',
+  'boards:write',
+  'users.profile:read',
+  'users.profile:write',
+  'teams:read',
+  'teams:write'
+]
+
+function validateScope (user, client, scope) {
+  return scope
+    .split(' ')
+    .filter(s => VALID_SCOPES.indexOf(s) >= 0)
+    .join(' ')
+}
 
 function verifyScope (token, scope) {
-  console.log('verifyScope', token, scope)
-  return token.scope === scope
+  if (!token.scope) {
+    return false
+  }
+  let requestedScopes = scope.split(' ')
+  let authorizedScopes = token.scope.split(' ')
+  return requestedScopes.every(s => authorizedScopes.indexOf(s) >= 0)
 }
 
 function validateGoogleCode (code, origin) {
@@ -243,7 +258,7 @@ function validateGoogleCode (code, origin) {
           return resolve({accessToken, profile})
         })
       } else {
-        return reject(error)
+        return reject(response.body)
       }
     })
   })
@@ -261,7 +276,7 @@ module.exports = {
   revokeToken: revokeToken,
   saveToken: saveToken, // saveOAuthAccessToken, renamed to
   saveAuthorizationCode: saveAuthorizationCode, // renamed saveOAuthAuthorizationCode,
-  // validateScope: validateScope,
+  validateScope: validateScope,
   verifyScope: verifyScope,
   validateGoogleCode: validateGoogleCode
 }
