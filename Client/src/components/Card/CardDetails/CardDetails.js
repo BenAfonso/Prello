@@ -96,7 +96,7 @@ export default class CardDetails extends React.Component {
           .uploader {
             position: absolute;
             left: calc(50% - 100px);
-            top: calc(50% - 100px);
+            top: calc(50vh - 150px);
           }
         `}</style>
       </div>
