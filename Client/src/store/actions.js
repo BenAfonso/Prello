@@ -512,6 +512,11 @@ export function removeResponsible (boardId, listId, cardId, email) {
   removeResponsibleDistant(boardId, listId, cardId)
 }
 
+export function updateCardText (boardId, listId, card, text) {
+  let newCard = { ...card, text: text }
+  updateCard(boardId, listId, card._id, newCard)
+}
+
 export function updateCardDueDate (boardId, listId, card, dueDate) {
   let newCard = { ...card, dueDate: dueDate }
   updateCard(boardId, listId, card._id, newCard)
