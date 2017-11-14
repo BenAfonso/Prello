@@ -1,7 +1,7 @@
 const {requiresLogin} = require('../../config/middlewares/authorization')
 const {isCollaborator} = require('../../config/middlewares/boardAuthorizations')
 const multer = require('multer')
-const multerUpload = multer().any()
+const multerUpload = multer({storage: multer.memoryStorage()}).any()
 module.exports = (router, controller) => {
   /**
     * @swagger

@@ -10,6 +10,7 @@ import { subscribeToBoard } from '../../services/api'
 import CustomDragLayer from '../CustomDragLayer'
 import PropTypes from 'prop-types'
 import MultiBackend from 'react-dnd-multi-backend'
+import {Redirect} from 'react-router-dom'
 
 @connect(store => {
   return {
@@ -30,7 +31,8 @@ export default class Board extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      newListFormDisplayed: false
+      newListFormDisplayed: false,
+      redirectTo: undefined
     }
 
     this.displayNewListForm = this.displayNewListForm.bind(this)
@@ -46,6 +48,7 @@ export default class Board extends React.Component {
     setBoard(this.props.dispatch, this.props._id).then(board => {
       subscribeToBoard(board)
     }).catch(err => {
+      this.setState({ redirectTo: '/boards' })
       console.error(err)
     })
   }
@@ -131,6 +134,10 @@ export default class Board extends React.Component {
   }
 
   render () {
+    if (this.state.redirectTo) {
+      return (<Redirect to={this.state.redirectTo} />)
+    }
+
     const boardStyle = {
       backgroundColor: this.props.primaryColor
     }

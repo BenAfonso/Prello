@@ -18,6 +18,7 @@ import { addLabel, deleteLabel, updateLabel, addCardLabel, deleteCardLabel } fro
 import { archiveCard } from '../../../store/actions'
 import Uploader from '../../Uploader/Uploader'
 import LabelDropdown from '../../UI/LabelDropdown/LabelDropdown'
+import Config from '../../../config'
 
 @connect(store => {
   return {
@@ -78,7 +79,7 @@ export default class CardDetails extends React.Component {
       <div className='overlay' onClick={this.dismissFileUploader.bind(this)}>
         <div className='uploader'>
           <Uploader
-            api={`http://localhost:3333/boards/${this.props.board._id}/lists/${this.props.lists[this.props.listIndex]._id}/cards/${this.props.id}/attachments`}
+            api={`${Config.API_URL}/boards/${this.props.board._id}/lists/${this.props.lists[this.props.listIndex]._id}/cards/${this.props.id}/attachments`}
             uploadedImage={this.onUploadComplete.bind(this)} />
         </div>
         <style jsx>{`
@@ -95,7 +96,7 @@ export default class CardDetails extends React.Component {
           .uploader {
             position: absolute;
             left: calc(50% - 100px);
-            top: calc(50% - 100px);
+            top: calc(50vh - 150px);
           }
         `}</style>
       </div>
@@ -143,7 +144,7 @@ export default class CardDetails extends React.Component {
         <div className='content'>
           <CardDetailsInformations {...this.props} cardLabels={cardLabels} onDeleteCardLabel={this.deleteCardLabel.bind(this)} onAddCardLabel={this.addCardLabel.bind(this)} onUpdateBoardLabel={this.updateBoardLabel.bind(this)} onDeleteBoardLabel={this.deleteBoardLabel.bind(this)} labels={this.props.board.labels} onAddBoardLabel={this.addBoardLabel.bind(this)} />
           <CardDetailsChecklists cardId={this.props.id} listIndex={this.props.listIndex} checklists={this.props.checklists}/>
-          <CardDetailsComments {...this.props}/>
+          <CardDetailsComments {...this.props} />
           <CardDetailsActivity labels={this.props.labels}/>
         </div>
 

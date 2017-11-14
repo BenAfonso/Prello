@@ -15,21 +15,27 @@ export function addAttachmentCard (boardId, listId, cardId) {
 }
 
 export function getAttachment (boardId, attachment) {
-  axios.get(`${Config.API_URL}/boards/${boardId}/attachments/${attachment._id}.${attachment.ext}`).then(res => {
-    let image = new Image()
-    const name = `${attachment.name}`
-    image.src = res.data
-    let newWindow = window.open()
-    let canvas = newWindow.document.createElement('canvas')
-    let context = canvas.getContext('2d')
-    context.drawImage(image, 0, 0)
-    console.log(canvas)
-    canvas.toBlob(blob => {
-      FileSaver.saveAs(blob, name)
-    }, 'image/png')
+  if (!(boardId && attachment)) { return }
+  let url = `${Config.API_URL}/boards/${boardId}/attachments/${attachment._id}.${attachment.ext}`
+  return new Promise((resolve, reject) => {
+    axios.get(url, { responseType: 'blob' }).then(res => {
+      resolve(URL.createObjectURL(res.data))
+    }).catch(err => (
+      console.error(err)
+    ))
   })
 }
 
+export function downloadAttachment (boardId, attachment) {
+  if (!(boardId && attachment)) { return }
+  let url = `${Config.API_URL}/boards/${boardId}/attachments/${attachment._id}.${attachment.ext}`
+  axios.get(url, { responseType: 'blob' }).then(res => {
+    FileSaver.saveAs(res.data, `${attachment._id}.${attachment.ext}`)
+  }).catch(err => (
+    console.error(err)
+  ))
+}
+
 export function deleteAttachment (boardId, attachmentId) {
-  axios.delete(`${Config.API_URL}/boards/${boardId}/attachments/${attachmentId}`)
+  return axios.delete(`${Config.API_URL}/boards/${boardId}/attachments/${attachmentId}`)
 }
