@@ -61,6 +61,7 @@ require('./Attachment')(router, controllers.attachmentController)
 require('./Checklist')(router, controllers.checklistController)
 require('./Team')(router, controllers.teamController)
 require('./Label')(router, controllers)
+require('./Analytics')(router, controllers.analyticsController)
 
 router.get('/', (req, res) => {
   res.redirect('/api-docs')
