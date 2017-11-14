@@ -1,5 +1,6 @@
 import React from 'react'
 import Dropzone from 'react-dropzone'
+import styles from './TrelloImport.styles'
 import { importTrelloBoardDistant } from '../../services/Board.services'
 
 export default class Import extends React.Component {
@@ -47,7 +48,7 @@ export default class Import extends React.Component {
       delete card['limits']
       delete card['idMembersVoted']
       delete card['idShort']
-      delete card['idAttachmentCover']
+      // delete card['idAttachmentCover']
       delete card['manualCoverAttachment']
       delete card['pos']
       delete card['shortLink']
@@ -74,10 +75,14 @@ export default class Import extends React.Component {
 
   render () {
     return (
-      <div>
-        <Dropzone onDrop={this.importTrelloBoard} accept='application/json'>
-          <p>Click here to import Trello JSON file.</p>
-        </Dropzone>
+      <div className='container'>
+        <h3>Import Trello board</h3>
+        <div>
+          <Dropzone style={{ borderColor: '#000', borderWidth: '1px', marginTop: '5%', marginLeft: '10%', marginRight: '10%', width: '80%', height: '20px', borderRadius: '3px', backgroundColor: 'white' }} onDrop={this.importTrelloBoard} accept='application/json'>
+            <p>Drag'n'Drop file or click here...</p>
+          </Dropzone>
+        </div>
+        <style jsx>{styles}</style>
       </div>
     )
   }
