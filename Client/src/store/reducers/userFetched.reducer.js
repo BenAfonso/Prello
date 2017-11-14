@@ -41,7 +41,6 @@ export default (state = defaultFetchedUserState, action) => {
       }
     }
     case 'UPDATE_USER_PROFILE_PAGE': {
-      console.log(action.payload)
       return {
         ...state,
         user: {

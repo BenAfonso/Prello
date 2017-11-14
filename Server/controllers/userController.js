@@ -69,6 +69,7 @@ userController.getUser = (id) => {
 
 userController.login = (userToConnect) => {
   return new Promise((resolve, reject) => {
+    console.log(userToConnect.passwordHash)
     User.load({
       where: { email: userToConnect.email },
       select: 'name username email passwordHash salt provider'
@@ -131,7 +132,11 @@ userController.getUserTeams = function (userId) {
 
 userController.updateUser = (userId, body) => {
   return new Promise((resolve, reject) => {
+    let user = new User(body)
     delete body.email
+    if (body.password) {
+      body.passwordHash = user.encryptPassword(body.password)
+    }
     User.findOneAndUpdate({'_id': userId}, body, { new: true }).exec((err, res) => {
       if (err) {
         reject(err)

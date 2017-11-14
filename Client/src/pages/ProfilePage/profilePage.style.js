@@ -90,7 +90,8 @@ label {
     margin-top: 10px;
 }
 .input:hover,
-.textarea:hover {
+.textarea:hover,
+.passwordInput:hover{
     border: 1px solid #878d96;
 }
 .input:focus,
@@ -152,8 +153,26 @@ label {
 .linkText {
     color: white;
     text-decoration: underline;
+    margin-left: 20px;
 }
 .linkText:hover {
     cursor: pointer;
+}
+.passwordInput {
+    margin-left: 30px;
+    display: block;
+    border-radius: 3px;
+    border: 1px solid #bec5d1;
+    padding: 4px 10px;
+    background-color: white;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    font-size: 14px;
+}
+.passwordLabel {
+    margin-left: 20px;
+}
+.newPasswordButtons {
+    margin-top: 10px;
+    margin-left: 20px;
 }
 `

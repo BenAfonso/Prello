@@ -644,7 +644,6 @@ export function setFetchedUserTeams (id) {
 export function setFetchedUserBoards (id) {
   return new Promise((resolve, reject) => {
     fetchUserBoards(id).then(boards => {
-      console.log(boards)
       store.dispatch({
         type: 'SET_FETCHED_USER_BOARDS',
         payload: boards

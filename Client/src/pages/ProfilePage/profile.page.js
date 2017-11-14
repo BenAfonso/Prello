@@ -5,7 +5,7 @@ import Button from '../../components/UI/Button/Button'
 import Icon from '../../components/UI/Icon/Icon'
 import styles from './profilePage.style'
 import { updateProfile } from '../../services/User.services'
-import { updateProfileAction, updateProfilePageAction, setTeamslist, setBoardslist, setFetchedUser, setFetchedUserTeams, setFetchedUserBoards } from '../../store/actions'
+import { updateProfileAction, updateProfilePageAction, setFetchedUser, setFetchedUserTeams, setFetchedUserBoards } from '../../store/actions'
 import { updateProfileLocalStorage } from '../../services/Authentication.services'
 import { displayNotification } from '../../services/Notification.service'
 import AvatarThumbnail from '../../components/UI/AvatarThumbnail/AvatarThumbnail'
@@ -62,14 +62,6 @@ export default class ProfilePage extends React.Component {
     }).catch(err => {
       console.error(err)
     })
-    setBoardslist(this.props.dispatch).then(() => {
-    }).catch(err => {
-      console.error(err)
-    })
-    setTeamslist(this.props.dispatch).then(() => {
-    }).catch(err => {
-      console.error(err)
-    })
   }
 
   displayModifyProfileForm () {
@@ -106,7 +98,6 @@ export default class ProfilePage extends React.Component {
       }
       updateProfile(datas)
         .then(updatedUser => {
-          console.log(updatedUser)
           updateProfileLocalStorage(updatedUser)
           updateProfileAction(updatedUser)
           updateProfilePageAction(updatedUser)
@@ -122,8 +113,8 @@ export default class ProfilePage extends React.Component {
 
   updatePassword () {
     if (this.newPasswordInput.value && this.confirmPasswordInput.value && this.newPasswordInput.value === this.confirmPasswordInput.value) {
-      const passwordHash = this.newPasswordInput.value
-      updateProfile({ passwordHash: passwordHash })
+      const password = this.newPasswordInput.value
+      updateProfile({ password: password })
         .then(updatedUser => {
         })
       this.hideNewPasswordForm()
@@ -150,7 +141,6 @@ export default class ProfilePage extends React.Component {
         isInTeam = true
       }
     })
-    console.log(isInTeam)
     return isInTeam
   }
 
@@ -230,27 +220,35 @@ export default class ProfilePage extends React.Component {
 
   renderNewPasswordForm () {
     return (
-      <form>
-        <label>New password :</label>
-        <input className='input' type='password' required ref={e => { this.newPasswordInput = e }}/>
-        <label>Confirm new password :</label>
-        <input className='input' type='password' required ref={e => { this.confirmPasswordInput = e }}/>
-        <Button bgColor='#5AAC44'
-          onClick={this.updatePassword}
-          hoverBgColor='#07a801'
-          fontSize='12px'
-          bold
-          shadow
-          color='white'><Icon name='check' fontSize='10px' style={{marginRight: '5px'}} color='white'/>Confirm
-        </Button>
-        <Button onClick={this.hideNewPasswordForm}
-          bgColor='#E2E4E6'
-          hoverBgColor='#d6d6d6'
-          color='black'
-          fontSize='12px'
-          bold
-          shadow><Icon name='ban' fontSize='10px' style={{marginRight: '5px'}}/>Cancel
-        </Button>
+      <form className='newPasswordform'>
+        <div className='formDiv'>
+          <label className='passwordLabel'>New password :</label>
+          <input className='passwordInput' type='password' required ref={e => { this.newPasswordInput = e }}/>
+        </div>
+        <div className='formDiv'>
+          <label className='passwordLabel'>Confirm new password :</label>
+          <input className='passwordInput' type='password' required ref={e => { this.confirmPasswordInput = e }}/>
+        </div>
+        <div className='newPasswordButtons'>
+          <span className='saveButton'>
+            <Button bgColor='#5AAC44'
+              onClick={this.updatePassword}
+              hoverBgColor='#07a801'
+              fontSize='12px'
+              bold
+              shadow
+              color='white'><Icon name='check' fontSize='10px' style={{marginRight: '5px'}} color='white'/>Confirm
+            </Button>
+          </span>
+          <Button onClick={this.hideNewPasswordForm}
+            bgColor='#E2E4E6'
+            hoverBgColor='#d6d6d6'
+            color='black'
+            fontSize='12px'
+            bold
+            shadow><Icon name='ban' fontSize='10px' style={{marginRight: '5px'}}/>Cancel
+          </Button>
+        </div>
         <style jsx>{styles}</style>
       </form>
     )
@@ -310,7 +308,6 @@ export default class ProfilePage extends React.Component {
   }
 
   renderUserAvatar (user) {
-    console.log(this.props.userFetched)
     return (
       <div className='avatar' onClick={this.onAvatarClick}>
         <AvatarThumbnail
