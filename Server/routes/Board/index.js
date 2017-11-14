@@ -20,4 +20,5 @@ module.exports = function (router, controller) {
   require('./removeTeams')(router, controller)
   require('./getHistory')(router, controller)
   require('./update')(router, controller)
+  require('./delete')(router, controller)
 }

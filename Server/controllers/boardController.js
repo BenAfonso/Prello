@@ -457,4 +457,17 @@ boardController.updateBoard = (boardId, body) => {
     })
   })
 }
+boardController.deleteBoard = (boardId) => {
+  return new Promise((resolve, reject) => {
+    Board.findOneAndRemove({ '_id': boardId }, (err, res) => {
+      if (err) {
+        reject(err)
+      } else {
+        console.log(res)
+        emit(boardId, 'BOARD_DELETED', res)
+        resolve(res)
+      }
+    })
+  })
+}
 module.exports = boardController
