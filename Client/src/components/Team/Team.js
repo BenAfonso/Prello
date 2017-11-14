@@ -80,7 +80,6 @@ export default class Team extends React.Component {
 
   isCurrentUserAdmin () {
     const isAdmin = this.props.team.admins.filter(admin => admin._id === this.props.currentUser._id)[0]
-    console.log(isAdmin !== undefined)
     return isAdmin !== undefined
   }
 
@@ -263,9 +262,11 @@ export default class Team extends React.Component {
                       </li>
                     ))
                   }
-                  <li>
-                    <NewBoardForm currentTeam={team} />
-                  </li>
+                  {
+                    this.isCurrentUserAdmin()
+                      ? <li><NewBoardForm currentTeam={team} /></li>
+                      : null
+                  }
                 </ul>
               </div>
             </TabPanel>

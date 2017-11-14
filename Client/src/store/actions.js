@@ -189,19 +189,31 @@ export function addBoard (dispatch, payload) {
   })
 }
 
-export function addTeamBoard (dispatch, payload) {
-  addTeamBoardDistant(payload).then((board) => {
-    // <= HANDLED FROM SOCKETS
-  }).catch(err => {
-    return err
-  })
-}
-
 export function addBoardLocal (board) {
   if (board) {
     store.dispatch({
       type: 'ADD_BOARD',
       payload: board
+    })
+  }
+}
+
+export function addTeamBoard (dispatch, teamId, payload) {
+  addTeamBoardDistant(payload).then((board) => {
+    addTeamBoardLocal(teamId, board)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function addTeamBoardLocal (teamId, board) {
+  if (board) {
+    store.dispatch({
+      type: 'ADD_TEAM_BOARD',
+      payload: {
+        board: board,
+        teamId: teamId
+      }
     })
   }
 }

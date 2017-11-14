@@ -16,6 +16,21 @@ export default (state = defaultTeamslistState, action) => {
         teams: action.payload
       }
     }
+    case 'ADD_TEAM_BOARD': {
+      let newTeams = state.teams.map((t) => {
+        if (t._id === action.payload.teamId) {
+          t.boards.push(action.payload.board)
+        }
+        return t
+      })
+      return {
+        ...state,
+        teamslist: {
+          ...state.teamslist,
+          teams: newTeams
+        }
+      }
+    }
     default:
       return {
         ...state

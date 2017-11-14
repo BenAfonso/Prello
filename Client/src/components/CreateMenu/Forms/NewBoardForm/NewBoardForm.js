@@ -42,7 +42,7 @@ export default class NewBoardForm extends React.Component {
       if (this.state.selected === []) {
         addBoard(this.props.dispatch, {title: this.title.value, color: this.color.value})
       } else {
-        addTeamBoard(this.props.dispatch, {title: this.title.value, color: this.color.value, teams: this.state.selected})
+        addTeamBoard(this.props.dispatch, this.props.currentTeam._id, {title: this.title.value, color: this.color.value, teams: this.state.selected})
       }
     }
   }
@@ -92,7 +92,7 @@ export default class NewBoardForm extends React.Component {
                 </div>
               </li>
               <li className='element'>
-                <div className='element-title'>Team</div>
+                <div className='element-title'>Teams</div>
                 {
                   teams.length >= 1
                     ? <div className='element-input'>
