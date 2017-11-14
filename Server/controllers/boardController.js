@@ -122,7 +122,12 @@ boardController.importTrelloBoard = function (board) {
               boardController.addListToBoard(boardToImport._id, newList)
               board.cards.map((card) => {
                 if (card.idList === list.id) {
-                  let newCard = new Card({text: card.name, isArchived: card.closed, dueDate: card.due, description: card.desc})
+                  let newCard
+                  if (card.due === null) {
+                    newCard = new Card({text: card.name, isArchived: card.closed, description: card.desc})
+                  } else {
+                    newCard = new Card({text: card.name, isArchived: card.closed, dueDate: card.due, description: card.desc})
+                  }
                   newCard.save((err, item) => {
                     if (err) {
                       reject(err)
@@ -143,10 +148,17 @@ boardController.importTrelloBoard = function (board) {
                               reject(err)
                             } else {
                               cardController.addChecklistToCard(newCard._id, newChecklist)
-                              checklist.checkItems.map((item) => {
-                                checklistController.addItemToChecklist(newCard._id, newChecklist._id, item.name)
-                              })
                             }
+                          })
+                          checklist.checkItems.map((item) => {
+                            let newItem = new Item({text: item.name, isChecked: false})
+                            newItem.save((err, item) => {
+                              if (err) {
+                                reject(err)
+                              } else {
+                                checklistController.addItemToChecklist(newChecklist._id, newItem)
+                              }
+                            })
                           })
                         }
                       })
