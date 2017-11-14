@@ -20,16 +20,6 @@ module.exports = function (router, controller) {
   *         description: The board id where we want to retrieve
   *         in: query
   *         required: true
-  *       - name: from
-  *         type: string
-  *         description: The board id where we want to retrieve
-  *         in: query
-  *         required: true
-  *       - name: to
-  *         type: string
-  *         description: The board id where we want to retrieve
-  *         in: query
-  *         required: true
   *     responses:
   *       200:
   *         description: One board

@@ -78,6 +78,11 @@ cardController.updateCard = (req) => {
               reject(err)
             })
           }
+          if (!req.body.isArchived && item.isArchived) {
+            modificationController.UNARCHIVED_CARD(req.params.boardId, req.user._id, req.params.cardId).catch((err) => {
+              reject(err)
+            })
+          }
           if (!req.body.validated && item.validated) {
             modificationController.MARKED_DUE_DATE_INCOMPLETE(req.params.boardId, req.user._id, req.params.cardId).catch((err) => {
               reject(err)
