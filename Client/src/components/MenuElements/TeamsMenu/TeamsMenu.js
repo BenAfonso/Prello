@@ -59,7 +59,7 @@ export default class TeamsMenu extends React.Component {
     return (
       <div className='host'>
         <div className='teammenu-title'>
-          List of teams
+          LIST OF TEAMS
         </div>
         <div className='teammenu-teams'>
           <ul className='teams'>
@@ -109,13 +109,18 @@ export default class TeamsMenu extends React.Component {
             margin: 8px 0 8px 0;
           }
 
+          .teammenu-title {
+            font-weight: bold;          
+          }
+
           .teams {
             display: flex;
             flex-wrap: wrap;
-            padding: 10px 0;
+            padding: 15px 0;
             max-height: 800px;
             overflow-y: auto;
             font-weight: bold;
+            margin-left: 10px;
           }
 
           .team {

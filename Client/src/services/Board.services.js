@@ -28,6 +28,16 @@ export function addTeamBoardDistant (payload) {
   })
 }
 
+export function deleteBoardDistant (boardId) {
+  return new Promise((resolve, reject) => {
+    axios.delete(`${Config.API_URL}/boards/${boardId}`).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
 export function updateBoardNameDistant (boardId, boardName) {
   return new Promise((resolve, reject) => {
     axios.put(`${Config.API_URL}/boards/${boardId}`, {

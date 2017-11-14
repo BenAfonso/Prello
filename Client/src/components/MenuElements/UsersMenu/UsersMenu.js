@@ -72,7 +72,7 @@ export default class UsersMenu extends React.Component {
     return (
       <div className='host'>
         <div className='usermenu-title'>
-          List of collaborators
+          LIST OF COLLABORATORS
         </div>
         <div className='usermenu-collaborators'>
           <ul className='collaborators'>
@@ -125,6 +125,10 @@ export default class UsersMenu extends React.Component {
             background-color: #aaa;
             width: 90%;
             margin: 8px 0 8px 5%;
+          }
+
+          .usermenu-title {
+            font-weight: bold;          
           }
 
           .collaborators {

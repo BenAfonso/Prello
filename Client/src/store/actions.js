@@ -1,5 +1,5 @@
 import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDistant, removeTeamAdminDistant, setTeamAdminDistant, unsetTeamAdminDistant, updateTeamDistant } from '../services/Team.services'
-import { fetchBoards, addBoardDistant, addTeamBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, removeTeamFromBoardDistant, updateBoardNameDistant } from '../services/Board.services'
+import { fetchBoards, addBoardDistant, addTeamBoardDistant, deleteBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, removeTeamFromBoardDistant, updateBoardNameDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
@@ -216,6 +216,14 @@ export function addTeamBoardLocal (teamId, board) {
       }
     })
   }
+}
+
+export function deleteBoard (boardId) {
+  deleteBoardDistant(boardId).then((board) => {
+    // <= HANDLED FROM SOCKETS
+  }).catch(err => {
+    return err
+  })
 }
 
 export function updateBoardName (boardId, boardName) {
