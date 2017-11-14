@@ -6,9 +6,9 @@ import CardDetailsResponsible from './CardDetailsResponsible/CardDetailsResponsi
 import CardDetailsDueDate from './CardDetailsDueDate/CardDetailsDueDate'
 import {connect} from 'react-redux'
 import Button from '../../../../UI/Button/Button'
+import File from '../../../../UI/File/File'
 import {updateCardDescription} from '../../../../../services/Card.services'
 import Markdown from 'react-markdown'
-// import { getAttachment } from '../../../../../services/Attachment.services'
 
 @connect(store => {
   return {
@@ -62,14 +62,26 @@ export default class CardDetailsInformations extends React.Component {
           <div className='description'>
             <Markdown source={fullCard.description} />
           </div>
-
-          { /* <ul className='attachments'>
-            {
-              fullCard.attachments.map(a => (
-                <li onClick={() => { getAttachment(this.props.board._id, a) }}>{a.name}</li>
-              ))
-            }
-          </ul> */ }
+          {
+            this.state.editDescriptionFormDisplayed
+              ? <div className='editDescriptionForm'>
+                <div className='content'>
+                  <div className='card' contentEditable ref={c => { this.text = c }} />
+                  <div className='saveButton' onClick={() => { this.updateDescription(this.text.innerHTML) }}>
+                      Save
+                  </div>
+                </div>
+              </div>
+              : null
+          }
+          <Button
+            block
+            size='x-small'
+            bgColor='rgba(0,0,0,0)'
+            color='#999'
+            hoverBgColor='rgba(0,0,0,0.2)'
+            onClick={this.toggleDescriptionForm}
+          >Edit the description...</Button>
 
           <div className='sections'>
             <div className='members'>
@@ -101,26 +113,14 @@ export default class CardDetailsInformations extends React.Component {
                 : null
             }
           </div>
-          {
-            this.state.editDescriptionFormDisplayed
-              ? <div className='editDescriptionForm'>
-                <div className='content'>
-                  <div className='card' contentEditable ref={c => { this.text = c }} />
-                  <div className='saveButton' onClick={() => { this.updateDescription(this.text.innerHTML) }}>
-                      Save
-                  </div>
-                </div>
-              </div>
-              : null
-          }
-          <Button
-            block
-            size='x-small'
-            bgColor='rgba(0,0,0,0)'
-            color='#999'
-            hoverBgColor='rgba(0,0,0,0.2)'
-            onClick={this.toggleDescriptionForm}
-          >Edit the description...</Button>
+
+          { <ul className='attachments'>
+            {
+              fullCard.attachments.map((a, i) => (
+                <li key={a._id || i}><File renderPreview attachment={a} boardId={this.props.board._id} /></li>
+              ))
+            }
+          </ul> }
         </CardDetailsSection>
         <style jsx>
           {`
@@ -166,6 +166,16 @@ export default class CardDetailsInformations extends React.Component {
 
     .content {
       font-size: 13px;
+    }
+
+    .attachments {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .attachments li {
+      margin-bottom: 20px;
     }
     
     .content .card {

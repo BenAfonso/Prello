@@ -43,7 +43,6 @@ export function updateCardDescription (boardId, listId, cardId, card) {
 
 export function getCompleteCard (boardId, listId, cardId) {
   axios.get(`${Config.API_URL}/boards/${boardId}/lists/${listId}/cards/${cardId}`).then(res => {
-    console.log(res.data)
     updateCardAction(listId, res.data)
   })
 }

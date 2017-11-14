@@ -33,10 +33,10 @@ module.exports = (router, controller) => {
     *         description: Internal error
     */
   router.get('/boards/:boardId/attachments/:attachmentId', [requiresLogin, isCollaborator], (req, res) => {
-    controller.getFile(req).then(result => {
-      res.setHeader('Content-type', result.mimetype)
-      return res.status(200).send(result.buffer)
+    controller.getFile(req, res).then(pipe => {
+      // Handled in service
     }).catch(err => {
+      console.error(err)
       return res.status(500).send(err)
     })
   })

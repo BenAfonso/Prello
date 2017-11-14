@@ -649,3 +649,33 @@ export function updateOAuthClient (client) {
 >>>>>>> dashboard_backend
   })
 }
+
+export function removeAttachment (attachmentId) {
+  store.dispatch({
+    type: 'REMOVE_ATTACHMENT',
+    payload: attachmentId
+  })
+}
+
+export function removeAttachmentCard (listId, card, attachment) {
+  card.attachments = card.attachments.filter(a => a._id !== attachment._id)
+  store.dispatch({
+    type: 'UPDATE_CARD',
+    payload: {listId, card}
+  })
+}
+
+export function addAttachment (attachment) {
+  store.dispatch({
+    type: 'ADD_ATTACHMENT',
+    payload: attachment
+  })
+}
+
+export function addAttachmentCard (listId, card, attachment) {
+  card.attachments.push(attachment)
+  store.dispatch({
+    type: 'UPDATE_CARD',
+    payload: {listId, card}
+  })
+}
