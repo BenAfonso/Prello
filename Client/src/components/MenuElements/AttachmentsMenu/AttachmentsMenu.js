@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import File from '../../UI/File/File'
 import AvatarThumbnail from '../../UI/AvatarThumbnail/AvatarThumbnail'
 import Icon from '../../UI/Icon/Icon'
-import { getAttachment, deleteAttachment } from '../../../services/Attachment.services'
+import { deleteAttachment } from '../../../services/Attachment.services'
+import { removeAttachment } from '../../../store/actions'
 
 @connect(store => {
   return {
@@ -20,18 +21,22 @@ export default class AttachmentsMenu extends React.Component {
     return initials
   }
 
+  deleteAttachment (a) {
+    deleteAttachment(this.props.board._id, a._id).then(res => removeAttachment(a._id))
+  }
+
   render () {
     return (
       <div>
         <ul className='attachments'>
           {
             this.props.board.attachments.map(a => (
-              <li>
-                <File {...a} onClick={() => { getAttachment(this.props.board._id, a) }}/>
+              <li key={a._id}>
+                <File attachment={a} boardId={this.props.board._id} />
                 <div className='user'>
                   <AvatarThumbnail thumbnail={a.owner._id ? a.owner.picture : ''} initials={this.getInitials(a.owner)} size='19px' fontSize='13px' />
                 </div>
-                <div className='removeIcon' onClick={() => { deleteAttachment(this.props.board._id, a._id) }}>
+                <div className='removeIcon' onClick={this.deleteAttachment.bind(this, a)}>
                   <Icon name='times' color='red' />
                 </div>
               </li>

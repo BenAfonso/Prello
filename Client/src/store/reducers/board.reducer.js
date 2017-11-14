@@ -97,6 +97,26 @@ export default (state = defaultBoardState, action) => {
         }
       }
     }
+    case 'REMOVE_ATTACHMENT': {
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          attachments: state.board.attachments.filter(a => a._id !== action.payload)
+        }
+      }
+    }
+    case 'ADD_ATTACHMENT': {
+      let newAttachments = state.board.attachments.slice()
+      newAttachments.push(action.payload)
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          attachments: newAttachments
+        }
+      }
+    }
     case 'MOVE_LIST': {
       return {
         ...state,
@@ -143,7 +163,6 @@ export default (state = defaultBoardState, action) => {
       let listIndex = newLists.indexOf(updatedList[0])
       let cardIndex = updatedList[0].cards.indexOf(updatedCard[0])
       newLists[listIndex].cards[cardIndex] = action.payload.card
-      console.log(newLists[listIndex].cards[cardIndex])
       return {
         ...state,
         board: {

@@ -15,36 +15,27 @@ export function addAttachmentCard (boardId, listId, cardId) {
 }
 
 export function getAttachment (boardId, attachment) {
-  let opts = {}
-  opts.responseType = 'blob' // <--- force blob at the beginning, anyway
+  if (!(boardId && attachment)) { return }
   let url = `${Config.API_URL}/boards/${boardId}/attachments/${attachment._id}.${attachment.ext}`
-  axios.get(url, opts).then(res => {
-    console.log(res)
-    let resBlob = res.data // <--- store the blob if it is
-    FileSaver.saveAs(resBlob, `${attachment._id}.${attachment.ext}`)
-    try {
-      let resData = null
-      let resText = new Promise((resolve, reject) => {
-        let reader = new FileReader()
-        reader.addEventListener('abort', reject)
-        reader.addEventListener('error', reject)
-        reader.addEventListener('loadend', () => {
-          resolve(reader.result)
-        })
-        reader.readAsText(resBlob)
-      })
-      resData = JSON.parse(resText) // <--- try to parse as json evantually
-      console.log(resData)
-    } catch (err) {
-      // ignore
-    }
+  return new Promise((resolve, reject) => {
+    axios.get(url, { responseType: 'blob' }).then(res => {
+      resolve(URL.createObjectURL(res.data))
+    }).catch(err => (
+      console.error(err)
+    ))
   })
+}
 
-  /* axios.get(`${Config.API_URL}/boards/${boardId}/attachments/${attachment._id}.${attachment.ext}`).then(res => {
-    console.log(res)
-  )} */
+export function downloadAttachment (boardId, attachment) {
+  if (!(boardId && attachment)) { return }
+  let url = `${Config.API_URL}/boards/${boardId}/attachments/${attachment._id}.${attachment.ext}`
+  axios.get(url, { responseType: 'blob' }).then(res => {
+    FileSaver.saveAs(res.data, `${attachment._id}.${attachment.ext}`)
+  }).catch(err => (
+    console.error(err)
+  ))
 }
 
 export function deleteAttachment (boardId, attachmentId) {
-  axios.delete(`${Config.API_URL}/boards/${boardId}/attachments/${attachmentId}`)
+  return axios.delete(`${Config.API_URL}/boards/${boardId}/attachments/${attachmentId}`)
 }

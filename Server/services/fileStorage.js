@@ -27,7 +27,7 @@ FileUploader.getFile = (res, boardId, attachmentName) => {
     minioClient.getObject(bucketName, `${boardId}/${attachmentName}`, (err, stream) => {
       if (err) {
         console.error(err)
-        reject(err)
+        return reject(err)
       }
       stream.pipe(res)
     })
