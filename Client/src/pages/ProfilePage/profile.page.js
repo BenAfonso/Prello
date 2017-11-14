@@ -139,20 +139,6 @@ export default class ProfilePage extends React.Component {
     let isOwner = board.owner._id === this.props.currentUser._id
     let isCollaborator = board.collaborators.filter(collab => collab._id === this.props.currentUser._id)[0] !== undefined
     let isInTeam = board.teams.filter(team => (this.currentUserIsInTeam(team)))[0] !== undefined
-    /* let isRelatedToBoard = false
-    if (board.owner._id === this.props.currentUser._id) {
-      isRelatedToBoard = true
-    }
-    board.collaborators.forEach(collab => {
-      if (collab._id === this.props.currentUser._id) {
-        isRelatedToBoard = true
-      }
-    })
-    board.teams.forEach(team => {
-      if (this.currentUserIsInTeam(team)) {
-        isRelatedToBoard = true
-      }
-    }) */
     return isOwner || isCollaborator || isInTeam
   }
 
