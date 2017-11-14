@@ -2,6 +2,7 @@ import React from 'react'
 import Dropzone from 'react-dropzone'
 import styles from './TrelloImport.styles'
 import { importTrelloBoardDistant } from '../../services/Board.services'
+import { displayNotification } from '../../services/Notification.service'
 
 export default class Import extends React.Component {
   constructor () {
@@ -27,7 +28,11 @@ export default class Import extends React.Component {
   importTrelloBoard (files) {
     const trelloBoard = files[0]
     const blobURL = trelloBoard.preview
-    this.fetchBoardJSON(blobURL)
+    if (trelloBoard.size > 500000) {
+      displayNotification({ type: 'error', title: 'Upload error', content: 'Board you\'re trying to upload is too big. Max size limit is 500 Kb' })
+    } else {
+      this.fetchBoardJSON(blobURL)
+    }
   }
 
   cleanTrelloBoard (board) {
@@ -77,6 +82,7 @@ export default class Import extends React.Component {
     return (
       <div className='container'>
         <h3>Import Trello board</h3>
+        <p>(Max size limit: 500Kb)</p>
         <div>
           <Dropzone style={{ borderColor: '#000', borderWidth: '1px', marginTop: '5%', marginLeft: '10%', marginRight: '10%', width: '80%', height: '20px', borderRadius: '3px', backgroundColor: 'white' }} onDrop={this.importTrelloBoard} accept='application/json'>
             <p>Drag'n'Drop file or click here...</p>
