@@ -7,7 +7,8 @@ const addDays = (theDate, days) => {
   return new Date(theDate.getTime() + days * 24 * 60 * 60 * 1000)
 }
 const addMonths = (theDate, months) => {
-  return theDate.setMonth(theDate.getMonth() + months)
+  theDate = new Date(theDate)
+  return new Date(theDate.setMonth(theDate.getMonth() + months))
 }
 const addYears = (theDate, years) => {
   return theDate.setFullYear(theDate.getFullYear() + years)
@@ -44,8 +45,10 @@ analyticsController.getBoardAnalytics = (boardId, per, beginDate, endDate) => {
         if (per === undefined) {
           per = 'day'
         }
-        beginDate = addDays(new Date(beginDate.getFullYear(), beginDate.getMonth(), beginDate.getDate(), 0, 59, 59, 999), 1)
+        beginDate = addDays(new Date(beginDate.getFullYear(), beginDate.getMonth(), beginDate.getDate()), 1)
+
         endDate = addDays(new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()), 1)
+
         let funcs = constructFuncArray(board, analyticsController.getBoardAnalyticsByDate, [], per, beginDate, endDate)
         executeFuncRecursive(funcs, [], 0).then(res => {
           resolve(res)
@@ -73,34 +76,50 @@ const executeFuncRecursive = (funcs, result, index) => {
 const constructFuncArray = (board, func, funcs, per, beginDate, endDate) => {
   switch (per) {
     case 'day':
+      beginDate = new Date(beginDate)
       if (beginDate.getDate() === endDate.getDate() && beginDate.getMonth() === endDate.getMonth() && beginDate.getFullYear() === endDate.getFullYear()) {
-        funcs.push(func.bind(this, board, beginDate, beginDate, `${beginDate.getDate() - 1}/${endDate.getMonth() + 1}/${beginDate.getFullYear()}`))
+        funcs.push(func.bind(this, board, beginDate, beginDate))
         return funcs
       }
-      funcs.push(func.bind(this, board, beginDate, beginDate, `${beginDate.getDate() - 1}/${beginDate.getMonth() + 1}/${beginDate.getFullYear()}`))
+      funcs.push(func.bind(this, board, beginDate, beginDate))
       return constructFuncArray(board, func, funcs, per, addDays(beginDate, 1), endDate)
     case 'month':
-      if (beginDate.getMonth() === endDate.getMonth() && beginDate.getFullYear() === endDate.getFullYear()) {
-        funcs.push(func.bind(this, board, beginDate, beginDate, `${beginDate.getMonth() + 1}/${beginDate.getFullYear()}`))
+      beginDate = new Date(beginDate)
+      beginDate = new Date(beginDate.getFullYear(), beginDate.getMonth(), 1, 23, 59, 69, 999)
+      beginDate = addMonths(beginDate, 1)
+      beginDate = addDays(beginDate, -1)
+      let endMonth = endDate.getMonth()
+      if (endMonth === 11) {
+        endMonth = 0
+      } else {
+        endMonth++
+      }
+      let endYear = endDate.getFullYear()
+      if (endMonth === 0) {
+        endYear++
+      }
+      if (beginDate.getMonth() === endMonth && beginDate.getFullYear() === endYear) {
+        funcs.push(func.bind(this, board, beginDate, beginDate))
         return funcs
       }
-      funcs.push(func.bind(this, board, beginDate, beginDate, `${beginDate.getMonth() + 1}/${beginDate.getFullYear()}`))
-      return constructFuncArray(board, func, funcs, per, addMonths(beginDate, 1), endDate)
+      funcs.push(func.bind(this, board, beginDate, beginDate))
+      return constructFuncArray(board, func, funcs, per, beginDate, endDate)
 
     case 'year':
-      if (beginDate.getFullYear() === endDate.getFullYear()) {
-        funcs.push(func.bind(this, board, beginDate, beginDate, `${beginDate.getFullYear()}`))
+      beginDate = new Date(beginDate)
+      if (beginDate.getFullYear() === (endDate.getFullYear())) {
+        funcs.push(func.bind(this, board, beginDate, beginDate))
         return funcs
       }
-      funcs.push(func.bind(this, board, beginDate, beginDate, `${beginDate.getFullYear()}`))
+      funcs.push(func.bind(this, board, beginDate, beginDate))
       return constructFuncArray(board, func, funcs, per, addYears(beginDate, 1), endDate)
   }
 }
 
-analyticsController.getBoardAnalyticsByDate = (board, beginDate, endDate, dateFormat) => {
+analyticsController.getBoardAnalyticsByDate = (board, beginDate, endDate) => {
   return new Promise((resolve, reject) => {
     let numbers = {}
-    numbers.date = dateFormat
+    numbers.date = Date.parse(beginDate)
     getNumberOfListsByDate(board, endDate).then(res => {
       numbers.numberOfLists = res
       getNumberOfCardsByDate(board, endDate).then(res => {
