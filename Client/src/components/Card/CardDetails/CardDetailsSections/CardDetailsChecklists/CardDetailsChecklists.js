@@ -20,7 +20,7 @@ export default class CardDetailsChecklists extends React.Component {
     onDelete: PropTypes.func,
     checklists: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string,
-      title: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired,
       items: PropTypes.array
     }))
   }
@@ -55,7 +55,6 @@ export default class CardDetailsChecklists extends React.Component {
   }
 
   updateItem (checklistId, itemId, content, isChecked) {
-    console.log(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.cardId, checklistId, itemId, content, isChecked)
     updateItem(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.cardId, checklistId, itemId, content, isChecked)
   }
 

@@ -143,6 +143,7 @@ export default (state = defaultBoardState, action) => {
       let listIndex = newLists.indexOf(updatedList[0])
       let cardIndex = updatedList[0].cards.indexOf(updatedCard[0])
       newLists[listIndex].cards[cardIndex] = action.payload.card
+      console.log(newLists[listIndex].cards[cardIndex])
       return {
         ...state,
         board: {
@@ -169,6 +170,46 @@ export default (state = defaultBoardState, action) => {
         board: {
           ...state.board,
           collaborators: newCollaborators
+        }
+      }
+    }
+    case 'UPDATE_TEAMS': {
+      const newTeams = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          teams: newTeams
+        }
+      }
+    }
+    case 'ADD_LABEL': {
+      const newLabels = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          labels: newLabels
+        }
+      }
+    }
+    case 'REMOVE_LABEL': {
+      let newLabels = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          labels: newLabels
+        }
+      }
+    }
+    case 'UPDATE_LABEL': {
+      let newLabels = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          labels: newLabels
         }
       }
     }

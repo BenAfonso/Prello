@@ -12,6 +12,7 @@ import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store/store'
 import { isAuthenticated } from './services/Authentication.services'
+import TeamPage from './pages/team.page'
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
@@ -39,6 +40,8 @@ class App extends Component {
             <PrivateRoute exact path='/boards/:id' component={BoardPage} />
             <PrivateRoute exact path='/boards/:id/dashboard' component={DashboardBoardPage} />
             <PrivateRoute exact path='/dashboard' component={DashboardPage} />
+            <PrivateRoute exact path='/teams/:id' component={TeamPage} />
+            <PrivateRoute exact path='/teams/:id/:tab' component={TeamPage} />
             <PrivateRoute exact path='/developers' component={ApiPage} />
             <Route exact path='/loading' component={LoadingPage} />
           </div>

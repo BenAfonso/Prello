@@ -89,6 +89,9 @@ export default class Header extends React.Component {
                   {
                     action: () => { this.redirectTo('/dashboard') },
                     placeholder: 'Dashboard'
+                  },
+                    action: () => { window.location = '/developers' },
+                    placeholder: 'Developers API'
                   }
                 ]}>
                 <div className='user button'>
