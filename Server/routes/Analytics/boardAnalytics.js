@@ -23,10 +23,12 @@ module.exports = function (router, controller) {
   *         required: true
   *       - name: from
   *         type: string
+  *         format: date
   *         description: The board id where we want to retrieve
   *         in: query
   *       - name: to
   *         type: string
+  *         format: date
   *         description: The board id where we want to retrieve
   *         in: query
   *     responses:

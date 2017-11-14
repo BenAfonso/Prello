@@ -1,7 +1,7 @@
 module.exports = function (router, controller) {
   /**
   * @swagger
-  * /analytics/boards/{boardId}:
+  * /analytics/users/{userId}/boards:
   *   get:
   *     tags:
   *       - Analytics
@@ -15,10 +15,10 @@ module.exports = function (router, controller) {
   *         description: The board id where we want to retrieve
   *         in: path
   *         required: true
-  *       - name: per
+  *       - name: userId
   *         type: string
   *         description: The board id where we want to retrieve
-  *         in: query
+  *         in: path
   *         required: true
   *     responses:
   *       200:
@@ -26,8 +26,8 @@ module.exports = function (router, controller) {
   *       500:
   *         description: Internal error
   */
-  router.get('/analytics/boards/:boardId', [], function (req, res) {
-    controller.getBoardAnalytics(req.params.boardId, req.query.per, req.query.from, req.query.to).then((data) => {
+  router.get('/analytics/users/:userId/boards', [], function (req, res) {
+    controller.getBoardAnalytics(req.params.userId).then((data) => {
       res.status(200).json(data)
     })
       .catch((err) => {
