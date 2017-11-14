@@ -107,9 +107,6 @@ checklistController.addItemToChecklistt = function (cardId, checklistId, itemNam
       if (err) {
         reject(err)
       } else {
-        console.log(checklistId)
-        console.log(res.checklists)
-        console.log(res.checklists.id(checklistId))
         res.checklists.id(checklistId).items.push({text: itemName})
         res.save()
       }

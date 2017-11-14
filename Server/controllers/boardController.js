@@ -128,6 +128,9 @@ boardController.importTrelloBoard = function (board) {
                   } else {
                     newCard = new Card({text: card.name, isArchived: card.closed, dueDate: card.due, description: card.desc})
                   }
+                  card.attachments.map((att) => {
+                    newCard.attachments.push({name: att.name, url: att.url, createdAt: att.date})
+                  })
                   newCard.save((err, item) => {
                     if (err) {
                       reject(err)
@@ -142,23 +145,16 @@ boardController.importTrelloBoard = function (board) {
                       })
                       board.checklists.map((checklist) => {
                         if (card.id === checklist.idCard) {
-                          let newChecklist = new Checklist({text: checklist.name})
+                          let newChecklist = new Checklist({text: checklist.name, items: []})
+                          checklist.checkItems.map((item) => {
+                            newChecklist.items.push({text: item.name, isChecked: false})
+                          })
                           newChecklist.save((err, item) => {
                             if (err) {
                               reject(err)
                             } else {
                               cardController.addChecklistToCard(newCard._id, newChecklist)
                             }
-                          })
-                          checklist.checkItems.map((item) => {
-                            let newItem = new Item({text: item.name, isChecked: false})
-                            newItem.save((err, item) => {
-                              if (err) {
-                                reject(err)
-                              } else {
-                                checklistController.addItemToChecklist(newChecklist._id, newItem)
-                              }
-                            })
                           })
                         }
                       })
