@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 const Card = mongoose.model('Card')
 const List = mongoose.model('List')
 const User = mongoose.model('User')
+const Board = mongoose.model('Board')
+
 const boardController = require('./boardController')
 const listController = require('./listController')
 const modificationController = require('./modificationController')
@@ -374,10 +376,55 @@ cardController.removeLabel = (boardId, cardId, listId, labelId) => {
     })
   })
 }
+cardController.removeOldCollaborators = (boardId, cardId) => {
+  return new Promise((resolve, reject) => {
+    Board.findOne({'_id': boardId}).populate('teams').then((board) => {
+      Card.findOne({'_id': cardId}).then((card) => {
+        let collaborators = checkCollaborators(card, board)
+        let responsible = card.responsible ? checkResponsible(card, board) : undefined
+        if (!responsible) {
+          responsible = null
+        }
 
+        Card.findOneAndUpdate({'_id': cardId}, {collaborators: collaborators, responsible: responsible}).then((res) => {
+          resolve(res)
+        }).catch((err) => {
+          reject(err)
+        })
+      })
+    })
+  })
+}
 cardController.findAllCardUser = (boardId, userId) => {
   return new Promise((resolve, reject) => {
   })
 }
 
+// Input: the card and the board
+// Output: The card collaborators cleaned of missing board members
+let checkCollaborators = function (card, board) {
+  let allCollaborators
+  if (board.teams.length > 0) {
+    allCollaborators = board.teams.map(t => t.users).reduce((x, y) => x.concat(y)).concat(board.collaborators)
+  } else {
+    allCollaborators = board.collaborators
+  }
+  return card.collaborators.filter(c => {
+    // Change to > 0 to get existing collaborators (for replacement)
+    return allCollaborators.filter(u => u.toString() === c.toString()).length > 0
+  })
+}
+// Input: the card and the board
+// Output: The responsible if in board members, else, undefined
+let checkResponsible = function (card, board) {
+  let allCollaborators
+  if (board.teams.length > 0) {
+    allCollaborators = board.teams.map(t => t.users).reduce((x, y) => x.concat(y)).concat(board.collaborators)
+  } else {
+    allCollaborators = board.collaborators
+  }
+  // Change to > 0 to get existing collaborators (for replacement)
+  let responsible = allCollaborators.filter(u => u.toString() === card.responsible.toString())
+  return responsible.length > 0 ? responsible[0] : undefined
+}
 module.exports = cardController

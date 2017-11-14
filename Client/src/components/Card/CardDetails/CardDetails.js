@@ -71,7 +71,6 @@ export default class CardDetails extends React.Component {
 
   onUploadComplete (c) {
     this.dismissFileUploader()
-    console.log(c)
   }
 
   renderFileUploader () {

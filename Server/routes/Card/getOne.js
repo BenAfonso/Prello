@@ -47,11 +47,14 @@ module.exports = function (router, controller) {
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-    controller.getOneCard(req.params.cardId, req.user._id).then((data) => {
-      res.status(200).json(data)
-    })
-      .catch((err) => {
-        res.status(err.status).json(err)
+    controller.removeOldCollaborators(req.params.boardId, req.params.cardId).then(() => {
+      controller.getOneCard(req.params.cardId, req.user._id).then((data) => {
+        res.status(200).json(data)
       })
+        .catch((err) => {
+          console.log(err)
+          res.status(err.status).json(err)
+        })
+    })
   })
 }

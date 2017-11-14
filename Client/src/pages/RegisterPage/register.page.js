@@ -16,7 +16,6 @@ export default class RegisterPage extends React.Component {
 
   checkName () {
     let res = this.name.value.split(' ').length > 1
-    console.log(this.name.value.split(' '))
     this.setState({
       nameValid: res
     })
@@ -60,7 +59,6 @@ export default class RegisterPage extends React.Component {
   submitForm () {
     if (this.formIsValid()) {
       register(this.name.value, this.email.value, this.password1.value, true).then((response) => {
-        console.log(response)
         storeToken(response.token)
         this.setState({ redirectToReferrer: true })
       }).catch((err) => {
