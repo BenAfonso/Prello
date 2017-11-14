@@ -46,6 +46,7 @@ export default class ProfilePage extends React.Component {
     this.renderNewPasswordForm = this.renderNewPasswordForm.bind(this)
     this.updatePassword = this.updatePassword.bind(this)
     this.currentUserIsInTeam = this.currentUserIsInTeam.bind(this)
+    this.currentUserIsRelatedToBoard = this.currentUserIsRelatedToBoard.bind(this)
   }
 
   componentDidMount () {
@@ -151,6 +152,24 @@ export default class ProfilePage extends React.Component {
     })
     console.log(isInTeam)
     return isInTeam
+  }
+
+  currentUserIsRelatedToBoard (board) {
+    let isRelatedToBoard = false
+    if (board.owner._id === this.props.currentUser.id) {
+      isRelatedToBoard = true
+    }
+    board.collaborators.forEach(collab => {
+      if (collab._id === this.props.currentUser.id) {
+        isRelatedToBoard = true
+      }
+    })
+    board.teams.forEach(team => {
+      if (this.currentUserIsInTeam(team)) {
+        isRelatedToBoard = true
+      }
+    })
+    return isRelatedToBoard
   }
 
   renderModifyProfileForm () {
@@ -291,7 +310,7 @@ export default class ProfilePage extends React.Component {
   }
 
   renderUserAvatar (user) {
-    console.log(this.props.currentUser)
+    console.log(this.props.userFetched)
     return (
       <div className='avatar' onClick={this.onAvatarClick}>
         <AvatarThumbnail
@@ -320,11 +339,13 @@ export default class ProfilePage extends React.Component {
         <hr className='titleAndContentSeparator'/>
         <ul className='boardsList'>
           {this.props.userFetched.boards.map(board => (
-            <li key={board._id} className='boardLi'>
-              <Link to={`/boards/${board._id}`}>
-                <BoardThumbnail index={0} id={board._id} title={board.title} background={board.background}/>
-              </Link>
-            </li>
+            this.currentUserIsRelatedToBoard(board)
+              ? <li key={board._id} className='boardLi'>
+                <Link to={`/boards/${board._id}`}>
+                  <BoardThumbnail index={0} id={board._id} title={board.title} background={board.background}/>
+                </Link>
+              </li>
+              : null
           ))}
         </ul>
         <style jsx>
