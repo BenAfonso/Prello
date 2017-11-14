@@ -57,7 +57,8 @@ export const defaultDashboardState = {
     _id: '',
     title: '',
     background: '#fff',
-    provider: ''
+    provider: '',
+    numbers: []
   }
 }
 

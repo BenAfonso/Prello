@@ -15,6 +15,11 @@ export default class DateFilter extends React.Component {
       firstTrigger: 0.34,
       secondTrigger: 0.76
     }
+    this.onChange = this.onChange.bind(this)
+  }
+
+  onChange (d1, d2) {
+    this.props.onChange(d1, d2)
   }
 
   componentDidMount () {
@@ -51,13 +56,24 @@ export default class DateFilter extends React.Component {
     let windowWidth = window.innerWidth
     let mouseX = e.pageX
     this.setState({ firstTrigger: mouseX / windowWidth })
-    console.log(e)
+    this.getDateFraction(this.state.firstTrigger)
+    this.onChange(this.getDateFraction(this.state.firstTrigger), this.getDateFraction(this.state.secondTrigger))
   }
 
   adjustSecond (e) {
     let windowWidth = window.innerWidth
     let mouseX = e.pageX
     this.setState({ secondTrigger: mouseX / windowWidth })
+    this.onChange(this.getDateFraction(this.state.firstTrigger), this.getDateFraction(this.state.secondTrigger))
+  }
+
+  getDateFraction (fraction) {
+    let minDate = new Date(this.props.minDate)
+    let maxDate = new Date(this.props.maxDate)
+    let delta = maxDate.getDate() - minDate.getDate()
+    let newDay = Math.floor(minDate.getDate() + delta * fraction)
+    let newDate = new Date(minDate.getUTCFullYear(), minDate.getMonth(), newDay)
+    return `${newDate.getDate()}/${newDate.getMonth() + 1}/${newDate.getUTCFullYear()}`
   }
 
   render () {
@@ -70,8 +86,8 @@ export default class DateFilter extends React.Component {
           width: `${(this.state.secondTrigger - this.state.firstTrigger) * 100}%`
         }}>
           <div style={{position: 'relative'}}>
-            <div className='first value'>{this.state.firstTrigger}</div>
-            <div className='second value'>{this.state.secondTrigger}</div>
+            <div className='first value'>{this.getDateFraction(this.state.firstTrigger)}</div>
+            <div className='second value'>{this.getDateFraction(this.state.secondTrigger)}</div>
           </div>
         </div>
         <div className='right bar' onMouseDown={this.pressSecond.bind(this)} style={{ left: `${this.state.secondTrigger * 100}%` }} />

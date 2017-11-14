@@ -11,7 +11,19 @@ export default (state = defaultDashboardState, action) => {
     case 'SET_ANALYTICS_BOARD': {
       return {
         ...state,
-        board: action.payload
+        board: {
+          ...state.board,
+          ...action.payload
+        }
+      }
+    }
+    case 'SET_BOARD_ANALYTICS': {
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          numbers: action.payload
+        }
       }
     }
     default:

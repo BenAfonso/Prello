@@ -622,9 +622,9 @@ export function setAnalyticsBoards (provider) {
   })
 }
 
-export function setAnalyticsBoard (id) {
+export function setAnalyticsBoard (provider, id) {
   return new Promise((resolve, reject) => {
-    fetchAnalyticsBoards().then((data) => {
+    fetchAnalyticsBoards(provider).then((data) => {
       store.dispatch({
         type: 'SET_ANALYTICS_BOARD',
         payload: data.filter(x => x._id === id)[0]
@@ -670,5 +670,12 @@ export function addAttachmentCard (listId, card, attachment) {
   store.dispatch({
     type: 'UPDATE_CARD',
     payload: {listId, card}
+  })
+}
+
+export function setBoardAnalytics (analytics) {
+  store.dispatch({
+    type: 'SET_BOARD_ANALYTICS',
+    payload: analytics
   })
 }
