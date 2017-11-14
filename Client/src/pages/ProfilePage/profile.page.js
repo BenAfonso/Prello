@@ -45,6 +45,7 @@ export default class ProfilePage extends React.Component {
     this.hideNewPasswordForm = this.hideNewPasswordForm.bind(this)
     this.renderNewPasswordForm = this.renderNewPasswordForm.bind(this)
     this.updatePassword = this.updatePassword.bind(this)
+    this.currentUserIsInTeam = this.currentUserIsInTeam.bind(this)
   }
 
   componentDidMount () {
@@ -134,6 +135,22 @@ export default class ProfilePage extends React.Component {
     const matches = name.match(/\b(\w)/g)
     const initials = matches.join('').toUpperCase()
     return initials
+  }
+
+  currentUserIsInTeam (team) {
+    let isInTeam = false
+    team.users.forEach(user => {
+      if (user._id === this.props.currentUser.id) {
+        isInTeam = true
+      }
+    })
+    team.admins.forEach(admin => {
+      if (admin._id === this.props.currentUser.id) {
+        isInTeam = true
+      }
+    })
+    console.log(isInTeam)
+    return isInTeam
   }
 
   renderModifyProfileForm () {
@@ -234,7 +251,9 @@ export default class ProfilePage extends React.Component {
           <hr className='titleAndContentSeparator'/>
           <ul className='teamsList'>
             {this.props.userFetched.teams.map(team => (
-              <li key={team._id} className='teamLi'><Link to={`teams/${team._id}`}><TeamListElement team={team}/></Link></li>
+              this.currentUserIsInTeam(team) || team.visibility === 'Public'
+                ? <li key={team._id} className='teamLi'><Link to={`/teams/${team._id}`}><TeamListElement team={team}/></Link></li>
+                : null
             ))}
           </ul>
         </div>
@@ -272,6 +291,7 @@ export default class ProfilePage extends React.Component {
   }
 
   renderUserAvatar (user) {
+    console.log(this.props.currentUser)
     return (
       <div className='avatar' onClick={this.onAvatarClick}>
         <AvatarThumbnail
