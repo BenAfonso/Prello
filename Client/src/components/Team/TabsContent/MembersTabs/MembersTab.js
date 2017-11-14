@@ -253,7 +253,6 @@ export default class MembersTab extends React.Component {
   render () {
     const teamId = this.props.team._id
     const members = this.props.team.users
-
     return (
       <div className='host'>
         <div className='sidebar'>

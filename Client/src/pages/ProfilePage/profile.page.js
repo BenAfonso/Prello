@@ -130,27 +130,21 @@ export default class ProfilePage extends React.Component {
   }
 
   currentUserIsInTeam (team) {
-    let isInTeam = false
-    team.users.forEach(user => {
-      if (user._id === this.props.currentUser.id) {
-        isInTeam = true
-      }
-    })
-    team.admins.forEach(admin => {
-      if (admin._id === this.props.currentUser.id) {
-        isInTeam = true
-      }
-    })
-    return isInTeam
+    let isMember = team.users.filter(user => user._id === this.props.currentUser._id)
+    let isAdmin = team.admins.filter(admin => admin._id === this.props.currentUser._id)
+    return isMember[0] !== undefined || isAdmin[0] !== undefined
   }
 
   currentUserIsRelatedToBoard (board) {
-    let isRelatedToBoard = false
-    if (board.owner._id === this.props.currentUser.id) {
+    let isOwner = board.owner._id === this.props.currentUser._id
+    let isCollaborator = board.collaborators.filter(collab => collab._id === this.props.currentUser._id)[0] !== undefined
+    let isInTeam = board.teams.filter(team => (this.currentUserIsInTeam(team)))[0] !== undefined
+    /* let isRelatedToBoard = false
+    if (board.owner._id === this.props.currentUser._id) {
       isRelatedToBoard = true
     }
     board.collaborators.forEach(collab => {
-      if (collab._id === this.props.currentUser.id) {
+      if (collab._id === this.props.currentUser._id) {
         isRelatedToBoard = true
       }
     })
@@ -158,8 +152,8 @@ export default class ProfilePage extends React.Component {
       if (this.currentUserIsInTeam(team)) {
         isRelatedToBoard = true
       }
-    })
-    return isRelatedToBoard
+    }) */
+    return isOwner || isCollaborator || isInTeam
   }
 
   renderModifyProfileForm () {
@@ -294,7 +288,7 @@ export default class ProfilePage extends React.Component {
   renderOptionsTab () {
     return (
       <div className='optionsTab'>
-        {this.props.currentUser.id === this.props.match.params.id
+        {this.props.currentUser._id === this.props.match.params.id
           ? !this.state.displayNewPasswordForm
             ? <span className='linkText' onClick={this.displayNewPasswordForm}>Change password</span>
             : this.renderNewPasswordForm()
@@ -362,7 +356,7 @@ export default class ProfilePage extends React.Component {
               <span className='nameSpan'>{this.props.userFetched.name}</span>
               <span className='usernameSpan'>@{this.props.userFetched.username}</span>
               <div className='biopicDiv'>{this.props.userFetched.bio}</div>
-              {this.props.currentUser.id === this.props.match.params.id
+              {this.props.currentUser._id === this.props.match.params.id
                 ? <div className='modifyButton'>
                   <Button onClick={this.displayModifyProfileForm}
                     bgColor='#E2E4E6'
