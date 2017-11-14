@@ -44,6 +44,7 @@ export default class Modification extends React.Component {
   renderCard (card) {
     if (!card) { return <span>[ ? ]</span> }
     const style = { textDecoration: 'underline', cursor: 'pointer' }
+    if (!card) { return <span>[?]</span> }
     let listIndex = this.props.board.lists.indexOf(this.props.board.lists.filter(l => l.cards.filter(c => c._id === card._id))[0])
     let index = this.props.board.lists[listIndex].cards.indexOf(this.props.board.lists[listIndex].cards.filter(c => c._id === card._id)[0])
     let newCard = {

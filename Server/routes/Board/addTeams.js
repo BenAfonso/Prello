@@ -32,7 +32,7 @@ module.exports = (router, controller) => {
     *         in: body
     *         required: true
     *         schema:
-    *             $ref: '#/definitions/teamId'
+    *             $ref: '#/definitions/NewTeams'
     *     responses:
     *       200:
     *         description: Message confirming the team has been added

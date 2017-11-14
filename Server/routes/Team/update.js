@@ -12,7 +12,7 @@ module.exports = (router, controller) => {
     *     produces:
     *       - application/json
     *     parameters:
-    *       - name: listId
+    *       - name: teamId
     *         type: string
     *         description: The team id to update
     *         in: path

@@ -27,12 +27,10 @@ module.exports = (router, controller) => {
     *         description: The board id where we want to remove the teams
     *         in: path
     *         required: true
-    *       - name: body
+    *       - name: teamId
     *         description: The team id that needs to be removed
-    *         in: body
+    *         in: path
     *         required: true
-    *         schema:
-    *             $ref: '#/definitions/teamId'
     *     responses:
     *       200:
     *         description: Message confirming the team has been removed
@@ -41,7 +39,7 @@ module.exports = (router, controller) => {
     */
   router.delete('/boards/:boardId/teams/:teamId', [requiresLogin, boardExists, isOwner], function (req, res) {
     let requiredParameter = ['teamId']
-    requiredParameter = Util.checkRequest(req.params, requiredParameter)    
+    requiredParameter = Util.checkRequest(req.params, requiredParameter)
     if (requiredParameter.length > 0) {
       let stringMessage = requiredParameter.join(',')
       res.status(400).json(`Missing ${stringMessage}`)

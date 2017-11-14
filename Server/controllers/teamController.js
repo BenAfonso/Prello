@@ -71,7 +71,6 @@ teamController.removeCollaboratorFromTeam = function (teamId, userId) {
       if (err) {
         reject(err)
       } else {
-        console.log(res)
         resolve(res)
       }
     })
@@ -79,7 +78,6 @@ teamController.removeCollaboratorFromTeam = function (teamId, userId) {
 }
 teamController.updateTeam = function (teamId, body) {
   return new Promise((resolve, reject) => {
-    console.log(body)
     delete body.users
     delete body.createdAt
     Team.findOneAndUpdate({ '_id': teamId }, { name: body.name, visibility: body.visibility, picture: body.picture }, { new: true }, function (err, res) {

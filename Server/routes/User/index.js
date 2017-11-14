@@ -110,7 +110,6 @@ module.exports = (router, userController) => {
     userController.getUsers(req.query.email, parseInt(req.query.limit), parseInt(req.query.skip)).then(users => {
       return res.status(200).send(users)
     }).catch(err => {
-      console.log(err)
       return res.status(400).send(err)
     })
   })
