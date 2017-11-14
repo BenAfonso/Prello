@@ -15,19 +15,34 @@ export function addAttachmentCard (boardId, listId, cardId) {
 }
 
 export function getAttachment (boardId, attachment) {
-  axios.get(`${Config.API_URL}/boards/${boardId}/attachments/${attachment._id}.${attachment.ext}`).then(res => {
-    let image = new Image()
-    const name = `${attachment.name}`
-    image.src = res.data
-    let newWindow = window.open()
-    let canvas = newWindow.document.createElement('canvas')
-    let context = canvas.getContext('2d')
-    context.drawImage(image, 0, 0)
-    console.log(canvas)
-    canvas.toBlob(blob => {
-      FileSaver.saveAs(blob, name)
-    }, 'image/png')
+  let opts = {}
+  opts.responseType = 'blob' // <--- force blob at the beginning, anyway
+  let url = `${Config.API_URL}/boards/${boardId}/attachments/${attachment._id}.${attachment.ext}`
+  axios.get(url, opts).then(res => {
+    console.log(res)
+    let resBlob = res.data // <--- store the blob if it is
+    FileSaver.saveAs(resBlob, `${attachment._id}.${attachment.ext}`)
+    try {
+      let resData = null
+      let resText = new Promise((resolve, reject) => {
+        let reader = new FileReader()
+        reader.addEventListener('abort', reject)
+        reader.addEventListener('error', reject)
+        reader.addEventListener('loadend', () => {
+          resolve(reader.result)
+        })
+        reader.readAsText(resBlob)
+      })
+      resData = JSON.parse(resText) // <--- try to parse as json evantually
+      console.log(resData)
+    } catch (err) {
+      // ignore
+    }
   })
+
+  /* axios.get(`${Config.API_URL}/boards/${boardId}/attachments/${attachment._id}.${attachment.ext}`).then(res => {
+    console.log(res)
+  )} */
 }
 
 export function deleteAttachment (boardId, attachmentId) {

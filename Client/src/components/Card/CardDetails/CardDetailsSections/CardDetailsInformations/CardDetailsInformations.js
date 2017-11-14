@@ -6,9 +6,10 @@ import CardDetailsResponsible from './CardDetailsResponsible/CardDetailsResponsi
 import CardDetailsDueDate from './CardDetailsDueDate/CardDetailsDueDate'
 import {connect} from 'react-redux'
 import Button from '../../../../UI/Button/Button'
+import File from '../../../../UI/File/File'
 import {updateCardDescription} from '../../../../../services/Card.services'
 import Markdown from 'react-markdown'
-// import { getAttachment } from '../../../../../services/Attachment.services'
+import { getAttachment } from '../../../../../services/Attachment.services'
 
 @connect(store => {
   return {
@@ -63,14 +64,6 @@ export default class CardDetailsInformations extends React.Component {
             <Markdown source={fullCard.description} />
           </div>
 
-          { /* <ul className='attachments'>
-            {
-              fullCard.attachments.map(a => (
-                <li onClick={() => { getAttachment(this.props.board._id, a) }}>{a.name}</li>
-              ))
-            }
-          </ul> */ }
-
           <div className='sections'>
             <div className='members'>
               <div className='subsectionTitle'>
@@ -121,6 +114,14 @@ export default class CardDetailsInformations extends React.Component {
             hoverBgColor='rgba(0,0,0,0.2)'
             onClick={this.toggleDescriptionForm}
           >Edit the description...</Button>
+
+          { <ul className='attachments'>
+            {
+              fullCard.attachments.map(a => (
+                <li><File {...a} onClick={() => { getAttachment(this.props.board._id, a) }}/></li>
+              ))
+            }
+          </ul> }
         </CardDetailsSection>
         <style jsx>
           {`
@@ -166,6 +167,12 @@ export default class CardDetailsInformations extends React.Component {
 
     .content {
       font-size: 13px;
+    }
+
+    .attachments {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 20px;
     }
     
     .content .card {

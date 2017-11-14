@@ -22,25 +22,14 @@ FileUploader.uploadFile = (boardId, attachmentId, file) => {
   })
 }
 
-FileUploader.getFile = (boardId, attachmentName) => {
+FileUploader.getFile = (res, boardId, attachmentName) => {
   return new Promise((resolve, reject) => {
-    let chunks = []
-    minioClient.getObject(bucketName, `${boardId}/${attachmentName}`, (err, dataStream) => {
+    minioClient.getObject(bucketName, `${boardId}/${attachmentName}`, (err, stream) => {
       if (err) {
+        console.error(err)
         reject(err)
       }
-      if (dataStream === undefined) {
-        reject(new Error('Missing datastream'))
-      }
-      dataStream.on('data', (chunk) => {
-        chunks.push(chunk)
-      })
-      dataStream.on('end', () => {
-        resolve({mimetype: 'image/png', fileName: 'test.png', buffer: Buffer.concat(chunks)})
-      })
-      dataStream.on('error', (err) => {
-        reject(err)
-      })
+      stream.pipe(res)
     })
   })
 }
