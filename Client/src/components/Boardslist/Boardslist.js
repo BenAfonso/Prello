@@ -92,7 +92,16 @@ export default class Boardslist extends React.Component {
           ))
         }
         <li>
-          <NewBoardForm self/>
+          <NewBoardForm
+            self
+            button={
+              <div className='createBoard'>
+                <div className='createBoard-title'>
+                  Create a board...
+                </div>
+              </div>
+            }
+          />
         </li>
       </ul>
 
@@ -153,7 +162,16 @@ export default class Boardslist extends React.Component {
                     ))
                   }
                   <li>
-                    <NewBoardForm currentTeam={team} />
+                    <NewBoardForm
+                      currentTeam={team}
+                      button={
+                        <div className='createBoard'>
+                          <div className='createBoard-title'>
+                            Create a board...
+                          </div>
+                        </div>
+                      }
+                    />
                   </li>
                 </ul>
               </div>

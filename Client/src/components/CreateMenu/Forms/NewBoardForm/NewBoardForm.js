@@ -39,10 +39,14 @@ export default class NewBoardForm extends React.Component {
 
   submit (title) {
     if (this.title.value !== '') {
-      if (this.state.selected === []) {
+      if (this.state.selected.length === 0) {
         addBoard(this.props.dispatch, {title: this.title.value, color: this.color.value})
       } else {
-        addTeamBoard(this.props.dispatch, this.props.currentTeam._id, {title: this.title.value, color: this.color.value, teams: this.state.selected})
+        let teamId = ''
+        if (this.props.currentTeam !== undefined) {
+          teamId = this.props.currentTeam._id
+        }
+        addTeamBoard(this.props.dispatch, teamId, {title: this.title.value, color: this.color.value, teams: this.state.selected})
       }
     }
   }
@@ -59,19 +63,13 @@ export default class NewBoardForm extends React.Component {
   }
 
   render () {
-    const { teams } = this.props
+    const { teams, button } = this.props
     return (
       <div className='host'>
         <DropDown
           layout='custom'
           orientation='right'
-          button={
-            <div className='createBoard'>
-              <div className='createBoard-title'>
-                Create a board...
-              </div>
-            </div>
-          }
+          button={button}
           title='Create Board'>
           <div style={{ width: '300px' }}>
             <ul>
@@ -95,7 +93,7 @@ export default class NewBoardForm extends React.Component {
                 <div className='element-title'>Teams</div>
                 {
                   teams.length >= 1
-                    ? <div className='element-input'>
+                    ? <div>
                       <form>
                         <ul>
                           {
@@ -153,10 +151,6 @@ export default class NewBoardForm extends React.Component {
       font-weight: bold;
     }
 
-    .element-input {
-      padding: 8px 0px;
-    }
-
     .element-text {
       padding: 8px 0px;
       font-size: 15px;
@@ -177,11 +171,13 @@ export default class NewBoardForm extends React.Component {
       width: 100%;
     }
 
-    input {
+    .element-input input {
       font-size: inherit;
       width: 100%;
       padding: 8px;
       border-radius: 3px;
+      border: 1px solid rgba(0,0,0,0.2);
+      box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
     }
 
     input[type=checkbox] {

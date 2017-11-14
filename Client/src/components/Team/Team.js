@@ -188,6 +188,8 @@ export default class Team extends React.Component {
           width: 100%;
           padding: 8px;
           border-radius: 3px;
+          border: 1px solid rgba(0,0,0,0.2);
+          box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
         }
 
         select {
@@ -264,7 +266,18 @@ export default class Team extends React.Component {
                   }
                   {
                     this.isCurrentUserAdmin()
-                      ? <li><NewBoardForm currentTeam={team} /></li>
+                      ? <li>
+                        <NewBoardForm
+                          currentTeam={team}
+                          button={
+                            <div className='createBoard'>
+                              <div className='createBoard-title'>
+                                Create a board...
+                              </div>
+                            </div>
+                          }
+                        />
+                      </li>
                       : null
                   }
                 </ul>
