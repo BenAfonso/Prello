@@ -47,5 +47,11 @@ module.exports = (router, controller) => {
     }
     controller
       .importTrelloBoard({...req.body, owner: req.user._id, collaborators: [req.user._id]})
+      .then(data => {
+        res.status(201).json(data)
+      })
+      .catch(err => {
+        res.status(500).json(err)
+      })
   })
 }

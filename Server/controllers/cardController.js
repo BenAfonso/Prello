@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 const Card = mongoose.model('Card')
 const List = mongoose.model('List')
 const User = mongoose.model('User')
+const Board = mongoose.model('Board')
+
 const boardController = require('./boardController')
 const listController = require('./listController')
 const modificationController = require('./modificationController')
@@ -140,6 +142,7 @@ cardController.moveCard = (req) => {
     })
   })
 }
+
 cardController.addCommentToCard = (cardId, commentToAdd) => {
   return new Promise((resolve, reject) => {
     Card.findOneAndUpdate({'_id': cardId}, {$push: {comments: commentToAdd}}, {new: true}, function (err, res) {
@@ -165,7 +168,7 @@ cardController.removeCommentFromCard = (cardId, commentId) => {
 }
 cardController.getOneCard = (cardId) => {
   return new Promise((resolve, reject) => {
-    Card.findOne({ '_id': cardId }).populate('comments responsible collaborators labels', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+    Card.findOne({ '_id': cardId }).populate('comments responsible collaborators labels attachments', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
@@ -176,13 +179,22 @@ cardController.getOneCard = (cardId) => {
           if (err) {
             reject(err)
           } else {
-            modificationController.findCardHistory(cardId).then((item) => {
-              let object = res._doc
-              object.modifications = item
-              resolve(res)
-            }).catch((err) => {
-              err.status = 500
-              reject(err)
+            User.populate(res, {
+              path: 'attachments.owner',
+              select: { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }
+            }, function (err, res) {
+              if (err) {
+                reject(err)
+              } else {
+                modificationController.findCardHistory(cardId).then((item) => {
+                  let object = res._doc
+                  object.modifications = item
+                  resolve(res)
+                }).catch((err) => {
+                  err.status = 500
+                  reject(err)
+                })
+              }
             })
           }
         })
@@ -236,7 +248,6 @@ cardController.addCollaboratorEmail = (boardId, cardId, listId, email, requester
 cardController.refreshOneCard = (boardId, listId, cardId) => {
   return new Promise((resolve, reject) => {
     cardController.getOneCard(cardId).then((cardToEmit) => {
-      console.log(cardToEmit)
       let payload = {
         listId: listId,
         card: cardToEmit
@@ -399,10 +410,55 @@ cardController.removeLabel = (boardId, cardId, listId, labelId) => {
     })
   })
 }
+cardController.removeOldCollaborators = (boardId, cardId) => {
+  return new Promise((resolve, reject) => {
+    Board.findOne({'_id': boardId}).populate('teams').then((board) => {
+      Card.findOne({'_id': cardId}).then((card) => {
+        let collaborators = checkCollaborators(card, board)
+        let responsible = card.responsible ? checkResponsible(card, board) : undefined
+        if (!responsible) {
+          responsible = null
+        }
 
+        Card.findOneAndUpdate({'_id': cardId}, {collaborators: collaborators, responsible: responsible}).then((res) => {
+          resolve(res)
+        }).catch((err) => {
+          reject(err)
+        })
+      })
+    })
+  })
+}
 cardController.findAllCardUser = (boardId, userId) => {
   return new Promise((resolve, reject) => {
   })
 }
 
+// Input: the card and the board
+// Output: The card collaborators cleaned of missing board members
+let checkCollaborators = function (card, board) {
+  let allCollaborators
+  if (board.teams.length > 0) {
+    allCollaborators = board.teams.map(t => t.users).reduce((x, y) => x.concat(y)).concat(board.collaborators)
+  } else {
+    allCollaborators = board.collaborators
+  }
+  return card.collaborators.filter(c => {
+    // Change to > 0 to get existing collaborators (for replacement)
+    return allCollaborators.filter(u => u.toString() === c.toString()).length > 0
+  })
+}
+// Input: the card and the board
+// Output: The responsible if in board members, else, undefined
+let checkResponsible = function (card, board) {
+  let allCollaborators
+  if (board.teams.length > 0) {
+    allCollaborators = board.teams.map(t => t.users).reduce((x, y) => x.concat(y)).concat(board.collaborators)
+  } else {
+    allCollaborators = board.collaborators
+  }
+  // Change to > 0 to get existing collaborators (for replacement)
+  let responsible = allCollaborators.filter(u => u.toString() === card.responsible.toString())
+  return responsible.length > 0 ? responsible[0] : undefined
+}
 module.exports = cardController

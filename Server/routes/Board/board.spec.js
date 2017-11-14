@@ -236,9 +236,11 @@ function initData (mockedUser1, mockedUser2, mockedBoard) {
               User.create(mockedUser2).then(u2 => {
                 user2 = u2
                 mockedBoard.owner = user1._id
+                mockedBoard.collaborators = [user1._id]
                 Board.create(mockedBoard).then(b1 => {
                   board1 = b1
                   mockedBoard.owner = user2._id
+                  mockedBoard.collaborators = [user2._id]
                   Board.create(mockedBoard).then(b2 => {
                     board2 = b2
                     mockedBoard.collaborators = [u1._id]

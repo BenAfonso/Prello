@@ -16,6 +16,8 @@ module.exports = function (router, controller) {
   require('./addCollaborator')(router, controller)
   require('./removeCollaborator')(router, controller)
   require('./getUserBoards')(router, controller)
+  require('./addTeams')(router, controller)
+  require('./removeTeams')(router, controller)
   require('./getHistory')(router, controller)
   require('./import')(router, controller)
 }

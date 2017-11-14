@@ -96,6 +96,7 @@ export default class Label extends React.Component {
             addedToCard: !this.state.addedToCard
           })
         }
+        return label
       })
     }
   }

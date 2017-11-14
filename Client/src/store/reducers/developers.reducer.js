@@ -23,6 +23,15 @@ export default (state = defaultDevelopersState, action) => {
         oauthClients: newOauthClients
       }
     }
+    case 'UPDATE_OAUTHCLIENT': {
+      let newClients = state.oauthClients.slice()
+      let updatedClient = newClients.filter(c => c._id === action.payload._id)
+      let clientIndex = newClients.indexOf(updatedClient[0])
+      newClients[clientIndex] = action.payload
+      return {
+        oauthClients: newClients
+      }
+    }
     default:
       return {
         ...state

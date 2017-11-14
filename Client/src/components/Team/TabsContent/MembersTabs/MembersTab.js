@@ -5,7 +5,7 @@ import AvatarThumbnail from '../../../UI/AvatarThumbnail/AvatarThumbnail'
 import DropDown from '../../../UI/DropDown/DropDown'
 import AddMemberMenu from './AddMemberMenu'
 import {connect} from 'react-redux'
-import { removeTeamMember } from '../../../../store/actions'
+import { removeTeamMember, removeTeamAdmin, setTeamAdmin, unsetTeamAdmin } from '../../../../store/actions'
 import { displayNotification } from '../../../../services/Notification.service'
 
 @connect(store => {
@@ -30,12 +30,47 @@ export default class MembersTab extends React.Component {
     this.onSearchChange = this.onSearchChange.bind(this)
   }
 
+  // Lifecycle
   componentWillReceiveProps (nextProps) {
     if (this.props.team !== nextProps.team) {
       this.updateMatchingMembers(nextProps)
     }
   }
 
+  // Server calls
+  removeTeamMember (userId) {
+    removeTeamMember(this.props.team._id, userId)
+  }
+
+  removeTeamAdmin (userId) {
+    removeTeamAdmin(this.props.team._id, userId)
+  }
+
+  removeTeamAdminSelf (userId) {
+    if (this.isLastAdmin()) {
+      displayNotification({type: 'error', title: 'Error', content: 'You\'re the last admin ! You can\'t just leave like that...'})
+    } else {
+      removeTeamAdmin(this.props.team._id, userId)
+    }
+  }
+
+  setTeamAdmin (member) {
+    setTeamAdmin(this.props.team._id, member._id)
+  }
+
+  unsetTeamAdmin (member) {
+    unsetTeamAdmin(this.props.team._id, member._id)
+  }
+
+  unsetTeamAdminSelf (member) {
+    if (this.isLastAdmin()) {
+      displayNotification({type: 'error', title: 'Error', content: 'You\'re the last admin !'})
+    } else {
+      unsetTeamAdmin(this.props.team._id, member._id)
+    }
+  }
+
+  // Other functions
   updateMatchingMembers (nextProps) {
     this.setState({matchingTeamMembers: nextProps.team.users})
   }
@@ -53,18 +88,6 @@ export default class MembersTab extends React.Component {
   isLastAdmin () {
     const isLast = this.props.team.admins.length === 1
     return isLast
-  }
-
-  removeTeamMember (userId) {
-    removeTeamMember(this.props.team._id, userId)
-  }
-
-  removeTeamAdminSelf (userId) {
-    if (this.isLastAdmin()) {
-      displayNotification({type: 'error', title: 'Error', content: 'You\'re the last admin ! You can\'t just leave like that...'})
-    } else {
-      removeTeamMember(this.props.team._id, userId)
-    }
   }
 
   getMatchingMembers (email) {
@@ -92,6 +115,7 @@ export default class MembersTab extends React.Component {
 
   renderMemberAction (member) {
     const isCurrentAdmin = this.isCurrentUserAdmin(member)
+    const isMemberAdmin = this.isMemberAdmin(member)
     return (
       <div className='member-actions'>
         <div className='member-button'>
@@ -123,7 +147,7 @@ export default class MembersTab extends React.Component {
                   hoverBgColor='rgba(255,255,255,0.3)'
                   color='#dcdcda'
                   gradient
-                  onClick={() => this.removeTeamMember(member._id)}>
+                  onClick={isMemberAdmin ? () => this.removeTeamAdmin(member._id) : () => this.removeTeamMember(member._id)}>
                   <Icon color='#dcdcda' name='remove' fontSize='20px' />&nbsp;Remove
                 </Button>
                 : null
@@ -159,37 +183,24 @@ export default class MembersTab extends React.Component {
   renderRoleDropdown (member) {
     const isAdmin = this.isMemberAdmin(member)
     let menuElements = []
-    if (isAdmin) {
-      menuElements = [
-        {
-          action: null,
-          placeholder: 'Admin',
-          closer: true,
-          disabled: true
-        },
-        {
-          action: null,
-          placeholder: 'Normal',
-          closer: true,
-          disabled: false
-        }
-      ]
-    } else {
-      menuElements = [
-        {
-          action: null,
-          placeholder: 'Admin',
-          closer: true,
-          disabled: false
-        },
-        {
-          action: null,
-          placeholder: 'Normal',
-          closer: true,
-          disabled: true
-        }
-      ]
-    }
+    menuElements = [
+      {
+        action: isAdmin ? null : () => this.setTeamAdmin(member),
+        placeholder: 'Admin',
+        closer: true,
+        disabled: isAdmin
+      },
+      {
+        action: !isAdmin
+          ? null
+          : this.props.currentUserId === member._id
+            ? () => this.unsetTeamAdminSelf(member)
+            : () => this.unsetTeamAdmin(member),
+        placeholder: 'Normal',
+        closer: true,
+        disabled: !isAdmin
+      }
+    ]
 
     return (
       <DropDown
@@ -222,7 +233,7 @@ export default class MembersTab extends React.Component {
           size='60px'
           fontSize='30px'
           thumbnail={user.picture}
-          initials={this.getInitials(user.name)}
+          initials={this.getInitials(user.username)}
           bgColor={user.bgColor}
           color='black'
         />
@@ -269,14 +280,14 @@ export default class MembersTab extends React.Component {
           <ul className='members'>
             {
               this.state.matchingTeamMembers.map((member, i) => (
-                <div>
-                  <li key={member._id} className='member' >
+                <div key={member._id}>
+                  <li className='member' >
                     <div className='member-infos'>
                       <div className='member-avatar'>
                         {this.renderUserAvatar(member)}
                       </div>
                       <div className='member-names'>
-                        <div className='member-name'>{member.name}</div>
+                        <div className='member-name'>{member.username}</div>
                         <div className='member-email'>{member.email}</div>
                       </div>
                     </div>
@@ -325,7 +336,8 @@ export default class MembersTab extends React.Component {
           }
 
           .main {
-            margin-left: 290px;    
+            margin-left: 290px;
+            overflow-x: auto;
           }
 
           .member {
@@ -343,6 +355,7 @@ export default class MembersTab extends React.Component {
           .member-names {
             display: inline-block;
             margin-left: 10px;
+            min-width: 175px;
           }
 
           .member-name {
