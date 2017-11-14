@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-
+import NewTeamForm from '../NewTeamForm/NewTeamForm'
 import Button from '../../../UI/Button/Button'
 import DropDown from '../../../UI/DropDown/DropDown'
 import { addBoard, addTeamBoard, setTeamslist } from '../../../../store/actions'
@@ -113,7 +113,14 @@ export default class NewBoardForm extends React.Component {
                         </select> */}
                       </form>
                     </div>
-                    : <div className='element-text'>You have no team yet.</div>
+                    : <div className='element-text'>
+                      You have no team yet.
+                      <div className='teamForm'>
+                        <NewTeamForm
+                          button={<span className='add-team'>Add one</span>}
+                        />
+                      </div>
+                    </div>
                 }
               </li>
               <li className='separator' />
@@ -149,11 +156,14 @@ export default class NewBoardForm extends React.Component {
 
     .element-title{
       font-weight: bold;
+      text-align: left;
+      padding: 4px 0;      
     }
 
     .element-text {
-      padding: 8px 0px;
+      padding: 4px 0px;
       font-size: 15px;
+      text-align: left;
     }
 
     .team {
@@ -169,6 +179,17 @@ export default class NewBoardForm extends React.Component {
 
     .add-button {
       width: 100%;
+    }
+
+    .teamForm {
+      display: inline-block;
+      padding-left: 5px;
+    }
+
+    .add-team {
+      cursor: pointer;
+      text-decoration: underline;
+      display: inline-block;
     }
 
     .element-input input {
