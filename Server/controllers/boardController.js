@@ -165,8 +165,7 @@ boardController.importTrelloBoard = function (board) {
             }
           })
         })
-        console.log('DONE IMPORTING')
-        emit('trelloImport', 'IMPORTED_BOARD', item)
+        emit('testID', 'NEW_BOARD', item)
         resolve(item)
       }
     })
