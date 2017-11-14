@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-import { fetchBoards, addBoardDistant, addCollaboratorDistant, removeCollaboratorDistant } from '../services/Board.services'
-=======
 import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDistant, removeTeamAdminDistant, setTeamAdminDistant, unsetTeamAdminDistant, updateTeamDistant } from '../services/Team.services'
 import { fetchBoards, fetchBoard, addBoardDistant, addTeamBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, removeTeamFromBoardDistant } from '../services/Board.services'
->>>>>>> dashboard_backend
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
@@ -218,8 +214,6 @@ export function addBoardLocal (board) {
   }
 }
 
-<<<<<<< HEAD
-=======
 export function setTeamslist (dispatch) {
   return new Promise((resolve, reject) => {
     dispatch({type: 'FETCH_TEAMSLIST_START'})
@@ -386,7 +380,6 @@ export function removeTeamFromBoard (boardId, teamId) {
   })
 }
 
->>>>>>> dashboard_backend
 export function setBoardHistory (history) {
   store.dispatch({
     type: 'SET_BOARD_HISTORY',
@@ -609,7 +602,6 @@ export function removeOAuthClient (client) {
   })
 }
 
-<<<<<<< HEAD
 /**
  *
  * ANALYTICS
@@ -641,12 +633,13 @@ export function setAnalyticsBoard (id) {
     }).catch((err) => {
       reject(err)
     })
-=======
+  })
+}
+
 export function updateOAuthClient (client) {
   store.dispatch({
     type: 'UPDATE_OAUTHCLIENT',
     payload: client
->>>>>>> dashboard_backend
   })
 }
 

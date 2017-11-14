@@ -78,5 +78,9 @@ export const defaultTeamState = {
   }
 }
 
+export const defaultTeamslistState = {
+  teams: []
+}
+
 export const defaultState = Object.assign(defaultCurrentUserState, defaultBoardState, defaultBoardslistState, defaultTeamState, defaultTeamslistState, defaultNotificationsState, defaultDevelopersState)
 export default createStore(reducer, { ...defaultState }, enhancer)
