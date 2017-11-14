@@ -276,7 +276,7 @@ export default class ProfilePage extends React.Component {
       <div className='optionsTab'>
         {this.props.currentUser._id === this.props.match.params.id
           ? !this.state.displayNewPasswordForm
-            ? <span className='linkText' onClick={this.displayNewPasswordForm}>Change password</span>
+            ? <span className='linkText' /* onClick={this.displayNewPasswordForm */>Change password</span>
             : this.renderNewPasswordForm()
           : ''
         }
