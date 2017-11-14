@@ -7,13 +7,11 @@ const Modification = mongoose.model('Modification')
 const List = mongoose.model('List')
 const Card = mongoose.model('Card')
 const Checklist = mongoose.model('Checklist')
-const Item = mongoose.model('Item')
 const Util = require('./Util')
 const emit = require('../controllers/sockets').emit
 const modificationController = require('./modificationController')
-const listController = require('./listController')
-const cardController = require('./cardController')
-const checklistController = require('./checklistController')
+// const listController = require('./listController')
+// const cardController = require('./cardController')
 const boardController = {}
 
 /**
@@ -140,11 +138,11 @@ boardController.importTrelloBoard = function (board) {
                     if (err) {
                       reject(err)
                     } else {
-                      listController.addCardToList(newList._id, newCard)
+                      List.findOneAndUpdate({'_id': newList._id}, {$push: {cards: newCard}}).exec()
                       card.labels.map((cardLabel) => {
                         tempLabels.map((tempLabel) => {
                           if (cardLabel.id === tempLabel.id) {
-                            cardController.addLabelToCard(newCard._id, tempLabel.mongoId)
+                            Card.findOneAndUpdate({ '_id': newCard._id }, { $push: { labels: tempLabel.mongoId } }, { new: true }).exec()
                           }
                         })
                       })
@@ -159,7 +157,7 @@ boardController.importTrelloBoard = function (board) {
                             if (err) {
                               reject(err)
                             } else {
-                              cardController.addChecklistToCard(newCard._id, newChecklist)
+                              Card.findOneAndUpdate({ '_id': newCard._id }, { $push: { checklists: newChecklist } }).exec()
                             }
                           })
                         }
@@ -171,7 +169,6 @@ boardController.importTrelloBoard = function (board) {
             }
           })
         })
-        emit('testID', 'NEW_BOARD', item)
         resolve(item)
       }
     })
