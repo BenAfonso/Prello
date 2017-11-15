@@ -59,6 +59,7 @@ export default class CreateMenu extends React.Component {
     this.setState({
       newBoardFormDisplayed: true,
       newTeamFormDisplayed: false,
+      importDropzoneDisplayed: false,
       isOpen: false
     })
   }
@@ -67,12 +68,15 @@ export default class CreateMenu extends React.Component {
     this.setState({
       newBoardFormDisplayed: false,
       newTeamFormDisplayed: true,
+      importDropzoneDisplayed: false,
       isOpen: false
     })
   }
 
   displayImportDropzone () {
     this.setState({
+      newBoardFormDisplayed: false,
+      newTeamFormDisplayed: false,
       importDropzoneDisplayed: true,
       isOpen: false
     })

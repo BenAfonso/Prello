@@ -119,8 +119,13 @@ boardController.importTrelloBoard = function (board) {
             }
           })
         })
-        board.lists.map((list) => {
-          let newList = new List({name: list.name, isArchived: list.closed})
+        const sortedLists = board.lists.sort((l1, l2) => {
+          if (l1.pos < l2.pos) return -1
+          else if (l1.pos > l2.pos) return 1
+          else return 0
+        })
+        sortedLists.map((list, index) => {
+          let newList = new List({name: list.name, isArchived: list.closed, position: index + 1})
           newList.save((err, item) => {
             if (err) {
               reject(err)
@@ -289,6 +294,7 @@ boardController.moveList = function (req) {
     let boardId = req.params.boardId
     let listId = req.params.listId
     let position = req.body.position
+    console.log(position)
     Board.findOne({ '_id': boardId }).exec(function (err, res) {
       if (err) {
         reject(err)

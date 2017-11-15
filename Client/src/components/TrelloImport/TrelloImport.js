@@ -53,7 +53,6 @@ export default class Import extends React.Component {
       delete card['limits']
       delete card['idMembersVoted']
       delete card['idShort']
-      // delete card['idAttachmentCover']
       delete card['manualCoverAttachment']
       delete card['pos']
       delete card['shortLink']
@@ -84,8 +83,11 @@ export default class Import extends React.Component {
         <h3>Import Trello board</h3>
         <p>(Max size limit: 500Kb)</p>
         <div>
-          <Dropzone style={{ borderColor: '#000', borderWidth: '1px', marginTop: '5%', marginLeft: '10%', marginRight: '10%', width: '80%', height: '20px', borderRadius: '3px', backgroundColor: 'white' }} onDrop={this.importTrelloBoard} accept='application/json'>
-            <p>Drag'n'Drop file or click here...</p>
+          <Dropzone style={{ borderColor: '#000', borderWidth: '1px', marginTop: '5%', marginLeft: '10%', marginRight: '10%', width: '80%', height: '75px', borderRadius: '3px', backgroundColor: 'white' }} onDrop={this.importTrelloBoard} accept='application/json'>
+            <div>
+              <p>Drag and drop file or click here...</p>
+              <p style={{ fontWeight: 'normal' }}>(only json files are allowed)</p>
+            </div>
           </Dropzone>
         </div>
         <style jsx>{styles}</style>
