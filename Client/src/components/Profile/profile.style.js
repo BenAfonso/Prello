@@ -1,9 +1,10 @@
 export default `
-.profilePage {
+.host {
     width: 100%;
-    height: 100%;
-    background-color: #cd5a91;
+    min-height: 120%;
     overflow-y: auto;
+    background-color: #cd5a91;
+    clear: both;
 }
 .profileForm {
     display: inline-block;
@@ -176,7 +177,7 @@ label {
     margin-top: 10px;
     margin-left: 20px;
 }
-.createBoard {
+.createElement {
     cursor: pointer;
     position: relative;
     background-color: rgba(250,250,250,0.3);
@@ -186,7 +187,7 @@ label {
     width: 270px;
   }
   
-.createBoard-title {
+.createElement-title {
     height: 50px;
     line-height: 50px;
     color: #dcdcda;
