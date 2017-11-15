@@ -30,7 +30,7 @@ export const defaultFetchedUserState = {
   fetched: false,
   error: null,
   user: {
-    id: '',
+    _id: '',
     username: '',
     name: '',
     picture: '',
