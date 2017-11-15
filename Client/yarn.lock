@@ -2757,7 +2757,7 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-create-react-class@^15.5.2, create-react-class@^15.5.x, create-react-class@^15.6.0:
+create-react-class@^15.5.2, create-react-class@^15.5.x:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.6.2.tgz#cf1ed15f12aad7f14ef5f2dfe05e6c42f91ef02a"
   dependencies:
@@ -8403,16 +8403,6 @@ react-textarea-autosize@^4.3.0:
   dependencies:
     prop-types "^15.5.8"
 
-react-theprello-login@quentincrinon/react-theprello-login:
-  version "1.0.0"
-  resolved "https://codeload.github.com/quentincrinon/react-theprello-login/tar.gz/37cccef1ae2008d7034edac87a4b98fbe36b5c66"
-
-react-theprello-oauth@quentincrinon/react-theprello-oauth:
-  version "0.0.1"
-  resolved "https://codeload.github.com/quentincrinon/react-theprello-oauth/tar.gz/5d34f02a6e72a5d89014c47fd59a9acca5b244a6"
-  dependencies:
-    react "^15.5.4"
-
 react-transition-group@^1.1.2:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-1.2.0.tgz#b51fc921b0c3835a7ef7c571c79fc82c73e9204f"
@@ -8453,16 +8443,6 @@ react@>=15.5, "react@^15 || ^16", react@^16.0.0:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.0"
-
-react@^15.5.4:
-  version "15.6.2"
-  resolved "https://registry.yarnpkg.com/react/-/react-15.6.2.tgz#dba0434ab439cfe82f108f0f511663908179aa72"
-  dependencies:
-    create-react-class "^15.6.0"
-    fbjs "^0.8.9"
-    loose-envify "^1.1.0"
-    object-assign "^4.1.0"
-    prop-types "^15.5.10"
 
 reactcss@^1.2.0:
   version "1.2.3"

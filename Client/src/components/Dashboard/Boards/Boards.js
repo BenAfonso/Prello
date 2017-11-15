@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import BoardThumbnail from '../../BoardThumbnail/BoardThumbnail'
 import { Link } from 'react-router-dom'
 import { displayNotification } from '../../../services/Notification.service'
-import ThePrelloLogin from 'react-theprello-login/dist/PrelloLogin'
+// import ThePrelloLogin from 'react-theprello-login/dist/PrelloLogin'
 
 @connect(store => {
   return {
@@ -28,12 +28,13 @@ export default class DashboardBoards extends React.Component {
           <ul className='services'>
             <li className='service checked'>TheMightyPrello</li>
             <li className='service unchecked' onClick={this.displayUnavailableOAuth}>
-              <ThePrelloLogin
-                className='oauth'
-                clientId='2d8ef2e3670006d59ca8'
-                redirectUri='http://localhost:3000/dashboard'
-                onSuccess={console.log}
-              >ThePrello</ThePrelloLogin>
+              { /* <ThePrelloLogin
+              className='oauth'
+              clientId='2d8ef2e3670006d59ca8'
+              redirectUri='http://localhost:3000/dashboard'
+              onSuccess={console.log}
+            >ThePrello</ThePrelloLogin>
+            */ }
             </li>
             <li className='service unchecked' onClick={this.displayUnavailableOAuth}>PrelloG3</li>
           </ul>
