@@ -111,10 +111,14 @@ export default class Modification extends React.Component {
   }
 
   renderSetReponsible (user, targetUser, card, timestamp) {
-    if (user._id === targetUser._id) {
-      return <div style={modificationStyle}>{this.renderUser(user)} joined responsable on card {this.renderCard(card)} {this.renderDate(timestamp)}</div>
+    if (user && targetUser) {
+      if (user._id === targetUser._id) {
+        return <div style={modificationStyle}>{this.renderUser(user)} joined responsable on card {this.renderCard(card)} {this.renderDate(timestamp)}</div>
+      } else {
+        return <div style={modificationStyle}>{this.renderUser(user)} set {this.renderUser(targetUser)} as responsable on card {this.renderCard(card)} {this.renderDate(timestamp)}</div>
+      }
     } else {
-      return <div style={modificationStyle}>{this.renderUser(user)} set {this.renderUser(targetUser)} as responsable on card {this.renderCard(card)} {this.renderDate(timestamp)}</div>
+      return null
     }
   }
 

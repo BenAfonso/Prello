@@ -12,10 +12,10 @@ attachmentController.getBoardAttachments = function (req) {
   })
 }
 
-attachmentController.getFile = (req) => {
+attachmentController.getFile = (req, res) => {
   return new Promise((resolve, reject) => {
-    FileUploader.getFile(req.params.boardId, req.params.attachmentId).then(result => {
-      resolve(result)
+    FileUploader.getFile(res, req.params.boardId, req.params.attachmentId).then(result => {
+      // Handled in service
     }).catch(err => reject(err))
   })
 }

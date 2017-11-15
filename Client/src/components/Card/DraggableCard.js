@@ -126,6 +126,7 @@ export default class CardComponent extends React.Component {
     const {
       id,
       checklists,
+      attachments,
       index,
       nbChecklists,
       nbComments,
@@ -181,12 +182,9 @@ export default class CardComponent extends React.Component {
           nbComments={nbComments}
           nbChecklists={nbChecklists}
           checklists={checklists}
-          collaborators={
-            col
-          }
-          responsible={
-            resp
-          }
+          collaborators={col}
+          responsible={resp}
+          attachments={attachments}
           labels={
             labels
               ? labels.map(l => l._id

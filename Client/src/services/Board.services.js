@@ -1,5 +1,6 @@
 import Config from '../config'
 import axios from 'axios'
+import { logout } from './Authentication.services'
 
 export function addBoardDistant (payload) {
   return new Promise((resolve, reject) => {
@@ -33,6 +34,7 @@ export function fetchBoards () {
     axios.get(`${Config.API_URL}/me/boards`).then((res) => {
       resolve(res.data)
     }).catch((err) => {
+      logout()
       reject(err)
     })
   })
@@ -42,6 +44,7 @@ export function fetchBoard (boardId) {
     axios.get(`${Config.API_URL}/boards/${boardId}`).then((res) => {
       resolve(res.data)
     }).catch((err) => {
+      logout()
       reject(err)
     })
   })

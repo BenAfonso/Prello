@@ -97,6 +97,7 @@ input {
 .numbers {
   display: flex;
   margin-top: 10px;
+  color: #888;
 }
 
 .number {

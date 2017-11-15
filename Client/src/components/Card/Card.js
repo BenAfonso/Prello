@@ -96,6 +96,7 @@ export default class Card extends React.Component {
     const formattedDate = this.getFormattedDueDate(dueDate)
     let nbComments = this.props.comments ? this.props.comments.length : 0
     let nbChecklists = this.props.checklists ? this.props.checklists.length : 0
+    let nbAttachments = this.props.attachments ? this.props.attachments.length : 0
     // let labelsToDisplay = card.labels
     return (
       <div style={{...this.props.style}} ref={c => { this.card = c }} className='root'>
@@ -109,8 +110,15 @@ export default class Card extends React.Component {
         <div className='numbers'>
           { nbComments > 0
             ? <div className='number'>
-              <div className='icon'><Icon name='comment-o' fontSize='12px' /></div>
+              <div className='icon'><Icon name='comment-o' fontSize='12px' color='' /></div>
               <span>{nbComments}</span>
+            </div>
+            : null
+          }
+          { nbAttachments > 0
+            ? <div className='number'>
+              <div className='icon'><Icon name='paperclip' fontSize='12px' color='' /></div>
+              <span>{nbAttachments}</span>
             </div>
             : null
           }
