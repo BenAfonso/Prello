@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { isAuthenticated, logout } from '../../services/Authentication.services'
 import Icon from '../UI/Icon/Icon'
 import AvatarThumbnail from '../UI/AvatarThumbnail/AvatarThumbnail'
-import CreateMenu from '../CreateMenu/CreateMenu'
+import CreateMenu from '../CreateMenu/CreateDropDown'
 import DropDown from '../UI/DropDown/DropDown'
 
 export default class Header extends React.Component {
@@ -23,6 +23,10 @@ export default class Header extends React.Component {
   static defaultProps = {
     bgColor: '#ae4d7b',
     color: 'white'
+  }
+
+  goToProfilePage () {
+    window.location = `/users/${this.props.currentUser._id}/profile`
   }
 
   render () {
@@ -62,6 +66,10 @@ export default class Header extends React.Component {
               <DropDown
                 orientation='right'
                 menuElements={[
+                  {
+                    action: this.goToProfilePage.bind(this),
+                    placeholder: 'Profile'
+                  },
                   {
                     action: logout,
                     placeholder: 'Logout'

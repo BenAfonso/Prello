@@ -63,6 +63,19 @@ export default (state = defaultTeamState, action) => {
         }
       }
     }
+    case 'ADD_TEAM_BOARD': {
+      let newBoards = state.team.boards.slice()
+      if (state.team._id === action.payload.teamId) {
+        newBoards.push(action.payload.board)
+      }
+      return {
+        ...state,
+        team: {
+          ...state.team,
+          boards: newBoards
+        }
+      }
+    }
     default:
       return {
         ...state

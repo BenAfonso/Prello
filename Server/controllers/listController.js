@@ -43,7 +43,7 @@ listController.removeList = (boardId, listId) => {
 }
 listController.updateList = (req) => {
   return new Promise((resolve, reject) => {
-    List.findOneAndUpdate({ '_id': req.params.listId }, req.body, (err, item) => {
+    List.findOneAndUpdate({ '_id': req.params.listId }, req.body, {new: true}, (err, item) => {
       if (err) {
         return reject(err)
       } else {

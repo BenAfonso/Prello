@@ -19,6 +19,11 @@ export default class TeamsMenu extends React.Component {
     removeTeamFromBoard(this.props.board._id, teamId)
   }
 
+  isCurrentUserOwner () {
+    const isAdmin = this.props.currentUser._id === this.props.board.owner._id
+    return isAdmin
+  }
+
   getInitials (name) {
     const matches = name.match(/\b(\w)/g)
     const initials = matches.join('').toUpperCase()
@@ -54,7 +59,7 @@ export default class TeamsMenu extends React.Component {
     return (
       <div className='host'>
         <div className='teammenu-title'>
-          List of teams
+          LIST OF TEAMS
         </div>
         <div className='teammenu-teams'>
           <ul className='teams'>
@@ -65,7 +70,11 @@ export default class TeamsMenu extends React.Component {
                     <Link to={`/teams/${team._id}`}>
                       <div className='team-name'>{team.name}</div>
                     </Link>
-                    <div className='team-remove' onClick={() => this.removeTeam(team._id)}><Icon color='#444' name='remove' fontSize='20px' /></div>
+                    {
+                      this.isCurrentUserOwner()
+                        ? <div className='team-remove' onClick={() => this.removeTeam(team._id)}><Icon color='#444' name='remove' fontSize='20px' /></div>
+                        : null
+                    }
                   </div>
                   <ul className='team-users'>
                     {
@@ -83,7 +92,11 @@ export default class TeamsMenu extends React.Component {
           </ul>
         </div>
         <div className='add-team-button'>
-          <AddTeamMenu board={this.props.board} />
+          {
+            this.isCurrentUserOwner()
+              ? <AddTeamMenu board={this.props.board} />
+              : null
+          }
         </div>
         <style jsx>
           {`
@@ -96,13 +109,18 @@ export default class TeamsMenu extends React.Component {
             margin: 8px 0 8px 0;
           }
 
+          .teammenu-title {
+            font-weight: bold;          
+          }
+
           .teams {
             display: flex;
             flex-wrap: wrap;
-            padding: 10px 0;
+            padding: 15px 0;
             max-height: 800px;
             overflow-y: auto;
             font-weight: bold;
+            margin-left: 10px;
           }
 
           .team {
