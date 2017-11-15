@@ -3,6 +3,7 @@ export default `
     width: 100%;
     height: 100%;
     background-color: #cd5a91;
+    overflow-y: auto;
 }
 .profileForm {
     display: inline-block;
@@ -175,4 +176,23 @@ label {
     margin-top: 10px;
     margin-left: 20px;
 }
+.boardFormButton {
+    justify-content: center;
+}
+.createBoard {
+    cursor: pointer;
+    background-color: rgba(250,250,250,0.3);
+    padding: 10px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    width: 270px;
+  }
+  
+  .createBoard-title {
+    height: 50px;
+    line-height: 50px;
+    color: #dcdcda;
+    font-size: 16px;
+    text-align: center;
+  }
 `

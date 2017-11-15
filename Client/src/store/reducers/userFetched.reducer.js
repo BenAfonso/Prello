@@ -52,6 +52,17 @@ export default (state = defaultFetchedUserState, action) => {
         }
       }
     }
+    case 'ADD_BOARD_FROM_PROFILE_PAGE': {
+      let newBoards = state.user.boards
+      newBoards.push(action.payload)
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          boards: newBoards
+        }
+      }
+    }
     default:
       return {
         ...state

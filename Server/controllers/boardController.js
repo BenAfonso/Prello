@@ -76,6 +76,8 @@ boardController.getUserBoards = function (userId) {
 boardController.createBoard = function (board) {
   return new Promise((resolve, reject) => {
     const boardToAdd = new Board(board)
+    boardToAdd.populate('owner').execPopulate() // Needed when the board is added from the profile page
+    boardToAdd.populate('teams').execPopulate() // Needed when the board is added from the profile page
     boardToAdd.save((err, item) => {
       if (err) {
         reject(err)

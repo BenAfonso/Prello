@@ -10,6 +10,7 @@ export function addBoardDistant (payload) {
     }).then(res => {
       resolve(res.data)
     }).catch(err => {
+      console.log(err)
       reject(err)
     })
   })

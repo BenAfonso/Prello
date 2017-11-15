@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom'
 import Tabs from '../../components/UI/Tabs/Tabs'
 import TabPanel from '../../components/UI/TabPanel/TabPanel'
 import TeamListElement from '../../components/UI/TeamListElement/TeamListElement'
+import NewBoardForm from '../../components/CreateMenu/Forms/NewBoardForm/NewBoardForm'
 
 @connect(store => {
   return {
@@ -136,7 +137,7 @@ export default class ProfilePage extends React.Component {
   }
 
   currentUserIsRelatedToBoard (board) {
-    let isOwner = board.owner._id === this.props.currentUser._id
+    let isOwner = board.owner._id === this.props.currentUser._id || board.owner._id === this.props.userFetched._id
     let isCollaborator = board.collaborators.filter(collab => collab._id === this.props.currentUser._id)[0] !== undefined
     let isInTeam = board.teams.filter(team => (this.currentUserIsInTeam(team)))[0] !== undefined
     return isOwner || isCollaborator || isInTeam
@@ -272,7 +273,6 @@ export default class ProfilePage extends React.Component {
   }
 
   renderOptionsTab () {
-    console.log(this.props.userFetched)
     return (
       <div className='optionsTab'>
         {this.props.currentUser._id === this.props.match.params.id && this.props.userFetched.provider !== 'google'
@@ -326,6 +326,22 @@ export default class ProfilePage extends React.Component {
               : null
           ))}
         </ul>
+        {this.props.match.params.id === this.props.currentUser._id
+          ? <div className='boardFormButton'>
+            <NewBoardForm
+              self
+              comingFromProfilePage
+              button={
+                <div className='createBoard'>
+                  <div className='createBoard-title'>
+                    Create a board
+                  </div>
+                </div>
+              }
+            />
+          </div>
+          : ''
+        }
         <style jsx>
           {styles}
         </style>
