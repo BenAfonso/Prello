@@ -16,8 +16,24 @@ export default `
 }
 
 .content {
+  position: relative;
   margin-left: 40px;
   font-size: 13px;
+}
+
+.buttons {
+  position: absolute;
+  display: flex;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  bottom: 42px;
+  left: 0;
+  width: 100%;
+  height: 20px;
+}
+
+.buttons li {
+  cursor: pointer;
 }
 
 .content .card {

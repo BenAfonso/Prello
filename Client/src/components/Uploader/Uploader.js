@@ -11,6 +11,7 @@ export default class Uploader extends React.Component {
       progress: 0
     }
     this.onDrop = this.onDrop.bind(this)
+    this.acceptedFiles = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'application/pdf', 'application/zip', 'application/rar', 'text/markdown', 'text/plain']
   }
 
   static propTypes = {
@@ -67,12 +68,12 @@ export default class Uploader extends React.Component {
           </div>
 
           {this.props.api && (
-            <Dropzone accept='image/jpeg, image/png' onDrop={this.onDrop}>
+            <Dropzone accept={`${this.acceptedFiles.join(', ')}`} onDrop={this.onDrop}>
               {this.state.progress > 0 ? (
                 <div className='progress-label'>{this.state.progress}%</div>
               ) : (
                 <div className='label'>
-                  Drag your image here or click to upload
+                  Drag a file here or click to upload
                 </div>
               )}
             </Dropzone>

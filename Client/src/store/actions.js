@@ -1,5 +1,5 @@
 import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDistant, removeTeamAdminDistant, setTeamAdminDistant, unsetTeamAdminDistant, updateTeamDistant } from '../services/Team.services'
-import { fetchBoards, addBoardDistant, addTeamBoardDistant, deleteBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, removeTeamFromBoardDistant, updateBoardNameDistant } from '../services/Board.services'
+import { fetchBoards, fetchBoard, addBoardDistant, addTeamBoardDistant, deleteBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, removeTeamFromBoardDistant, updateBoardNameDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail } from '../services/User.services'
@@ -83,12 +83,19 @@ export function moveListLocal (list) {
 export function setBoard (dispatch, id) {
   return new Promise((resolve, reject) => {
     dispatch({type: 'FETCH_BOARD_START'})
-    fetchBoards().then((data) => {
+    fetchBoard(id).then((data) => {
+      data.teams.map(team => team.users.map(user => {
+        user.isTeamUser = true
+        return data.collaborators.filter(collaborator => collaborator._id === user._id)[0] !== undefined
+          ? null
+          : data.collaborators.push(user)
+      })
+      )
       dispatch({
         type: 'FETCH_BOARD_SUCCESS',
-        payload: data.filter(x => x._id === id)[0]
+        payload: data
       })
-      resolve(data.filter(x => x._id === id)[0])
+      resolve(data)
     }).catch((err) => {
       dispatch({
         type: 'FETCH_BOARD_ERROR',
@@ -652,5 +659,35 @@ export function updateOAuthClient (client) {
   store.dispatch({
     type: 'UPDATE_OAUTHCLIENT',
     payload: client
+  })
+}
+
+export function removeAttachment (attachmentId) {
+  store.dispatch({
+    type: 'REMOVE_ATTACHMENT',
+    payload: attachmentId
+  })
+}
+
+export function removeAttachmentCard (listId, card, attachment) {
+  card.attachments = card.attachments.filter(a => a._id !== attachment._id)
+  store.dispatch({
+    type: 'UPDATE_CARD',
+    payload: {listId, card}
+  })
+}
+
+export function addAttachment (attachment) {
+  store.dispatch({
+    type: 'ADD_ATTACHMENT',
+    payload: attachment
+  })
+}
+
+export function addAttachmentCard (listId, card, attachment) {
+  card.attachments.push(attachment)
+  store.dispatch({
+    type: 'UPDATE_CARD',
+    payload: {listId, card}
   })
 }

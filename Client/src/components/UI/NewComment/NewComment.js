@@ -2,6 +2,8 @@ import React from 'react'
 import AvatarThumbnail from '../AvatarThumbnail/AvatarThumbnail'
 import styles from './NewComment.styles'
 import PropTypes from 'prop-types'
+import Icon from '../Icon/Icon'
+import { displayNotification } from '../../../services/Notification.service'
 
 const NewComment = (props) => {
   const handleSubmit = (text) => {
@@ -18,6 +20,9 @@ const NewComment = (props) => {
       </div>
       <div className='content'>
         <div className='card' contentEditable ref={c => { this.text = c }} />
+        <ul className='buttons'>
+          <li onClick={() => { displayNotification({type: 'info', title: 'Info', content: 'Not implemented yet!'}) }}><Icon name='paperclip' fontSize='13px' color='gray' /></li>
+        </ul>
         <div className='saveButton' onClick={() => { handleSubmit(this.text.innerHTML) }}>
           Save
         </div>

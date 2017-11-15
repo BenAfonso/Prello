@@ -24,8 +24,8 @@ export default class Card extends React.Component {
     content: PropTypes.string.isRequired,
     createdAt: PropTypes.string,
     bgColor: PropTypes.any,
-    nbComments: PropTypes.number,
-    nbChecklists: PropTypes.number,
+    comments: PropTypes.number,
+    checklists: PropTypes.any,
     index: PropTypes.number.isRequired,
     listIndex: PropTypes.number.isRequired,
     collaborators: PropTypes.arrayOf(PropTypes.any),
@@ -36,8 +36,8 @@ export default class Card extends React.Component {
 
   static defaultProps = {
     bgColor: '#fff',
-    nbComments: 0,
-    nbChecklists: 0
+    comments: 0,
+    checklists: 0
   }
 
   getInitials (user) {
@@ -94,6 +94,9 @@ export default class Card extends React.Component {
     const card = list.cards.filter(c => c._id === this.props.id)[0]
     const dueDate = this.getDueDate(card)
     const formattedDate = this.getFormattedDueDate(dueDate)
+    let nbComments = this.props.comments ? this.props.comments.length : 0
+    let nbChecklists = this.props.checklists ? this.props.checklists.length : 0
+    let nbAttachments = this.props.attachments ? this.props.attachments.length : 0
     // let labelsToDisplay = card.labels
     return (
       <div style={{...this.props.style}} ref={c => { this.card = c }} className='root'>
@@ -105,22 +108,29 @@ export default class Card extends React.Component {
             : null }
         </div>
         <div className='numbers'>
-          { this.props.nbComments > 0
+          { nbComments > 0
             ? <div className='number'>
-              <div className='icon'><Icon name='comment-o' fontSize='12px' /></div>
-              <span>{this.props.nbComments}</span>
+              <div className='icon'><Icon name='comment-o' fontSize='12px' color='' /></div>
+              <span>{nbComments}</span>
             </div>
             : null
           }
-          { this.props.nbChecklists > 0
+          { nbAttachments > 0
+            ? <div className='number'>
+              <div className='icon'><Icon name='paperclip' fontSize='12px' color='' /></div>
+              <span>{nbAttachments}</span>
+            </div>
+            : null
+          }
+          { nbChecklists > 0
             ? <div className={`number 
-              ${this.numberCompletedChecklists(this.props.checklists) === this.props.nbChecklists ? 'completed' : ''}`}
+              ${this.numberCompletedChecklists(this.props.checklists) === nbChecklists ? 'completed' : ''}`}
             >
               <div className='icon'><Icon name='check-square-o' fontSize='13px' color={this.numberCompletedChecklists(this.props.checklists) === this.props.nbChecklists ? 'white' : ''} /></div>
               <span style={{
-                color: this.numberCompletedChecklists(this.props.checklists) === this.props.nbChecklists ? 'white' : '#444'
+                color: this.numberCompletedChecklists(this.props.checklists) === nbChecklists ? 'white' : '#444'
               }}>{`
-                ${this.numberCompletedChecklists(this.props.checklists)} / ${this.props.nbChecklists}
+                ${this.numberCompletedChecklists(this.props.checklists)} / ${nbChecklists}
               `}</span>
             </div>
             : null
@@ -147,11 +157,15 @@ export default class Card extends React.Component {
                 : null
             }
             {
-              this.props.collaborators.map(a => (
-                <div key={a._id ? a._id : a} className='collaborator'>
-                  <AvatarThumbnail thumbnail={a._id ? a.picture : ''} initials={this.getInitials(a)} size='25px' fontSize='15px' />
-                </div>
-              ))
+              this.props.collaborators
+                ? this.props.collaborators.map(a => (
+                  a._id
+                    ? <div key={a._id ? a._id : a} className='collaborator'>
+                      <AvatarThumbnail thumbnail={a._id ? a.picture : ''} initials={this.getInitials(a)} size='25px' fontSize='15px' />
+                    </div>
+                    : null
+                ))
+                : null
             }
           </div>
         </div>

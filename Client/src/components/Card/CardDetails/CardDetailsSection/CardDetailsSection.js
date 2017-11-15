@@ -39,7 +39,7 @@ const CardDetailsSection = props => (
     .host {
       margin-left: 40px;
       display: inline-block;
-      width: calc(100% - 140px);
+      width: calc(100% - 55px);
       margin-bottom: 40px;
     }
     `}</style>

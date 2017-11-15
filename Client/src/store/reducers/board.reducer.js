@@ -97,6 +97,26 @@ export default (state = defaultBoardState, action) => {
         }
       }
     }
+    case 'REMOVE_ATTACHMENT': {
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          attachments: state.board.attachments.filter(a => a._id !== action.payload)
+        }
+      }
+    }
+    case 'ADD_ATTACHMENT': {
+      let newAttachments = state.board.attachments.slice()
+      newAttachments.push(action.payload)
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          attachments: newAttachments
+        }
+      }
+    }
     case 'MOVE_LIST': {
       return {
         ...state,

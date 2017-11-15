@@ -143,44 +143,36 @@ boardController.getOneboard = function (boardId, userId) {
         err.status = 500
         reject(err)
       } else {
-        let collaborators = res.collaborators
-        collaborators = collaborators.filter((x) => (x._id.toString() === userId.toString()))
-        if (res.owner._id.toString() !== userId.toString() && res.visibility !== 'public' && collaborators.length === 0) {
-          err = new Error('Unauthorize user')
-          err.status = 403
-          reject(err)
-        } else {
-          Card.populate(res, {
-            path: 'lists.cards'
-          }, function (err, res) {
-            if (err) {
-              err.status = 500
-              reject(err)
-            } else {
-              User.populate(res, {
-                path: 'attachments.owner',
-                select: { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }
-              }, function (err, res) {
-                if (err) {
-                  err.status = 500
-                  reject(err)
-                } else {
-                  resolve(res)
-                }
-              })
-            }
-          })
-          User.populate(res, {
-            path: 'teams.users'
-          }, function (err, res) {
-            if (err) {
-              err.status = 500
-              reject(err)
-            } else {
-              resolve(res)
-            }
-          })
-        }
+        Card.populate(res, {
+          path: 'lists.cards'
+        }, function (err, res) {
+          if (err) {
+            err.status = 500
+            reject(err)
+          } else {
+            User.populate(res, {
+              path: 'attachments.owner',
+              select: { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }
+            }, function (err, res) {
+              if (err) {
+                err.status = 500
+                reject(err)
+              } else {
+                User.populate(res, {
+                  path: 'teams.users',
+                  select: { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }
+                }, function (err, res) {
+                  if (err) {
+                    err.status = 500
+                    reject(err)
+                  } else {
+                    resolve(res)
+                  }
+                })
+              }
+            })
+          }
+        })
       }
     })
   })
