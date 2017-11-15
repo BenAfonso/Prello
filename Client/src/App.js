@@ -12,6 +12,7 @@ import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store/store'
 import { isAuthenticated } from './services/Authentication.services'
+import BoardDashboardPage from './pages/board.dashboard.page'
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
@@ -37,11 +38,13 @@ class App extends Component {
             <Route path='/register' component={RegisterPage} />
             <PrivateRoute exact path='/boards' component={BoardsPage} />
             <PrivateRoute exact path='/boards/:id' component={BoardPage} />
+            <PrivateRoute exact path='/dashboard' component={DashboardPage} />
             <PrivateRoute exact path='/teams/:id' component={TeamPage} />
             <PrivateRoute exact path='/teams/:id/:tab' component={TeamPage} />
             <PrivateRoute exact path='/developers' component={ApiPage} />
             <Route exact path='/loading' component={LoadingPage} />
             <PrivateRoute exact path='/users/:id/profile' component={ProfilePage} />
+            <PrivateRoute exact path='/boards/:id/dashboard/board' component={BoardDashboardPage} analytics='board' />
           </div>
         </Provider>
       </Router>
