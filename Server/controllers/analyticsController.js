@@ -1,5 +1,6 @@
 
 const mongoose = require('mongoose')
+const _ = require('underscore')
 const Board = mongoose.model('Board')
 const Team = mongoose.model('Team')
 const modificationController = require('./modificationController')
@@ -193,6 +194,12 @@ analyticsController.getListAnalyticsByDate = (list, beginDate, endDate, per) => 
     getNumberOfCardsFromListByDate(list, endDate).then(res => {
       numbers.numberOfCards = res
       resolve(numbers)
+      getAverageTimeFromListByDate(list, endDate).then(res => {
+        numbers.averageTimeSpentPerCard = res
+        resolve(numbers)
+      }).catch((err) => {
+        reject(err)
+      })
     }).catch((err) => {
       reject(err)
     })
@@ -208,6 +215,42 @@ const getNumberOfCardsFromListByDate = (list, endDate) => {
       return ((item.type.toString() === 'MOVED_CARD' && item.fromList._id.toString() === list._id.toString()) && (item.timestamp.getTime() < endDate.getTime()))
     })
     resolve(allCardsAdded.length - allCardsRemoved.length)
+  })
+}
+
+const getAverageTimeFromListByDate = (list, endDate) => {
+  return new Promise((resolve, reject) => {
+    // let totalTime = 0
+    let allCards = list.modification.filter((item) => {
+      return (((item.type.toString() === 'MOVED_CARD' && item.toList._id.toString() === list._id.toString()) || (item.type.toString() === 'CREATED_CARD' && item.list._id.toString() === list._id.toString()) || (item.type.toString() === 'MOVED_CARD' && item.fromList._id.toString() === list._id.toString())) && (item.timestamp.getTime() < endDate.getTime()))
+    })
+    let modifs = _.groupBy(allCards, modif => { return modif.card._id })
+    modifs = _.pairs(modifs)
+    let modifsAfterTreat = modifs.map((pairModif) => {
+      return pairModif[1].reverse().map((x, i) => {
+        if (i === pairModif[1].length - 1) {
+          if (i % 2 === 0) {
+            return Date.now() - new Date(x.timestamp).getTime()
+          }
+        } else {
+          if (i % 2 === 0) {
+            return (new Date(pairModif[1][i + 1].timestamp).getTime()) - new Date(x.timestamp).getTime()
+          }
+        }
+      }).filter(v => v > 0)
+    })
+    let modifFlat = _.flatten(modifsAfterTreat)
+    let res = modifFlat.reduce((x, y) => x + y) / modifFlat.length
+    resolve((res / 1000 / 60 / 60 / 24))
+    /*
+    allCardsAdded.map(c => {
+      modificationController.findCardHistory(c._id).then(histories => {
+        let time = 0
+        histories.filter(history => {
+        })
+      })
+    })
+    resolve(allCardsAdded.length - allCardsRemoved.length) */
   })
 }
 
