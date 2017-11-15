@@ -24,6 +24,7 @@ cardController.createCard = (req) => {
                 card: item,
                 listId: req.params.listId
               }
+              modificationController.CREATED_CARD(req.params.boardId, req.user._id, item._id, req.params.listId)
               emit(req.params.boardId, 'NEW_CARD', cardToEmit)
               resolve(item)
             })

@@ -122,7 +122,18 @@ modificationController.ARCHIVED_LIST = (boardId, userId, listId) => {
     })
   })
 }
-
+modificationController.CREATED_CARD = (boardId, userId, cardId, listId) => {
+  return new Promise((resolve, reject) => {
+    let modificationToAdd = Modification({type: 'CREATED_CARD', board: boardId, user: userId, card: cardId, list: listId})
+    modificationToAdd.save((err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
+  })
+}
 modificationController.ARCHIVED_CARD = (boardId, userId, cardId) => {
   return new Promise((resolve, reject) => {
     let modificationToAdd = Modification({type: 'ARCHIVED_CARD', board: boardId, user: userId, card: cardId})

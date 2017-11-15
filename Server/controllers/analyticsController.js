@@ -1,3 +1,4 @@
+
 const mongoose = require('mongoose')
 const Board = mongoose.model('Board')
 const Team = mongoose.model('Team')
@@ -29,6 +30,45 @@ analyticsController.getAllUserBoards = (userId) => {
 
 analyticsController.getBoardAnalytics = (boardId, per, beginDate, endDate) => {
   return new Promise((resolve, reject) => {
+    initDate(boardId, beginDate, endDate).then((result) => {
+      if (per === undefined) {
+        per = 'day'
+      }
+      let funcs = constructFuncArray(result.board, analyticsController.getBoardAnalyticsByDate, [], per, result.beginDate, result.endDate)
+      executeFuncRecursive(funcs, [], 0).then(res => {
+        resolve(res)
+      }).catch(err => {
+        console.log(err)
+      })
+    })
+  })
+}
+
+analyticsController.getListsAnalytics = (boardId, per, beginDate, endDate) => {
+  return new Promise((resolve, reject) => {
+    initDate(boardId, beginDate, endDate).then((result) => {
+      if (per === undefined) {
+        per = 'day'
+      }
+      let listStats = []
+      result.board.lists.map((list, index) => {
+        list.modification = result.board.modification
+        let funcs = constructFuncArray(list, analyticsController.getListAnalyticsByDate, [], per, result.beginDate, result.endDate)
+        executeFuncRecursive(funcs, [], 0).then(res => {
+          let listStat = {name: list.name, numbers: res}
+          listStats.push(listStat)
+          if (result.board.lists.length - 1 === index) {
+            resolve(listStats)
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      })
+    })
+  })
+}
+const initDate = (boardId, beginDate, endDate) => {
+  return new Promise((resolve, reject) => {
     Board.findOne({'_id': boardId}).populate({path: 'lists', model: 'List', populate: {path: 'cards', model: 'Card'}}).then((board) => {
       modificationController.findBoardHistory(boardId).then(modification => {
         board.modification = modification
@@ -42,19 +82,11 @@ analyticsController.getBoardAnalytics = (boardId, per, beginDate, endDate) => {
         } else {
           endDate = new Date(endDate)
         }
-        if (per === undefined) {
-          per = 'day'
-        }
         beginDate = addDays(new Date(beginDate.getFullYear(), beginDate.getMonth(), beginDate.getDate()), 1)
 
         endDate = addDays(new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()), 1)
-
-        let funcs = constructFuncArray(board, analyticsController.getBoardAnalyticsByDate, [], per, beginDate, endDate)
-        executeFuncRecursive(funcs, [], 0).then(res => {
-          resolve(res)
-        }).catch(err => {
-          console.log(err)
-        })
+        let objectToResolve = {board: board, beginDate: beginDate, endDate: endDate}
+        resolve(objectToResolve)
       })
     })
   })
@@ -153,6 +185,32 @@ analyticsController.getBoardAnalyticsByDate = (board, beginDate, endDate, per) =
     })
   })
 }
+
+analyticsController.getListAnalyticsByDate = (list, beginDate, endDate, per) => {
+  return new Promise((resolve, reject) => {
+    let numbers = {}
+    numbers.date = beginDate
+    getNumberOfCardsFromListByDate(list, endDate).then(res => {
+      numbers.numberOfCards = res
+      resolve(numbers)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+const getNumberOfCardsFromListByDate = (list, endDate) => {
+  return new Promise((resolve, reject) => {
+    let allCardsAdded = list.modification.filter((item) => {
+      return (((item.type.toString() === 'MOVED_CARD' && item.toList._id.toString() === list._id.toString()) || (item.type.toString() === 'CREATED_CARD' && item.list._id.toString() === list._id.toString())) && (item.timestamp.getTime() < endDate.getTime()))
+    })
+    let allCardsRemoved = list.modification.filter((item) => {
+      return ((item.type.toString() === 'MOVED_CARD' && item.fromList._id.toString() === list._id.toString()) && (item.timestamp.getTime() < endDate.getTime()))
+    })
+    resolve(allCardsAdded.length - allCardsRemoved.length)
+  })
+}
+
 const getNumberOfCardsByDate = (board, endDate) => {
   return new Promise((resolve, reject) => {
     let allCards = board.lists.map(l => l.cards).reduce((x, y) => x.concat(y))
