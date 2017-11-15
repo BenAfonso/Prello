@@ -80,10 +80,12 @@ export default class Import extends React.Component {
   render () {
     return (
       <div className='container'>
-        <h3>Import Trello board</h3>
-        <p>(Max size limit: 500Kb)</p>
         <div>
-          <Dropzone style={{ borderColor: '#000', borderWidth: '1px', marginTop: '5%', marginLeft: '10%', marginRight: '10%', width: '80%', height: '75px', borderRadius: '3px', backgroundColor: 'white' }} onDrop={this.importTrelloBoard} accept='application/json'>
+          <h3 className='title'>Import Trello board</h3>
+          <p className='description'>(Max size limit: 500Kb)</p>
+        </div>
+        <div className='dropzone'>
+          <Dropzone style={{ borderStyle: 'dotted', borderWidth: 'medium', borderColor: '#000', marginTop: '5%', marginLeft: '10%', marginRight: '10%', width: '80%', height: '75px', borderRadius: '3px', backgroundColor: '#f9f9f9' }} onDrop={this.importTrelloBoard} accept='application/json'>
             <div>
               <p>Drag and drop file or click here...</p>
               <p style={{ fontWeight: 'normal' }}>(only json files are allowed)</p>
