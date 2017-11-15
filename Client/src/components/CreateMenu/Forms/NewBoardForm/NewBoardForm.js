@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-
+import NewTeamForm from '../NewTeamForm/NewTeamForm'
 import Button from '../../../UI/Button/Button'
 import DropDown from '../../../UI/DropDown/DropDown'
 import { addBoard, addTeamBoard, setTeamslist } from '../../../../store/actions'
@@ -39,10 +39,14 @@ export default class NewBoardForm extends React.Component {
 
   submit (title) {
     if (this.title.value !== '') {
-      if (this.state.selected === []) {
+      if (this.state.selected.length === 0) {
         addBoard(this.props.dispatch, {title: this.title.value, color: this.color.value})
       } else {
-        addTeamBoard(this.props.dispatch, {title: this.title.value, color: this.color.value, teams: this.state.selected})
+        let teamId = ''
+        if (this.props.currentTeam !== undefined) {
+          teamId = this.props.currentTeam._id
+        }
+        addTeamBoard(this.props.dispatch, teamId, {title: this.title.value, color: this.color.value, teams: this.state.selected})
       }
     }
   }
@@ -59,19 +63,13 @@ export default class NewBoardForm extends React.Component {
   }
 
   render () {
-    const { teams } = this.props
+    const { teams, button } = this.props
     return (
       <div className='host'>
         <DropDown
           layout='custom'
           orientation='right'
-          button={
-            <div className='createBoard'>
-              <div className='createBoard-title'>
-                Create a board...
-              </div>
-            </div>
-          }
+          button={button}
           title='Create Board'>
           <div style={{ width: '300px' }}>
             <ul>
@@ -92,10 +90,10 @@ export default class NewBoardForm extends React.Component {
                 </div>
               </li>
               <li className='element'>
-                <div className='element-title'>Team</div>
+                <div className='element-title'>Teams</div>
                 {
                   teams.length >= 1
-                    ? <div className='element-input'>
+                    ? <div>
                       <form>
                         <ul>
                           {
@@ -115,7 +113,14 @@ export default class NewBoardForm extends React.Component {
                         </select> */}
                       </form>
                     </div>
-                    : <div className='element-text'>You have no team yet.</div>
+                    : <div className='element-text'>
+                      You have no team yet.
+                      <div className='teamForm'>
+                        <NewTeamForm
+                          button={<span className='add-team'>Add one</span>}
+                        />
+                      </div>
+                    </div>
                 }
               </li>
               <li className='separator' />
@@ -151,15 +156,14 @@ export default class NewBoardForm extends React.Component {
 
     .element-title{
       font-weight: bold;
-    }
-
-    .element-input {
-      padding: 8px 0px;
+      text-align: left;
+      padding: 4px 0;      
     }
 
     .element-text {
-      padding: 8px 0px;
+      padding: 4px 0px;
       font-size: 15px;
+      text-align: left;
     }
 
     .team {
@@ -177,11 +181,24 @@ export default class NewBoardForm extends React.Component {
       width: 100%;
     }
 
-    input {
+    .teamForm {
+      display: inline-block;
+      padding-left: 5px;
+    }
+
+    .add-team {
+      cursor: pointer;
+      text-decoration: underline;
+      display: inline-block;
+    }
+
+    .element-input input {
       font-size: inherit;
       width: 100%;
       padding: 8px;
       border-radius: 3px;
+      border: 1px solid rgba(0,0,0,0.2);
+      box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
     }
 
     input[type=checkbox] {

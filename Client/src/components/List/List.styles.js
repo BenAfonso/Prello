@@ -20,8 +20,9 @@ export default `
 .title {
   display: inline-block;
   color: #444;
-  margin-bottom: 10px;
-  margin-top: 7px;
+  padding-bottom: 10px;
+  padding-top: 7px;
+  width: 100%;
   font-weight: bold;
   font-size: 16px;
 }
@@ -79,6 +80,16 @@ ul li:nth-child(1) {
   top: 8px;
   cursor: pointer;
   float: right;
+}
+
+.rename-form {
+  padding-bottom: 10px;
+}
+
+.rename-input{
+  border-radius: 3px;
+  padding: 10px;
+  font-size: 15px;
 }
 
 `

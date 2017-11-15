@@ -5,6 +5,8 @@ import UsersMenu from '../../MenuElements/UsersMenu/UsersMenu'
 import TeamsMenu from '../../MenuElements/TeamsMenu/TeamsMenu'
 import ActivityMenu from '../../MenuElements/ActivityMenu/ActivityMenu'
 import ArchivedMenu from '../../MenuElements/ArchivedMenu/ArchivedMenu'
+import SettingsMenu from '../../MenuElements/SettingsMenu/SettingsMenu'
+import AttachmentsMenu from '../../MenuElements/AttachmentsMenu/AttachmentsMenu'
 
 const elements = [
   {
@@ -26,6 +28,16 @@ const elements = [
     icon: 'archive',
     description: 'Archives',
     component: ArchivedMenu
+  },
+  {
+    icon: 'file',
+    description: 'Files',
+    component: AttachmentsMenu
+  },
+  {
+    icon: 'gear',
+    description: 'Settings',
+    component: SettingsMenu
   }
 ]
 

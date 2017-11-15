@@ -1,5 +1,5 @@
 import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDistant, removeTeamAdminDistant, setTeamAdminDistant, unsetTeamAdminDistant, updateTeamDistant } from '../services/Team.services'
-import { fetchBoards, fetchBoard, addBoardDistant, addTeamBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, removeTeamFromBoardDistant } from '../services/Board.services'
+import { fetchBoards, fetchBoard, addBoardDistant, addTeamBoardDistant, deleteBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, removeTeamFromBoardDistant, updateBoardNameDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail, fetchUser, fetchUserTeams, fetchUserBoards } from '../services/User.services'
@@ -147,13 +147,6 @@ export function setConnectedUser (user) {
   })
 }
 
-export function updateProfileAction (datas) {
-  store.dispatch({
-    type: 'UPDATE_USER',
-    payload: datas
-  })
-}
-
 export function removeListLocal (list) {
   store.dispatch({
     type: 'REMOVE_LIST',
@@ -203,19 +196,58 @@ export function addBoard (dispatch, payload) {
   })
 }
 
-export function addTeamBoard (dispatch, payload) {
+export function addBoardLocal (board) {
+  if (board) {
+    store.dispatch({
+      type: 'ADD_BOARD',
+      payload: board
+    })
+  }
+}
+
+export function addTeamBoard (dispatch, teamId, payload) {
   addTeamBoardDistant(payload).then((board) => {
+    addTeamBoardLocal(teamId, board)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function addTeamBoardLocal (teamId, board) {
+  if (board) {
+    store.dispatch({
+      type: 'ADD_TEAM_BOARD',
+      payload: {
+        board: board,
+        teamId: teamId
+      }
+    })
+  }
+}
+
+export function deleteBoard (boardId) {
+  deleteBoardDistant(boardId).then((board) => {
     // <= HANDLED FROM SOCKETS
   }).catch(err => {
     return err
   })
 }
 
-export function addBoardLocal (board) {
+export function updateBoardName (boardId, boardName) {
+  updateBoardNameDistant(boardId, boardName).then((board) => {
+    // <= HANDLED FROM SOCKETS
+  }).catch(err => {
+    return err
+  })
+}
+
+export function updateBoardLocal (board) {
   if (board) {
     store.dispatch({
-      type: 'ADD_BOARD',
-      payload: board
+      type: 'UPDATE_BOARD',
+      payload: {
+        title: board.title
+      }
     })
   }
 }
@@ -507,6 +539,11 @@ export function removeResponsible (boardId, listId, cardId, email) {
   removeResponsibleDistant(boardId, listId, cardId)
 }
 
+export function updateCardText (boardId, listId, card, text) {
+  let newCard = { ...card, text: text }
+  updateCard(boardId, listId, card._id, newCard)
+}
+
 export function updateCardDueDate (boardId, listId, card, dueDate) {
   let newCard = { ...card, dueDate: dueDate }
   updateCard(boardId, listId, card._id, newCard)
@@ -567,6 +604,16 @@ export function restoreList (boardId, list) {
     payload: newList
   })
 }
+
+export function updateListName (boardId, list, listName) {
+  let newList = { ...list, name: listName }
+  updateList(boardId, list._id, newList)
+  store.dispatch({
+    type: 'UPDATE_LIST',
+    payload: newList
+  })
+}
+
 export function addLabel (labels) {
   store.dispatch({
     type: 'ADD_LABEL',
@@ -660,6 +707,42 @@ export function setFetchedUserBoards (id) {
     }).catch(err => {
       reject(err)
     })
+  })
+}
+
+export function updateProfileAction (datas) {
+  store.dispatch({
+    type: 'UPDATE_USER',
+    payload: datas
+  })
+}
+export function removeAttachment (attachmentId) {
+  store.dispatch({
+    type: 'REMOVE_ATTACHMENT',
+    payload: attachmentId
+  })
+}
+
+export function removeAttachmentCard (listId, card, attachment) {
+  card.attachments = card.attachments.filter(a => a._id !== attachment._id)
+  store.dispatch({
+    type: 'UPDATE_CARD',
+    payload: {listId, card}
+  })
+}
+
+export function addAttachment (attachment) {
+  store.dispatch({
+    type: 'ADD_ATTACHMENT',
+    payload: attachment
+  })
+}
+
+export function addAttachmentCard (listId, card, attachment) {
+  card.attachments.push(attachment)
+  store.dispatch({
+    type: 'UPDATE_CARD',
+    payload: {listId, card}
   })
 }
 

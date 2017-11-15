@@ -327,6 +327,8 @@ export default class MembersTab extends React.Component {
             width: 100%;
             padding: 8px;
             border-radius: 3px;
+            border: 1px solid rgba(0,0,0,0.2);
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
           }
 
           .sidebar {

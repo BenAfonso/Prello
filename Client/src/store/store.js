@@ -59,6 +59,7 @@ export const defaultBoardState = {
     visibility: '',
     isArchived: false,
     background: '#fff',
+    owner: '',
     collaborators: [],
     labels: [],
     modifications: []

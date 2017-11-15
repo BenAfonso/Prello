@@ -1,5 +1,6 @@
 import Config from '../config'
 import axios from 'axios'
+import { logout } from './Authentication.services'
 
 export function addBoardDistant (payload) {
   return new Promise((resolve, reject) => {
@@ -28,11 +29,34 @@ export function addTeamBoardDistant (payload) {
   })
 }
 
+export function deleteBoardDistant (boardId) {
+  return new Promise((resolve, reject) => {
+    axios.delete(`${Config.API_URL}/boards/${boardId}`).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function updateBoardNameDistant (boardId, boardName) {
+  return new Promise((resolve, reject) => {
+    axios.put(`${Config.API_URL}/boards/${boardId}`, {
+      title: boardName
+    }).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
 export function fetchBoards () {
   return new Promise((resolve, reject) => {
     axios.get(`${Config.API_URL}/me/boards`).then((res) => {
       resolve(res.data)
     }).catch((err) => {
+      logout()
       reject(err)
     })
   })
@@ -42,6 +66,7 @@ export function fetchBoard (boardId) {
     axios.get(`${Config.API_URL}/boards/${boardId}`).then((res) => {
       resolve(res.data)
     }).catch((err) => {
+      logout()
       reject(err)
     })
   })

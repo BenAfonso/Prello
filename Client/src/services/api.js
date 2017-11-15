@@ -1,5 +1,5 @@
 import openSocket from 'socket.io-client'
-import {addBoardLocal, addListLocal, removeListLocal, moveListLocal, addCardLocal, moveCardLocal, updateCardAction, replaceCollaboratorsLocal, updateTeams, addLabel, updateLabel, removeLabel} from '../store/actions'
+import {addBoardLocal, updateBoardLocal, addListLocal, removeListLocal, moveListLocal, addCardLocal, moveCardLocal, updateCardAction, replaceCollaboratorsLocal, updateTeams, addLabel, updateLabel, removeLabel} from '../store/actions'
 import Config from '../config'
 const socket = openSocket(Config.SOCKET_URL)
 
@@ -13,6 +13,10 @@ export function subscribeToBoardslist (userId) {
 
 socket.on('NEW_BOARD', (board) => {
   addBoardLocal(board)
+})
+
+socket.on('BOARD_UPDATED', (board) => {
+  updateBoardLocal(board)
 })
 
 socket.on('NEW_LIST', (list) => {

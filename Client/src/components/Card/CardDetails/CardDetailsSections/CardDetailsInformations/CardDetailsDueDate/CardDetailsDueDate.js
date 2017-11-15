@@ -93,6 +93,7 @@ export default class CardDetailsDueDate extends React.Component {
             
             .dueDate{
               padding: 5px;
+              font-size: 13px;
             }
           `}
         </style>

@@ -45,30 +45,6 @@ export default class Boardslist extends React.Component {
 
   render () {
     return (<div className='host'>
-      { /* <h1>Mes boards favoris</h1>
-
-      <ul>
-        {
-          this.props.boardslist.boards.map((board, i) => board.isFavorite ?
-
-            <li key={board._id}>
-              <Link to={`/boards/${board._id}`}>
-                <BoardThumbnail
-                  id={board._id}
-                  title={board.title}
-                  index={i}
-                  findBoard={this.findBoard}
-                  isFavorite={board.isFavorite}
-                  background={board.background}
-                />
-              </Link>
-            </li>
-
-          : null)
-        }
-
-      </ul>
-      */ }
       <div className='titleSection'>
         <Icon color='#dcdcda' name='window-restore' fontSize='40px' />
         <h1>My boards</h1>
@@ -92,7 +68,16 @@ export default class Boardslist extends React.Component {
           ))
         }
         <li>
-          <NewBoardForm self/>
+          <NewBoardForm
+            self
+            button={
+              <div className='createBoard'>
+                <div className='createBoard-title'>
+                  Create a board...
+                </div>
+              </div>
+            }
+          />
         </li>
       </ul>
 
@@ -153,7 +138,16 @@ export default class Boardslist extends React.Component {
                     ))
                   }
                   <li>
-                    <NewBoardForm currentTeam={team} />
+                    <NewBoardForm
+                      currentTeam={team}
+                      button={
+                        <div className='createBoard'>
+                          <div className='createBoard-title'>
+                            Create a board...
+                          </div>
+                        </div>
+                      }
+                    />
                   </li>
                 </ul>
               </div>
