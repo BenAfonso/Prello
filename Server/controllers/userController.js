@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const Team = mongoose.model('Team')
-
 const userController = {}
 const querystring = require('querystring')
 const request = require('request')

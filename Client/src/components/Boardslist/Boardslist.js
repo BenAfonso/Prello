@@ -6,7 +6,7 @@ import Icon from '../UI/Icon/Icon'
 import Button from '../UI/Button/Button'
 import NewBoardForm from '../CreateMenu/Forms/NewBoardForm/NewBoardForm'
 import {connect} from 'react-redux'
-import { setBoardslist, setTeamslist } from '../../store/actions'
+import { setBoardslist } from '../../store/actions'
 import { subscribeToBoardslist } from '../../services/api'
 
 @connect(store => {
@@ -26,10 +26,6 @@ export default class Boardslist extends React.Component {
   componentDidMount () {
     setBoardslist(this.props.dispatch).then(() => {
       subscribeToBoardslist('testID')
-    }).catch(err => {
-      console.error(err)
-    })
-    setTeamslist(this.props.dispatch).then(() => {
     }).catch(err => {
       console.error(err)
     })

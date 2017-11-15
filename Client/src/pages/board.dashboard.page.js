@@ -1,9 +1,10 @@
 import React from 'react'
-import BoardAnalytics from '../components/Dashboard/Analytics/Board/Board'
-import ListsAnalytics from '../components/Dashboard/Analytics/Lists/Lists'
+// import BoardAnalytics from '../components/Dashboard/Analytics/Board/Board'
+// import ListsAnalytics from '../components/Dashboard/Analytics/Lists/Lists'
 import PopupManager from '../components/PopupManager/PopupManager'
+import Dashboard from '../components/Dashboard/Dashboard'
 
-export default (props) => {
+/* export default (props) => {
   if (props.analytics === 'board') {
     return <PopupManager>
       <BoardAnalytics
@@ -19,4 +20,12 @@ export default (props) => {
       />
     </PopupManager>
   }
-}
+} */
+
+export default (props) => (
+  <PopupManager>
+    <Dashboard
+      _id={props.match.params.id}
+    />
+  </PopupManager>
+)

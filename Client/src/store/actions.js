@@ -3,6 +3,7 @@ import { fetchBoards, fetchBoard, addBoardDistant, addTeamBoardDistant, deleteBo
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail, fetchUser, fetchUserTeams, fetchUserBoards } from '../services/User.services'
+import { fetchBoards as fetchAnalyticsBoards } from '../services/Analytics.services'
 
 import store from '../store/store'
 
@@ -655,6 +656,40 @@ export function removeOAuthClient (client) {
   })
 }
 
+/**
+ *
+ * ANALYTICS
+ *
+ */
+
+export function setAnalyticsBoards (provider) {
+  return new Promise((resolve, reject) => {
+    fetchAnalyticsBoards(provider).then((data) => {
+      store.dispatch({
+        type: 'SET_ANALYTICS_BOARDS',
+        payload: data
+      })
+      resolve(data)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export function setAnalyticsBoard (provider, id) {
+  return new Promise((resolve, reject) => {
+    fetchAnalyticsBoards(provider).then((data) => {
+      store.dispatch({
+        type: 'SET_ANALYTICS_BOARD',
+        payload: data.filter(x => x._id === id)[0]
+      })
+      resolve(data.filter(x => x._id === id)[0])
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
 export function updateOAuthClient (client) {
   store.dispatch({
     type: 'UPDATE_OAUTHCLIENT',
@@ -750,5 +785,12 @@ export function updateProfilePageAction (datas) {
   store.dispatch({
     type: 'UPDATE_USER_PROFILE_PAGE',
     payload: datas
+  })
+}
+
+export function setBoardAnalytics (analytics) {
+  store.dispatch({
+    type: 'SET_BOARD_ANALYTICS',
+    payload: analytics
   })
 }

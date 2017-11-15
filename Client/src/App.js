@@ -3,16 +3,17 @@ import IndexPage from './pages/index.page'
 import LoginPage from './pages/LoginPage/login.page'
 import BoardsPage from './pages/boards.page'
 import BoardPage from './pages/board.page'
-import TeamPage from './pages/team.page'
 import RegisterPage from './pages/RegisterPage/register.page'
 import LoadingPage from './pages/LoadingPage/loading.page'
 import ProfilePage from './pages/ProfilePage/profile.page'
+import DashboardPage from './pages/dashboard.page'
 import ApiPage from './pages/ApiPages/api.page'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store/store'
 import { isAuthenticated } from './services/Authentication.services'
 import BoardDashboardPage from './pages/board.dashboard.page'
+import TeamPage from './pages/team.page'
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
