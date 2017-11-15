@@ -2,7 +2,7 @@ import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDista
 import { fetchBoards, fetchBoard, addBoardDistant, addTeamBoardDistant, deleteBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, removeTeamFromBoardDistant, updateBoardNameDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
-import { fetchMatchingUsersEmail } from '../services/User.services'
+import { fetchMatchingUsersEmail, fetchUser, fetchUserTeams, fetchUserBoards } from '../services/User.services'
 
 import store from '../store/store'
 
@@ -662,6 +662,60 @@ export function updateOAuthClient (client) {
   })
 }
 
+export function setFetchedUser (id) {
+  return new Promise((resolve, reject) => {
+    store.dispatch({type: 'FETCH_USER_PROFILE_START'})
+    fetchUser(id).then(user => {
+      store.dispatch({
+        type: 'FETCH_USER_PROFILE_SUCCESS',
+        payload: user
+      })
+      resolve(user)
+    }).catch(err => {
+      store.dispatch({
+        type: 'FETCH_USER_PROFILE_ERROR',
+        payload: err
+      })
+    })
+  })
+}
+
+export function setFetchedUserTeams (id) {
+  return new Promise((resolve, reject) => {
+    fetchUserTeams(id).then(teams => {
+      store.dispatch({
+        type: 'SET_FETCHED_USER_TEAMS',
+        payload: teams
+      })
+    }).then(teams => {
+      resolve(teams)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function setFetchedUserBoards (id) {
+  return new Promise((resolve, reject) => {
+    fetchUserBoards(id).then(boards => {
+      store.dispatch({
+        type: 'SET_FETCHED_USER_BOARDS',
+        payload: boards
+      })
+    }).then(boards => {
+      resolve(boards)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function updateProfileAction (datas) {
+  store.dispatch({
+    type: 'UPDATE_USER',
+    payload: datas
+  })
+}
 export function removeAttachment (attachmentId) {
   store.dispatch({
     type: 'REMOVE_ATTACHMENT',
@@ -689,5 +743,12 @@ export function addAttachmentCard (listId, card, attachment) {
   store.dispatch({
     type: 'UPDATE_CARD',
     payload: {listId, card}
+  })
+}
+
+export function updateProfilePageAction (datas) {
+  store.dispatch({
+    type: 'UPDATE_USER_PROFILE_PAGE',
+    payload: datas
   })
 }

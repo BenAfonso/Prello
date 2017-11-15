@@ -131,7 +131,7 @@ module.exports = (router, userController) => {
   })
 
   router.put('/users/:userId', requiresLogin, function (req, res) {
-    if (req.params.userId === req.user._id) {
+    if (req.params.userId.toString() === req.user._id.toString()) {
       userController.updateUser(req.params.userId, req.body).then(user => {
         return res.status(200).send(user)
       }).catch(err => {

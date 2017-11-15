@@ -25,6 +25,10 @@ export default class Header extends React.Component {
     color: 'white'
   }
 
+  goToProfilePage () {
+    window.location = `/users/${this.props.currentUser._id}/profile`
+  }
+
   render () {
     return <div className='host' style={{
       backgroundColor: this.props.bgColor,
@@ -62,6 +66,10 @@ export default class Header extends React.Component {
               <DropDown
                 orientation='right'
                 menuElements={[
+                  {
+                    action: this.goToProfilePage.bind(this),
+                    placeholder: 'Profile'
+                  },
                   {
                     action: logout,
                     placeholder: 'Logout'
