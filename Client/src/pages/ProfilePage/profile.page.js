@@ -15,6 +15,7 @@ import Tabs from '../../components/UI/Tabs/Tabs'
 import TabPanel from '../../components/UI/TabPanel/TabPanel'
 import TeamListElement from '../../components/UI/TeamListElement/TeamListElement'
 import NewBoardForm from '../../components/CreateMenu/Forms/NewBoardForm/NewBoardForm'
+import NewTeamForm from '../../components/CreateMenu/Forms/NewTeamForm/NewTeamForm'
 
 @connect(store => {
   return {
@@ -253,6 +254,22 @@ export default class ProfilePage extends React.Component {
                 ? <li key={team._id} className='teamLi'><Link to={`/teams/${team._id}`}><TeamListElement team={team}/></Link></li>
                 : null
             ))}
+            {this.props.match.params.id === this.props.currentUser._id
+              ? <li>
+                <NewTeamForm
+                  self
+                  comingFromProfilePage
+                  button={
+                    <div className='createBoard'>
+                      <div className='createBoard-title'>
+                        Create a team
+                      </div>
+                    </div>
+                  }
+                />
+              </li>
+              : ''
+            }
           </ul>
         </div>
         <div className = 'activityDiv'>
@@ -325,23 +342,23 @@ export default class ProfilePage extends React.Component {
               </li>
               : null
           ))}
-        </ul>
-        {this.props.match.params.id === this.props.currentUser._id
-          ? <div className='boardFormButton'>
-            <NewBoardForm
-              self
-              comingFromProfilePage
-              button={
-                <div className='createBoard'>
-                  <div className='createBoard-title'>
-                    Create a board
+          {this.props.match.params.id === this.props.currentUser._id
+            ? <li>
+              <NewBoardForm
+                self
+                comingFromProfilePage
+                button={
+                  <div className='createBoard'>
+                    <div className='createBoard-title'>
+                      Create a board
+                    </div>
                   </div>
-                </div>
-              }
-            />
-          </div>
-          : ''
-        }
+                }
+              />
+            </li>
+            : ''
+          }
+        </ul>
         <style jsx>
           {styles}
         </style>

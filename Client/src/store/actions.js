@@ -280,13 +280,19 @@ export function setTeamslist (dispatch) {
   })
 }
 
-export function addTeam (teamName) {
+export function addTeam (teamName, comingFromProfilePage) {
   addTeamDistant(teamName).then((team) => {
     if (team) {
       store.dispatch({
         type: 'ADD_TEAM',
         payload: team
       })
+      if (comingFromProfilePage) {
+        store.dispatch({
+          type: 'ADD_TEAM_FROM_PROFILE_PAGE',
+          payload: team
+        })
+      }
     }
   }).catch(err => {
     return err

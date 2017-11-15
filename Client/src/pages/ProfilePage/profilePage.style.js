@@ -176,11 +176,10 @@ label {
     margin-top: 10px;
     margin-left: 20px;
 }
-.boardFormButton {
-    justify-content: center;
-}
+
 .createBoard {
     cursor: pointer;
+    position: relative;
     background-color: rgba(250,250,250,0.3);
     padding: 10px;
     border-radius: 3px;
@@ -188,7 +187,7 @@ label {
     width: 270px;
   }
   
-  .createBoard-title {
+.createBoard-title {
     height: 50px;
     line-height: 50px;
     color: #dcdcda;

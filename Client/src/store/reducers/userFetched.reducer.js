@@ -63,6 +63,17 @@ export default (state = defaultFetchedUserState, action) => {
         }
       }
     }
+    case 'ADD_TEAM_FROM_PROFILE_PAGE': {
+      let newTeams = state.user.teams
+      newTeams.push(action.payload)
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          teams: newTeams
+        }
+      }
+    }
     default:
       return {
         ...state
