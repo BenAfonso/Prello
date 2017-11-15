@@ -35,6 +35,8 @@ export default `
 
 .title {
   font-weight: bold;
+  font-size: 30px;
+  color: white;
 }
 
 .bigNumbers {

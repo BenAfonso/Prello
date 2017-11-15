@@ -26,6 +26,15 @@ export default (state = defaultDashboardState, action) => {
         }
       }
     }
+    case 'SET_LISTS_ANALYTICS': {
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          lists: action.payload
+        }
+      }
+    }
     default:
       return {
         ...state

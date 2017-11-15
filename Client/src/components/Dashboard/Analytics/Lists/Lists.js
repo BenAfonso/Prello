@@ -2,16 +2,16 @@ import PageLayout from '../../../../layouts/page'
 import React from 'react'
 import styles from './Lists.styles'
 import { connect } from 'react-redux'
-import { setAnalyticsBoard, setBoardAnalytics } from '../../../../store/actions'
-import DateFilter from '../../DateFilter/DateFilter'
-import { BarChart, Bar, LineChart, CartesianGrid, XAxis, YAxis, Line, Legend, Tooltip } from 'recharts'
-import { fetchBoardAnalytics } from '../../../../services/Analytics.services'
+import { setListsAnalytics } from '../../../../store/actions'
+import { BarChart, Bar, LineChart, Pie, Cell, PieChart, Line, CartesianGrid, XAxis, YAxis, Legend, Tooltip } from 'recharts'
 import BaseChart from '../../Charts/BaseChart'
+import {shuffle} from 'underscore'
 
 @connect(store => {
   return {
     analytics: store.analytics,
-    board: store.analytics.board
+    board: store.analytics.board,
+    lists: store.analytics.board.lists
   }
 })
 export default class BoardAnalytics extends React.Component {
@@ -19,30 +19,22 @@ export default class BoardAnalytics extends React.Component {
     super(props)
     this.state = {
       firstDate: '',
-      secondDate: ''
+      secondDate: '',
+      fetched: false
     }
     this.shouldUpdateData = this.shouldUpdateData.bind(this)
   }
 
   componentDidMount () {
-    setAnalyticsBoard(this.props.provider || 'TheMightyPrello', this.props._id)
-    fetchBoardAnalytics(this.props.provier || 'TheMightyPrello', this.props._id, 'day', '2017-11-05', '2017-11-15').then(analytics => {
-      setBoardAnalytics(analytics)
-      this.numbers = analytics
-    }).catch(err => {
-      console.error(err)
+    if (this.state.fetched) {
+      return
+    }
+    setListsAnalytics(this.props.provider || 'TheMightyPrello', this.props._id, 'day').then(res => {
+      this.setState({ fetched: true })
     })
   }
 
   onFilterChange (d1, d2) {
-    if (this.shouldUpdateData(d1, d2, 'day')) {
-      fetchBoardAnalytics(this.props.provier || 'TheMightyPrello', this.props._id, 'day', this.state.firstDate, this.state.secondDate).then(analytics => {
-        setBoardAnalytics(analytics)
-        this.numbers = analytics
-      }).catch(err => {
-        console.error(err)
-      })
-    }
   }
 
   shouldUpdateData (d1, d2, per) {
@@ -65,63 +57,120 @@ export default class BoardAnalytics extends React.Component {
   }
 
   render () {
-    let data = this.props.analytics.board.numbers.map(a => (
+    let data = this.props.lists.map(l => (
       {
-        name: this.renderDate(a.date),
-        nbCards: a.numberOfCards,
-        nbLists: a.numberOfLists,
-        nbCardsArchived: a.numberOfCardsArchived,
-        nbListsArchived: a.numberOfListsArchived,
-        nbCardsCreated: a.numberOfCardsCreated,
-        nbListsCreated: a.numberOfListsCreated
-      }))
+        name: l.name,
+        nbCards: l.numbers ? l.numbers[0].numberOfCards : 0,
+        averageTimeSpentPerCard: l.numbers ? l.numbers[0].averageTimeSpentPerCard : 0
+      }
+    ))
+
+    let colors = shuffle(['#8884d8', '#82ca9d', '#F9A825', '#FF1744', '#F06292', '#AB47BC', '#651FFF', '#80D8FF', '#00E5FF', '#69F0AE'])
     return (<PageLayout>
       <div className='host'>
         <div className='header'>
           <div className='title'>{ this.props.board.title }</div>
-          { data.length > 0
-            ? <div className='bigNumbers'>
-              <span className='number'>{data[data.length - 1].nbCards}<span>Cards</span></span>
-              <span className='number'>{data[data.length - 1].nbLists}<span>Lists</span></span>
+        </div>
+        { this.state.fetched
+          ? <div className='charts'>
+            <div className='chart'>
+              <BaseChart>
+                <PieChart>
+                  <Pie data={this.props.lists.map(l => ({ value: l.numbers[0].numberOfCards, name: l.name }))} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label>
+                    {
+                      this.props.lists.map(l => ({ value: l.numbers[0].numberOfCards, name: l.name })).map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={colors[index]}/>
+                      ))
+                    }
+                  </Pie>
+                  <Tooltip verticalAlign="top" height={36} />
+                  <Legend />
+                </PieChart>
+              </BaseChart>
             </div>
-            : null
-          }
-        </div>
-        <div className='charts'>
-          <div className='chart'>
-            <BaseChart>
-              <LineChart data={data}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" stroke="#444" />
-                <YAxis stroke="#444" />
-                <Tooltip verticalAlign="top" height={36} />
-                <Legend />
-                <Line type="monotone" dataKey="nbCards" stroke="#8884d8" />
-                <Line type="monotone" dataKey="nbLists" stroke="#82ca9d" />
-                <Line type="monotone" dataKey="nbCardsArchived" stroke="#889ad3" />
-                <Line type="monotone" dataKey="nbListsArchived" stroke="#82942d" />
-              </LineChart>
-            </BaseChart>
+            <div className='chart'>
+              <BaseChart>
+                <BarChart data={data}
+                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" stroke="#444" />
+                  <YAxis stroke="#444" />
+                  <Tooltip verticalAlign="top" height={36} />
+                  <Legend />
+                  <Bar dataKey="nbCards" fill="#8884d8">
+                    {
+                      data.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={colors[index]}/>
+                      ))
+                    }
+                  </Bar>
+                </BarChart>
+              </BaseChart>
+            </div>
+            <div className='chart'>
+              <BaseChart>
+                <BarChart data={data}
+                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" stroke="#444" />
+                  <YAxis stroke="#444" />
+                  <Tooltip verticalAlign="top" height={36} />
+                  <Legend />
+                  <Bar dataKey="averageTimeSpentPerCard" fill="#82ca9d">
+                    {
+                      data.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={colors[index]}/>
+                      ))
+                    }
+                  </Bar>
+                </BarChart>
+              </BaseChart>
+            </div>
+            {
+              this.props.lists.map((l, index) => {
+                let data2 = l.numbers.map(n => (
+                  {
+                    date: this.renderDate(n.date),
+                    nbCards: n.numberOfCards,
+                    averageTimeSpentPerCard: n.averageTimeSpentPerCard
+                  }
+                ))
+                return (
+                  <div>
+                    <div className='title'>{l.name}</div>
+                    <div className='chart'>
+                      <BaseChart>
+                        <BarChart data={data2}
+                          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="date" stroke="#444" />
+                          <YAxis stroke="#444" />
+                          <Tooltip verticalAlign="top" height={36} />
+                          <Legend />
+                          <Bar dataKey="nbCards" fill={colors[index]} />
+                        </BarChart>
+                      </BaseChart>
+                    </div>
+                    <div className='chart'>
+                      <BaseChart>
+                        <LineChart data={data2}
+                          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="date" stroke="#444" />
+                          <YAxis stroke="#444" />
+                          <Tooltip verticalAlign="top" height={36} />
+                          <Legend />
+                          <Line type='monotone' dataKey="averageTimeSpentPerCard" stroke={colors[index]} />
+                        </LineChart>
+                      </BaseChart>
+                    </div>
+                  </div>
+                )
+              })
+            }
           </div>
-          <div className='chart'>
-            <BaseChart>
-              <BarChart data={data}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" stroke="#444" />
-                <YAxis stroke="#444" />
-                <Tooltip verticalAlign="top" height={36} />
-                <Legend />
-                <Bar dataKey="nbCardsCreated" fill="#8884d8" />
-                <Bar dataKey="nbListsCreated" fill="#82ca9d" />
-              </BarChart>
-            </BaseChart>
-          </div>
-        </div>
-
-        <div className='date-filter'><DateFilter minDate={this.props.board.createdAt} maxDate={Date.now()} onChange={this.onFilterChange.bind(this)}/></div>
-
+          : null
+        }
         <style jsx>{styles}</style>
       </div>
     </PageLayout>)
