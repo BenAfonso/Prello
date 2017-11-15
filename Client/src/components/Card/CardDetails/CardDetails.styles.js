@@ -36,9 +36,6 @@ export default `
   width: 100%;
   margin-bottom: 5px;
 }
-.host {
-  width: 100%;
-}
 
 .element {
   padding: 15px;
@@ -66,5 +63,31 @@ input {
   background-color: #aaa;
   width: 90%;
   margin: 8px 0 8px 5%;
+}
+
+.rename-form {
+  padding-bottom: 10px;
+}
+
+.rename-input{
+  border-radius: 3px;
+  padding: 10px;
+  font-size: 15px;
+  border: solid 1px #eee;
+}
+
+h1 {
+  font-size: 20px;
+}
+
+.title {
+  width: 100%;
+  margin-left: 40px;
+}
+
+.title .icon {
+  position: absolute;
+  left: 10px;
+  font-size: 20px;
 }
 `

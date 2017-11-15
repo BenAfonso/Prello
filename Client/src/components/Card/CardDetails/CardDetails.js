@@ -15,7 +15,7 @@ import DueDateMenu from './CardDetailsMenu/DueDateMenu/DueDateMenu'
 import { addChecklist } from '../../../services/Checklist.services'
 import { getCompleteCard } from '../../../services/Card.services'
 import { addLabel, deleteLabel, updateLabel, addCardLabel, deleteCardLabel } from '../../../services/Label.services'
-import { archiveCard } from '../../../store/actions'
+import { archiveCard, updateCardText } from '../../../store/actions'
 import Uploader from '../../Uploader/Uploader'
 import LabelDropdown from '../../UI/LabelDropdown/LabelDropdown'
 import Config from '../../../config'
@@ -29,7 +29,8 @@ import Config from '../../../config'
 @connect(store => {
   return {
     currentBoard: store.currentBoard,
-    board: store.currentBoard.board
+    board: store.currentBoard.board,
+    currentUser: store.currentUser
   }
 })
 export default class CardDetails extends React.Component {
@@ -53,9 +54,73 @@ export default class CardDetails extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      fileUploaderDisplayed: false
+      fileUploaderDisplayed: false,
+      renameCardDisplayed: false
     }
     this.createChecklist = this.createChecklist.bind(this)
+    this.displayRenameCard = this.displayRenameCard.bind(this)
+    this.undisplayRenameCard = this.undisplayRenameCard.bind(this)
+    this.handleClickOutside = this.handleClickOutside.bind(this)
+  }
+
+  componentDidMount () {
+    document.addEventListener('mousedown', this.handleClickOutside)
+    getCompleteCard(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.id)
+  }
+
+  componentWillUnmount () {
+    document.removeEventListener('mousedown', this.handleClickOutside)
+  }
+
+  handleClickOutside (event) {
+    if (this.cardName && !this.cardName.contains(event.target)) {
+      this.undisplayRenameCard()
+    }
+  }
+
+  isCurrentUserOwner () {
+    if (this.props.board.owner !== undefined) {
+      const isAdmin = this.props.currentUser._id === this.props.board.owner._id
+      return isAdmin
+    } else {
+      return false
+    }
+  }
+
+  displayRenameCard () {
+    this.setState({
+      renameCardDisplayed: true
+    })
+  }
+
+  undisplayRenameCard (event) {
+    if (event) event.preventDefault()
+    const card = this.props.lists[this.props.listIndex].cards[this.props.index]
+    if (this.cardName.value !== '' && this.cardName.value !== card.text) {
+      this.updateCardName(card, this.cardName.value)
+    }
+    this.setState({
+      renameCardDisplayed: false
+    })
+  }
+
+  updateCardName (card, cardText) {
+    updateCardText(this.props.board._id, this.props.lists[this.props.listIndex]._id, card, cardText)
+  }
+
+  handleFocus (event) {
+    event.target.select()
+  }
+
+  renderRenameCard (card) {
+    return (
+      <div className='rename-form'>
+        <form onSubmit={this.undisplayRenameCard}>
+          <input autoFocus type='text' className='rename-input' defaultValue={card.text} ref={(name) => { this.cardName = name }} onFocus={this.handleFocus}/>
+        </form>
+        <style jsx>{styles}</style>
+      </div>
+    )
   }
 
   displayFileUploader () {
@@ -107,10 +172,6 @@ export default class CardDetails extends React.Component {
     addChecklist(this.props.board._id, this.props.lists[this.props.listIndex]._id, this.props.id, this.checklistTitleInput.input.value)
   }
 
-  componentDidMount () {
-    getCompleteCard(this.props.board._id, this.props.board.lists[this.props.listIndex]._id, this.props.id)
-  }
-
   addBoardLabel (labelText, labelColor) {
     addLabel(this.props.board._id, labelText, labelColor)
   }
@@ -142,6 +203,14 @@ export default class CardDetails extends React.Component {
             : null
         }
         <div className='content'>
+          <div className='title'>
+            <span className='icon'><Icon name='list-alt' color='#bbb' /></span>
+            {
+              this.state.renameCardDisplayed
+                ? this.renderRenameCard(card)
+                : <h1 onClick={this.isCurrentUserOwner() ? this.displayRenameCard : null}>{card.text}</h1>
+            }
+          </div>
           <CardDetailsInformations {...this.props} cardLabels={cardLabels} onDeleteCardLabel={this.deleteCardLabel.bind(this)} onAddCardLabel={this.addCardLabel.bind(this)} onUpdateBoardLabel={this.updateBoardLabel.bind(this)} onDeleteBoardLabel={this.deleteBoardLabel.bind(this)} labels={this.props.board.labels} onAddBoardLabel={this.addBoardLabel.bind(this)} />
           <CardDetailsChecklists cardId={this.props.id} listIndex={this.props.listIndex} checklists={this.props.checklists}/>
           <CardDetailsComments {...this.props} />

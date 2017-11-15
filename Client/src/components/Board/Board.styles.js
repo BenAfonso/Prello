@@ -6,14 +6,12 @@ export default `
   }
 
   .boardTitle {
+    display: inline-block;
     color: white;
-    font-size: 18px;
+    font-size: 35px;
+    font-weight: bold;
     margin-bottom: 15px;
-    padding-left: 10px;
-  }
-
-  h1 {
-    font-size: 25px;
+    margin-left: 10px;
   }
 
   ul {

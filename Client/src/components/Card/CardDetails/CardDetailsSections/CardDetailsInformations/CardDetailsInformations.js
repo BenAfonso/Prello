@@ -57,7 +57,7 @@ export default class CardDetailsInformations extends React.Component {
 
     return (
       <div className='host'>
-        <CardDetailsSection title={this.props.content} icon='list-alt'>
+        <CardDetailsSection>
           <span className='listInformations'>In list {this.props.board.lists[this.props.listIndex].name}</span>
           <div className='description'>
             <Markdown source={fullCard.description} />

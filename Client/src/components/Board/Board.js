@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './Board.styles'
 import List from '../List/List'
 import {connect} from 'react-redux'
-import { addList, setBoard, updateLists, removeList, resetBoard } from '../../store/actions'
+import { addList, setBoard, updateLists, removeList, resetBoard, updateBoardName } from '../../store/actions'
 import { DragDropContext } from 'react-dnd'
 import HTML5toTouch from 'react-dnd-multi-backend/lib/HTML5toTouch'
 import Button from '../UI/Button/Button'
@@ -15,7 +15,8 @@ import {Redirect} from 'react-router-dom'
 @connect(store => {
   return {
     currentBoard: store.currentBoard,
-    board: store.currentBoard.board
+    board: store.currentBoard.board,
+    currentUser: store.currentUser
   }
 })
 @DragDropContext(MultiBackend(HTML5toTouch))
@@ -32,19 +33,23 @@ export default class Board extends React.Component {
     super(props)
     this.state = {
       newListFormDisplayed: false,
-      redirectTo: undefined
+      renameBoardDisplayed: false
     }
 
     this.displayNewListForm = this.displayNewListForm.bind(this)
     this.undisplayNewListForm = this.undisplayNewListForm.bind(this)
+    this.displayRenameBoard = this.displayRenameBoard.bind(this)
+    this.undisplayRenameBoard = this.undisplayRenameBoard.bind(this)
     this.addList = this.addList.bind(this)
     this.clearForm = this.clearForm.bind(this)
     this.moveList = this.moveList.bind(this)
     this.findList = this.findList.bind(this)
     this.removeList = this.removeList.bind(this)
+    this.handleClickOutside = this.handleClickOutside.bind(this)
   }
 
   componentDidMount () {
+    document.addEventListener('mousedown', this.handleClickOutside)
     setBoard(this.props.dispatch, this.props._id).then(board => {
       subscribeToBoard(board)
     }).catch(err => {
@@ -54,7 +59,47 @@ export default class Board extends React.Component {
   }
 
   componentWillUnmount () {
+    document.removeEventListener('mousedown', this.handleClickOutside)
     resetBoard()
+  }
+
+  handleClickOutside (event) {
+    if (this.boardName && !this.boardName.contains(event.target)) {
+      this.undisplayRenameBoard()
+    }
+  }
+
+  handleFocus (event) {
+    event.target.select()
+  }
+
+  isCurrentUserOwner () {
+    if (this.props.board.owner !== undefined) {
+      const isAdmin = this.props.currentUser._id === this.props.board.owner._id
+      return isAdmin
+    } else {
+      return false
+    }
+  }
+
+  displayRenameBoard () {
+    this.setState({
+      renameBoardDisplayed: true
+    })
+  }
+
+  undisplayRenameBoard (event) {
+    if (event) event.preventDefault()
+    if (this.boardName.value !== '' && this.boardName.value !== this.props.board.title) {
+      this.updateBoardName(this.boardName.value)
+    }
+    this.setState({
+      renameBoardDisplayed: false
+    })
+  }
+
+  updateBoardName (boardName) {
+    updateBoardName(this.props.board._id, boardName)
   }
 
   displayNewListForm () {
@@ -95,6 +140,27 @@ export default class Board extends React.Component {
       this.clearForm()
       this.undisplayNewListForm()
     }
+  }
+
+  renderRenameBoard () {
+    return (
+      <div className='rename-form'>
+        <form onSubmit={this.undisplayRenameBoard}>
+          <input autoFocus className='rename-input' defaultValue={this.props.board.title} ref={(name) => { this.boardName = name }} onFocus={this.handleFocus} />
+        </form>
+        <style jsx>{`
+        .rename-form {
+          padding: 15px;
+        }
+
+        .rename-input{
+          border-radius: 3px;
+          padding: 10px;
+          font-size: 20px;
+        }
+        `}</style>
+      </div>
+    )
   }
 
   renderNewListForm () {
@@ -143,8 +209,11 @@ export default class Board extends React.Component {
     }
 
     return <div className='host' style={boardStyle} >
-
-      <h1 className='boardTitle'>{this.props.currentBoard.title}</h1>
+      {
+        this.state.renameBoardDisplayed
+          ? this.renderRenameBoard()
+          : <div className='boardTitle' onClick={this.isCurrentUserOwner() ? this.displayRenameBoard : null}>{this.props.board.title}</div>
+      }
       <CustomDragLayer snapToGrid={false} />
       <ul>
         {

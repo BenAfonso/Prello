@@ -18,7 +18,8 @@ export default class AddTeamMenu extends React.Component {
     this.state = {
       matchingTeams: this.props.teams,
       enableAdd: false,
-      inputValue: ''
+      inputValue: '',
+      teamIdSelected: ''
     }
 
     this.addTeam = this.addTeam.bind(this)
@@ -45,12 +46,23 @@ export default class AddTeamMenu extends React.Component {
     return (this.props.board.teams.find(inTeam => team._id === inTeam._id) !== undefined)
   }
 
-  addTeam (teamId) {
-    addTeamToBoard(this.props.board._id, teamId)
+  addTeam () {
+    if (this.state.teamIdSelected !== '') {
+      addTeamToBoard(this.props.board._id, this.state.teamIdSelected)
+    }
     this.setState({
       inputValue: '',
       enableAdd: false,
-      matchingTeams: this.props.teams
+      matchingTeams: this.props.teams,
+      teamIdSelected: ''
+    })
+  }
+
+  setTeamId (teamId, teamName) {
+    this.setState({
+      teamIdSelected: teamId,
+      inputValue: teamName,
+      enableAdd: true
     })
   }
 
@@ -83,7 +95,7 @@ export default class AddTeamMenu extends React.Component {
     let menuElements = []
     this.state.matchingTeams.filter(team =>
       menuElements.push({
-        action: this.alreadyInBoard(team) ? null : () => this.addTeam(team._id),
+        action: this.alreadyInBoard(team) ? null : () => this.setTeamId(team._id, team.name),
         placeholder: team.name,
         closer: true,
         disabled: this.alreadyInBoard(team)
@@ -119,6 +131,16 @@ export default class AddTeamMenu extends React.Component {
                   </form>
                 </div>
               </li>
+              <li className='element'>
+                <Button
+                  bgColor='#5AAC44'
+                  block
+                  onClick={this.addTeam}
+                  disabled={!this.state.enableAdd}
+                >
+                Add
+                </Button>
+              </li>
             </ul>
           </div>
         </DropDown>
@@ -133,15 +155,11 @@ export default class AddTeamMenu extends React.Component {
       overflow-y: auto;
     }
     .element {
-      padding: 15px;
+      padding: 10px 15px;
     }
 
     .element-input {
       padding: 8px 0px;
-    }
-
-    .element-button {
-      padding: 8px 0;
     }
 
     input {
