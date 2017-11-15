@@ -12,8 +12,8 @@ export default class DateFilter extends React.Component {
     this.state = {
       firstPressed: false,
       secondPressed: false,
-      firstTrigger: 0.34,
-      secondTrigger: 0.76
+      firstTrigger: 0,
+      secondTrigger: 1
     }
     this.onChange = this.onChange.bind(this)
   }
@@ -108,8 +108,8 @@ export default class DateFilter extends React.Component {
             <div className='second value'>{this.getDateFraction(this.state.secondTrigger)}</div>
           </div>
         </div>
-        <div className='right bar' onMouseDown={this.pressSecond.bind(this)} onTouchStart={this.pressSecond.bind(this)} style={{ left: `${this.state.secondTrigger * 100}%` }} />
-        <div className='right void' style={{ width: `calc(${(1 - this.state.secondTrigger) * 100}% - 20px)` }} />
+        <div className='right bar' onMouseDown={this.pressSecond.bind(this)} onTouchStart={this.pressSecond.bind(this)} style={{ left: `calc(${this.state.secondTrigger * 100}% - 20px)` }} />
+        <div className='right void' style={{ width: `${(1 - this.state.secondTrigger) * 100}%` }} />
         <style jsx>{`
         .host {
           position: relative;
@@ -125,6 +125,7 @@ export default class DateFilter extends React.Component {
           width: 20px;
           height: 100%;
           background-color: #fff;
+          z-index: 2;
         }
 
         .selectedArea {
@@ -145,7 +146,7 @@ export default class DateFilter extends React.Component {
         }
 
         .right.void {
-          right: 0;
+          right: 0px;
         }
 
         .value {
@@ -160,7 +161,7 @@ export default class DateFilter extends React.Component {
         }
 
         .second.value {
-          right: 30px;
+          right: 50px;
           bottom: calc(100% - 25px);
           z-index: 100;
         }

@@ -18,7 +18,7 @@ import TeamPage from './pages/team.page'
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
     isAuthenticated() ? (
-      <Component {...props} />
+      <Component {...props} {...rest} />
     ) : (
       <Redirect to={{
         pathname: '/login',
@@ -46,6 +46,7 @@ class App extends Component {
             <Route exact path='/loading' component={LoadingPage} />
             <PrivateRoute exact path='/users/:id/profile' component={ProfilePage} />
             <PrivateRoute exact path='/boards/:id/dashboard/board' component={BoardDashboardPage} analytics='board' />
+            <PrivateRoute exact path='/boards/:id/dashboard/lists' component={BoardDashboardPage} analytics='lists' />
           </div>
         </Provider>
       </Router>
