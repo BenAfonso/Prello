@@ -7,6 +7,7 @@ import AddMemberMenu from './AddMemberMenu'
 import {connect} from 'react-redux'
 import { removeTeamMember, removeTeamAdmin, setTeamAdmin, unsetTeamAdmin } from '../../../../store/actions'
 import { displayNotification } from '../../../../services/Notification.service'
+import {Redirect} from 'react-router-dom'
 
 @connect(store => {
   return {
@@ -28,6 +29,8 @@ export default class MembersTab extends React.Component {
       matchingTeamMembers: this.props.team.users
     }
     this.onSearchChange = this.onSearchChange.bind(this)
+    this.removeTeamMember = this.removeTeamMember.bind(this)
+    this.removeTeamAdmin = this.removeTeamAdmin.bind(this)
   }
 
   // Lifecycle
@@ -39,18 +42,30 @@ export default class MembersTab extends React.Component {
 
   // Server calls
   removeTeamMember (userId) {
-    removeTeamMember(this.props.team._id, userId)
+    const self = userId === this.props.currentUserId
+    removeTeamMember(this.props.team._id, userId).then(() => {
+      if (self) {
+        this.setState({redirectTo: '/'})
+        displayNotification({type: 'success', title: 'You left', content: `You're no longer in the team ${this.props.team.name}`})
+      }
+    })
   }
 
   removeTeamAdmin (userId) {
-    removeTeamAdmin(this.props.team._id, userId)
+    const self = userId === this.props.currentUserId
+    removeTeamAdmin(this.props.team._id, userId).then(() => {
+      if (self) {
+        this.setState({redirectTo: '/'})
+        displayNotification({type: 'success', title: 'You left', content: `You're no longer in the team ${this.props.team.name}`})
+      }
+    })
   }
 
   removeTeamAdminSelf (userId) {
     if (this.isLastAdmin()) {
       displayNotification({type: 'error', title: 'Error', content: 'You\'re the last admin ! You can\'t just leave like that...'})
     } else {
-      removeTeamAdmin(this.props.team._id, userId)
+      this.removeTeamAdmin(userId)
     }
   }
 
@@ -251,6 +266,9 @@ export default class MembersTab extends React.Component {
   }
 
   render () {
+    if (this.state.redirectTo) {
+      return (<Redirect to={this.state.redirectTo} />)
+    }
     const teamId = this.props.team._id
     const members = this.props.team.users
     return (
