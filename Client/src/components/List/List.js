@@ -2,7 +2,7 @@ import React from 'react'
 import Card from '../Card/DraggableCard'
 import styles from './List.styles'
 import {connect} from 'react-redux'
-import { addCard, moveList, moveCardDistant, updateLists, archiveList } from '../../store/actions'
+import { addCard, moveList, moveCardDistant, updateLists, archiveList, updateListName } from '../../store/actions'
 import { DragSource, DropTarget } from 'react-dnd'
 import { ItemTypes } from '../Constants'
 import { PropTypes } from 'prop-types'
@@ -81,7 +81,8 @@ const listTarget = {
 @connect(store => {
   return {
     currentBoard: store.currentBoard,
-    board: store.currentBoard.board
+    board: store.currentBoard.board,
+    currentUser: store.currentUser
   }
 })
 // List can be hovered by another dragged list
@@ -125,6 +126,30 @@ export default class List extends React.Component {
     this.undisplayNewCardForm = this.undisplayNewCardForm.bind(this)
     this.clearForm = this.clearForm.bind(this)
     this.removeAction = this.removeAction.bind(this)
+    this.displayRenameList = this.displayRenameList.bind(this)
+    this.undisplayRenameList = this.undisplayRenameList.bind(this)
+    this.handleClickOutside = this.handleClickOutside.bind(this)
+  }
+
+  componentDidMount () {
+    document.addEventListener('mousedown', this.handleClickOutside)
+    this.props.connectDragPreview(getEmptyImage(), {
+      captureDraggingState: true
+    })
+  }
+
+  componentWillUnmount () {
+    document.removeEventListener('mousedown', this.handleClickOutside)
+  }
+
+  handleClickOutside (event) {
+    if (this.listName && !this.listName.contains(event.target)) {
+      this.undisplayRenameList()
+    }
+  }
+
+  handleFocus (event) {
+    event.target.select()
   }
 
   displayNewCardForm () {
@@ -137,6 +162,36 @@ export default class List extends React.Component {
     this.setState({
       newCardFormDisplayed: false
     })
+  }
+
+  isCurrentUserOwner () {
+    if (this.props.board.owner !== undefined) {
+      const isAdmin = this.props.currentUser._id === this.props.board.owner._id
+      return isAdmin
+    } else {
+      return false
+    }
+  }
+
+  displayRenameList () {
+    this.setState({
+      renameListDisplayed: true
+    })
+  }
+
+  undisplayRenameList (event) {
+    if (event) event.preventDefault()
+    if (this.listName.value !== '' && this.listName.value !== this.props.title) {
+      this.updateListName(this.listName.value)
+    }
+    this.setState({
+      renameListDisplayed: false
+    })
+  }
+
+  updateListName (listName) {
+    const list = this.props.findList(this.props.id).list
+    updateListName(this.props.board._id, list, listName)
   }
 
   clearForm () {
@@ -161,10 +216,15 @@ export default class List extends React.Component {
     this.props.removeAction(this.props.index)
   }
 
-  componentDidMount () {
-    this.props.connectDragPreview(getEmptyImage(), {
-      captureDraggingState: true
-    })
+  renderRenameList () {
+    return (
+      <div className='rename-form'>
+        <form onSubmit={this.undisplayRenameList}>
+          <input autoFocus type='text' className='rename-input' defaultValue={this.props.title} ref={(name) => { this.listName = name }} onFocus={this.handleFocus}/>
+        </form>
+        <style jsx>{styles}</style>
+      </div>
+    )
   }
 
   render () {
@@ -173,7 +233,11 @@ export default class List extends React.Component {
       <div className='host'
         ref={(l) => { this.host = l }}>
         { isDragging ? <div className='overlay' style={{backgroundColor: shadowColor}} /> : null }
-        <div className='title'>{title}</div>
+        {
+          this.state.renameListDisplayed
+            ? this.renderRenameList()
+            : <div className='title' onClick={this.isCurrentUserOwner() ? this.displayRenameList : null}>{title}</div>
+        }
         <div className='button'>
           <ListMenu archive={this.archive.bind(this)} />
         </div>
