@@ -57,7 +57,7 @@ userController.getUsers = (email, limit, skip) => {
 
 userController.getUser = (id) => {
   return new Promise((resolve, reject) => {
-    User.findOne({ '_id': id }, { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
+    User.findOne({ '_id': id }, { 'passwordHash': 0, 'salt': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {

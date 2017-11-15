@@ -272,9 +272,10 @@ export default class ProfilePage extends React.Component {
   }
 
   renderOptionsTab () {
+    console.log(this.props.userFetched)
     return (
       <div className='optionsTab'>
-        {this.props.currentUser._id === this.props.match.params.id
+        {this.props.currentUser._id === this.props.match.params.id && this.props.userFetched.provider !== 'google'
           ? !this.state.displayNewPasswordForm
             ? <span className='linkText' /* onClick={this.displayNewPasswordForm */>Change password</span>
             : this.renderNewPasswordForm()
