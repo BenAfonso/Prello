@@ -132,15 +132,15 @@ export default class ProfilePage extends React.Component {
   }
 
   currentUserIsInTeam (team) {
-    let isMember = team.users.filter(user => user._id === this.props.currentUser._id)
-    let isAdmin = team.admins.filter(admin => admin._id === this.props.currentUser._id)
-    return isMember[0] !== undefined || isAdmin[0] !== undefined
+    let isMember = team.users.filter(user => user._id === this.props.currentUser._id)[0] !== undefined
+    let isAdmin = team.admins.filter(admin => admin._id === this.props.currentUser._id)[0] !== undefined
+    return isMember || isAdmin
   }
 
   currentUserIsRelatedToBoard (board) {
-    let isOwner = board.owner._id === this.props.currentUser._id || board.owner._id === this.props.userFetched._id
+    let isOwner = board.owner._id === this.props.currentUser._id
     let isCollaborator = board.collaborators.filter(collab => collab._id === this.props.currentUser._id)[0] !== undefined
-    let isInTeam = board.teams.filter(team => (this.currentUserIsInTeam(team)))[0] !== undefined
+    let isInTeam = board.teams.filter(team => (this.currentUserIsInTeam(team))).filter(result => result)[0] !== undefined
     return isOwner || isCollaborator || isInTeam
   }
 
@@ -255,7 +255,7 @@ export default class ProfilePage extends React.Component {
                 : null
             ))}
             {this.props.match.params.id === this.props.currentUser._id
-              ? <li>
+              ? <li className='newBoardButton'>
                 <NewTeamForm
                   self
                   comingFromProfilePage

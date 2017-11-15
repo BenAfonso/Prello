@@ -176,7 +176,6 @@ label {
     margin-top: 10px;
     margin-left: 20px;
 }
-
 .createBoard {
     cursor: pointer;
     position: relative;
