@@ -78,10 +78,10 @@ const constructFuncArray = (board, func, funcs, per, beginDate, endDate) => {
     case 'day':
       beginDate = new Date(beginDate)
       if (beginDate.getDate() === endDate.getDate() && beginDate.getMonth() === endDate.getMonth() && beginDate.getFullYear() === endDate.getFullYear()) {
-        funcs.push(func.bind(this, board, beginDate, beginDate))
+        funcs.push(func.bind(this, board, beginDate, beginDate, per))
         return funcs
       }
-      funcs.push(func.bind(this, board, beginDate, beginDate))
+      funcs.push(func.bind(this, board, beginDate, beginDate, per))
       return constructFuncArray(board, func, funcs, per, addDays(beginDate, 1), endDate)
     case 'month':
       beginDate = new Date(beginDate)
@@ -99,24 +99,24 @@ const constructFuncArray = (board, func, funcs, per, beginDate, endDate) => {
         endYear++
       }
       if (beginDate.getMonth() === endMonth && beginDate.getFullYear() === endYear) {
-        funcs.push(func.bind(this, board, beginDate, beginDate))
+        funcs.push(func.bind(this, board, beginDate, beginDate, per))
         return funcs
       }
-      funcs.push(func.bind(this, board, beginDate, beginDate))
+      funcs.push(func.bind(this, board, beginDate, beginDate, per))
       return constructFuncArray(board, func, funcs, per, beginDate, endDate)
 
     case 'year':
       beginDate = new Date(beginDate)
       if (beginDate.getFullYear() === (endDate.getFullYear())) {
-        funcs.push(func.bind(this, board, beginDate, beginDate))
+        funcs.push(func.bind(this, board, beginDate, beginDate, per))
         return funcs
       }
-      funcs.push(func.bind(this, board, beginDate, beginDate))
+      funcs.push(func.bind(this, board, beginDate, beginDate, per))
       return constructFuncArray(board, func, funcs, per, addYears(beginDate, 1), endDate)
   }
 }
 
-analyticsController.getBoardAnalyticsByDate = (board, beginDate, endDate) => {
+analyticsController.getBoardAnalyticsByDate = (board, beginDate, endDate, per) => {
   return new Promise((resolve, reject) => {
     let numbers = {}
     numbers.date = Date.parse(beginDate)
@@ -128,7 +128,17 @@ analyticsController.getBoardAnalyticsByDate = (board, beginDate, endDate) => {
           numbers.numberOfListsArchived = res
           getNumberOfCardsArchivedByDate(board, endDate).then(res => {
             numbers.numberOfCardsArchived = res
-            resolve(numbers)
+            getNumberOfCardsCreatedByDate(board, endDate, per).then(res => {
+              numbers.numberOfCardsCreated = res
+              getNumberOfListsCreatedByDate(board, endDate, per).then(res => {
+                numbers.numberOfListsCreated = res
+                resolve(numbers)
+              }).catch((err) => {
+                reject(err)
+              })
+            }).catch((err) => {
+              reject(err)
+            })
           }).catch((err) => {
             reject(err)
           })
@@ -151,6 +161,50 @@ const getNumberOfCardsByDate = (board, endDate) => {
     })
     resolve(cardSort.length)
   })
+}
+const getNumberOfCardsCreatedByDate = (board, endDate, per) => {
+  return new Promise((resolve, reject) => {
+    let allCards = board.lists.map(l => l.cards).reduce((x, y) => x.concat(y))
+    resolve(getCreatedAt(allCards, endDate, per))
+  })
+}
+
+const getNumberOfListsCreatedByDate = (board, endDate, per) => {
+  return new Promise((resolve, reject) => {
+    let allLists = board.lists
+    resolve(getCreatedAt(allLists, endDate, per))
+  })
+}
+
+const getCreatedAt = (array, endDate, per) => {
+  let sort
+  switch (per) {
+    case 'day':
+      sort = array.filter((c) => {
+        return c.createdAt.getDate() + 1 === endDate.getDate() && c.createdAt.getMonth() === endDate.getMonth() && c.createdAt.getFullYear() === endDate.getFullYear()
+      })
+      return (sort.length)
+    case 'month':
+      sort = array.filter((c) => {
+        let createdAtMonth = c.createdAt.getMonth()
+        if (createdAtMonth === 11) {
+          createdAtMonth = 0
+        } else {
+          createdAtMonth++
+        }
+        let createdAtYear = c.createdAt.getFullYear()
+        if (c.createdAt.getMonth() === 11) {
+          createdAtYear++
+        }
+        return createdAtMonth === endDate.getMonth() && createdAtYear === endDate.getFullYear()
+      })
+      return (sort.length)
+    case 'year':
+      sort = array.filter((c) => {
+        return c.createdAt.getFullYear() === endDate.getFullYear()
+      })
+      return (sort.length)
+  }
 }
 const getNumberOfListsByDate = (board, endDate) => {
   return new Promise((resolve, reject) => {
