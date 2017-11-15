@@ -69,7 +69,6 @@ userController.getUser = (id) => {
 
 userController.login = (userToConnect) => {
   return new Promise((resolve, reject) => {
-    console.log(userToConnect.passwordHash)
     User.load({
       where: { email: userToConnect.email },
       select: 'name username email passwordHash salt provider'
