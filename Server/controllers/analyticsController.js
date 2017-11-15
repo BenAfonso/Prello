@@ -119,7 +119,7 @@ const constructFuncArray = (board, func, funcs, per, beginDate, endDate) => {
 analyticsController.getBoardAnalyticsByDate = (board, beginDate, endDate, per) => {
   return new Promise((resolve, reject) => {
     let numbers = {}
-    numbers.date = Date.parse(beginDate)
+    numbers.date = beginDate
     getNumberOfListsByDate(board, endDate).then(res => {
       numbers.numberOfLists = res
       getNumberOfCardsByDate(board, endDate).then(res => {
