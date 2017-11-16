@@ -286,7 +286,17 @@ const getAverageTimeFromListByDate = (list, endDate) => {
       }).filter(v => v > 0)
     })
     let modifFlat = _.flatten(modifsAfterTreat)
-    let res = modifFlat.reduce((x, y) => x + y) / modifFlat.length
+    let res = 0
+    switch (modifFlat.length) {
+      case 0:
+        break
+      case 1:
+        res = modifFlat[0]
+        break
+      default:
+        res = modifFlat.reduce((x, y) => x + y) / modifFlat.length
+        break
+    }
     resolve((res / 1000 / 60 / 60 / 24))
     /*
     allCardsAdded.map(c => {
@@ -302,8 +312,19 @@ const getAverageTimeFromListByDate = (list, endDate) => {
 
 const getNumberOfCardsByDate = (board, endDate) => {
   return new Promise((resolve, reject) => {
-    let allCards = board.lists.map(l => l.cards).reduce((x, y) => x.concat(y))
-    let cardSort = allCards.filter((c) => {
+    let allCards = board.lists.map(l => l.cards)
+    let cards = []
+    switch (allCards.length) {
+      case 0:
+        break
+      case 1:
+        cards = allCards[0]
+        break
+      default:
+        cards = allCards.reduce((x, y) => x.concat(y))
+        break
+    }
+    let cardSort = cards.filter((c) => {
       return c.createdAt.getTime() < endDate.getTime()
     })
     resolve(cardSort.length)
@@ -311,8 +332,19 @@ const getNumberOfCardsByDate = (board, endDate) => {
 }
 const getNumberOfCardsCreatedByDate = (board, endDate, per) => {
   return new Promise((resolve, reject) => {
-    let allCards = board.lists.map(l => l.cards).reduce((x, y) => x.concat(y))
-    resolve(getCreatedAt(allCards, endDate, per))
+    let allCards = board.lists.map(l => l.cards)
+    let cards = []
+    switch (allCards.length) {
+      case 0:
+        break
+      case 1:
+        cards = allCards[0]
+        break
+      default:
+        cards = allCards.reduce((x, y) => x.concat(y))
+        break
+    }
+    resolve(getCreatedAt(cards, endDate, per))
   })
 }
 

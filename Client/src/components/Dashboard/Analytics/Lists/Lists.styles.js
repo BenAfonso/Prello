@@ -60,7 +60,7 @@ export default `
   color: white;
   border-radius: 6px;
   font-size: 20px;
-  margin-bottom: 30px;
+  margin: 30px 0;
 }
 
 .list-legend {
@@ -77,11 +77,17 @@ export default `
   border-radius: 5px;
 }
 
-.group {
+.chart-group {
+  width: 100%;
   background-color: rgb(174, 77, 123);
-  padding: 15px;
   border-radius: 6px;
   margin-bottom: 15px;
+  padding: 15px;
 }
 
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
 `

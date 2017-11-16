@@ -1,4 +1,3 @@
-import PageLayout from '../../../../layouts/page'
 import React from 'react'
 import styles from './Board.styles'
 import { connect } from 'react-redux'
@@ -7,6 +6,7 @@ import DateFilter from '../../DateFilter/DateFilter'
 import { fetchBoardAnalytics } from '../../../../services/Analytics.services'
 import NumbersOverTime from './Charts/NumbersOverTime'
 import NumbersCreationOverTime from './Charts/NumbersCreationOverTime'
+import DashboardNav from '../Nav/Nav'
 
 @connect(store => {
   return {
@@ -19,7 +19,8 @@ export default class BoardAnalytics extends React.Component {
     super(props)
     this.state = {
       firstDate: '',
-      secondDate: ''
+      secondDate: '',
+      fetching: false
     }
     this.shouldUpdateData = this.shouldUpdateData.bind(this)
   }
@@ -88,10 +89,13 @@ export default class BoardAnalytics extends React.Component {
         nbCardsCreated: a.numberOfCardsCreated,
         nbListsCreated: a.numberOfListsCreated
       }))
-    return (<PageLayout>
+    return (
       <div className='host'>
         <div className='header'>
-          <div className='title'>{ this.props.board.title }</div>
+          <div className='title'>
+            { this.props.board.title }
+          </div>
+          <DashboardNav boardId={this.props.board._id} currentPage='board' />
           { data.length > 0
             ? <div className='bigNumbers'>
               <span className='number'>{data[data.length - 1].nbCards}<span>Cards</span></span>
@@ -121,6 +125,6 @@ export default class BoardAnalytics extends React.Component {
 
         <style jsx>{styles}</style>
       </div>
-    </PageLayout>)
+    )
   }
 }

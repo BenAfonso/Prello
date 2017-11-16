@@ -3,8 +3,7 @@ export default `
   background-color: #cd5a91;
   padding: 20px;
   color: #444;
-  min-height: 100%;
-  padding-bottom: 60px;
+  min-height: calc(100% - 40px);
 }
 
 .date-filter {
@@ -34,7 +33,20 @@ export default `
 }
 
 .title {
+  position: relative;
   font-weight: bold;
+  font-size: 30px;
+  color: white;
+}
+
+.title:after {
+  position: absolute;
+  content: '';
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  width: 30%;
+  background-color: white;
 }
 
 .bigNumbers {

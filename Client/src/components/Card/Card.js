@@ -126,7 +126,7 @@ export default class Card extends React.Component {
             ? <div className={`number 
               ${this.numberCompletedChecklists(this.props.checklists) === nbChecklists ? 'completed' : ''}`}
             >
-              <div className='icon'><Icon name='check-square-o' fontSize='13px' color={this.numberCompletedChecklists(this.props.checklists) === this.props.nbChecklists ? 'white' : ''} /></div>
+              <div className='icon'><Icon name='check-square-o' fontSize='13px' color={this.numberCompletedChecklists(this.props.checklists) === nbChecklists ? 'white' : ''} /></div>
               <span style={{
                 color: this.numberCompletedChecklists(this.props.checklists) === nbChecklists ? 'white' : '#444'
               }}>{`

@@ -14,6 +14,14 @@ export default `
     margin-left: 10px;
   }
 
+  .dashboard-button {
+    font-size: 12px;
+    text-decoration: underline;
+    margin-left: 30px;
+    cursor: pointer;
+    font-weight: 400;
+  }
+
   ul {
     display: flex;
     flex-wrap: nowrap;

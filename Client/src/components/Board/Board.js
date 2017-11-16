@@ -199,6 +199,10 @@ export default class Board extends React.Component {
     this.title = ''
   }
 
+  goToDashboard () {
+    this.setState({ redirectTo: `/boards/${this.props.board._id}/dashboard/board` })
+  }
+
   render () {
     if (this.state.redirectTo) {
       return (<Redirect to={this.state.redirectTo} />)
@@ -212,7 +216,10 @@ export default class Board extends React.Component {
       {
         this.state.renameBoardDisplayed
           ? this.renderRenameBoard()
-          : <div className='boardTitle' onClick={this.isCurrentUserOwner() ? this.displayRenameBoard : null}>{this.props.board.title}</div>
+          : <div className='boardTitle' onClick={this.isCurrentUserOwner() ? this.displayRenameBoard : null}>
+            {this.props.board.title}
+            <span className='dashboard-button' onClick={this.goToDashboard.bind(this)}>Dashboard</span>
+          </div>
       }
       <CustomDragLayer snapToGrid={false} />
       <ul>

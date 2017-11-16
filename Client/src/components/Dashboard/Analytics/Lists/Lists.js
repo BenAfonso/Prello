@@ -1,4 +1,3 @@
-import PageLayout from '../../../../layouts/page'
 import React from 'react'
 import styles from './Lists.styles'
 import { connect } from 'react-redux'
@@ -9,6 +8,7 @@ import NumberCardsPerList from './Charts/NumberCardsPerList'
 import AverageTimeCards from './Charts/AverageTimeCards'
 import NumberOfCardsOverTimePerList from './Charts/List/NumberOfCardsOverTime'
 import AverageTimeCardsPerList from './Charts/List/AverageTimeCards'
+import DashboardNav from '../Nav/Nav'
 
 @connect(store => {
   return {
@@ -84,9 +84,13 @@ export default class BoardAnalytics extends React.Component {
       }
     ))
 
-    return (<PageLayout>
+    return (
       <div className='host'>
         <div className='header'>
+          <div className='title'>
+            { this.props.board.title }
+          </div>
+          <DashboardNav boardId={this.props.board._id} currentPage='lists' />
           <div className='legend'>
             {
               this.props.lists.map((l, i) => (
@@ -146,23 +150,25 @@ export default class BoardAnalytics extends React.Component {
                     }
                   ))
                   return (
-                    <div className='group'>
+                    <div className='chart-group'>
                       <div className='title'>{l.name}</div>
-                      <div className='chart'>
-                        <NumberOfCardsOverTimePerList
-                          dataKey='nbCards'
-                          nameKey='date'
-                          data={data}
-                          color={this.colors[index]}
-                        />
-                      </div>
-                      <div className='chart'>
-                        <AverageTimeCardsPerList
-                          dataKey='averageTimeSpentPerCard'
-                          nameKey='date'
-                          data={data}
-                          color={this.colors[index]}
-                        />
+                      <div className='group'>
+                        <div className='chart'>
+                          <NumberOfCardsOverTimePerList
+                            dataKey='nbCards'
+                            nameKey='date'
+                            data={data}
+                            color={this.colors[index]}
+                          />
+                        </div>
+                        <div className='chart'>
+                          <AverageTimeCardsPerList
+                            dataKey='averageTimeSpentPerCard'
+                            nameKey='date'
+                            data={data}
+                            color={this.colors[index]}
+                          />
+                        </div>
                       </div>
                     </div>
                   )
@@ -176,6 +182,6 @@ export default class BoardAnalytics extends React.Component {
         }
         <style jsx>{styles}</style>
       </div>
-    </PageLayout>)
+    )
   }
 }
