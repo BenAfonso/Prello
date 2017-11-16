@@ -11,8 +11,11 @@ export default class ChecklistItem extends React.Component {
     onToggle: PropTypes.func,
     onDelete: PropTypes.func,
     onChange: PropTypes.func,
-    isChecked: PropTypes.boolean,
-    doneDate: PropTypes.instanceOf(Date)
+    isChecked: PropTypes.bool,
+    doneDate: PropTypes.oneOfType([
+      PropTypes.instanceOf(Date),
+      PropTypes.string
+    ])
   }
 
   static defaultProps = {
@@ -76,7 +79,7 @@ export default class ChecklistItem extends React.Component {
       <div className='checklistItem'>
         {!this.state.isEditable
           ? <div className='readOnlyMode'>
-            <input type='checkbox' className='checkbox' ref={t => { this.checkbox = t }} checked={this.props.isChecked} onClick={this.onToggle} />
+            <input type='checkbox' className='checkbox' ref={t => { this.checkbox = t }} onChange={this.onToggle} checked={this.props.isChecked} onClick={this.onToggle} />
             <span className='itemContent' onClick={this.setEditable}>{this.props.text}</span>
             <div className='deleteItemButton'>
               <Button

@@ -1,6 +1,7 @@
 import Config from '../config'
 import axios from 'axios'
 // import { addListDistant } from './List.services'
+import { logout } from './Authentication.services'
 
 export function addBoardDistant (payload) {
   return new Promise((resolve, reject) => {
@@ -19,8 +20,43 @@ export function addScrumBoardDistant (payload) {
   return new Promise((resolve, reject) => {
     axios.post(`${Config.API_URL}/boards?template=scrum`, {
       title: payload.title,
+      background: payload.color
+    }).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function addTeamBoardDistant (payload) {
+  return new Promise((resolve, reject) => {
+    axios.post(`${Config.API_URL}/boards`, {
+      title: payload.title,
       background: payload.color,
-      sprints: payload.sprints
+      teams: payload.teams
+    }).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function deleteBoardDistant (boardId) {
+  return new Promise((resolve, reject) => {
+    axios.delete(`${Config.API_URL}/boards/${boardId}`).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function updateBoardNameDistant (boardId, boardName) {
+  return new Promise((resolve, reject) => {
+    axios.put(`${Config.API_URL}/boards/${boardId}`, {
+      title: boardName
     }).then(res => {
       resolve(res.data)
     }).catch(err => {
@@ -34,6 +70,17 @@ export function fetchBoards () {
     axios.get(`${Config.API_URL}/me/boards`).then((res) => {
       resolve(res.data)
     }).catch((err) => {
+      logout()
+      reject(err)
+    })
+  })
+}
+export function fetchBoard (boardId) {
+  return new Promise((resolve, reject) => {
+    axios.get(`${Config.API_URL}/boards/${boardId}`).then((res) => {
+      resolve(res.data)
+    }).catch((err) => {
+      logout()
       reject(err)
     })
   })
@@ -42,7 +89,6 @@ export function fetchBoards () {
 export function getBoardHistory (boardId) {
   return new Promise((resolve, reject) => {
     axios.get(`${Config.API_URL}/boards/${boardId}/history?limit=20&skip=0`).then(res => {
-      console.log(res.data)
       resolve(res.data)
     }).catch(err => {
       reject(err)
@@ -70,6 +116,28 @@ export function addCollaboratorDistant (board, email) {
 export function removeCollaboratorDistant (board, userId) {
   return new Promise((resolve, reject) => {
     axios.delete(`${Config.API_URL}/boards/${board}/collaborators/${userId}`).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function addTeamToBoardDistant (boardId, teamId) {
+  return new Promise((resolve, reject) => {
+    axios.post(`${Config.API_URL}/boards/${boardId}/teams`, {
+      teamId: teamId
+    }).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function removeTeamFromBoardDistant (boardId, teamId) {
+  return new Promise((resolve, reject) => {
+    axios.delete(`${Config.API_URL}/boards/${boardId}/teams/${teamId}`).then(res => {
       resolve(res.data)
     }).catch(err => {
       reject(err)

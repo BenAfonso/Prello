@@ -12,6 +12,7 @@ const UserSchema = new Schema({
   enabled: { type: Boolean, default: false },
   email: { type: String, default: '' },
   picture: { type: String, default: '' },
+  bio: {type: String, default: ''},
   bgColor: {type: String, default: '#ff3399'},
   google: {}
 })

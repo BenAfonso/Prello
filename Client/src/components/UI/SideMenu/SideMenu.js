@@ -2,14 +2,22 @@ import React from 'react'
 import styles from './SideMenu.styles'
 import Icon from '../Icon/Icon'
 import UsersMenu from '../../MenuElements/UsersMenu/UsersMenu'
+import TeamsMenu from '../../MenuElements/TeamsMenu/TeamsMenu'
 import ActivityMenu from '../../MenuElements/ActivityMenu/ActivityMenu'
 import ArchivedMenu from '../../MenuElements/ArchivedMenu/ArchivedMenu'
+import SettingsMenu from '../../MenuElements/SettingsMenu/SettingsMenu'
+import AttachmentsMenu from '../../MenuElements/AttachmentsMenu/AttachmentsMenu'
 
 const elements = [
   {
     icon: 'user-o',
     description: 'People',
     component: UsersMenu
+  },
+  {
+    icon: 'users',
+    description: 'Teams',
+    component: TeamsMenu
   },
   {
     icon: 'hashtag',
@@ -20,6 +28,16 @@ const elements = [
     icon: 'archive',
     description: 'Archives',
     component: ArchivedMenu
+  },
+  {
+    icon: 'file',
+    description: 'Files',
+    component: AttachmentsMenu
+  },
+  {
+    icon: 'gear',
+    description: 'Settings',
+    component: SettingsMenu
   }
 ]
 

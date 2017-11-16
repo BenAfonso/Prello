@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
+const Team = mongoose.model('Team')
+
 const userController = {}
 const querystring = require('querystring')
 const request = require('request')
@@ -67,6 +69,7 @@ userController.getUser = (id) => {
 
 userController.login = (userToConnect) => {
   return new Promise((resolve, reject) => {
+    console.log(userToConnect.passwordHash)
     User.load({
       where: { email: userToConnect.email },
       select: 'name username email passwordHash salt provider'
@@ -115,10 +118,9 @@ userController.login = (userToConnect) => {
   })
 }
 
-userController.updateUser = (userId, body) => {
+userController.getUserTeams = function (userId) {
   return new Promise((resolve, reject) => {
-    delete body.email
-    User.findOneAndUpdate('_id', body, { new: true }).exec((err, res) => {
+    Team.find({ 'users': userId }).populate('boards users admins', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).exec(function (err, res) {
       if (err) {
         reject(err)
       } else {
@@ -127,4 +129,22 @@ userController.updateUser = (userId, body) => {
     })
   })
 }
+
+userController.updateUser = (userId, body) => {
+  return new Promise((resolve, reject) => {
+    let user = new User(body)
+    delete body.email
+    if (body.password) {
+      body.passwordHash = user.encryptPassword(body.password)
+    }
+    User.findOneAndUpdate({'_id': userId}, body, { new: true }).exec((err, res) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+
 module.exports = userController

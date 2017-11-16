@@ -1,7 +1,8 @@
-import { fetchBoards, addBoardDistant, addScrumBoardDistant, addCollaboratorDistant, removeCollaboratorDistant } from '../services/Board.services'
+import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDistant, removeTeamAdminDistant, setTeamAdminDistant, unsetTeamAdminDistant, updateTeamDistant } from '../services/Team.services'
+import { fetchBoards, fetchBoard, addBoardDistant, addScrumBoardDistant, addTeamBoardDistant, deleteBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, removeTeamFromBoardDistant, updateBoardNameDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
-import { fetchMatchingUsersEmail } from '../services/User.services'
+import { fetchMatchingUsersEmail, fetchUser, fetchUserTeams, fetchUserBoards } from '../services/User.services'
 
 import store from '../store/store'
 
@@ -82,12 +83,19 @@ export function moveListLocal (list) {
 export function setBoard (dispatch, id) {
   return new Promise((resolve, reject) => {
     dispatch({type: 'FETCH_BOARD_START'})
-    fetchBoards().then((data) => {
+    fetchBoard(id).then((data) => {
+      data.teams.map(team => team.users.map(user => {
+        user.isTeamUser = true
+        return data.collaborators.filter(collaborator => collaborator._id === user._id)[0] !== undefined
+          ? null
+          : data.collaborators.push(user)
+      })
+      )
       dispatch({
         type: 'FETCH_BOARD_SUCCESS',
-        payload: data.filter(x => x._id === id)[0]
+        payload: data
       })
-      resolve(data.filter(x => x._id === id)[0])
+      resolve(data)
     }).catch((err) => {
       dispatch({
         type: 'FETCH_BOARD_ERROR',
@@ -203,6 +211,219 @@ export function addBoardLocal (board) {
       payload: board
     })
   }
+}
+
+export function addTeamBoard (dispatch, teamId, payload) {
+  addTeamBoardDistant(payload).then((board) => {
+    addTeamBoardLocal(teamId, board)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function addTeamBoardLocal (teamId, board) {
+  if (board) {
+    store.dispatch({
+      type: 'ADD_TEAM_BOARD',
+      payload: {
+        board: board,
+        teamId: teamId
+      }
+    })
+  }
+}
+
+export function deleteBoard (boardId) {
+  deleteBoardDistant(boardId).then((board) => {
+    // <= HANDLED FROM SOCKETS
+  }).catch(err => {
+    return err
+  })
+}
+
+export function updateBoardName (boardId, boardName) {
+  updateBoardNameDistant(boardId, boardName).then((board) => {
+    // <= HANDLED FROM SOCKETS
+  }).catch(err => {
+    return err
+  })
+}
+
+export function updateBoardLocal (board) {
+  if (board) {
+    store.dispatch({
+      type: 'UPDATE_BOARD',
+      payload: {
+        title: board.title
+      }
+    })
+  }
+}
+
+export function setTeamslist (dispatch) {
+  return new Promise((resolve, reject) => {
+    dispatch({type: 'FETCH_TEAMSLIST_START'})
+    fetchTeams().then((data) => {
+      dispatch({
+        type: 'FETCH_TEAMSLIST_SUCCESS',
+        payload: data
+      })
+      resolve(data)
+    }).catch((err) => {
+      dispatch({
+        type: 'FETCH_TEAMSLIST_ERROR',
+        payload: err
+      })
+    })
+  })
+}
+
+export function addTeam (teamName) {
+  addTeamDistant(teamName).then((team) => {
+    if (team) {
+      store.dispatch({
+        type: 'ADD_TEAM',
+        payload: team
+      })
+    }
+  }).catch(err => {
+    return err
+  })
+}
+
+/* export function addTeamLocal (team) {
+  if (team) {
+    store.dispatch({
+      type: 'ADD_TEAM',
+      payload: team
+    })
+  }
+} */
+
+export function setTeam (dispatch, id) {
+  return new Promise((resolve, reject) => {
+    dispatch({type: 'FETCH_TEAM_START'})
+    fetchTeams().then((data) => {
+      dispatch({
+        type: 'FETCH_TEAM_SUCCESS',
+        payload: data.filter(x => x._id === id)[0]
+      })
+      resolve(data.filter(x => x._id === id)[0])
+    }).catch((err) => {
+      dispatch({
+        type: 'FETCH_TEAM_ERROR',
+        payload: err
+      })
+      reject(err)
+    })
+  })
+}
+
+export function addTeamMember (teamId, email) {
+  addTeamMemberDistant(teamId, email).then((team) => {
+    updateTeamLocal(team)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function removeTeamMember (teamId, userId) {
+  removeTeamMemberDistant(teamId, userId).then((res) => {
+    removeTeamMemberLocal(userId)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function removeTeamMemberLocal (userId) {
+  if (userId) {
+    store.dispatch({
+      type: 'REMOVE_MEMBER',
+      payload: userId
+    })
+  }
+}
+
+export function removeTeamAdmin (teamId, userId) {
+  removeTeamAdminDistant(teamId, userId).then((res) => {
+    removeTeamAdminLocal(userId)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function removeTeamAdminLocal (userId) {
+  if (userId) {
+    store.dispatch({
+      type: 'REMOVE_ADMIN',
+      payload: userId
+    })
+  }
+}
+
+export function setTeamAdmin (teamId, userId) {
+  setTeamAdminDistant(teamId, userId).then((res) => {
+    updateTeamLocal(res)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function unsetTeamAdmin (teamId, userId) {
+  unsetTeamAdminDistant(teamId, userId).then((res) => {
+    updateTeamLocal(res)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function updateTeam (teamId, payload) {
+  updateTeamDistant(teamId, payload).then((res) => {
+    updateTeamInfosLocal(payload)
+  }).catch(err => {
+    return err
+  })
+}
+
+export function updateTeamInfosLocal (payload) {
+  if (payload) {
+    store.dispatch({
+      type: 'UPDATE_INFOS',
+      payload: payload
+    })
+  }
+}
+
+export function updateTeamLocal (team) {
+  if (team) {
+    store.dispatch({
+      type: 'UPDATE_TEAM',
+      payload: team
+    })
+  }
+}
+
+export function addTeamToBoard (boardId, teamId) {
+  addTeamToBoardDistant(boardId, teamId).then((res) => {
+    // HANDLED FROM SOCKETS
+  }).catch(err => {
+    return err
+  })
+}
+
+export function updateTeams (teams) {
+  store.dispatch({
+    type: 'UPDATE_TEAMS',
+    payload: teams
+  })
+}
+
+export function removeTeamFromBoard (boardId, teamId) {
+  removeTeamFromBoardDistant(boardId, teamId).then((res) => {
+    // HANDLED FROM SOCKETS
+  }).catch(err => {
+    return err
+  })
 }
 
 export function setBoardHistory (history) {
@@ -326,6 +547,11 @@ export function removeResponsible (boardId, listId, cardId, email) {
   removeResponsibleDistant(boardId, listId, cardId)
 }
 
+export function updateCardText (boardId, listId, card, text) {
+  let newCard = { ...card, text: text }
+  updateCard(boardId, listId, card._id, newCard)
+}
+
 export function updateCardDueDate (boardId, listId, card, dueDate) {
   let newCard = { ...card, dueDate: dueDate }
   updateCard(boardId, listId, card._id, newCard)
@@ -333,7 +559,6 @@ export function updateCardDueDate (boardId, listId, card, dueDate) {
 
 export function removeCardDueDate (boardId, listId, card) {
   let newCard = { ...card, dueDate: null, validated: false }
-  console.log(newCard)
   updateCard(boardId, listId, card._id, newCard)
 }
 
@@ -387,6 +612,16 @@ export function restoreList (boardId, list) {
     payload: newList
   })
 }
+
+export function updateListName (boardId, list, listName) {
+  let newList = { ...list, name: listName }
+  updateList(boardId, list._id, newList)
+  store.dispatch({
+    type: 'UPDATE_LIST',
+    payload: newList
+  })
+}
+
 export function addLabel (labels) {
   store.dispatch({
     type: 'ADD_LABEL',
@@ -425,5 +660,103 @@ export function removeOAuthClient (client) {
   store.dispatch({
     type: 'REMOVE_OAUTHCLIENT',
     payload: client._id
+  })
+}
+
+export function updateOAuthClient (client) {
+  store.dispatch({
+    type: 'UPDATE_OAUTHCLIENT',
+    payload: client
+  })
+}
+
+export function setFetchedUser (id) {
+  return new Promise((resolve, reject) => {
+    store.dispatch({type: 'FETCH_USER_PROFILE_START'})
+    fetchUser(id).then(user => {
+      store.dispatch({
+        type: 'FETCH_USER_PROFILE_SUCCESS',
+        payload: user
+      })
+      resolve(user)
+    }).catch(err => {
+      store.dispatch({
+        type: 'FETCH_USER_PROFILE_ERROR',
+        payload: err
+      })
+    })
+  })
+}
+
+export function setFetchedUserTeams (id) {
+  return new Promise((resolve, reject) => {
+    fetchUserTeams(id).then(teams => {
+      store.dispatch({
+        type: 'SET_FETCHED_USER_TEAMS',
+        payload: teams
+      })
+    }).then(teams => {
+      resolve(teams)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function setFetchedUserBoards (id) {
+  return new Promise((resolve, reject) => {
+    fetchUserBoards(id).then(boards => {
+      store.dispatch({
+        type: 'SET_FETCHED_USER_BOARDS',
+        payload: boards
+      })
+    }).then(boards => {
+      resolve(boards)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function updateProfileAction (datas) {
+  store.dispatch({
+    type: 'UPDATE_USER',
+    payload: datas
+  })
+}
+export function removeAttachment (attachmentId) {
+  store.dispatch({
+    type: 'REMOVE_ATTACHMENT',
+    payload: attachmentId
+  })
+}
+
+export function removeAttachmentCard (listId, card, attachment) {
+  card.attachments = card.attachments.filter(a => a._id !== attachment._id)
+  store.dispatch({
+    type: 'UPDATE_CARD',
+    payload: {listId, card}
+  })
+}
+
+export function addAttachment (attachment) {
+  store.dispatch({
+    type: 'ADD_ATTACHMENT',
+    payload: attachment
+  })
+}
+
+export function addAttachmentCard (listId, card, attachment) {
+  card.attachments.push(attachment)
+  store.dispatch({
+    type: 'UPDATE_CARD',
+    payload: {listId, card}
+  })
+}
+
+export function updateProfilePageAction (datas) {
+  store.dispatch({
+    type: 'UPDATE_USER_PROFILE_PAGE',
+    payload: datas
   })
 }

@@ -81,14 +81,17 @@ export default class CardComponent extends React.Component {
     listId: PropTypes.any,
     connectCardDragSource: PropTypes.func.isRequired,
     checklists: PropTypes.arrayOf(PropTypes.shape({
-      title: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired,
       index: PropTypes.number,
       items: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.any,
         index: PropTypes.number,
         text: PropTypes.string.isRequired,
         isChecked: PropTypes.boolean,
-        doneDate: PropTypes.instanceOf(Date)
+        doneDate: PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.instanceOf(Date)
+        ])
       }))
     })),
     content: PropTypes.string.isRequired,
@@ -123,6 +126,7 @@ export default class CardComponent extends React.Component {
     const {
       id,
       checklists,
+      attachments,
       index,
       nbChecklists,
       nbComments,
@@ -136,6 +140,31 @@ export default class CardComponent extends React.Component {
       collaborators,
       responsible,
       labels } = this.props
+    let col = collaborators.map((c) => {
+      if (!c._id) {
+        let filterCollab = this.props.board.collaborators.filter(c2 => c === c2._id)
+        if (filterCollab.length !== 0) {
+          return filterCollab[0]
+        }
+      } else {
+        return c
+      }
+    })
+    if (col[0] === undefined) {
+      col = []
+    }
+    let resp
+    if (responsible) {
+      if (!responsible._id) {
+        let filterResp = this.props.board.collaborators.filter(c => responsible === c._id)
+        if (filterResp.length !== 0) {
+          resp = filterResp[0]
+        }
+      } else {
+        resp = responsible
+      }
+    }
+
     return connectCardDropTarget(connectCardDragSource(
       <div className='host' style={{position: 'relative'}} onClick={this.displayCardDetails.bind(this)}>
         <div className='overlay' style={{
@@ -153,22 +182,15 @@ export default class CardComponent extends React.Component {
           nbComments={nbComments}
           nbChecklists={nbChecklists}
           checklists={checklists}
-          collaborators={
-            collaborators.map(c => c._id
-              ? c
-              : this.props.board.collaborators.filter(c2 => c === c2._id)[0])
-          }
-          responsible={
-            responsible
-              ? responsible._id
-                ? responsible
-                : this.props.board.collaborators.filter(c => c._id === responsible)[0]
-              : undefined
-          }
+          collaborators={col}
+          responsible={resp}
+          attachments={attachments}
           labels={
-            labels.map(l => l._id
-              ? l
-              : this.props.board.labels.filter(l2 => l === l2._id)[0])
+            labels
+              ? labels.map(l => l._id
+                ? l
+                : this.props.board.labels.filter(l2 => l === l2._id)[0])
+              : null
           } />
         <style jsx>{`
           .overlay {

@@ -19,29 +19,6 @@ export default `
   display: flex;
 }
 
-.team-avatar {
-  display: inline-block;
-}
-
-.team-infos {
-  display: inline-block;
-  padding-left: 20px;
-}
-
-.team-name {
-  display: inline-block;
-  font-size: 30px;
-  font-weight: bold;
-  padding-bottom: 15px;
-}
-
-.team-privacy {
-  display: inline-block;
-  font-size: 15px;
-  padding-left: 20px;
-  padding-bottom: 15px;  
-}
-
 .tabsSection {
   display: flex;
   background: #cd5a91;
@@ -65,6 +42,11 @@ ul li {
   margin-bottom: 20px;
 }
 
+ul.boards {
+  margin-top: 20px;
+  justify-content: center;
+}
+
 .createBoard {
   cursor: pointer;
   position: relative;
@@ -78,7 +60,7 @@ ul li {
 .createBoard-title {
   height: 50px;
   line-height: 50px;
-  color: rgba(250,250,250,0.5);
+  color: #dcdcda;
   font-size: 16px;
   text-align: center;
 }
@@ -90,11 +72,6 @@ ul li {
 
 .createBoard:hover .createBoard-title {
   color: rgba(0,0,0,0.5);
-}
-
-ul.boards {
-  margin-top: 20px;
-  justify-content: center;
 }
 
 `

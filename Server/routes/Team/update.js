@@ -12,7 +12,7 @@ module.exports = (router, controller) => {
     *     produces:
     *       - application/json
     *     parameters:
-    *       - name: listId
+    *       - name: teamId
     *         type: string
     *         description: The team id to update
     *         in: path
@@ -37,7 +37,7 @@ module.exports = (router, controller) => {
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-    controller.updateTeam(req).then((data) => {
+    controller.updateTeam(req.params.teamId, req.body).then((data) => {
       res.status(200).json('Successfully updated')
     }).catch((err) => {
       res.status(500).json(err)

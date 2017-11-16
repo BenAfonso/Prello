@@ -40,6 +40,7 @@ button:hover {
 
 .dropdown-content {
   position: absolute;
+  color: #444;  
   background-color: #f9f9f9;
   min-width: 160px;
   max-width: 340px;
@@ -85,5 +86,11 @@ button:hover {
   margin: 8px 0 8px 5%;
 }
 
-.dropdown-content ul li:hover {background-color: #ff3399}
+.dropdown-content ul li:hover {
+  background-color: #ff3399;
+}
+
+.dropdown-content ul li:hover .element-title {
+  color: white;
+}
 `

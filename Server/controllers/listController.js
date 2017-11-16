@@ -24,8 +24,7 @@ listController.createList = (req) => {
   })
 }
 
-listController.createScrumList = (boardId, name, position) => {
-  console.log(boardId, name)
+listController.createListByBoardId = (boardId, name) => {
   return new Promise((resolve, reject) => {
     const listToAdd = new List({name})
     listToAdd.save((err, item) => {
@@ -40,6 +39,36 @@ listController.createScrumList = (boardId, name, position) => {
               reject(err)
             })
       }
+    })
+  })
+}
+
+listController.createScrumLists = (boardId) => { // <- NOT SURE ABOUT THE CODE QUALITY
+  return new Promise((resolve, reject) => {
+    listController.createListByBoardId(boardId, 'Product Backlog').then(data => {
+      listController.createListByBoardId(boardId, 'Sprint Planning').then(data => {
+        listController.createListByBoardId(boardId, 'TO DO').then(data => {
+          listController.createListByBoardId(boardId, 'WIP').then(data => {
+            listController.createListByBoardId(boardId, 'Review').then(data => {
+              listController.createListByBoardId(boardId, 'Sprint 1').then(data => {
+                resolve(data)
+              }).catch(err => {
+                reject(err)
+              })
+            }).catch(err => {
+              reject(err)
+            })
+          }).catch(err => {
+            reject(err)
+          })
+        }).catch(err => {
+          reject(err)
+        })
+      }).catch(err => {
+        reject(err)
+      })
+    }).catch(err => {
+      reject(err)
     })
   })
 }
@@ -64,7 +93,7 @@ listController.removeList = (boardId, listId) => {
 }
 listController.updateList = (req) => {
   return new Promise((resolve, reject) => {
-    List.findOneAndUpdate({ '_id': req.params.listId }, req.body, (err, item) => {
+    List.findOneAndUpdate({ '_id': req.params.listId }, req.body, {new: true}, (err, item) => {
       if (err) {
         return reject(err)
       } else {

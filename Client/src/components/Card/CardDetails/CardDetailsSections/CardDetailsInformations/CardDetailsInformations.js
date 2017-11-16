@@ -4,9 +4,9 @@ import CardDetailsMembers from './CardDetailsMembers/CardDetailsMembers'
 import CardDetailsLabels from './CardDetailsLabels/CardDetailsLabels'
 import CardDetailsResponsible from './CardDetailsResponsible/CardDetailsResponsible'
 import CardDetailsDueDate from './CardDetailsDueDate/CardDetailsDueDate'
-
 import {connect} from 'react-redux'
 import Button from '../../../../UI/Button/Button'
+import File from '../../../../UI/File/File'
 import {updateCardDescription} from '../../../../../services/Card.services'
 import Markdown from 'react-markdown'
 
@@ -57,40 +57,10 @@ export default class CardDetailsInformations extends React.Component {
 
     return (
       <div className='host'>
-        <CardDetailsSection title={this.props.content} icon='list-alt'>
+        <CardDetailsSection>
           <span className='listInformations'>In list {this.props.board.lists[this.props.listIndex].name}</span>
           <div className='description'>
             <Markdown source={fullCard.description} />
-          </div>
-          <div className='sections'>
-            <div className='members'>
-              <div className='subsectionTitle'>
-                Members
-              </div>
-              <CardDetailsMembers listIndex={this.props.listIndex} id={fullCard._id} />
-            </div>
-            <div className='labels'>
-              <div className='subsectionTitle'>
-                Labels
-              </div>
-              <CardDetailsLabels labels={this.props.board.labels} cardLabels={this.props.cardLabels} onDeleteCardLabel={this.props.onDeleteCardLabel} onAddCardLabel={this.props.onAddCardLabel} onUpdateBoardLabel={this.props.onUpdateBoardLabel} onDeleteBoardLabel={this.props.onDeleteBoardLabel} labels={this.props.board.labels} onAddBoardLabel={this.props.onAddBoardLabel} />
-            </div>
-            <div className='responsible'>
-              <div className='subsectionTitle'>
-                Responsible
-              </div>
-              <CardDetailsResponsible listIndex={this.props.listIndex} id={fullCard._id} />
-            </div>
-            {
-              fullCard.dueDate !== undefined
-                ? <div className='dueDate'>
-                  <div className='subsectionTitle'>
-                      Due Date
-                  </div>
-                  <CardDetailsDueDate listIndex={this.props.listIndex} id={fullCard._id}/>
-                </div>
-                : null
-            }
           </div>
           {
             this.state.editDescriptionFormDisplayed
@@ -112,6 +82,45 @@ export default class CardDetailsInformations extends React.Component {
             hoverBgColor='rgba(0,0,0,0.2)'
             onClick={this.toggleDescriptionForm}
           >Edit the description...</Button>
+
+          <div className='sections'>
+            <div className='members'>
+              <div className='subsectionTitle'>
+                Members
+              </div>
+              <CardDetailsMembers listIndex={this.props.listIndex} id={fullCard._id} />
+            </div>
+            <div className='labels'>
+              <div className='subsectionTitle'>
+                Labels
+              </div>
+              <CardDetailsLabels labels={this.props.board.labels} cardLabels={this.props.cardLabels} onDeleteCardLabel={this.props.onDeleteCardLabel} onAddCardLabel={this.props.onAddCardLabel} onUpdateBoardLabel={this.props.onUpdateBoardLabel} onDeleteBoardLabel={this.props.onDeleteBoardLabel} onAddBoardLabel={this.props.onAddBoardLabel} />
+            </div>
+            <div className='responsible'>
+              <div className='subsectionTitle'>
+                Responsible
+              </div>
+              <CardDetailsResponsible listIndex={this.props.listIndex} id={fullCard._id} />
+            </div>
+            {
+              fullCard.dueDate !== undefined
+                ? <div className='dueDate'>
+                  <div className='subsectionTitle'>
+                      Due Date
+                  </div>
+                  <CardDetailsDueDate listIndex={this.props.listIndex} id={fullCard._id}/>
+                </div>
+                : null
+            }
+          </div>
+
+          { <ul className='attachments'>
+            {
+              fullCard.attachments.map((a, i) => (
+                <li key={a._id || i}><File renderPreview attachment={a} boardId={this.props.board._id} /></li>
+              ))
+            }
+          </ul> }
         </CardDetailsSection>
         <style jsx>
           {`
@@ -157,6 +166,16 @@ export default class CardDetailsInformations extends React.Component {
 
     .content {
       font-size: 13px;
+    }
+
+    .attachments {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .attachments li {
+      margin-bottom: 20px;
     }
     
     .content .card {

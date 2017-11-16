@@ -9,6 +9,7 @@ export default class Input extends React.Component {
     fontSize: PropTypes.string,
     style: PropTypes.object,
     centeredText: PropTypes.bool,
+    value: PropTypes.string,
     type: PropTypes.oneOf(['input', 'textarea'])
   }
 
@@ -30,9 +31,11 @@ export default class Input extends React.Component {
       fontSize,
       type,
       centeredText,
+      value,
       ...props
     } = this.props
 
+    console.log(value)
     props.style = {
       width,
       height,
@@ -46,7 +49,7 @@ export default class Input extends React.Component {
       <div className='host' style={{...props.style.height}}>
         {
           type === 'input'
-            ? <input ref={v => { this.input = v }} style={props.style} type='text' placeholder={placeholder} />
+            ? <input value={value} ref={v => { this.input = v }} style={props.style} type='text' placeholder={placeholder} />
             : <textarea ref={v => { this.input = v }} className='' dir='auto' placeholder={placeholder} />
         }
         <style jsx>{`

@@ -97,6 +97,26 @@ export default (state = defaultBoardState, action) => {
         }
       }
     }
+    case 'REMOVE_ATTACHMENT': {
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          attachments: state.board.attachments.filter(a => a._id !== action.payload)
+        }
+      }
+    }
+    case 'ADD_ATTACHMENT': {
+      let newAttachments = state.board.attachments.slice()
+      newAttachments.push(action.payload)
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          attachments: newAttachments
+        }
+      }
+    }
     case 'MOVE_LIST': {
       return {
         ...state,
@@ -172,6 +192,16 @@ export default (state = defaultBoardState, action) => {
         }
       }
     }
+    case 'UPDATE_TEAMS': {
+      const newTeams = action.payload
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          teams: newTeams
+        }
+      }
+    }
     case 'ADD_LABEL': {
       const newLabels = action.payload
       return {
@@ -208,6 +238,15 @@ export default (state = defaultBoardState, action) => {
         board: {
           ...state.board,
           modifications: action.payload
+        }
+      }
+    }
+    case 'UPDATE_BOARD': {
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          title: action.payload.title
         }
       }
     }

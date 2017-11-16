@@ -42,7 +42,6 @@ module.exports = (router, controller) => {
   *         description: Internal error
   */
   router.post('/boards', [requiresLogin], (req, res) => {
-    console.log(req.query)
     let requiredBody = ['title']
     requiredBody = Util.checkRequest(req.body, requiredBody)
     if (requiredBody.length > 0) {
@@ -51,25 +50,13 @@ module.exports = (router, controller) => {
       return
     }
     if (req.query.template === 'scrum') {
-      console.log(req.body)
       controller
       .createBoard({...req.body, owner: req.user._id, collaborators: [req.user._id]})
       .then(data => {
         let boardId = data._id
-        listController.createScrumList(boardId, 'Product Backlog').then(data => {
-          listController.createScrumList(boardId, 'Sprint Planning').then(data => {
-            listController.createScrumList(boardId, 'TO DO').then(data => {
-              listController.createScrumList(boardId, 'WIP').then(data => {
-                listController.createScrumList(boardId, 'Review').then(data => {
-                  for (let i = 0; i < parseInt(req.body.sprints); i++) {
-                    listController.createScrumList(boardId, `Sprint ${i}`).catch(err => {
-                      res.status(500).json(err)
-                    })
-                  }
-                })
-              })
-            })
-          })
+        listController.createScrumLists(boardId).then(data => {
+        }).catch(err => {
+          res.status(500).json(err)
         })
         res.status(201).json(data)
       })

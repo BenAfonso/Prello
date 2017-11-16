@@ -64,7 +64,7 @@ export default class CardDetailsDueDate extends React.Component {
         background: this.getDueDateColor(card.validated, dueDate)
       }}>
         <div className='checkbox'>
-          <input type='checkbox' ref={t => { this.checkbox = t }} checked={card.validated} onClick={this.updateValidated} />
+          <input type='checkbox' ref={t => { this.checkbox = t }} checked={card.validated} onChange={this.updateValidated} />
         </div>
         <div className='dueDate' style={{color: this.getDueDateTextColor(card.validated, dueDate)}}>
           {
@@ -93,6 +93,7 @@ export default class CardDetailsDueDate extends React.Component {
             
             .dueDate{
               padding: 5px;
+              font-size: 13px;
             }
           `}
         </style>
