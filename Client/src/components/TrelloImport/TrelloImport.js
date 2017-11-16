@@ -36,6 +36,7 @@ export default class Import extends React.Component {
   }
 
   cleanTrelloBoard (board) {
+    // test
     delete board['descData']
     delete board['idOrganization']
     delete board['invited']
