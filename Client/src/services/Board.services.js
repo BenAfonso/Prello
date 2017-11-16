@@ -25,6 +25,7 @@ export function addScrumBoardDistant (payload) {
       title: payload.title,
       background: payload.color
     }).then(res => {
+      addBoardLocal(res.data)
       resolve(res.data)
     }).catch(err => {
       reject(err)
@@ -35,6 +36,20 @@ export function addScrumBoardDistant (payload) {
 export function addTeamBoardDistant (payload) {
   return new Promise((resolve, reject) => {
     axios.post(`${Config.API_URL}/boards`, {
+      title: payload.title,
+      background: payload.color,
+      teams: payload.teams
+    }).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function addScrumTeamBoardDistant (payload) {
+  return new Promise((resolve, reject) => {
+    axios.post(`${Config.API_URL}/boards?template=scrum`, {
       title: payload.title,
       background: payload.color,
       teams: payload.teams

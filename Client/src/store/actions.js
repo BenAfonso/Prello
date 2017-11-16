@@ -1,5 +1,5 @@
 import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDistant, removeTeamAdminDistant, setTeamAdminDistant, unsetTeamAdminDistant, updateTeamDistant } from '../services/Team.services'
-import { fetchBoards, fetchBoard, addBoardDistant, addScrumBoardDistant, addTeamBoardDistant, deleteBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, removeTeamFromBoardDistant, updateBoardNameDistant } from '../services/Board.services'
+import { fetchBoards, fetchBoard, addBoardDistant, addScrumBoardDistant, addTeamBoardDistant, deleteBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, addScrumTeamBoardDistant, removeTeamFromBoardDistant, updateBoardNameDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail, fetchUser, fetchUserTeams, fetchUserBoards } from '../services/User.services'
@@ -224,13 +224,29 @@ export function addBoardLocal (board) {
   }
 }
 
-export function addTeamBoard (dispatch, teamId, payload) {
+export function addTeamBoard (dispatch, teamId, payload, comingFromProfilePage) {
   addTeamBoardDistant(payload).then((board) => {
     addTeamBoardLocal(teamId, board)
-    dispatch({
-      type: 'ADD_BOARD_FROM_PROFILE_PAGE',
-      payload: board
-    })
+    if (comingFromProfilePage) {
+      dispatch({
+        type: 'ADD_BOARD_FROM_PROFILE_PAGE',
+        payload: board
+      })
+    }
+  }).catch(err => {
+    return err
+  })
+}
+
+export function addScrumTeamBoard (dispatch, teamId, payload, comingFromProfilePage) {
+  addScrumTeamBoardDistant(payload).then((board) => {
+    addTeamBoardLocal(teamId, board)
+    if (comingFromProfilePage) {
+      dispatch({
+        type: 'ADD_BOARD_FROM_PROFILE_PAGE',
+        payload: board
+      })
+    }
   }).catch(err => {
     return err
   })
