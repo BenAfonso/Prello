@@ -73,6 +73,42 @@ listController.createScrumLists = (boardId) => { // <- NOT SURE ABOUT THE CODE Q
   })
 }
 
+listController.createKanbanLists = (boardId) => {
+  return new Promise((resolve, reject) => {
+    listController.createListByBoardId(boardId, 'Backlog')
+    .then(data => {
+      listController.createListByBoardId(boardId, 'Ready')
+      .then(data => {
+        listController.createListByBoardId(boardId, 'Coding')
+        .then(data => {
+          listController.createListByBoardId(boardId, 'Testing')
+          .then(data => {
+            listController.createListByBoardId(boardId, 'Approval')
+            .then(data => {
+              listController.createListByBoardId(boardId, 'Done')
+              .then(data => {
+                resolve(data)
+              }).catch(err => {
+                reject(err)
+              })
+            }).catch(err => {
+              reject(err)
+            })
+          }).catch(err => {
+            reject(err)
+          })
+        }).catch(err => {
+          reject(err)
+        })
+      }).catch(err => {
+        reject(err)
+      })
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
 listController.removeList = (boardId, listId) => {
   return new Promise((resolve, reject) => {
     List.findOneAndRemove({ '_id': listId }, (err, item) => {

@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import NewTeamForm from '../NewTeamForm/NewTeamForm'
 import Button from '../../../UI/Button/Button'
 import DropDown from '../../../UI/DropDown/DropDown'
-import { addBoard, addScrumBoard, addTeamBoard, setTeamslist } from '../../../../store/actions'
+import { addBoard, addScrumBoard, addKanbanBoard, addTeamBoard, setTeamslist } from '../../../../store/actions'
 import styles from './NewBoardForm.styles'
 import PropTypes from 'prop-types'
 
@@ -32,6 +32,8 @@ export default class NewBoardForm extends React.Component {
     this.displayScrumForm = this.displayScrumForm.bind(this)
     this.hideScrumForm = this.hideScrumForm.bind(this)
     this.onTemplateChanged = this.onTemplateChanged.bind(this)
+    this.displayKanbanForm = this.displayKanbanForm.bind(this)
+    this.hideKanbanForm = this.hideKanbanForm.bind(this)
   }
 
   componentDidMount () {
@@ -53,18 +55,31 @@ export default class NewBoardForm extends React.Component {
     this.setState({selectedTemplate: 'scrum'})
   }
 
+  displayKanbanForm () {
+    this.setState({selectedTemplate: 'kanban'})
+  }
+
   hideScrumForm () {
     this.setState({selectedTemplate: null})
     this.scrumRadio.checked = false
   }
 
+  hideKanbanForm () {
+    this.setState({selectedTemplate: null})
+    this.kanbanRadio.checked = false
+  }
+
   submit (title) {
     const templates = [this.scrumRadio]
     const selectedTemplate = templates.filter(radio => radio.checked)[0]
+    const kanbanTemplate = [this.kanbanRadio]
+    const selectedKanban = kanbanTemplate.filter(radio => radio.checked)[0]
     if (this.title.value !== '') {
       if (this.state.selected.length === 0) {
         if (selectedTemplate && selectedTemplate.id === 'scrum') {
           addScrumBoard(this.props.dispatch, {title: this.title.value, color: this.color.value}, this.props.comingFromProfilePage)
+        } else if (selectedKanban && selectedKanban.id === 'kanban') {
+          addKanbanBoard(this.props.dispatch, {title: this.title.value, color: this.color.value}, this.props.comingFromProfilePage)
         } else {
           addBoard(this.props.dispatch, {title: this.title.value, color: this.color.value}, this.props.comingFromProfilePage)
         }
@@ -93,6 +108,9 @@ export default class NewBoardForm extends React.Component {
     if (newTemplate === 'scrum') {
       this.displayScrumForm()
     }
+    if (newTemplate === 'kanban') {
+      this.displayKanbanForm()
+    }
   }
 
   renderScrumForm () {
@@ -105,6 +123,23 @@ export default class NewBoardForm extends React.Component {
           fontSize='12px'
           bold
           onClick={this.hideScrumForm}>
+          Cancel
+        </Button>
+        <style jsx>{styles}</style>
+      </div>
+    )
+  }
+
+  renderKanbanForm () {
+    return (
+      <div className='close-template-button'>
+        <Button
+          bgColor='#E2E4E6'
+          hoverBgColor='#d6d6d6'
+          color='black'
+          fontSize='12px'
+          bold
+          onClick={this.hideKanbanForm}>
           Cancel
         </Button>
         <style jsx>{styles}</style>
@@ -181,6 +216,14 @@ export default class NewBoardForm extends React.Component {
                     <div className='template-name'>SCRUM</div>
                     {this.state.selectedTemplate === 'scrum'
                       ? <div>{this.renderScrumForm()}</div>
+                      : null
+                    }
+                  </li>
+                  <li className='template'>
+                    <input type='radio' name='template' id='kanban' ref={radio => { this.kanbanRadio = radio }} onChange={event => this.onTemplateChanged('kanban')}/>
+                    <div className='template-name'>KANBAN</div>
+                    {this.state.selectedTemplate === 'kanban'
+                      ? <div>{this.renderKanbanForm()}</div>
                       : null
                     }
                   </li>

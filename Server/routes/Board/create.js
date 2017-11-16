@@ -62,6 +62,20 @@ module.exports = (router, controller) => {
       .catch(err => {
         res.status(500).json(err)
       })
+    } else if (req.query.template === 'kanban') {
+      controller
+      .createBoard({...req.body, owner: req.user._id, collaborators: [req.user._id]})
+      .then(data => {
+        let boardId = data._id
+        listController.createKanbanLists(boardId).then(data => {
+        }).catch(err => {
+          res.status(500).json(err)
+        })
+        res.status(201).json(data)
+      })
+      .catch(err => {
+        res.status(500).json(err)
+      })
     } else {
       controller
       .createBoard({...req.body, owner: req.user._id, collaborators: [req.user._id]})

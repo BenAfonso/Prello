@@ -1,5 +1,5 @@
 import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDistant, removeTeamAdminDistant, setTeamAdminDistant, unsetTeamAdminDistant, updateTeamDistant } from '../services/Team.services'
-import { fetchBoards, fetchBoard, addBoardDistant, addScrumBoardDistant, addTeamBoardDistant, deleteBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, removeTeamFromBoardDistant, updateBoardNameDistant } from '../services/Board.services'
+import { fetchBoards, fetchBoard, addBoardDistant, addScrumBoardDistant, addKanbanBoardDistant, addTeamBoardDistant, deleteBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, removeTeamFromBoardDistant, updateBoardNameDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail, fetchUser, fetchUserTeams, fetchUserBoards } from '../services/User.services'
@@ -212,6 +212,17 @@ export function addScrumBoard (dispatch, payload, comingFromProfilePage) {
     }
   }).catch(err => {
     return err
+  })
+}
+
+export function addKanbanBoard (dispatch, payload, comingFromProfilePage) {
+  addKanbanBoardDistant(payload).then(board => {
+    if (comingFromProfilePage) {
+      dispatch({
+        type: 'ADD_BOARD_FROM_PROFILE_PAGE',
+        payload: board
+      })
+    }
   })
 }
 

@@ -32,6 +32,19 @@ export function addScrumBoardDistant (payload) {
   })
 }
 
+export function addKanbanBoardDistant (payload) {
+  return new Promise((resolve, reject) => {
+    axios.post(`${Config.API_URL}/boards?template=kanban`, {
+      title: payload.title,
+      background: payload.color
+    }).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
 export function addTeamBoardDistant (payload) {
   return new Promise((resolve, reject) => {
     axios.post(`${Config.API_URL}/boards`, {
