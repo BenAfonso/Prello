@@ -1,7 +1,6 @@
 const Util = require('../../controllers/Util')
 const {requiresLogin} = require('../../config/middlewares/authorization')
 const listController = require('../../controllers/listController')
-const List = require('../../models/List')
 
 module.exports = (router, controller) => {
   /**

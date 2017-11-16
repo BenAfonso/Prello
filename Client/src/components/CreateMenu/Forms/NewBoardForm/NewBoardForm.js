@@ -5,6 +5,7 @@ import Button from '../../../UI/Button/Button'
 import DropDown from '../../../UI/DropDown/DropDown'
 import { addBoard, addScrumBoard, addTeamBoard, setTeamslist } from '../../../../store/actions'
 import styles from './NewBoardForm.styles'
+import PropTypes from 'prop-types'
 
 @connect(store => {
   return {
@@ -13,6 +14,12 @@ import styles from './NewBoardForm.styles'
 })
 
 export default class NewBoardForm extends React.Component {
+  static propTypes = {
+    comingFromProfilePage: PropTypes.bool
+  }
+  static defaultProps = {
+    comingFromProfilePage: false
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -57,9 +64,9 @@ export default class NewBoardForm extends React.Component {
     if (this.title.value !== '') {
       if (this.state.selected.length === 0) {
         if (selectedTemplate && selectedTemplate.id === 'scrum') {
-          addScrumBoard(this.props.dispatch, {title: this.title.value, color: this.color.value})
+          addScrumBoard(this.props.dispatch, {title: this.title.value, color: this.color.value}, this.props.comingFromProfilePage)
         } else {
-          addBoard(this.props.dispatch, {title: this.title.value, color: this.color.value})
+          addBoard(this.props.dispatch, {title: this.title.value, color: this.color.value}, this.props.comingFromProfilePage)
         }
       } else {
         let teamId = ''

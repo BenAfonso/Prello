@@ -188,17 +188,28 @@ export function setBoardslist (dispatch) {
   })
 }
 
-export function addBoard (dispatch, payload) {
+export function addBoard (dispatch, payload, comingFromProfilePage) {
   addBoardDistant(payload).then((board) => {
     // <= HANDLED FROM SOCKETS
+    if (comingFromProfilePage) {
+      dispatch({
+        type: 'ADD_BOARD_FROM_PROFILE_PAGE',
+        payload: board
+      })
+    }
   }).catch(err => {
     return err
   })
 }
 
-export function addScrumBoard (dispatch, payload) {
+export function addScrumBoard (dispatch, payload, comingFromProfilePage) {
   addScrumBoardDistant(payload).then((board) => {
-
+    if (comingFromProfilePage) {
+      dispatch({
+        type: 'ADD_BOARD_FROM_PROFILE_PAGE',
+        payload: board
+      })
+    }
   }).catch(err => {
     return err
   })
@@ -216,6 +227,10 @@ export function addBoardLocal (board) {
 export function addTeamBoard (dispatch, teamId, payload) {
   addTeamBoardDistant(payload).then((board) => {
     addTeamBoardLocal(teamId, board)
+    dispatch({
+      type: 'ADD_BOARD_FROM_PROFILE_PAGE',
+      payload: board
+    })
   }).catch(err => {
     return err
   })
@@ -278,13 +293,19 @@ export function setTeamslist (dispatch) {
   })
 }
 
-export function addTeam (teamName) {
+export function addTeam (teamName, comingFromProfilePage) {
   addTeamDistant(teamName).then((team) => {
     if (team) {
       store.dispatch({
         type: 'ADD_TEAM',
         payload: team
       })
+      if (comingFromProfilePage) {
+        store.dispatch({
+          type: 'ADD_TEAM_FROM_PROFILE_PAGE',
+          payload: team
+        })
+      }
     }
   }).catch(err => {
     return err

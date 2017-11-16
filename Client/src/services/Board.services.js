@@ -2,6 +2,7 @@ import Config from '../config'
 import axios from 'axios'
 // import { addListDistant } from './List.services'
 import { logout } from './Authentication.services'
+import {addBoardLocal} from '../store/actions'
 
 export function addBoardDistant (payload) {
   return new Promise((resolve, reject) => {
@@ -9,8 +10,10 @@ export function addBoardDistant (payload) {
       title: payload.title,
       background: payload.color
     }).then(res => {
+      addBoardLocal(res.data)
       resolve(res.data)
     }).catch(err => {
+      console.log(err)
       reject(err)
     })
   })

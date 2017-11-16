@@ -13,6 +13,8 @@ const teamController = {}
 teamController.createTeam = function (name, userId) {
   return new Promise((resolve, reject) => {
     const teamToAdd = new Team({name: name, admins: [userId], users: [userId]})
+    teamToAdd.populate('admins').execPopulate() // Necessary if coming from profile page
+    teamToAdd.populate('users').execPopulate() // Necessary if coming from profile page
     teamToAdd.save((err, item) => {
       if (err) {
         reject(err)
