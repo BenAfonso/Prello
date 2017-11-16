@@ -4,6 +4,7 @@ import styles from './SearchBar.styles'
 import {connect} from 'react-redux'
 import DropDown from '../UI/DropDown/DropDown'
 import AvatarThumbnail from '../UI/AvatarThumbnail/AvatarThumbnail'
+import Icon from '../UI/Icon/Icon'
 import { setBoardslist, setTeamslist, fetchMatchingUsers } from '../../store/actions'
 import { subscribeToBoardslist } from '../../services/api'
 
@@ -24,6 +25,7 @@ export default class SearchBar extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      emptySearch: true,
       matchingBoards: [],
       matchingTeams: [],
       matchingCards: [],
@@ -110,12 +112,14 @@ export default class SearchBar extends React.Component {
   onChange () {
     const input = this.input.value
     if (input !== '') {
+      this.setState({emptySearch: false})
       this.setMatchingBoards(input)
       this.setMatchingCards(input)
       this.setMatchingUsers(input)
       this.setMatchingTeams(input)
     } else {
       this.setState({
+        emptySearch: true,
         matchingBoards: [],
         matchingCards: [],
         matchingTeams: [],
@@ -144,83 +148,98 @@ export default class SearchBar extends React.Component {
           button={<input type='text' className='search-input' ref={(input) => { this.input = input }} onFocus={this.handleFocus} onChange={this.onChange} />}
         >
           <div className='search-content'>
-            <ul className='search-column'>
-              <li className='section'>
-                <div className='section-title'>Boards</div>
-                <ul className='section-elements'>
-                  {
-                    matchingBoards.length === 0
-                      ? <li className='element'>
-                        <div className='element-text'>Nothing! Yaaay</div>
-                      </li>
-                      : matchingBoards.map(board =>
-                        <Link to={`/boards/${board._id}`}>
-                          <li className='element' key={board._id}>
-                            <div className='content'>
-                              <div className='element-title'>{board.title}</div>
-                            </div>
-                            <div className='separator' />
-                          </li>
-                        </Link>
-                      )
-                  }
-                </ul>
-              </li>
-              <li className='section'>
-                <div className='section-title'>Cards</div>
-                <ul className='section-elements'>
-                  {
-                    matchingCards.length === 0
-                      ? <li className='element'>
-                        <div className='element-text'>Nothing! Yaaay</div>
-                      </li>
-                      : matchingCards.map(card =>
-                        <li className='element'>{this.renderCard(card)}</li>
-                      )
-                  }
-                </ul>
-              </li>
-            </ul>
-            <ul className='search-column'>
-              <li className='section'>
-                <div className='section-title'>Teams</div>
-                <ul className='section-elements'>
-                  {
-                    matchingTeams.length === 0
-                      ? <li className='element'>
-                        <div className='element-text'>Nothing! Yaaay</div>
-                      </li>
-                      : matchingTeams.map(team =>
-                        <Link to={`/teams/${team._id}`}>
-                          <li className='element'>
-                            <div className='content'>
-                              <div className='element-title'>{team.name}</div>
-                              <div className='element-text'>{team.users.length} {team.users.length > 1 ? 'members' : 'member'}</div>
-                            </div>
-                            <div className='separator' />
-                          </li>
-                        </Link>
-                      )
-                  }
-                </ul>
-              </li>
-              <li className='section'>
-                <div className='section-title'>Users</div>
-                <ul className='section-elements'>
-                  {
-                    matchingUsers.length === 0
-                      ? <li className='element'>
-                        <div className='element-text'>Nothing! Yaaay</div>
-                      </li>
-                      : matchingUsers.map(user =>
-                        <Link to={`/users/${user._id}/profile`}>
-                          <li className='element'>{this.renderUser(user)}</li>
-                        </Link>
-                      )
-                  }
-                </ul>
-              </li>
-            </ul>
+            {
+              this.state.emptySearch
+                ? null
+                : <div>
+                  <ul className='search-column'>
+                    <li className='section'>
+                      <div className='section-title'>Boards</div>
+                      <ul className='section-elements'>
+                        {
+                          matchingBoards.length === 0
+                            ? <li className='element'>
+                              <div className='element-nothing'>We found nothing at all there..</div>
+                            </li>
+                            : matchingBoards.map(board =>
+                              <Link to={`/boards/${board._id}`}>
+                                <li className='element' key={board._id}>
+                                  <div className='content'>
+                                    <div className='element-title'>{board.title}</div>
+                                  </div>
+                                  <div className='separator' />
+                                </li>
+                              </Link>
+                            )
+                        }
+                      </ul>
+                    </li>
+                    <li className='section'>
+                      <div className='section-title'>Cards</div>
+                      <ul className='section-elements'>
+                        {
+                          matchingCards.length === 0
+                            ? <li className='element'>
+                              <div className='element-nothing'>We found nothing at all there..</div>
+                            </li>
+                            : matchingCards.map(card =>
+                              <li className='element'>{this.renderCard(card)}</li>
+                            )
+                        }
+                      </ul>
+                    </li>
+                  </ul>
+                  <ul className='search-column'>
+                    <li className='section'>
+                      <div className='section-title'>Teams</div>
+                      <ul className='section-elements'>
+                        {
+                          matchingTeams.length === 0
+                            ? <li className='element'>
+                              <div className='element-nothing'>We found nothing at all there..</div>
+                            </li>
+                            : matchingTeams.map(team =>
+                              <Link to={`/teams/${team._id}`}>
+                                <li className='element'>
+                                  <div className='content'>
+                                    <div className='element-title'>{team.name}</div>
+                                    <div className='element-icons'>
+                                      <div className='icon'>
+                                        <div className='icon-text'>{team.users.length}</div>
+                                        <Icon fontSize='13px' name='users' color='#999'/>
+                                      </div>
+                                      <div className='icon'>
+                                        <div className='icon-text'>{team.boards.length}</div>
+                                        <Icon fontSize='13px' name='window-restore' color='#999'/>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className='separator' />
+                                </li>
+                              </Link>
+                            )
+                        }
+                      </ul>
+                    </li>
+                    <li className='section'>
+                      <div className='section-title'>Users</div>
+                      <ul className='section-elements'>
+                        {
+                          matchingUsers.length === 0
+                            ? <li className='element'>
+                              <div className='element-nothing'>We found nothing at all there..</div>
+                            </li>
+                            : matchingUsers.map(user =>
+                              <Link to={`/users/${user._id}/profile`}>
+                                <li className='element'>{this.renderUser(user)}</li>
+                              </Link>
+                            )
+                        }
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+            }
           </div>
         </DropDown>
         <style jsx>{styles}</style>

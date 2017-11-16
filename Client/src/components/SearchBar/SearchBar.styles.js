@@ -68,6 +68,11 @@ input:focus {
   padding: 5px 0;  
 }
 
+.element-nothing {
+  text-align: center;
+  font-size: 15px;
+}
+
 .element-title {
   padding: 4px 0px;
   font-size: 15px;
@@ -76,6 +81,23 @@ input:focus {
 
 .element-text {
   padding: 4px 0px;
+  font-size: 13px;
+}
+
+.element-icons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  padding: 0 5px;  
+}
+
+.icon-text {
+  padding: 0 5px;
   font-size: 13px;
 }
 
