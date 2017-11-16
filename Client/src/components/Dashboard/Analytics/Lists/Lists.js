@@ -94,7 +94,7 @@ export default class BoardAnalytics extends React.Component {
     let values = this.props.lists ? this.props.lists.map(l => l.numbers ? l.numbers.map(n => n.numberOfCards) : []) : []
     let dates = this.props.lists.length > 0 ? this.props.lists[0].numbers ? this.props.lists[0].numbers.map(n => n.date) : [] : []
     let cumulativeData = dates.map((d, i) => ({
-      date: d,
+      date: this.renderDate(d),
       ...object(names, values.map(v => v[i]))
     }))
 
