@@ -4,7 +4,7 @@ import Button from '../../components/UI/Button/Button'
 import Icon from '../../components/UI/Icon/Icon'
 import styles from './profile.style'
 import { updateProfile } from '../../services/User.services'
-import { updateProfileAction, updateProfilePageAction, setFetchedUser, setFetchedUserTeams, setFetchedUserBoards } from '../../store/actions'
+import { updateProfileAction, updateProfilePageAction, setFetchedUser, setFetchedUserTeams, setFetchedUserBoards, setFetchedUserHistory } from '../../store/actions'
 import { updateProfileLocalStorage } from '../../services/Authentication.services'
 import { displayNotification } from '../../services/Notification.service'
 import AvatarThumbnail from '../../components/UI/AvatarThumbnail/AvatarThumbnail'
@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom'
 import Tabs from '../../components/UI/Tabs/Tabs'
 import TabPanel from '../../components/UI/TabPanel/TabPanel'
 import TeamListElement from '../../components/UI/TeamListElement/TeamListElement'
+import ModificationListElement from '../../components/UI/ModificationListElement/ModificationListElement'
 import NewBoardForm from '../../components/CreateMenu/Forms/NewBoardForm/NewBoardForm'
 import NewTeamForm from '../../components/CreateMenu/Forms/NewTeamForm/NewTeamForm'
 
@@ -60,6 +61,11 @@ export default class ProfilePage extends React.Component {
       console.error(err)
     })
     setFetchedUserBoards(this.props._id).then(() => {
+    }).catch(err => {
+      console.error(err)
+    })
+    setFetchedUserHistory(this.props._id).then(() => {
+      console.log(this.props.userFetched.modifications)
     }).catch(err => {
       console.error(err)
     })
@@ -236,6 +242,7 @@ export default class ProfilePage extends React.Component {
   }
 
   renderProfileTab () {
+    console.log(this.props.userFetched.modifications)
     return (
       <div className='profileTab'>
         <div className='teamPart'>
@@ -280,6 +287,13 @@ export default class ProfilePage extends React.Component {
             <span className='activityTitle'>Activity feed</span>
           </div>
           <hr className='titleAndContentSeparator'/>
+          <div className='activityFeedList'>
+            <ul>
+              {this.props.userFetched.modifications.map(modif => (
+                <li key={modif._id} className='modificationElement'><ModificationListElement modification={modif}/></li>
+              ))}
+            </ul>
+          </div>
         </div>
         <style jsx>
           {styles}
@@ -394,7 +408,7 @@ export default class ProfilePage extends React.Component {
           </div>
         }
         <div className='tabSection'>
-          <Tabs selected='0'>
+          <Tabs selected={0}>
             <TabPanel label='Profile'>
               {this.renderProfileTab()}
             </TabPanel>

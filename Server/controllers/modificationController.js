@@ -196,4 +196,15 @@ modificationController.findCardHistory = (cardId) => {
   })
 }
 
+modificationController.findUserHistory = (userId) => {
+  return new Promise((resolve, reject) => {
+    Modification.find({'user': userId}).limit(20).populate('fromList toList targetUser comment list board user card', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).sort({timestamp: 'desc'}).exec((err, items) => {
+      if (err) {
+        reject(err)
+      }
+      resolve(items)
+    })
+  })
+}
+
 module.exports = modificationController

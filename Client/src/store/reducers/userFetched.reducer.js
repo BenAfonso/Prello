@@ -12,7 +12,7 @@ export default (state = defaultFetchedUserState, action) => {
       return {
         ...state,
         fetching: false,
-        user: Object.assign(action.payload, {teams: [], boards: []}) // Trick not to have an error about teams undefined on profile page
+        user: Object.assign(action.payload, {teams: [], boards: [], modifications: []}) // Trick not to have an error about teams undefined on profile page
       }
     }
     case 'FETCH_USER_PROFILE_ERROR': {
@@ -28,6 +28,15 @@ export default (state = defaultFetchedUserState, action) => {
         user: {
           ...state.user,
           teams: action.payload
+        }
+      }
+    }
+    case 'SET_FETCHED_USER_HISTORY': {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          modifications: action.payload
         }
       }
     }

@@ -194,4 +194,10 @@ label {
     font-size: 16px;
     text-align: center;
   }
+
+  .modificationElement {
+      margin-left: 40px;
+      width: 80%;
+      min-width: 200px;
+  }
 `
