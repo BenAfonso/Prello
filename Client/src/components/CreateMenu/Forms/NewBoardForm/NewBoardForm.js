@@ -4,6 +4,7 @@ import NewTeamForm from '../NewTeamForm/NewTeamForm'
 import Button from '../../../UI/Button/Button'
 import DropDown from '../../../UI/DropDown/DropDown'
 import { addBoard, addTeamBoard, setTeamslist } from '../../../../store/actions'
+import PropTypes from 'prop-types'
 
 @connect(store => {
   return {
@@ -12,6 +13,12 @@ import { addBoard, addTeamBoard, setTeamslist } from '../../../../store/actions'
 })
 
 export default class NewBoardForm extends React.Component {
+  static propTypes = {
+    comingFromProfilePage: PropTypes.bool
+  }
+  static defaultProps = {
+    comingFromProfilePage: false
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -40,7 +47,7 @@ export default class NewBoardForm extends React.Component {
   submit (title) {
     if (this.title.value !== '') {
       if (this.state.selected.length === 0) {
-        addBoard(this.props.dispatch, {title: this.title.value, color: this.color.value})
+        addBoard(this.props.dispatch, {title: this.title.value, color: this.color.value}, this.props.comingFromProfilePage)
       } else {
         let teamId = ''
         if (this.props.currentTeam !== undefined) {

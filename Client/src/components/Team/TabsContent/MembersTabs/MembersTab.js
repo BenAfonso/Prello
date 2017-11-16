@@ -7,7 +7,7 @@ import AddMemberMenu from './AddMemberMenu'
 import {connect} from 'react-redux'
 import { removeTeamMember, removeTeamAdmin, setTeamAdmin, unsetTeamAdmin } from '../../../../store/actions'
 import { displayNotification } from '../../../../services/Notification.service'
-import {Redirect} from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 
 @connect(store => {
   return {
@@ -301,7 +301,7 @@ export default class MembersTab extends React.Component {
                   <li className='member' >
                     <div className='member-infos'>
                       <div className='member-avatar'>
-                        {this.renderUserAvatar(member)}
+                        <Link to={`/users/${member._id}/profile`}>{this.renderUserAvatar(member)}</Link>
                       </div>
                       <div className='member-names'>
                         <div className='member-name'>{member.username}</div>
