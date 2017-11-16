@@ -7,32 +7,27 @@ export default `
   overflow-y: auto;  
 }
 
-.titleSection {
-  display: flex;
+h1 {
+  color: white;
   margin-left: 23px;
-  align-items: center;
 }
 
-h1, h2 {
-  display: inline-block;  
-  color: #dcdcda;
-  padding: 10px;
-}
-
-
-
-ul.boards {
+ul {
   display: flex;
   flex-wrap: wrap; 
   align-items: center;
-  padding-right: 10px;
-  margin-top: 20px;
   justify-content: center;
+  padding-right: 10px;
 }
 
 ul li {
+
   margin-left: 10px;
   margin-bottom: 20px;
+}
+
+ul.boards {
+  margin-top: 20px;
 }
 
 .createBoard {
