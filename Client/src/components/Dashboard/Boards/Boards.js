@@ -43,7 +43,7 @@ export default class DashboardBoards extends React.Component {
           {
             this.props.analytics.boards.map(b => (
               <li>
-                <Link to={`/boards/${b._id}/dashboard`}>
+                <Link to={`/boards/${b._id}/dashboard/board`}>
                   <BoardThumbnail provider={b.provider} id={b._id} title={b.title} />
                 </Link>
               </li>
