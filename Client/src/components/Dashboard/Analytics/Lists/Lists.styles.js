@@ -7,24 +7,25 @@ export default `
   padding-bottom: 60px;
 }
 
-.date-filter {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+.color.selected {
+  border: 3px solid rgba(0,0,0,0.5);
 }
 
 .chart {
   width: 45%;
   min-width: 580px;
   min-height: 250px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+}
+
+.group .chart {
+  width: calc(45% - 30px);
 }
 
 .charts {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
   align-content: center;
 }
 
@@ -34,30 +35,53 @@ export default `
 }
 
 .title {
+  position: relative;
   font-weight: bold;
   font-size: 30px;
   color: white;
 }
 
-.bigNumbers {
+.title:after {
+  position: absolute;
+  content: '';
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  width: 30%;
+  background-color: white;
+}
+
+.legend {
+  width: auto;
   display: flex;
-  font-size: 20px;
   justify-content: center;
-  padding-right: 20px;
-  margin-bottom: 20px;
+  background-color: rgb(174, 77, 123);
+  padding: 10px;
+  color: white;
+  border-radius: 6px;
+  font-size: 20px;
+  margin-bottom: 30px;
 }
 
-.number {
-  font-size: 60px;
-  font-weight: bold;
-  margin-left: 20px;
+.list-legend {
+  line-height: 20px;
+  margin-left: 10px;
+  font-weight: 600;
 }
 
-.number span {
-  font-size: 40px;
-  font-weight: 400;
-  letter-spacing: -3px;
-  text-transform: uppercase;
+.color {
+  display: inline-block;
+  height: 16px;
+  margin-right: 8px;
+  width: 40px;
+  border-radius: 5px;
+}
+
+.group {
+  background-color: rgb(174, 77, 123);
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 15px;
 }
 
 `

@@ -4,9 +4,9 @@ import styles from './Board.styles'
 import { connect } from 'react-redux'
 import { setAnalyticsBoard, setBoardAnalytics } from '../../../../store/actions'
 import DateFilter from '../../DateFilter/DateFilter'
-import { BarChart, Bar, LineChart, CartesianGrid, XAxis, YAxis, Line, Legend, Tooltip } from 'recharts'
 import { fetchBoardAnalytics } from '../../../../services/Analytics.services'
-import BaseChart from '../../Charts/BaseChart'
+import NumbersOverTime from './Charts/NumbersOverTime'
+import NumbersCreationOverTime from './Charts/NumbersCreationOverTime'
 
 @connect(store => {
   return {
@@ -102,34 +102,18 @@ export default class BoardAnalytics extends React.Component {
         </div>
         <div className='charts'>
           <div className='chart'>
-            <BaseChart>
-              <LineChart data={data}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" stroke="#444" />
-                <YAxis stroke="#444" />
-                <Tooltip verticalAlign="top" height={36} />
-                <Legend />
-                <Line type="monotone" dataKey="nbCards" stroke="#8884d8" />
-                <Line type="monotone" dataKey="nbLists" stroke="#82ca9d" />
-                <Line type="monotone" dataKey="nbCardsArchived" stroke="#889ad3" />
-                <Line type="monotone" dataKey="nbListsArchived" stroke="#82942d" />
-              </LineChart>
-            </BaseChart>
+            <NumbersOverTime
+              dataKeys={['nbCards', 'nbLists', 'nbCardsArchived', 'nbListsArchived']}
+              nameKey='name'
+              data={data}
+            />
           </div>
           <div className='chart'>
-            <BaseChart>
-              <BarChart data={data}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" stroke="#444" />
-                <YAxis stroke="#444" />
-                <Tooltip verticalAlign="top" height={36} />
-                <Legend />
-                <Bar dataKey="nbCardsCreated" fill="#8884d8" />
-                <Bar dataKey="nbListsCreated" fill="#82ca9d" />
-              </BarChart>
-            </BaseChart>
+            <NumbersCreationOverTime
+              dataKeys={['nbCardsCreated', 'nbListsCreated']}
+              nameKey='name'
+              data={data}
+            />
           </div>
         </div>
 

@@ -3,6 +3,7 @@ import { ResponsiveContainer } from 'recharts'
 
 export default (props) => (
   <div className='host'>
+    { props.title ? <div className='title'>{props.title}</div> : null }
     <div className='container'>
       <div className='chart'>
         <ResponsiveContainer width='100%' height='100%'>
@@ -11,8 +12,19 @@ export default (props) => (
       </div>
     </div>
     <style jsx>{`
+
+    .title {
+      position: absolute;
+      top: -30px;
+      left: 0;
+      font-size: 24px;
+      color: white;
+      font-weight: bold;
+    }
+
     .host {
       position: relative;
+      margin-top: 30px;
       background-color: white;
       border-radius: 6px;
       width: 100%;

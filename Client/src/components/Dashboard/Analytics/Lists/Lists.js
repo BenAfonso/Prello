@@ -3,13 +3,15 @@ import React from 'react'
 import styles from './Lists.styles'
 import { connect } from 'react-redux'
 import { setListsAnalytics } from '../../../../store/actions'
-import { BarChart, Bar, LineChart, Pie, Cell, PieChart, Line, CartesianGrid, XAxis, YAxis, Legend, Tooltip } from 'recharts'
-import BaseChart from '../../Charts/BaseChart'
 import {shuffle} from 'underscore'
+import ListCardsProportionPieChart from './Charts/ListCardsProportionPieChart'
+import NumberCardsPerList from './Charts/NumberCardsPerList'
+import AverageTimeCards from './Charts/AverageTimeCards'
+import NumberOfCardsOverTimePerList from './Charts/List/NumberOfCardsOverTime'
+import AverageTimeCardsPerList from './Charts/List/AverageTimeCards'
 
 @connect(store => {
   return {
-    analytics: store.analytics,
     board: store.analytics.board,
     lists: store.analytics.board.lists
   }
@@ -20,9 +22,11 @@ export default class BoardAnalytics extends React.Component {
     this.state = {
       firstDate: '',
       secondDate: '',
-      fetched: false
+      fetched: false,
+      listFocused: 1
     }
     this.shouldUpdateData = this.shouldUpdateData.bind(this)
+    this.colors = shuffle(['#8884d8', '#82ca9d', '#F9A825', '#FF1744', '#F06292', '#AB47BC', '#651FFF', '#80D8FF', '#00E5FF', '#69F0AE'])
   }
 
   componentDidMount () {
@@ -32,6 +36,10 @@ export default class BoardAnalytics extends React.Component {
     setListsAnalytics(this.props.provider || 'TheMightyPrello', this.props._id, 'day').then(res => {
       this.setState({ fetched: true })
     })
+  }
+
+  focusList (i) {
+    this.setState({ listFocused: i })
   }
 
   onFilterChange (d1, d2) {
@@ -56,6 +64,17 @@ export default class BoardAnalytics extends React.Component {
     return `${date.getDate() > 9 ? date.getDate() : `0${date.getDate()}`}/${date.getMonth() + 1 > 9 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`}/${date.getFullYear()}`
   }
 
+  filterList (i) {
+    if (this.state.listFocused === i) {
+      return this.unfilterList()
+    }
+    this.setState({ listFocused: i })
+  }
+
+  unfilterList () {
+    this.setState({ listFocused: -1 })
+  }
+
   render () {
     let data = this.props.lists.map(l => (
       {
@@ -65,107 +84,91 @@ export default class BoardAnalytics extends React.Component {
       }
     ))
 
-    let colors = shuffle(['#8884d8', '#82ca9d', '#F9A825', '#FF1744', '#F06292', '#AB47BC', '#651FFF', '#80D8FF', '#00E5FF', '#69F0AE'])
     return (<PageLayout>
       <div className='host'>
         <div className='header'>
-          <div className='title'>{ this.props.board.title }</div>
+          <div className='legend'>
+            {
+              this.props.lists.map((l, i) => (
+                <div className='list-legend'>
+                  <div
+                    className={`color ${this.state.listFocused === i ? 'selected' : ''}`}
+                    onClick={this.filterList.bind(this, i)}
+                    style={{ backgroundColor: this.colors[i] }}
+                  />
+                  {l.name}
+                </div>)
+              )}
+          </div>
+          { this.state.listFocused < 0
+            ? <div className='title'>Global lists analytics</div>
+            : null
+          }
         </div>
         { this.state.fetched
           ? <div className='charts'>
-            <div className='chart'>
-              <BaseChart>
-                <PieChart>
-                  <Pie data={this.props.lists.map(l => ({ value: l.numbers[0].numberOfCards, name: l.name }))} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label>
-                    {
-                      this.props.lists.map(l => ({ value: l.numbers[0].numberOfCards, name: l.name })).map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={colors[index]}/>
-                      ))
-                    }
-                  </Pie>
-                  <Tooltip verticalAlign="top" height={36} />
-                  <Legend />
-                </PieChart>
-              </BaseChart>
+
+            { this.state.listFocused < 0 ? <div className='chart'>
+              <ListCardsProportionPieChart
+                dataKey='value'
+                nameKey='name'
+                data={this.props.lists.map(l => ({ value: l.numbers[0].numberOfCards, name: l.name }))}
+                colors={this.colors}
+              />
             </div>
-            <div className='chart'>
-              <BaseChart>
-                <BarChart data={data}
-                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" stroke="#444" />
-                  <YAxis stroke="#444" />
-                  <Tooltip verticalAlign="top" height={36} />
-                  <Legend />
-                  <Bar dataKey="nbCards" fill="#8884d8">
-                    {
-                      data.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={colors[index]}/>
-                      ))
-                    }
-                  </Bar>
-                </BarChart>
-              </BaseChart>
+              : null }
+            { this.state.listFocused < 0 ? <div className='chart'>
+              <NumberCardsPerList
+                dataKey='value'
+                nameKey='name'
+                data={this.props.lists.map(l => ({ value: l.numbers[0].numberOfCards, name: l.name }))}
+                colors={this.colors}
+              />
             </div>
-            <div className='chart'>
-              <BaseChart>
-                <BarChart data={data}
-                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" stroke="#444" />
-                  <YAxis stroke="#444" />
-                  <Tooltip verticalAlign="top" height={36} />
-                  <Legend />
-                  <Bar dataKey="averageTimeSpentPerCard" fill="#82ca9d">
-                    {
-                      data.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={colors[index]}/>
-                      ))
-                    }
-                  </Bar>
-                </BarChart>
-              </BaseChart>
+              : null }
+            { this.state.listFocused < 0 ? <div className='chart'>
+              <AverageTimeCards
+                dataKey='averageTimeSpentPerCard'
+                nameKey='name'
+                data={data}
+                colors={this.colors}
+              />
             </div>
+              : null }
             {
               this.props.lists.map((l, index) => {
-                let data2 = l.numbers.map(n => (
-                  {
-                    date: this.renderDate(n.date),
-                    nbCards: n.numberOfCards,
-                    averageTimeSpentPerCard: n.averageTimeSpentPerCard
-                  }
-                ))
-                return (
-                  <div>
-                    <div className='title'>{l.name}</div>
-                    <div className='chart'>
-                      <BaseChart>
-                        <BarChart data={data2}
-                          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis dataKey="date" stroke="#444" />
-                          <YAxis stroke="#444" />
-                          <Tooltip verticalAlign="top" height={36} />
-                          <Legend />
-                          <Bar dataKey="nbCards" fill={colors[index]} />
-                        </BarChart>
-                      </BaseChart>
+                if (index === this.state.listFocused || this.state.listFocused < 0) {
+                  let data = l.numbers.map(n => (
+                    {
+                      date: this.renderDate(n.date),
+                      nbCards: n.numberOfCards,
+                      averageTimeSpentPerCard: n.averageTimeSpentPerCard
+                    }
+                  ))
+                  return (
+                    <div className='group'>
+                      <div className='title'>{l.name}</div>
+                      <div className='chart'>
+                        <NumberOfCardsOverTimePerList
+                          dataKey='nbCards'
+                          nameKey='date'
+                          data={data}
+                          color={this.colors[index]}
+                        />
+                      </div>
+                      <div className='chart'>
+                        <AverageTimeCardsPerList
+                          dataKey='averageTimeSpentPerCard'
+                          nameKey='date'
+                          data={data}
+                          color={this.colors[index]}
+                        />
+                      </div>
                     </div>
-                    <div className='chart'>
-                      <BaseChart>
-                        <LineChart data={data2}
-                          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis dataKey="date" stroke="#444" />
-                          <YAxis stroke="#444" />
-                          <Tooltip verticalAlign="top" height={36} />
-                          <Legend />
-                          <Line type='monotone' dataKey="averageTimeSpentPerCard" stroke={colors[index]} />
-                        </LineChart>
-                      </BaseChart>
-                    </div>
-                  </div>
-                )
+                  )
+                } else {
+                  return null
+                }
               })
             }
           </div>
