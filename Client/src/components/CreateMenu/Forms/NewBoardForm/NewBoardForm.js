@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import NewTeamForm from '../NewTeamForm/NewTeamForm'
 import Button from '../../../UI/Button/Button'
 import DropDown from '../../../UI/DropDown/DropDown'
-import { addBoard, addScrumBoard, addKanbanBoard, addTeamBoard, addScrumTeamBoard, setTeamslist } from '../../../../store/actions'
+import { addBoard, addScrumBoard, addKanbanBoard, addTeamBoard, addScrumTeamBoard, addKanbanTeamBoard, setTeamslist } from '../../../../store/actions'
 import styles from './NewBoardForm.styles'
 import PropTypes from 'prop-types'
 
@@ -90,6 +90,8 @@ export default class NewBoardForm extends React.Component {
         }
         if (selectedTemplate && selectedTemplate.id === 'scrum') {
           addScrumTeamBoard(this.props.dispatch, teamId, {title: this.title.value, color: this.color.value, teams: this.state.selected}, this.props.comingFromProfilePage)
+        } else if (selectedKanban && selectedKanban.id === 'kanban') {
+          addKanbanTeamBoard(this.props.dispatch, teamId, {title: this.title.value, color: this.color.value, teams: this.state.selected}, this.props.comingFromProfilePage)
         } else {
           addTeamBoard(this.props.dispatch, teamId, {title: this.title.value, color: this.color.value, teams: this.state.selected}, this.props.comingFromProfilePage)
         }
