@@ -93,6 +93,14 @@ export default class Modification extends React.Component {
     return <div style={modificationStyle}>{this.renderUser(user)} archived card {this.renderCard(card)} {this.renderDate(timestamp)}</div>
   }
 
+  renderUnarchivedList (user, list, timestamp) {
+    return <div style={modificationStyle}>{this.renderUser(user)} unarchived list {list.name} {this.renderDate(timestamp)}</div>
+  }
+
+  renderUnarchivedCard (user, card, timestamp) {
+    return <div style={modificationStyle}>{this.renderUser(user)} unarchived card {this.renderCard(card)} {this.renderDate(timestamp)}</div>
+  }
+
   renderAddedDueDate (user, card, dueDate, timestamp) {
     // TODO: Add due date on text
     return <div style={modificationStyle}>{this.renderUser(user)} added due date on card {this.renderCard(card)} {this.renderDate(timestamp)}</div>
@@ -126,6 +134,10 @@ export default class Modification extends React.Component {
     return <div style={modificationStyle}>{this.renderUser(user)} moved card {this.renderCard(card)} from list {this.renderList(fromList)} to list {this.renderList(toList)} {this.renderDate(timestamp)}</div>
   }
 
+  renderCreatedCard (user, card, list, timestamp) {
+    return <div style={modificationStyle}>{this.renderUser(user)} created card {this.renderCard(card)} in list {this.renderList(list)} {this.renderDate(timestamp)}</div>
+  }
+
   renderAddedUserCard (user, targetUser, card, timestamp) {
     if (user._id === targetUser._id) {
       return <div style={modificationStyle}>{this.renderUser(user)} joined collaborators on card {this.renderCard(card)} {this.renderDate(timestamp)}</div>
@@ -152,6 +164,8 @@ export default class Modification extends React.Component {
         return this.renderAddedUserCard(this.props.user, this.props.targetUser, this.props.card, this.props.timestamp)
       case 'REMOVED_USER_CARD':
         return this.renderRemovedUserCard(this.props.user, this.props.targetUser, this.props.card, this.props.timestamp)
+      case 'CREATED_CARD':
+        return this.renderCreatedCard(this.props.user, this.props.card, this.props.list, this.props.timestamp)
       case 'MOVED_CARD':
         return this.renderMovedCard(this.props.user, this.props.card, this.props.fromList, this.props.toList, this.props.timestamp)
       case 'ADDED_COLLABORATOR_BOARD':
@@ -162,6 +176,10 @@ export default class Modification extends React.Component {
         return this.renderArchivedList(this.props.user, this.props.list, this.props.timestamp)
       case 'ARCHIVED_CARD':
         return this.renderArchivedCard(this.props.user, this.props.card, this.props.timestamp)
+      case 'UNARCHIVED_LIST':
+        return this.renderUnarchivedList(this.props.user, this.props.list, this.props.timestamp)
+      case 'UNARCHIVED_CARD':
+        return this.renderUnarchivedCard(this.props.user, this.props.card, this.props.timestamp)
       case 'ADDED_DUE_DATE':
         return this.renderAddedDueDate(this.props.user, this.props.card, this.props.dueDate, this.props.timestamp)
       case 'MARKED_DUE_DATE_COMPLETE':
