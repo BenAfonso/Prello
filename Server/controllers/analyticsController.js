@@ -96,9 +96,54 @@ analyticsController.getCardsAnalytics = (boardId, per, beginDate, endDate) => {
     })
   })
 }
+analyticsController.getMembersAnalytics = (boardId, per, beginDate, endDate) => {
+  return new Promise((resolve, reject) => {
+    initDate(boardId, beginDate, endDate).then((result) => {
+      if (per === undefined) {
+        per = 'day'
+      }
+      let memberStats = []
+      let allUsers = []
+      if (result.board.teams.length === 0) {
+        allUsers = result.board.collaborators
+      } else {
+        result.board.teams.map(team => team.users.map(user => {
+          return result.board.collaborators.filter(collaborator => {
+            console.log(collaborator._id)
+            console.log(user._id)
+            return collaborator._id.toString() === user._id.toString()
+          })[0] !== undefined
+            ? null
+            : result.board.collaborators.push(user)
+        }))
+      }
+      allUsers = result.board.collaborators
+      let allCards = result.board.lists.map(l => l.cards).reduce((x, y) => x.concat(y))
+      console.log(allUsers)
+      allUsers.map((user, index) => {
+        user.cards = allCards
+        user.modification = result.board.modification.filter(modif => {
+          return (user._id.toString() === modif.user._id.toString())
+        })
+        let funcs = constructFuncArray(user, analyticsController.getMemberAnalyticsByDate, [], per, result.beginDate, result.endDate)
+        executeFuncRecursive(funcs, [], 0).then(res => {
+          let memberStat = {user: user, numbers: res}
+          memberStats.push(memberStat)
+          if (memberStats.length - 1 === index) {
+            resolve(memberStats)
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      })
+    })
+  })
+}
 const initDate = (boardId, beginDate, endDate) => {
   return new Promise((resolve, reject) => {
-    Board.findOne({'_id': boardId}).populate({path: 'lists', model: 'List', populate: {path: 'cards', model: 'Card'}}).then((board) => {
+    Board.findOne({'_id': boardId}).populate({path: 'lists', model: 'List', populate: {path: 'cards', model: 'Card'}})
+    .populate({path: 'collaborators', model: 'User', select: { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0, 'google': 0 }})
+    .populate({path: 'teams', model: 'Team', populate: {path: 'users', model: 'User'}}).then((board) => {
       modificationController.findBoardHistory(boardId).then(modification => {
         board.modification = modification
         if (beginDate === undefined) {
@@ -244,6 +289,41 @@ analyticsController.getCardAnalyticsByDate = (card, beginDate, endDate, per) => 
     })
   })
 }
+
+analyticsController.getMemberAnalyticsByDate = (user, beginDate, endDate, per) => {
+  return new Promise((resolve, reject) => {
+    let numbers = {}
+    numbers.date = beginDate
+    getNumberOfCardsForUserByDate(user, endDate).then(res => {
+      numbers.numberOfCardsCollaborator = res
+      getNumberOfModificationByDate(user, endDate).then(res => {
+        numbers.numberOfModifications = res
+        resolve(numbers)
+      })
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+const getNumberOfModificationByDate = (user, endDate) => {
+  return new Promise((resolve, reject) => {
+    let allModifications = user.modification.filter((modif) => modif.timestamp.getTime() < endDate.getTime())
+    resolve(allModifications.length)
+  })
+}
+const getNumberOfCardsForUserByDate = (user, endDate) => {
+  return new Promise((resolve, reject) => {
+    let allModifications = user.modification
+    let allListsArchived = allModifications.filter((item) => {
+      return (item.type === 'ADDED_USER_CARD') && (item.timestamp.getTime() < endDate.getTime())
+    })
+    let allListsUnArchived = allModifications.filter((item) => {
+      return (item.type === 'REMOVED_USER_CARD') && (item.timestamp.getTime() < endDate.getTime())
+    })
+    resolve(allListsArchived.length - allListsUnArchived.length)
+  })
+}
+
 const getNumberOfCardsFromListByDate = (list, endDate) => {
   return new Promise((resolve, reject) => {
     let allCardsAdded = list.modification.filter((item) => {
