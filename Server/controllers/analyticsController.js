@@ -68,6 +68,34 @@ analyticsController.getListsAnalytics = (boardId, per, beginDate, endDate) => {
     })
   })
 }
+analyticsController.getCardsAnalytics = (boardId, per, beginDate, endDate) => {
+  return new Promise((resolve, reject) => {
+    initDate(boardId, beginDate, endDate).then((result) => {
+      if (per === undefined) {
+        per = 'day'
+      }
+      let cardStats = []
+      let allCards = result.board.lists.map(l => l.cards).reduce((x, y) => x.concat(y))
+
+      let cardsSort = allCards.filter((c) => {
+        return c.createdAt.getTime() < result.endDate.getTime()
+      })
+      cardsSort.map((card, index) => {
+        card.modification = result.board.modification
+        let funcs = constructFuncArray(card, analyticsController.getCardAnalyticsByDate, [], per, result.beginDate, result.endDate)
+        executeFuncRecursive(funcs, [], 0).then(res => {
+          let cardStat = {name: card.name, numbers: res}
+          cardStats.push(cardStat)
+          if (cardStats.length - 1 === index) {
+            resolve(cardStats)
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      })
+    })
+  })
+}
 const initDate = (boardId, beginDate, endDate) => {
   return new Promise((resolve, reject) => {
     Board.findOne({'_id': boardId}).populate({path: 'lists', model: 'List', populate: {path: 'cards', model: 'Card'}}).then((board) => {
@@ -193,7 +221,6 @@ analyticsController.getListAnalyticsByDate = (list, beginDate, endDate, per) => 
     numbers.date = beginDate
     getNumberOfCardsFromListByDate(list, endDate).then(res => {
       numbers.numberOfCards = res
-      resolve(numbers)
       getAverageTimeFromListByDate(list, endDate).then(res => {
         numbers.averageTimeSpentPerCard = res
         resolve(numbers)
@@ -205,7 +232,18 @@ analyticsController.getListAnalyticsByDate = (list, beginDate, endDate, per) => 
     })
   })
 }
-
+analyticsController.getCardAnalyticsByDate = (card, beginDate, endDate, per) => {
+  return new Promise((resolve, reject) => {
+    let numbers = {}
+    numbers.date = beginDate
+    getNumberOfCommentsFromCardByDate(card, endDate).then(res => {
+      numbers.numberOfComments = res
+      resolve(numbers)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
 const getNumberOfCardsFromListByDate = (list, endDate) => {
   return new Promise((resolve, reject) => {
     let allCardsAdded = list.modification.filter((item) => {
@@ -215,6 +253,14 @@ const getNumberOfCardsFromListByDate = (list, endDate) => {
       return ((item.type.toString() === 'MOVED_CARD' && item.fromList._id.toString() === list._id.toString()) && (item.timestamp.getTime() < endDate.getTime()))
     })
     resolve(allCardsAdded.length - allCardsRemoved.length)
+  })
+}
+const getNumberOfCommentsFromCardByDate = (card, endDate) => {
+  return new Promise((resolve, reject) => {
+    let allCommentsAdded = card.modification.filter((item) => {
+      return (((item.type.toString() === 'ADDED_COMMENT' && item.card._id.toString() === card._id.toString())) && (item.timestamp.getTime() < endDate.getTime()))
+    })
+    resolve(allCommentsAdded.length)
   })
 }
 
