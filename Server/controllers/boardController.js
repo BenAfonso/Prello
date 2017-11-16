@@ -76,7 +76,7 @@ boardController.getUserBoards = function (userId) {
 boardController.createBoard = function (board) {
   return new Promise((resolve, reject) => {
     const boardToAdd = new Board(board)
-    boardToAdd.populate('owner').execPopulate() // Needed when the board is added from the profile page
+    boardToAdd.populate({path: 'owner', select: { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }}).execPopulate() // Needed when the board is added from the profile page
     boardToAdd.populate('teams').execPopulate() // Needed when the board is added from the profile page
     boardToAdd.save((err, item) => {
       if (err) {
@@ -87,7 +87,6 @@ boardController.createBoard = function (board) {
             Team.findOneAndUpdate({'_id': team}, {$push: {boards: item._id}}).exec()
           })
         }
-        emit('testID', 'NEW_BOARD', item)
         resolve(item)
       }
     })
