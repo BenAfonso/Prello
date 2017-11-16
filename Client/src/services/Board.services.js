@@ -39,6 +39,7 @@ export function addKanbanBoardDistant (payload) {
       title: payload.title,
       background: payload.color
     }).then(res => {
+      addBoardLocal(res.data)
       resolve(res.data)
     }).catch(err => {
       reject(err)
