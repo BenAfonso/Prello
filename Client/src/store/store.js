@@ -88,12 +88,12 @@ export const defaultTeamState = {
   fetching: false,
   fetched: false,
   error: null,
-  boards: [],
-  board: {
+  team: {
     _id: '',
-    title: '',
-    background: '#fff',
-    provider: ''
+    name: '',
+    admins: [],
+    users: [],
+    boards: []
   }
 }
 
