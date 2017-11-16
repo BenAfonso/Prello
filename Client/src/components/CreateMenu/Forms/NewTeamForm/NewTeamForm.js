@@ -2,8 +2,15 @@ import React from 'react'
 import Button from '../../../UI/Button/Button'
 import DropDown from '../../../UI/DropDown/DropDown'
 import { addTeam } from '../../../../store/actions'
+import PropTypes from 'prop-types'
 
 export default class NewTeamForm extends React.Component {
+  static propTypes = {
+    comingFromProfilePage: PropTypes.bool
+  }
+  static defaultProps = {
+    comingFromProfilePage: false
+  }
   constructor (props) {
     super(props)
     this.submit = this.submit.bind(this)
@@ -11,7 +18,7 @@ export default class NewTeamForm extends React.Component {
 
   submit (name) {
     if (this.name.value !== '') {
-      addTeam(this.name.value)
+      addTeam(this.name.value, this.props.comingFromProfilePage)
     }
   }
 
