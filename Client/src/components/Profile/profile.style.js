@@ -1,8 +1,10 @@
 export default `
-.profilePage {
+.host {
     width: 100%;
-    height: 100%;
+    min-height: 120%;
+    overflow-y: auto;
     background-color: #cd5a91;
+    clear: both;
 }
 .profileForm {
     display: inline-block;
@@ -175,4 +177,21 @@ label {
     margin-top: 10px;
     margin-left: 20px;
 }
+.createElement {
+    cursor: pointer;
+    position: relative;
+    background-color: rgba(250,250,250,0.3);
+    padding: 10px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    width: 270px;
+  }
+  
+.createElement-title {
+    height: 50px;
+    line-height: 50px;
+    color: #dcdcda;
+    font-size: 16px;
+    text-align: center;
+  }
 `
