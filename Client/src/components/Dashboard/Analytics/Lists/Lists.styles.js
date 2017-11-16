@@ -14,8 +14,12 @@ export default `
 .chart {
   width: 45%;
   min-width: 580px;
-  min-height: 250px;
+  max-height: 340px;
   margin-bottom: 40px;
+}
+
+.block {
+  width: 100%;
 }
 
 .group .chart {

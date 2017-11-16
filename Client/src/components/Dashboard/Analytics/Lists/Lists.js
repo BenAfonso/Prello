@@ -2,13 +2,15 @@ import React from 'react'
 import styles from './Lists.styles'
 import { connect } from 'react-redux'
 import { setListsAnalytics } from '../../../../store/actions'
-import {shuffle} from 'underscore'
+import {shuffle, object} from 'underscore'
 import ListCardsProportionPieChart from './Charts/ListCardsProportionPieChart'
 import NumberCardsPerList from './Charts/NumberCardsPerList'
 import AverageTimeCards from './Charts/AverageTimeCards'
 import NumberOfCardsOverTimePerList from './Charts/List/NumberOfCardsOverTime'
 import AverageTimeCardsPerList from './Charts/List/AverageTimeCards'
 import DashboardNav from '../Nav/Nav'
+import CumulativeFlowDiagram from './Charts/List/CumulativeFlowDiagram'
+import CompletionBarChart from './Charts/List/CompletionBarChart'
 
 @connect(store => {
   return {
@@ -79,10 +81,22 @@ export default class BoardAnalytics extends React.Component {
     let data = this.props.lists.map(l => (
       {
         name: l.name,
-        nbCards: l.numbers ? l.numbers[0].numberOfCards : 0,
-        averageTimeSpentPerCard: l.numbers ? l.numbers[0].averageTimeSpentPerCard : 0
+        nbCards: l.numbers ? l.numbers[l.numbers.length - 1].numberOfCards : 0,
+        averageTimeSpentPerCard: l.numbers ? l.numbers[l.numbers.length - 1].averageTimeSpentPerCard : 0,
+        numberOfCardsDone: l.numberOfCardsDone,
+        numberOfCardsToDo: l.numberOfCardsToDo
       }
     ))
+    console.log(data)
+    let names = this.props.lists ? this.props.lists.map(l => (
+      l.name
+    )) : []
+    let values = this.props.lists ? this.props.lists.map(l => l.numbers ? l.numbers.map(n => n.numberOfCards) : []) : []
+    let dates = this.props.lists.length > 0 ? this.props.lists[0].numbers ? this.props.lists[0].numbers.map(n => n.date) : [] : []
+    let cumulativeData = dates.map((d, i) => ({
+      date: d,
+      ...object(names, values.map(v => v[i]))
+    }))
 
     return (
       <div className='host'>
@@ -94,7 +108,7 @@ export default class BoardAnalytics extends React.Component {
           <div className='legend'>
             {
               this.props.lists.map((l, i) => (
-                <div className='list-legend'>
+                <div key={i} className='list-legend'>
                   <div
                     className={`color ${this.state.listFocused === i ? 'selected' : ''}`}
                     onClick={this.filterList.bind(this, i)}
@@ -111,12 +125,22 @@ export default class BoardAnalytics extends React.Component {
         </div>
         { this.state.fetched
           ? <div className='charts'>
-
+            { this.state.listFocused < 0 ? <div className='chart block'>
+              <CumulativeFlowDiagram
+                fullWidth
+                nameKey='date'
+                dataKey='value'
+                names={names}
+                data={cumulativeData}
+                colors={this.colors}
+              />
+            </div>
+              : null }
             { this.state.listFocused < 0 ? <div className='chart'>
               <ListCardsProportionPieChart
                 dataKey='value'
                 nameKey='name'
-                data={this.props.lists.map(l => ({ value: l.numbers[0].numberOfCards, name: l.name }))}
+                data={this.props.lists.map(l => ({ value: l.numbers[l.numbers.length - 1].numberOfCards, name: l.name }))}
                 colors={this.colors}
               />
             </div>
@@ -125,7 +149,7 @@ export default class BoardAnalytics extends React.Component {
               <NumberCardsPerList
                 dataKey='value'
                 nameKey='name'
-                data={this.props.lists.map(l => ({ value: l.numbers[0].numberOfCards, name: l.name }))}
+                data={this.props.lists.map(l => ({ value: l.numbers[l.numbers.length - 1].numberOfCards, name: l.name }))}
                 colors={this.colors}
               />
             </div>
@@ -133,6 +157,15 @@ export default class BoardAnalytics extends React.Component {
             { this.state.listFocused < 0 ? <div className='chart'>
               <AverageTimeCards
                 dataKey='averageTimeSpentPerCard'
+                nameKey='name'
+                data={data}
+                colors={this.colors}
+              />
+            </div>
+              : null }
+            { this.state.listFocused < 0 ? <div className='chart'>
+              <CompletionBarChart
+                dataKeys={['numberOfCardsDone', 'numberOfCardsToDo']}
                 nameKey='name'
                 data={data}
                 colors={this.colors}
@@ -150,7 +183,7 @@ export default class BoardAnalytics extends React.Component {
                     }
                   ))
                   return (
-                    <div className='chart-group'>
+                    <div key={index} className='chart-group'>
                       <div className='title'>{l.name}</div>
                       <div className='group'>
                         <div className='chart'>
