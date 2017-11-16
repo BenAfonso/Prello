@@ -23,7 +23,7 @@ export default class BoardAnalytics extends React.Component {
       firstDate: '',
       secondDate: '',
       fetched: false,
-      listFocused: 1
+      listFocused: -1
     }
     this.shouldUpdateData = this.shouldUpdateData.bind(this)
     this.colors = shuffle(['#8884d8', '#82ca9d', '#F9A825', '#FF1744', '#F06292', '#AB47BC', '#651FFF', '#80D8FF', '#00E5FF', '#69F0AE'])
