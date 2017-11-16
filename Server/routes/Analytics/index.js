@@ -3,5 +3,4 @@ module.exports = function (router, controller) {
   require('./listsAnalytics')(router, controller)
   require('./cardsAnalytics')(router, controller)
   require('./membersAnalytics')(router, controller)
-  
 }

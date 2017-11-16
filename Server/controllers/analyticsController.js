@@ -56,11 +56,16 @@ analyticsController.getListsAnalytics = (boardId, per, beginDate, endDate) => {
         list.modification = result.board.modification
         let funcs = constructFuncArray(list, analyticsController.getListAnalyticsByDate, [], per, result.beginDate, result.endDate)
         executeFuncRecursive(funcs, [], 0).then(res => {
-          let listStat = {name: list.name, numbers: res}
-          listStats.push(listStat)
-          if (result.board.lists.length - 1 === index) {
-            resolve(listStats)
-          }
+          getNumberOfCardsComplete(list.cards).then(numberOfCardsDone => {
+            if (numberOfCardsDone === undefined) {
+              numberOfCardsDone = 0
+            }
+            let listStat = {name: list.name, numberOfCardsDone: numberOfCardsDone, numberOfCardsToDo: list.cards.length - numberOfCardsDone, numbers: res}
+            listStats.push(listStat)
+            if (result.board.lists.length - 1 === index) {
+              resolve(listStats)
+            }
+          })
         }).catch(err => {
           console.log(err)
         })
@@ -109,8 +114,6 @@ analyticsController.getMembersAnalytics = (boardId, per, beginDate, endDate) => 
       } else {
         result.board.teams.map(team => team.users.map(user => {
           return result.board.collaborators.filter(collaborator => {
-            console.log(collaborator._id)
-            console.log(user._id)
             return collaborator._id.toString() === user._id.toString()
           })[0] !== undefined
             ? null
@@ -119,19 +122,28 @@ analyticsController.getMembersAnalytics = (boardId, per, beginDate, endDate) => 
       }
       allUsers = result.board.collaborators
       let allCards = result.board.lists.map(l => l.cards).reduce((x, y) => x.concat(y))
-      console.log(allUsers)
       allUsers.map((user, index) => {
         user.cards = allCards
         user.modification = result.board.modification.filter(modif => {
           return (user._id.toString() === modif.user._id.toString())
         })
+        let userCards = user.cards.filter(c => {
+          return c.collaborators.filter(collaborator => {
+            return collaborator.toString() === user._id.toString()
+          }).length > 0
+        })
         let funcs = constructFuncArray(user, analyticsController.getMemberAnalyticsByDate, [], per, result.beginDate, result.endDate)
         executeFuncRecursive(funcs, [], 0).then(res => {
-          let memberStat = {user: user, numbers: res}
-          memberStats.push(memberStat)
-          if (memberStats.length - 1 === index) {
-            resolve(memberStats)
-          }
+          getNumberOfCardsComplete(userCards).then(numberOfCardsDone => {
+            if (numberOfCardsDone === undefined) {
+              numberOfCardsDone = 0
+            }
+            let memberStat = {user: user, numberOfCardsDone: numberOfCardsDone, numberOfCardsToDo: userCards.length - numberOfCardsDone, numbers: res}
+            memberStats.push(memberStat)
+            if (memberStats.length - 1 === index) {
+              resolve(memberStats)
+            }
+          })
         }).catch(err => {
           console.log(err)
         })
@@ -305,6 +317,14 @@ analyticsController.getMemberAnalyticsByDate = (user, beginDate, endDate, per) =
     })
   })
 }
+const getNumberOfCardsComplete = (cards, endDate) => {
+  return new Promise((resolve, reject) => {
+    resolve(_.countBy(cards, function (card) {
+      return card.validated
+    }).true)
+  })
+}
+
 const getNumberOfModificationByDate = (user, endDate) => {
   return new Promise((resolve, reject) => {
     let allModifications = user.modification.filter((modif) => modif.timestamp.getTime() < endDate.getTime())
