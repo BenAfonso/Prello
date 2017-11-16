@@ -59,6 +59,16 @@ export default class SearchBar extends React.Component {
   }
 
   setMatchingCards (input) {
+    const reg = new RegExp(input, 'i')
+    let newMatchingCards = []
+    this.props.boardslist.boards.map(board => {
+      board.lists.map(list => {
+        list.cards.map(card => card.text.match(reg) ? newMatchingCards.push({card: card, board: board, list: list}) : null)
+        this.setState({matchingCards: newMatchingCards.slice(0, 10)})
+        return null
+      })
+      return null
+    })
   }
 
   setMatchingUsers (input) {
@@ -76,15 +86,6 @@ export default class SearchBar extends React.Component {
     let newMatchingTeams = []
     this.props.teamslist.teams.map(team => team.name.match(reg) ? newMatchingTeams.push(team) : null)
     this.setState({matchingTeams: newMatchingTeams.slice(0, 10)})
-  }
-
-  renderBoard (board) {
-  }
-
-  renderCard (card) {
-  }
-
-  renderTeam (team) {
   }
 
   renderUser (user) {
@@ -162,8 +163,8 @@ export default class SearchBar extends React.Component {
                               <div className='element-nothing'>We found nothing at all there..</div>
                             </li>
                             : matchingBoards.map(board =>
-                              <Link to={`/boards/${board._id}`}>
-                                <li className='element' key={board._id}>
+                              <Link to={`/boards/${board._id}`} key={board._id}>
+                                <li className='element'>
                                   <div className='content'>
                                     <div className='element-title'>{board.title}</div>
                                   </div>
@@ -183,7 +184,19 @@ export default class SearchBar extends React.Component {
                               <div className='element-nothing'>We found nothing at all there..</div>
                             </li>
                             : matchingCards.map(card =>
-                              <li className='element'>{this.renderCard(card)}</li>
+                              <li className='element' key={card.card._id}>
+                                <div className='content'>
+                                  <div className='element-title'>{card.card.text}</div>
+                                  <div className='element-text'>in <span className='text-emphasis'>{card.list.name}</span> on <span className='text-emphasis'>{card.board.title}</span></div>
+                                  <div className='element-icons'>
+                                    <div className='icon'>
+                                      <div className='icon-text'>{card.card.collaborators.length}</div>
+                                      <Icon fontSize='13px' name='users' color='#999'/>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className='separator' />
+                              </li>
                             )
                         }
                       </ul>
@@ -199,7 +212,7 @@ export default class SearchBar extends React.Component {
                               <div className='element-nothing'>We found nothing at all there..</div>
                             </li>
                             : matchingTeams.map(team =>
-                              <Link to={`/teams/${team._id}`}>
+                              <Link to={`/teams/${team._id}`} key={team._id}>
                                 <li className='element'>
                                   <div className='content'>
                                     <div className='element-title'>{team.name}</div>
@@ -230,7 +243,7 @@ export default class SearchBar extends React.Component {
                               <div className='element-nothing'>We found nothing at all there..</div>
                             </li>
                             : matchingUsers.map(user =>
-                              <Link to={`/users/${user._id}/profile`}>
+                              <Link to={`/users/${user._id}/profile`} key={user._id}>
                                 <li className='element'>{this.renderUser(user)}</li>
                               </Link>
                             )

@@ -82,6 +82,11 @@ input:focus {
 .element-text {
   padding: 4px 0px;
   font-size: 13px;
+  color: #999;
+}
+
+.text-emphasis {
+  font-weight: bold;
 }
 
 .element-icons {
