@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import styles from './SearchBar.styles'
 import {connect} from 'react-redux'
 import DropDown from '../UI/DropDown/DropDown'
@@ -37,6 +37,7 @@ export default class SearchBar extends React.Component {
     this.setMatchingUsers = this.setMatchingUsers.bind(this)
     this.setMatchingTeams = this.setMatchingTeams.bind(this)
     this.renderUser = this.renderUser.bind(this)
+    this.redirectToCard = this.redirectToCard.bind(this)
   }
 
   componentDidMount () {
@@ -63,7 +64,7 @@ export default class SearchBar extends React.Component {
     let newMatchingCards = []
     this.props.boardslist.boards.map(board => {
       board.lists.map(list => {
-        list.cards.map(card => card.text.match(reg) ? newMatchingCards.push({card: card, board: board, list: list}) : null)
+        list.cards.map(card => card.text ? card.text.match(reg) ? newMatchingCards.push({card: card, board: board, list: list}) : null : '')
         this.setState({matchingCards: newMatchingCards.slice(0, 10)})
         return null
       })
@@ -128,6 +129,9 @@ export default class SearchBar extends React.Component {
       })
     }
   }
+  redirectToCard (boardId, cardId) {
+    this.setState({redirectTo: `/boards/${boardId}/cards/${cardId}`})
+  }
 
   handleFocus (event) {
     event.target.select()
@@ -181,6 +185,9 @@ export default class SearchBar extends React.Component {
   }
 
   render () {
+    if (this.state.redirectTo) {
+      return (<Redirect to={this.state.redirectTo} />)
+    }
     const { matchingBoards, matchingCards, matchingTeams, matchingUsers } = this.state
     let cardNumber = []
     let lateCards = []
@@ -227,6 +234,7 @@ export default class SearchBar extends React.Component {
                                             lateCards[board._id]
                                               ? lateCards[board._id] += this.getLateCards(list.cards)
                                               : lateCards[board._id] = this.getLateCards(list.cards)
+                                            return undefined
                                           })
                                         }
                                         {
@@ -253,6 +261,7 @@ export default class SearchBar extends React.Component {
                                               cardNumber[board._id]
                                                 ? cardNumber[board._id] += list.cards.length
                                                 : cardNumber[board._id] = list.cards.length
+                                              return undefined
                                             })
                                           }
                                           <div className='icon-text'>{cardNumber[board._id]}</div>
@@ -278,7 +287,7 @@ export default class SearchBar extends React.Component {
                               <div className='element-nothing'>We found nothing at all there..</div>
                             </li>
                             : matchingCards.map(card =>
-                              <li className='element' key={card.card._id}>
+                              <li className='element' key={card.card._id} onClick={() => this.redirectToCard(card.board._id, card.card._id)}>
                                 <div className='content'>
                                   <div className='content-title'>
                                     <div className='content-title-text'>{card.card.text}</div>
@@ -335,7 +344,7 @@ export default class SearchBar extends React.Component {
                               <div className='element-nothing'>We found nothing at all there..</div>
                             </li>
                             : matchingTeams.map(team =>
-                              <Link to={`/teams/${team._id}`} key={team._id} replace>
+                              <Link to={`/teams/${team._id}`} key={team._id}>
                                 <li className='element'>
                                   <div className='content'>
                                     <div className='element-title'>{team.name}</div>
