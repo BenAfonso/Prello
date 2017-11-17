@@ -310,7 +310,14 @@ analyticsController.getMemberAnalyticsByDate = (user, beginDate, endDate, per) =
       numbers.numberOfCardsCollaborator = res
       getNumberOfModificationByDate(user, endDate).then(res => {
         numbers.numberOfModifications = res
-        resolve(numbers)
+        getNumberOfModificationCumulativeByDate(user, endDate).then(res => {
+          numbers.cumulateNumberOfModifications = res
+          resolve(numbers)
+        }).catch((err) => {
+          reject(err)
+        })
+      }).catch((err) => {
+        reject(err)
       })
     }).catch((err) => {
       reject(err)
@@ -325,9 +332,15 @@ const getNumberOfCardsComplete = (cards, endDate) => {
   })
 }
 
-const getNumberOfModificationByDate = (user, endDate) => {
+const getNumberOfModificationCumulativeByDate = (user, endDate) => {
   return new Promise((resolve, reject) => {
     let allModifications = user.modification.filter((modif) => modif.timestamp.getTime() < endDate.getTime())
+    resolve(allModifications.length)
+  })
+}
+const getNumberOfModificationByDate = (user, endDate) => {
+  return new Promise((resolve, reject) => {
+    let allModifications = user.modification.filter((modif) => modif.timestamp.getDate() + 1 === endDate.getDate() && modif.timestamp.getMonth() === endDate.getMonth() && modif.timestamp.getFullYear() === endDate.getFullYear())
     resolve(allModifications.length)
   })
 }
