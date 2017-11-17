@@ -58,6 +58,17 @@ export default class Board extends React.Component {
     })
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (this.props._id !== nextProps._id) {
+      setBoard(this.props.dispatch, this.props._id).then(board => {
+        subscribeToBoard(board)
+      }).catch(err => {
+        this.setState({ redirectTo: '/boards' })
+        console.error(err)
+      })
+    }
+  }
+
   componentWillUnmount () {
     document.removeEventListener('mousedown', this.handleClickOutside)
     resetBoard()

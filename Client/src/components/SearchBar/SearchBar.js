@@ -147,8 +147,37 @@ export default class SearchBar extends React.Component {
         const dueDate = new Date(card.dueDate)
         late += now >= dueDate && !card.validated ? 1 : 0
       }
+      return null
     })
     return late
+  }
+
+  getDueDateColor (validated, cardDueDate) {
+    const dueDate = new Date(cardDueDate)
+    const dueDateMinus24 = dueDate.getTime() - (60 * 60 * 24 * 1000)
+    const dueDatePlus24 = dueDate.getTime() + (60 * 60 * 24 * 1000)
+    const now = Date.now()
+    if (validated) return '#5AAC44'
+    else if (now >= dueDateMinus24 && now < dueDate) return 'rgba(220,200,0,1)'
+    else if (now < dueDatePlus24 && now >= dueDate) return 'rgba(200,0,0,1)'
+    else if (now >= dueDatePlus24) return 'rgba(200,0,0,0.3)'
+  }
+
+  getDueDateTextColor (validated, cardDueDate) {
+    const dueDate = new Date(cardDueDate)
+    const dueDateMinus24 = dueDate.getTime() - (60 * 60 * 24 * 1000)
+    const now = Date.now()
+    if (validated || now >= dueDateMinus24) return 'white'
+  }
+
+  getFormattedDueDate (cardDueDate) {
+    const dueDate = new Date(cardDueDate)
+    if (dueDate !== null) {
+      const day = (dueDate.getDate() < 10 ? '0' : '') + dueDate.getDate()
+      const month = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ')[dueDate.getMonth()]
+      const formattedDate = month + ' ' + day
+      return formattedDate
+    }
   }
 
   render () {
@@ -160,7 +189,14 @@ export default class SearchBar extends React.Component {
         <DropDown
           layout='custom'
           orientation='left'
-          button={<input type='text' className='search-input' ref={(input) => { this.input = input }} onFocus={this.handleFocus} onChange={this.onChange} />}
+          input={
+            <div className='input-block'>
+              <div className='input-icon'>
+                <Icon fontSize='20px' color='#999' name='search' />
+              </div>
+              <input type='text' className='search-input' placeholder='Search...' ref={(input) => { this.input = input }} onFocus={this.handleFocus} onChange={this.onChange} />
+            </div>
+          }
         >
           <div className='search-content'>
             {
@@ -198,20 +234,20 @@ export default class SearchBar extends React.Component {
                                             ? null
                                             : <div className='icon icon-late'>
                                               <div className='icon-text'>{lateCards[board._id]}</div>
-                                              <Icon fontSize='13px' name='clock-o' color='white'/>
+                                              <Icon fontSize='13px' name='clock-o' color='' />
                                             </div>
                                         }
                                       </div>
                                       <div className='icons-section right'>
-                                        <div className='icon'>
+                                        <div className='icon' style={{ color: board.background }}>
                                           <div className='icon-text'>{board.collaborators.length}</div>
-                                          <Icon fontSize='13px' name='user' color={board.background}/>
+                                          <Icon fontSize='13px' name='user' color=''/>
                                         </div>
-                                        <div className='icon'>
+                                        <div className='icon' style={{ color: board.background }}>
                                           <div className='icon-text'>{board.teams.length}</div>
-                                          <Icon fontSize='13px' name='users' color={board.background}/>
+                                          <Icon fontSize='13px' name='users' color=''/>
                                         </div>
-                                        <div className='icon'>
+                                        <div className='icon' style={{ color: board.background }}>
                                           {
                                             board.lists.map(list => {
                                               cardNumber[board._id]
@@ -220,7 +256,7 @@ export default class SearchBar extends React.Component {
                                             })
                                           }
                                           <div className='icon-text'>{cardNumber[board._id]}</div>
-                                          <Icon fontSize='13px' name='list-alt' color={board.background}/>
+                                          <Icon fontSize='13px' name='list-alt' color=''/>
                                         </div>
                                       </div>
                                     </div>
@@ -244,15 +280,39 @@ export default class SearchBar extends React.Component {
                             : matchingCards.map(card =>
                               <li className='element' key={card.card._id}>
                                 <div className='content'>
-                                  <div className='element-title'>{card.card.text}</div>
+                                  <div className='content-title'>
+                                    <div className='content-title-text'>{card.card.text}</div>
+                                    {
+                                      card.card.dueDate
+                                        ? <div className='content-title-icon dueDate' style={{background: this.getDueDateColor(card.card.validated, card.card.dueDate)}}>
+                                          <span className='icon-text' style={{
+                                            color: this.getDueDateTextColor(card.card.validated, card.card.dueDate)
+                                          }}>{this.getFormattedDueDate(card.card.dueDate)}</span>
+                                          <span className='icon-icon' style={{color: this.getDueDateTextColor(card.card.validated, card.card.dueDate)}}><Icon fontSize='16px' name='clock-o' color='' /></span>
+                                        </div>
+                                        : null
+                                    }
+                                  </div>
                                   <div className='element-text'>in <span className='text-emphasis'>{card.list.name}</span> on <span className='text-emphasis' style={{color: card.board.background}}>{card.board.title}</span></div>
                                   <div className='element-icons'>
-                                    <div className='icons-section'>
+                                    <div className='icons-section left'>
+                                      <div className='icon' style={{ color: '#999' }}>
+                                        <div className='icon-text'>{card.card.checklists.length}</div>
+                                        <Icon fontSize='13px' name='list' color=''/>
+                                      </div>
+                                      <div className='icon' style={{ color: '#999' }}>
+                                        <div className='icon-text'>{card.card.attachments.length}</div>
+                                        <Icon fontSize='13px' name='file' color=''/>
+                                      </div>
                                     </div>
-                                    <div className='icons-section'>
-                                      <div className='icon'>
+                                    <div className='icons-section right'>
+                                      <div className='icon' style={{ color: '#999' }}>
                                         <div className='icon-text'>{card.card.collaborators.length}</div>
-                                        <Icon fontSize='13px' name='user' color='#999'/>
+                                        <Icon fontSize='13px' name='user' color=''/>
+                                      </div>
+                                      <div className='icon' style={{ color: '#999' }}>
+                                        <div className='icon-text'>{card.card.comments.length}</div>
+                                        <Icon fontSize='13px' name='comment' color=''/>
                                       </div>
                                     </div>
                                   </div>

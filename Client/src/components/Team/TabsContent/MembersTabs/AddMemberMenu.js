@@ -73,13 +73,13 @@ export default class AddMemberMenu extends React.Component {
             size='30px'
             fontSize=''
             thumbnail={user.picture}
-            initials={this.getInitials(user.username)}
+            initials={this.getInitials(user.name)}
             bgColor={user.bgColor}
             color='black'
           />
         </div>
         <div className='user-infos'>
-          <div className='user-username'>{user.username}</div>
+          <div className='user-username'>{user.name}</div>
           <div className='user-email'>{user.email}</div>
         </div>
         <style jsx>{`

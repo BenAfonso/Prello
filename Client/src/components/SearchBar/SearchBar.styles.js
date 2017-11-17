@@ -3,19 +3,31 @@ export default `
   text-align: left;
 }
 
+.input-block {
+  position:relative;  
+}
+
 input {
-  font-size: 15px;
+  font-size: 20px;
+  color: #666;
   height: 30px;
   padding: 4px;
+  padding-left: 30px;
+  width: 200px;
   min-width: 200px;
   border-radius: 3px;
   border: 1px solid rgba(0,0,0,0.2);
   transition: min-width 0.75s;    
 }
 
-
 input:focus {
   min-width: 300px;
+}
+
+.input-icon{
+  position: absolute;
+  left: 5px;
+  top: 3px;
 }
 
 .search-content {
@@ -35,11 +47,14 @@ input:focus {
 
 .section {
   width: 300px;
+  height: 40vh;
   padding-top: 10px;
   position: relative;
 }
 
 .section-title {
+  height: 28px;
+  line-height: 18px;
   font-size: 18px;
   font-weight: bold;
   text-align: center;
@@ -48,8 +63,8 @@ input:focus {
 
 .section-elements {
   overflow-y: auto; 
-  height: 200px;
   border: 1px solid #eee;
+  height: calc(100% - 28px);
 }
 
 .section-blur {
@@ -66,11 +81,16 @@ input:focus {
 
 .element:hover {
   background: #ff3399;
-  color: white;
+  color: white!important;
 }
 
-.element:hover .user-name, .element:hover .user-email, .element:hover .content-title-text, .element:hover .content-title-info, .element:hover .element-text {
-  color: white;
+.element:hover * {
+  color: white !important;
+}
+
+.element:hover .icon-late, .element:hover .dueDate, .element:hover .icon-icon, .element:hover .icon-late .icon-text, .element:hover .dueDate .icon-text {
+  background: white !important;
+  color: #ff3399 !important;
 }
 
 .content {
@@ -81,21 +101,37 @@ input:focus {
 .element-nothing {
   text-align: center;
   font-size: 15px;
+  padding-top: 15px;
 }
 
 .content-title {
-  display: flex;
-  align-items: baseline; 
+  width: 100%;
 }
 
 .content-title-text {
+  display: inline-block;
   font-weight: bold;
 }
 
 .content-title-info {
+  display: inline-block;
   font-size: 13px;
   color: #999;
   margin-left: 5px;
+}
+
+.content-title-icon {
+}
+
+.dueDate {
+  display: inline-block;
+  padding: 2px;
+  padding-right: 15px;
+  background: #eee;
+  border-radius: 3px;
+  font-size: 12px;
+  float: right;
+  position: relative;
 }
 
 .element-text {
@@ -110,7 +146,6 @@ input:focus {
 
 .element-icons {
   display: flex;
-  align-items: baseline;
   justify-content: space-between;
   padding-top: 5px;
 }
@@ -131,6 +166,12 @@ input:focus {
 .icon {
   display: flex;
   align-items: center;
+}
+
+.icon-icon {
+  position: absolute;
+  top: 2px;
+  right: 2px;
 }
 
 .icon-text {

@@ -248,7 +248,7 @@ export default class MembersTab extends React.Component {
           size='60px'
           fontSize='30px'
           thumbnail={user.picture}
-          initials={this.getInitials(user.username)}
+          initials={this.getInitials(user.name)}
           bgColor={user.bgColor}
           color='black'
         />
@@ -304,8 +304,8 @@ export default class MembersTab extends React.Component {
                         <Link to={`/users/${member._id}/profile`}>{this.renderUserAvatar(member)}</Link>
                       </div>
                       <div className='member-names'>
-                        <div className='member-name'>{member.username}</div>
-                        <div className='member-email'>{member.email}</div>
+                        <div className='member-name'>{member.name}</div>
+                        <div className='member-email'>{member.username}</div>
                       </div>
                     </div>
                     {this.renderMemberAction(member)}
