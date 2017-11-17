@@ -173,6 +173,10 @@ export function removeCollaboratorDistant (board, userId) {
   })
 }
 
+export function importTrelloBoardDistant (board) {
+  axios.post(`${Config.API_URL}/boards/import`, board)
+}
+
 export function addTeamToBoardDistant (boardId, teamId) {
   return new Promise((resolve, reject) => {
     axios.post(`${Config.API_URL}/boards/${boardId}/teams`, {
