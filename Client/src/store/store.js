@@ -52,6 +52,7 @@ export const defaultBoardState = {
   fetching: false,
   fetched: false,
   error: null,
+  labelsExpanded: false,
   board: {
     _id: '',
     title: '',

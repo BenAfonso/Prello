@@ -185,6 +185,7 @@ export default class CardComponent extends React.Component {
           collaborators={col}
           responsible={resp}
           attachments={attachments}
+          labelsExpanded={this.props.currentBoard.labelsExpanded}
           labels={
             labels
               ? labels.map(l => l._id

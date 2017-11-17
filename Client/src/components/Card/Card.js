@@ -101,12 +101,12 @@ export default class Card extends React.Component {
     return (
       <div style={{...this.props.style}} ref={c => { this.card = c }} className='root'>
         <div className='editButton'><Button size='small' bgColor='rgba(0,0,0,0)' hoverBgColor='rgba(255,255,255,0.6)'><Icon name='edit' color='#444' /></Button></div>
-        <div className='content'>{ this.props.content }</div>
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
           { this.props.labels
-            ? this.props.labels.map((label) => <div key={label['_id']}><LabelThumbnail labelText={label['name']} backgroundColor={label['color']} /></div>)
+            ? this.props.labels.map((label) => <div key={label['_id']} style={{ marginBottom: '2px' }}><LabelThumbnail isExpanded={this.props.labelsExpanded} labelText={label['name']} backgroundColor={label['color']} /></div>)
             : null }
         </div>
+        <div className='content'>{ this.props.content }</div>
         <div className='numbers'>
           { nbComments > 0
             ? <div className='number'>

@@ -5,6 +5,7 @@ export default (state = defaultBoardState, action) => {
     case 'RESET_BOARD': {
       return {
         ...state.currentBoard,
+        labelsExpanded: false,
         board: {
           _id: '',
           title: '',
@@ -124,6 +125,12 @@ export default (state = defaultBoardState, action) => {
           ...state.board,
           lists: action.payload
         }
+      }
+    }
+    case 'TOGGLE_LABELS_EXPANDED': {
+      return {
+        ...state,
+        labelsExpanded: !state.labelsExpanded
       }
     }
     case 'ADD_CARD': {

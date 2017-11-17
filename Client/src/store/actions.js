@@ -113,6 +113,12 @@ export function resetBoard (dispatch) {
   })
 }
 
+export function toggleLabelsExpanded (dispatch) {
+  store.dispatch({
+    type: 'TOGGLE_LABELS_EXPANDED'
+  })
+}
+
 export function updateLists (dispatch, lists) {
   dispatch({
     type: 'UPDATE_LISTS',
