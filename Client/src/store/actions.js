@@ -441,6 +441,13 @@ export function setBoardHistory (history) {
   })
 }
 
+export function addBoardHistory (history) {
+  store.dispatch({
+    type: 'ADD_BOARD_HISTORY',
+    payload: history
+  })
+}
+
 export function addCollaborator (dispatch, boardId, email) {
   addCollaboratorDistant(boardId, email).then((board) => {
   }).catch(err => {

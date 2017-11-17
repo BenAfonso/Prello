@@ -241,6 +241,17 @@ export default (state = defaultBoardState, action) => {
         }
       }
     }
+    case 'ADD_BOARD_HISTORY': {
+      let newModifications = state.board.modifications.slice()
+      newModifications.concat(action.payload)
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          modifications: newModifications
+        }
+      }
+    }
     case 'UPDATE_BOARD': {
       return {
         ...state,
