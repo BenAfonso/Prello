@@ -24,7 +24,7 @@ module.exports = function (app) {
     }
   })
   app.use(bodyParser.urlencoded({ extended: true }))
-  app.use(bodyParser.json())
+  app.use(bodyParser.json({limit: '5mb'}))
   app.set('view engine', 'ejs')
   app.all('/oauth/token', (req, res, next) => {
     var request = new Request(req)
