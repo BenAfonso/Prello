@@ -49,6 +49,8 @@ export default class File extends React.Component {
           font-size: 8px;
           line-break: word-wrap;
           text-align: center;
+          text-overflow: ellipsis;
+          overflow: hidden;
         }
         `}
           </style>
