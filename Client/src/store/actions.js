@@ -161,6 +161,16 @@ export function removeListLocal (list) {
   })
 }
 
+export function addModifications (modifications, atBottom = true) {
+  store.dispatch({
+    type: 'ADD_BOARD_MODIFICATIONS',
+    payload: {
+      modifications: modifications,
+      atBottom: atBottom
+    }
+  })
+}
+
 export function addCard (dispatch, boardId, listId, content) {
   postCard(boardId, listId, content).then(card => {
   }).catch(err => {

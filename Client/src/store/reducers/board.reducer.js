@@ -248,6 +248,21 @@ export default (state = defaultBoardState, action) => {
         }
       }
     }
+    case 'ADD_BOARD_MODIFICATIONS': {
+      let modifications = state.board.modifications.slice()
+      if (action.payload.atBottom) {
+        modifications = modifications.concat(action.payload.modifications)
+      } else {
+        modifications = action.payload.modifications.concat(modifications)
+      }
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          modifications: modifications
+        }
+      }
+    }
     case 'UPDATE_BOARD': {
       return {
         ...state,
