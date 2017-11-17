@@ -3,7 +3,7 @@ import { fetchBoards, fetchBoard, addBoardDistant, addTeamBoardDistant, deleteBo
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail, fetchUser, fetchUserTeams, fetchUserBoards } from '../services/User.services'
-import { fetchBoards as fetchAnalyticsBoards, fetchListsAnalytics } from '../services/Analytics.services'
+import { fetchBoards as fetchAnalyticsBoards, fetchListsAnalytics, fetchUsersAnalytics } from '../services/Analytics.services'
 
 import store from '../store/store'
 
@@ -804,11 +804,25 @@ export function setAnalyticsBoard (provider, id) {
   })
 }
 
-export function setListsAnalytics (provider, boardId, per) {
+export function setListsAnalytics (provider, boardId, per, dateFrom, dateTo) {
   return new Promise((resolve, reject) => {
-    fetchListsAnalytics(provider, boardId, per).then((data) => {
+    fetchListsAnalytics(provider, boardId, per, dateFrom, dateTo).then((data) => {
       store.dispatch({
         type: 'SET_LISTS_ANALYTICS',
+        payload: data
+      })
+      resolve(data)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export function setUsersAnalytics (provider, boardId, per, dateFrom, dateTo) {
+  return new Promise((resolve, reject) => {
+    fetchUsersAnalytics(provider, boardId, per, dateFrom, dateTo).then((data) => {
+      store.dispatch({
+        type: 'SET_USERS_ANALYTICS',
         payload: data
       })
       resolve(data)

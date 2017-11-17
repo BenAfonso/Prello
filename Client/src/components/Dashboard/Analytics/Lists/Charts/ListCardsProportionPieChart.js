@@ -3,7 +3,7 @@ import BaseChart from '../../../Charts/BaseChart'
 import { Pie, Cell, PieChart, Legend, Tooltip } from 'recharts'
 
 export default (props) => (
-  <BaseChart>
+  <BaseChart title='Card repartition'>
     <PieChart>
       <Pie data={props.data} dataKey={props.dataKey} nameKey={props.nameKey} cx='50%' cy='50%' outerRadius={100} label>
         {

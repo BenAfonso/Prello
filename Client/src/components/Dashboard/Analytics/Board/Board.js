@@ -75,7 +75,7 @@ export default class BoardAnalytics extends React.Component {
 
   renderDate (date) {
     date = new Date(date)
-    return `${date.getDate() > 9 ? date.getDate() : `0${date.getDate()}`}/${date.getMonth() + 1 > 9 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`}/${date.getFullYear()}`
+    return `${date.getDate() - 1 > 9 ? date.getDate() - 1 : `0${date.getDate() - 1}`}/${date.getMonth() + 1 > 9 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`}/${date.getFullYear()}`
   }
 
   render () {
@@ -95,7 +95,7 @@ export default class BoardAnalytics extends React.Component {
           <div className='title'>
             { this.props.board.title }
           </div>
-          <DashboardNav boardId={this.props.board._id} currentPage='board' />
+          <DashboardNav boardId={this.props._id} currentPage='board' />
           { data.length > 0
             ? <div className='bigNumbers'>
               <span className='number'>{data[data.length - 1].nbCards}<span>Cards</span></span>

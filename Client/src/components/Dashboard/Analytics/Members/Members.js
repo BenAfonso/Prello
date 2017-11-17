@@ -1,0 +1,127 @@
+import React from 'react'
+import styles from './Members.styles'
+import { connect } from 'react-redux'
+import DashboardNav from '../Nav/Nav'
+import { setUsersAnalytics } from '../../../../store/actions'
+import {shuffle} from 'underscore'
+import CardProportion from './Charts/CardProportion'
+import ActivityProportion from './Charts/ActivityProportion'
+import DailyActivityPerUser from './Charts/DailyActivityPerUser'
+
+@connect(store => {
+  return {
+    board: store.analytics.board,
+    users: store.analytics.users
+  }
+})
+export default class MembersAnalytics extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      firstDate: '',
+      secondDate: '',
+      fetched: false,
+      userFocused: -1
+    }
+    this.shouldUpdateData = this.shouldUpdateData.bind(this)
+    this.colors = shuffle(['#8884d8', '#82ca9d', '#F9A825', '#FF1744', '#F06292', '#AB47BC', '#651FFF', '#80D8FF', '#00E5FF', '#69F0AE'])
+  }
+
+  componentDidMount () {
+    if (this.state.fetched) {
+      return
+    }
+    setUsersAnalytics(this.props.provider || 'TheMightyPrello', this.props._id, 'day').then(res => {
+      this.setState({ fetched: true })
+    })
+  }
+
+  onFilterChange (d1, d2) {
+  }
+
+  shouldUpdateData (d1, d2, per) {
+    let date1 = `${d1.split('/')[2]}-${d1.split('/')[1]}-${d1.split('/')[0]}`
+    let date2 = `${d2.split('/')[2]}-${d2.split('/')[1]}-${d2.split('/')[0]}`
+    if (date1 !== this.state.firstDate) {
+      this.setState({ firstDate: date1 })
+      return true
+    }
+    if (date2 !== this.state.secondDate) {
+      this.setState({ secondDate: date2 })
+      return true
+    }
+    return false
+  }
+
+  renderDate (date) {
+    date = new Date(date)
+    return `${date.getDate() > 9 ? date.getDate() : `0${date.getDate()}`}/${date.getMonth() + 1 > 9 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`}/${date.getFullYear()}`
+  }
+
+  filterUser (i) {
+    if (this.state.userFocused === i) {
+      return this.unfilterList()
+    }
+    this.setState({ userFocused: i })
+  }
+
+  unfilterUser () {
+    this.setState({ userFocused: -1 })
+  }
+
+  render () {
+    return (
+      <div className='host'>
+        <div className='header'>
+          <div className='title'>
+            { this.props.board.title }
+          </div>
+          <DashboardNav boardId={this.props._id} currentPage='users' />
+          <div className='legend'>
+            {
+              this.props.users.map((u, i) => (
+                <div key={i} className='list-legend'>
+                  <div
+                    className={`color ${this.state.userFocused === i ? 'selected' : ''}`}
+                    onClick={this.filterUser.bind(this, i)}
+                  />
+                  {u.user.name}
+                </div>)
+              )}
+          </div>
+          { this.state.userFocused < 0
+            ? <div className='title'>Global users analytics</div>
+            : null
+          }
+        </div>
+        { this.state.fetched
+          ? <div className='charts'>
+            { this.state.userFocused < 0 ? <div className='chart block'>
+              <DailyActivityPerUser
+                data={this.props.users}
+                colors={this.colors}
+              />
+            </div>
+              : null }
+            { this.state.userFocused < 0 ? <div className='chart'>
+              <CardProportion
+                data={this.props.users}
+                colors={this.colors}
+              />
+            </div>
+              : null }
+            { this.state.userFocused < 0 ? <div className='chart'>
+              <ActivityProportion
+                data={this.props.users}
+                colors={this.colors}
+              />
+            </div>
+              : null }
+          </div>
+          : null
+        }
+        <style jsx>{styles}</style>
+      </div>
+    )
+  }
+}

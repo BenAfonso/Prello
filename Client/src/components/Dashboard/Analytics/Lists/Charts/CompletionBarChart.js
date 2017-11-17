@@ -1,6 +1,6 @@
 import React from 'react'
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Legend, Tooltip } from 'recharts'
-import BaseChart from '../../../../Charts/BaseChart'
+import BaseChart from '../../../Charts/BaseChart'
 
 export default (props) => (
   <BaseChart title='List completion'>

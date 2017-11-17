@@ -42,3 +42,14 @@ export function fetchListsAnalytics (provider, boardId, per, dateFrom, dateTo) {
     })
   })
 }
+
+export function fetchUsersAnalytics (provider, boardId, per, dateFrom, dateTo) {
+  return new Promise((resolve, reject) => {
+    let base = getBaseUrl('TheMightyPrello')
+    axios.get(`${base}/analytics/boards/${boardId}/members?per=${per}`).then((res) => {
+      resolve(res.data)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}

@@ -78,7 +78,8 @@ export const defaultDashboardState = {
     provider: '',
     numbers: [],
     lists: []
-  }
+  },
+  users: []
 }
 
 export const defaultBoardslistState = {

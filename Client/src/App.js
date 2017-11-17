@@ -47,6 +47,7 @@ class App extends Component {
             <PrivateRoute exact path='/users/:id/profile' component={ProfilePage} />
             <PrivateRoute exact path='/boards/:id/dashboard/board' component={BoardDashboardPage} analytics='board' />
             <PrivateRoute exact path='/boards/:id/dashboard/lists' component={BoardDashboardPage} analytics='lists' />
+            <PrivateRoute exact path='/boards/:id/dashboard/users' component={BoardDashboardPage} analytics='users' />
           </div>
         </Provider>
       </Router>

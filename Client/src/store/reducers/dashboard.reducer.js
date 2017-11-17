@@ -35,6 +35,12 @@ export default (state = defaultDashboardState, action) => {
         }
       }
     }
+    case 'SET_USERS_ANALYTICS': {
+      return {
+        ...state,
+        users: action.payload
+      }
+    }
     default:
       return {
         ...state

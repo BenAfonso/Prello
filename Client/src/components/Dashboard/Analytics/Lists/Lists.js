@@ -9,8 +9,9 @@ import AverageTimeCards from './Charts/AverageTimeCards'
 import NumberOfCardsOverTimePerList from './Charts/List/NumberOfCardsOverTime'
 import AverageTimeCardsPerList from './Charts/List/AverageTimeCards'
 import DashboardNav from '../Nav/Nav'
-import CumulativeFlowDiagram from './Charts/List/CumulativeFlowDiagram'
-import CompletionBarChart from './Charts/List/CompletionBarChart'
+import CumulativeFlowDiagram from './Charts/CumulativeFlowDiagram'
+import CompletionBarChart from './Charts/CompletionBarChart'
+import DateFilter from '../../DateFilter/DateFilter'
 
 @connect(store => {
   return {
@@ -18,7 +19,7 @@ import CompletionBarChart from './Charts/List/CompletionBarChart'
     lists: store.analytics.board.lists
   }
 })
-export default class BoardAnalytics extends React.Component {
+export default class ListsAnalytics extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -45,6 +46,9 @@ export default class BoardAnalytics extends React.Component {
   }
 
   onFilterChange (d1, d2) {
+    if (this.shouldUpdateData(d1, d2, 'day')) {
+      setListsAnalytics(this.props.provider || 'TheMightyPrello', this.props._id, 'day', this.state.firstDate, this.state.secondDate)
+    }
   }
 
   shouldUpdateData (d1, d2, per) {
@@ -63,7 +67,7 @@ export default class BoardAnalytics extends React.Component {
 
   renderDate (date) {
     date = new Date(date)
-    return `${date.getDate() > 9 ? date.getDate() : `0${date.getDate()}`}/${date.getMonth() + 1 > 9 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`}/${date.getFullYear()}`
+    return `${date.getDate() - 1 > 9 ? date.getDate() - 1 : `0${date.getDate() - 1}`}/${date.getMonth() + 1 > 9 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`}/${date.getFullYear()}`
   }
 
   filterList (i) {
@@ -87,7 +91,6 @@ export default class BoardAnalytics extends React.Component {
         numberOfCardsToDo: l.numberOfCardsToDo
       }
     ))
-    console.log(data)
     let names = this.props.lists ? this.props.lists.map(l => (
       l.name
     )) : []
@@ -104,7 +107,7 @@ export default class BoardAnalytics extends React.Component {
           <div className='title'>
             { this.props.board.title }
           </div>
-          <DashboardNav boardId={this.props.board._id} currentPage='lists' />
+          <DashboardNav boardId={this.props._id} currentPage='lists' />
           <div className='legend'>
             {
               this.props.lists.map((l, i) => (
@@ -213,6 +216,7 @@ export default class BoardAnalytics extends React.Component {
           </div>
           : null
         }
+        <div className='date-filter'><DateFilter minDate={this.props.board.createdAt} maxDate={Date.now()} onChange={this.onFilterChange.bind(this)}/></div>
         <style jsx>{styles}</style>
       </div>
     )

@@ -1,6 +1,6 @@
 import React from 'react'
 import { CartesianGrid, XAxis, YAxis, Tooltip, ComposedChart, Area } from 'recharts'
-import BaseChart from '../../../../Charts/BaseChart'
+import BaseChart from '../../../Charts/BaseChart'
 
 export default (props) => (
   <BaseChart title='Cumulative Flow Diagram' fullWidth>
