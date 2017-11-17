@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Card = mongoose.model('Card')
+const Checklist = mongoose.model('Checklist')
 const cardController = require('./cardController')
 
 const checklistController = {}
@@ -94,6 +95,42 @@ checklistController.createChecklistItem = (req) => {
     })
   })
 }
+
+/**
+ * @param {any} cardId
+ * @param {any} labelId
+ * @returns
+ */
+checklistController.addItemToChecklistt = function (cardId, checklistId, itemName) {
+  return new Promise((resolve, reject) => {
+    Card.findOne({ '_id': cardId }).exec(function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        res.checklists.id(checklistId).items.push({text: itemName})
+        res.save()
+      }
+    })
+  })
+}
+
+/**
+ * @param {any} cardId
+ * @param {any} labelId
+ * @returns
+ */
+checklistController.addItemToChecklist = function (checklistId, item) {
+  return new Promise((resolve, reject) => {
+    Checklist.findOneAndUpdate({ '_id': checklistId }, { $push: { items: item } }, { new: true }, function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+
 checklistController.updateItem = (req) => {
   return new Promise((resolve, reject) => {
     Card.findOne({ '_id': req.params.cardId }).exec(function (err, res) {
