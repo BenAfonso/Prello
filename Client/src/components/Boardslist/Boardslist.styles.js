@@ -52,10 +52,10 @@ ul li {
   color: rgba(0,0,0,0.5);
 }
 .teamSection {
-  margin-left: 46px;
   width: 100%;
 }
 .team-title {
+  margin-left: 46px;
   display: flex;
   align-items: center;
   padding: 10px;
