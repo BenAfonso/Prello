@@ -18,7 +18,7 @@ export default class File extends React.Component {
   }
 
   render () {
-    if (this.props.renderPreview && ['png', 'jpg', 'jpeg'].indexOf(this.props.attachment.ext) > -1) {
+    if (this.props.renderPreview && ['png', 'jpg', 'jpeg', 'gif'].indexOf(this.props.attachment.ext) > -1) {
       return (
         <div className='host' onClick={() => { downloadAttachment(this.props.boardId, this.props.attachment) }}>
           <div className='file-preview' style={{
@@ -49,6 +49,8 @@ export default class File extends React.Component {
           font-size: 8px;
           line-break: word-wrap;
           text-align: center;
+          text-overflow: ellipsis;
+          overflow: hidden;
         }
         `}
           </style>

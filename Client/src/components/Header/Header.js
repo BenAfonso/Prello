@@ -7,6 +7,7 @@ import Icon from '../UI/Icon/Icon'
 import AvatarThumbnail from '../UI/AvatarThumbnail/AvatarThumbnail'
 import CreateMenu from '../CreateMenu/CreateDropDown'
 import DropDown from '../UI/DropDown/DropDown'
+import SearchBar from '../SearchBar/SearchBar'
 
 export default class Header extends React.Component {
   static propTypes = {
@@ -50,6 +51,9 @@ export default class Header extends React.Component {
           ? <Redirect to={this.state.redirectTo} />
           : null
       }
+      <div className='searchBar'>
+        <SearchBar />
+      </div>
 
       <Link to='/'>
         <div className='brand' />

@@ -4,6 +4,7 @@ import DropDown from '../UI/DropDown/DropDown'
 import Icon from '../UI/Icon/Icon'
 import NewBoardForm from './Forms/NewBoardForm/NewBoardForm'
 import NewTeamForm from './Forms/NewTeamForm/NewTeamForm'
+import TrelloImport from '../TrelloImport/TrelloImport'
 
 export default class CreateDropDown extends React.Component {
   constructor (props) {
@@ -47,6 +48,10 @@ export default class CreateDropDown extends React.Component {
                     </div>
                   }
                 />
+              </li>
+              <li className='separator' />
+              <li className='element'>
+                <TrelloImport />
               </li>
             </ul>
           </div>

@@ -14,6 +14,7 @@ import store from './store/store'
 import { isAuthenticated } from './services/Authentication.services'
 import BoardDashboardPage from './pages/board.dashboard.page'
 import TeamPage from './pages/team.page'
+import history from './history'
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
@@ -31,7 +32,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 class App extends Component {
   render () {
     return (
-      <Router>
+      <Router history={history}>
         <Provider store={store}>
           <div className='App'>
             <PrivateRoute exact path='/' component={IndexPage} />
@@ -40,6 +41,7 @@ class App extends Component {
             <PrivateRoute exact path='/boards' component={BoardsPage} />
             <PrivateRoute exact path='/boards/:id' component={BoardPage} />
             <PrivateRoute exact path='/dashboard' component={DashboardPage} />
+            <PrivateRoute exact path='/boards/:id/cards/:cardId' component={BoardPage} />
             <PrivateRoute exact path='/teams/:id' component={TeamPage} />
             <PrivateRoute exact path='/teams/:id/:tab' component={TeamPage} />
             <PrivateRoute exact path='/developers' component={ApiPage} />

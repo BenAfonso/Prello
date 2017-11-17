@@ -4,11 +4,14 @@ const User = mongoose.model('User')
 const Team = mongoose.model('Team')
 const Label = mongoose.model('Label')
 const Modification = mongoose.model('Modification')
-
+const List = mongoose.model('List')
 const Card = mongoose.model('Card')
+const Checklist = mongoose.model('Checklist')
 const Util = require('./Util')
 const emit = require('../controllers/sockets').emit
 const modificationController = require('./modificationController')
+// const listController = require('./listController')
+// const cardController = require('./cardController')
 const boardController = {}
 
 /**
@@ -95,6 +98,90 @@ boardController.createBoard = function (board) {
 
 /**
  *
+ * @param {any} board
+ * @returns
+ */
+boardController.importTrelloBoard = function (board) {
+  return new Promise((resolve, reject) => {
+    const boardToImport = new Board({title: board.name, background: board.prefs.background, owner: board.owner, collaborators: board.collaborators})
+    boardToImport.save((err, item) => {
+      if (err) {
+        reject(err)
+      } else {
+        let tempLabels = []
+        board.labels.map((label) => {
+          let newLabel = new Label({name: label.name, color: label.color})
+          newLabel.save((err, item) => {
+            if (err) {
+              reject(err)
+            } else {
+              tempLabels.push({id: label.id, mongoId: newLabel._id})
+              boardController.addLabelToBoard(boardToImport._id, newLabel)
+            }
+          })
+        })
+        const sortedLists = board.lists.sort((l1, l2) => {
+          if (l1.pos < l2.pos) return -1
+          else if (l1.pos > l2.pos) return 1
+          else return 0
+        })
+        sortedLists.map((list, index) => {
+          let newList = new List({name: list.name, isArchived: list.closed, position: index + 1})
+          newList.save((err, item) => {
+            if (err) {
+              reject(err)
+            } else {
+              boardController.addListToBoard(boardToImport._id, newList)
+              board.cards.map((card) => {
+                if (card.idList === list.id) {
+                  let newCard
+                  if (card.due === null) {
+                    newCard = new Card({text: card.name, isArchived: card.closed, description: card.desc})
+                  } else {
+                    newCard = new Card({text: card.name, isArchived: card.closed, dueDate: card.due, description: card.desc, validated: card.dueComplete})
+                  }
+                  newCard.save((err, item) => {
+                    if (err) {
+                      reject(err)
+                    } else {
+                      List.findOneAndUpdate({'_id': newList._id}, {$push: {cards: newCard}}).exec()
+                      card.labels.map((cardLabel) => {
+                        tempLabels.map((tempLabel) => {
+                          if (cardLabel.id === tempLabel.id) {
+                            Card.findOneAndUpdate({ '_id': newCard._id }, { $push: { labels: tempLabel.mongoId } }, { new: true }).exec()
+                          }
+                        })
+                      })
+                      board.checklists.map((checklist) => {
+                        if (card.id === checklist.idCard) {
+                          let newChecklist = new Checklist({text: checklist.name, items: []})
+                          checklist.checkItems.map((item) => {
+                            let checked = item.state === 'complete'
+                            newChecklist.items.push({text: item.name, isChecked: checked})
+                          })
+                          newChecklist.save((err, item) => {
+                            if (err) {
+                              reject(err)
+                            } else {
+                              Card.findOneAndUpdate({ '_id': newCard._id }, { $push: { checklists: newChecklist } }).exec()
+                            }
+                          })
+                        }
+                      })
+                    }
+                  })
+                }
+              })
+            }
+          })
+        })
+        resolve(item)
+      }
+    })
+  })
+}
+/**
+ *
  *
  * @param {any} boardId
  * @param {any} list
@@ -103,6 +190,24 @@ boardController.createBoard = function (board) {
 boardController.addListToBoard = function (boardId, list) {
   return new Promise((resolve, reject) => {
     Board.findOneAndUpdate({ '_id': boardId }, { $push: { lists: list } }, { new: true }, function (err, res) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+
+/**
+ *
+ * @param {any} boardId
+ * @param {any} label
+ * @returns
+ */
+boardController.addLabelToBoard = function (boardId, label) {
+  return new Promise((resolve, reject) => {
+    Board.findOneAndUpdate({ '_id': boardId }, { $push: { labels: label } }, { new: true }, function (err, res) {
       if (err) {
         reject(err)
       } else {
@@ -190,6 +295,7 @@ boardController.moveList = function (req) {
     let boardId = req.params.boardId
     let listId = req.params.listId
     let position = req.body.position
+    console.log(position)
     Board.findOne({ '_id': boardId }).exec(function (err, res) {
       if (err) {
         reject(err)

@@ -75,7 +75,7 @@ const cardTarget = {
   connectDragPreview: connect.dragPreview(),
   isDragging: monitor.isDragging()
 }))
-export default class CardComponent extends React.Component {
+export default class DraggableCard extends React.Component {
   static propTypes = {
     id: PropTypes.any,
     listId: PropTypes.any,

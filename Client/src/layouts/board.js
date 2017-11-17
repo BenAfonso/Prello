@@ -70,7 +70,7 @@ export default class BoardLayout extends React.Component {
             currentUser={this.props.currentUser}
             createBoardButton
             notificationsButton
-            backButton
+            backHomeButton
           />
 
           <div className='content' style={{ display: 'flex', height: '100%' }}>
