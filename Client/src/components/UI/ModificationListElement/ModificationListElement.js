@@ -16,47 +16,43 @@ export default class ModificationListElement extends React.Component {
   getModificationContent () {
     switch (this.props.modification.type) {
       case 'ADDED_USER_CARD': {
-        return `${this.props.modification.user.username} added ${this.props.modification.targetUser.username} to the card ${this.props.modification.card.text}`
+        return `${this.props.modification.user.username} added ${this.props.modification.targetUser.username} to the card ${this.props.modification.card.text} in the board ${this.props.modification.board.title}`
       }
       case 'REMOVED_USER_CARD': {
-        return '' // TODO
+        return `${this.props.modification.user.username} removed ${this.props.modification.targetUser.username} to the card ${this.props.modification.card.text} in the board ${this.props.modification.board.title}` // TODO
       }
       case 'ADDED_COMMENT': {
-        return `${this.props.modification.user.username} commented the card ${this.props.modification.card.text}`
+        return `${this.props.modification.user.username} commented the card ${this.props.modification.card.text} in the board ${this.props.modification.board.title}`
       }
       case 'MOVED_CARD': {
         if (this.props.modification.fromList !== null && this.props.modification.toList !== null) {
-          return `${this.props.modification.user.username} moved the card ${this.props.modification.card.text} from ${this.props.modification.fromList.name} to ${this.props.modification.toList.name}`
+          return `${this.props.modification.user.username} moved the card ${this.props.modification.card.text} from ${this.props.modification.fromList.name} to ${this.props.modification.toList.name} in the board ${this.props.modification.board.title}`
         } else {
           return null
         }
       }
       case 'ADDED_COLLABORATOR_CARD': {
-        return `${this.props.modification.user.username} added ${this.props.modification.targetUser.username} as collaborator to the card ${this.props.modification.card.text}`
+        return `${this.props.modification.user.username} added ${this.props.modification.targetUser.username} as collaborator to the card ${this.props.modification.card.text} in the board ${this.props.modification.board.title}`
       }
       case 'ADDED_COLLABORATOR_BOARD': {
-        if (this.props.modification.board !== null) {
-          console.log('here')
-          return `${this.props.modification.user.username} added ${this.props.modification.targetUser.username} as collaborator to the board ${this.props.modification.board.title}`
-        }
-        return null
+        return `${this.props.modification.user.username} added ${this.props.modification.targetUser.username} as collaborator to the board ${this.props.modification.board.title}`
       }
-      case 'REMOVE_COLLABORATOR_CARD': {
-        return '' // TODO
+      case 'REMOVED_COLLABORATOR_CARD': {
+        return `${this.props.modification.user.username} removed ${this.props.modification.targetUser.username} as collaborator to the card ${this.props.modification.card.text} in the board ${this.props.modification.board.title}` // TODO
       }
       case 'ARCHIVED_LIST': {
-        return `${this.props.modification.user.username} archived the card ${this.props.modification.list.name}`
+        return `${this.props.modification.user.username} archived the list ${this.props.modification.list.name} in the board ${this.props.modification.board.title}`
       }
       case 'ARCHIVED_CARD': {
-        return `${this.props.modification.user.username} archived the card ${this.props.modification.card.text}`
+        return `${this.props.modification.user.username} archived the card ${this.props.modification.card.text} in the board ${this.props.modification.board.title}`
       }
       case 'MARKED_DUE_DATE_COMPLETE': {
-        return `${this.props.modification.user.username} marked the due date of the card ${this.props.modification.card.text}`
+        return `${this.props.modification.user.username} marked the due date of the card ${this.props.modification.card.text} in the board ${this.props.modification.board.title}`
       }
       case 'ADDED_DUE_DATE': {
-        return `${this.props.modification.user.username} added a due date to the card ${this.props.modification.card.text}`
+        return `${this.props.modification.user.username} added a due date to the card ${this.props.modification.card.text} in the board ${this.props.modification.board.title}`
       }
-      case 'SET_REPONSABLE': {
+      case 'SET_RESPONSABLE': {
         return `${this.props.modification.user.username} set ${this.props.modification.targetUser.username} responsible for the card ${this.props.modification.card.text}
         in the board ${this.props.modification.board.title}`
       }
@@ -79,6 +75,7 @@ export default class ModificationListElement extends React.Component {
   }
 
   render () {
+    const date = new Date(this.props.modification.timestamp)
     if (this.getModificationContent() !== null) {
       return (
         <div className='host'>
@@ -96,10 +93,9 @@ export default class ModificationListElement extends React.Component {
               {this.getModificationContent()}
             </div>
             <div className='dateContent'>
-              {new Date(Date.parse(this.props.modification.timestamp)).getFullYear()}-{new Date(Date.parse(this.props.modification.timestamp)).getMonth()}-{new Date(Date.parse(this.props.modification.timestamp)).getDay()}
+              {date.getFullYear()}-{date.getMonth() + 1}-{date.getDate()}
             </div>
           </div>
-          <hr className='separator'/>
           <style jsx>{styles}</style>
         </div>
       )

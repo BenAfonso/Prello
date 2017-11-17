@@ -1,6 +1,7 @@
 export default `
 .host {
   width: 80%;
+  margin-bottom: 5px;
 }
 .avatar {
   display: inline-block;

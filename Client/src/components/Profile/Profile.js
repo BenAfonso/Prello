@@ -65,7 +65,6 @@ export default class ProfilePage extends React.Component {
       console.error(err)
     })
     setFetchedUserHistory(this.props._id).then(() => {
-      console.log(this.props.userFetched.modifications)
     }).catch(err => {
       console.error(err)
     })
@@ -142,7 +141,7 @@ export default class ProfilePage extends React.Component {
     return isMember || isAdmin
   }
 
-  currentUserIsRelatedToBoard (board) {
+  currentUserIsRelatedToBoard (board, teamsPopulated) {
     let isOwner = board.owner._id === this.props.currentUser._id
     let isCollaborator = board.collaborators.filter(collab => collab._id === this.props.currentUser._id)[0] !== undefined
     let isInTeam = board.teams.filter(team => (this.currentUserIsInTeam(team))).filter(result => result)[0] !== undefined
@@ -242,7 +241,6 @@ export default class ProfilePage extends React.Component {
   }
 
   renderProfileTab () {
-    console.log(this.props.userFetched.modifications)
     return (
       <div className='profileTab'>
         <div className='teamPart'>
@@ -290,7 +288,13 @@ export default class ProfilePage extends React.Component {
           <div className='activityFeedList'>
             <ul>
               {this.props.userFetched.modifications.map(modif => (
-                <li key={modif._id} className='modificationElement'><ModificationListElement modification={modif}/></li>
+                modif.board !== null && this.currentUserIsRelatedToBoard(modif.board)
+                  ? <li key={modif._id} className='modificationElement'>
+                    <ModificationListElement modification={modif}/>
+                    <Link to={`/boards/${modif.board._id}`}><span className='modifBoardTitle'>Board page</span></Link>
+                    <hr className='separator'/>
+                  </li>
+                  : null
               ))}
             </ul>
           </div>

@@ -60,6 +60,7 @@ label {
 .activityTitle,
 .boardsTitle,
 .boardLi,
+.modifBoardTitle,
 label {
     color: white;
 }
@@ -142,22 +143,27 @@ label {
     margin-top: 10px;
     margin-bottom: 40px;
 }
-.boardSeparator {
-    margin-left: 50px;
+.separator {
     width: 80%;
+    min-width: 20px;
+    justify-content: center;
+    margin-top: 10px;
 }
+
 .tabSection {
     margin-top: 80px;
     display: flex;
     background: #cd5a91;
     border-top: 1px white solid;
 }
-.linkText {
+.linkText,
+.modifBoardTitle {
     color: white;
     text-decoration: underline;
     margin-left: 20px;
 }
-.linkText:hover {
+.linkText:hover,
+modifBoardTitle:hover {
     cursor: pointer;
 }
 .passwordInput {
@@ -195,9 +201,12 @@ label {
     text-align: center;
   }
 
-  .modificationElement {
-      margin-left: 40px;
-      width: 80%;
-      min-width: 200px;
-  }
+.modificationElement {
+    margin-left: 40px;
+    width: 80%;
+    min-width: 200px;
+}
+.modifBoardTitle {
+    margin-bottom: 5px;
+}
 `
