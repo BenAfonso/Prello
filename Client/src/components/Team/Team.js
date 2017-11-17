@@ -55,6 +55,13 @@ export default class Team extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    if (this.props._id !== nextProps._id) {
+      setTeam(this.props.dispatch, nextProps._id).then(team => {
+        // subscribeToTeam(team)
+      }).catch(err => {
+        console.error(err)
+      })
+    }
     if (this.props.team !== nextProps.team) {
       this.setState({
         inputName: nextProps.team.name,

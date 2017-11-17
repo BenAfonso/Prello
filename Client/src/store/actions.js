@@ -236,10 +236,13 @@ export function addTeamBoardLocal (teamId, board) {
 }
 
 export function deleteBoard (boardId) {
-  deleteBoardDistant(boardId).then((board) => {
-    // <= HANDLED FROM SOCKETS
-  }).catch(err => {
-    return err
+  return new Promise((resolve, reject) => {
+    deleteBoardDistant(boardId).then((board) => {
+      // <= HANDLED FROM SOCKETS
+      resolve()
+    }).catch(err => {
+      return err
+    })
   })
 }
 
@@ -336,10 +339,13 @@ export function addTeamMember (teamId, email) {
 }
 
 export function removeTeamMember (teamId, userId) {
-  removeTeamMemberDistant(teamId, userId).then((res) => {
-    removeTeamMemberLocal(userId)
-  }).catch(err => {
-    return err
+  return new Promise((resolve, reject) => {
+    removeTeamMemberDistant(teamId, userId).then((res) => {
+      removeTeamMemberLocal(userId)
+      resolve()
+    }).catch(err => {
+      return err
+    })
   })
 }
 
@@ -353,10 +359,13 @@ export function removeTeamMemberLocal (userId) {
 }
 
 export function removeTeamAdmin (teamId, userId) {
-  removeTeamAdminDistant(teamId, userId).then((res) => {
-    removeTeamAdminLocal(userId)
-  }).catch(err => {
-    return err
+  return new Promise((resolve, reject) => {
+    removeTeamAdminDistant(teamId, userId).then((res) => {
+      removeTeamAdminLocal(userId)
+      resolve()
+    }).catch(err => {
+      return err
+    })
   })
 }
 

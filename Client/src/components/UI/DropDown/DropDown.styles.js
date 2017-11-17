@@ -43,7 +43,7 @@ button:hover {
   color: #444;  
   background-color: #f9f9f9;
   min-width: 160px;
-  max-width: 340px;
+  max-width: 600px;
   border-radius: 3px;
   box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
   z-index: 10000;
