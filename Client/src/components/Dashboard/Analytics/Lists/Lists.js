@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './Lists.styles'
 import { connect } from 'react-redux'
-import { setListsAnalytics } from '../../../../store/actions'
+import { setListsAnalytics, setAnalyticsBoard } from '../../../../store/actions'
 import {shuffle, object} from 'underscore'
 import ListCardsProportionPieChart from './Charts/ListCardsProportionPieChart'
 import NumberCardsPerList from './Charts/NumberCardsPerList'
@@ -16,7 +16,7 @@ import DateFilter from '../../DateFilter/DateFilter'
 @connect(store => {
   return {
     board: store.analytics.board,
-    lists: store.analytics.board.lists
+    lists: store.analytics.lists
   }
 })
 export default class ListsAnalytics extends React.Component {
@@ -33,12 +33,26 @@ export default class ListsAnalytics extends React.Component {
   }
 
   componentDidMount () {
-    if (this.state.fetched) {
-      return
-    }
+    setAnalyticsBoard(this.props.provider || 'TheMightyPrello', this.props._id)
     setListsAnalytics(this.props.provider || 'TheMightyPrello', this.props._id, 'day').then(res => {
       this.setState({ fetched: true })
     })
+  }
+
+  componentWillReceiveProps (props) {
+    if (props.board.createdAt && this.state.firstDate === '' && this.state.secondDate === '') {
+      let date1 = new Date(props.board.createdAt)
+      date1 = `${date1.getFullYear()}-${date1.getMonth() + 1}-${date1.getDate()}`
+      let date2 = new Date(Date.now())
+      date2 = `${date2.getFullYear()}-${date2.getMonth() + 1}-${date2.getDate()}`
+      this.setState({
+        firstDate: date1,
+        secondDate: date2
+      })
+      setListsAnalytics(this.props.provider || 'TheMightyPrello', props._id, 'day', date1, date2).then(res => {
+        this.setState({ fetched: true })
+      })
+    }
   }
 
   focusList (i) {
@@ -47,7 +61,7 @@ export default class ListsAnalytics extends React.Component {
 
   onFilterChange (d1, d2) {
     if (this.shouldUpdateData(d1, d2, 'day')) {
-      setListsAnalytics(this.props.provider || 'TheMightyPrello', this.props._id, 'day', this.state.firstDate, this.state.secondDate)
+      setListsAnalytics(this.props.provider || 'TheMightyPrello', this.props._id, 'day', this.state.firstDate, this.state.secondDate).catch(err => console.error(err))
     }
   }
 

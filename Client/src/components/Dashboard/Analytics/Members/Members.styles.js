@@ -7,6 +7,13 @@ export default `
   padding-bottom: 60px;
 }
 
+.date-filter {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
 .color.selected {
   border: 3px solid rgba(0,0,0,0.5);
 }
@@ -42,6 +49,7 @@ export default `
   position: relative;
   font-weight: bold;
   font-size: 30px;
+  margin-top: 30px;
   color: white;
 }
 

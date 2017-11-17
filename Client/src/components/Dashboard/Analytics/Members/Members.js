@@ -2,11 +2,12 @@ import React from 'react'
 import styles from './Members.styles'
 import { connect } from 'react-redux'
 import DashboardNav from '../Nav/Nav'
-import { setUsersAnalytics } from '../../../../store/actions'
+import { setUsersAnalytics, setAnalyticsBoard } from '../../../../store/actions'
 import {shuffle} from 'underscore'
 import CardProportion from './Charts/CardProportion'
 import ActivityProportion from './Charts/ActivityProportion'
 import DailyActivityPerUser from './Charts/DailyActivityPerUser'
+import DateFilter from '../../DateFilter/DateFilter'
 
 @connect(store => {
   return {
@@ -31,12 +32,32 @@ export default class MembersAnalytics extends React.Component {
     if (this.state.fetched) {
       return
     }
+    setAnalyticsBoard(this.props.provider || 'TheMightyPrello', this.props._id)
     setUsersAnalytics(this.props.provider || 'TheMightyPrello', this.props._id, 'day').then(res => {
       this.setState({ fetched: true })
     })
   }
 
   onFilterChange (d1, d2) {
+    if (this.shouldUpdateData(d1, d2, 'day')) {
+      setUsersAnalytics(this.props.provider || 'TheMightyPrello', this.props._id, 'day', this.state.firstDate, this.state.secondDate)
+    }
+  }
+
+  componentWillReceiveProps (props) {
+    if (props.board.createdAt && this.state.firstDate === '' && this.state.secondDate === '') {
+      let date1 = new Date(props.board.createdAt)
+      date1 = `${date1.getFullYear()}-${date1.getMonth() + 1}-${date1.getDate()}`
+      let date2 = new Date(Date.now())
+      date2 = `${date2.getFullYear()}-${date2.getMonth() + 1}-${date2.getDate()}`
+      this.setState({
+        firstDate: date1,
+        secondDate: date2
+      })
+      setUsersAnalytics(this.props.provider || 'TheMightyPrello', this.props._id, 'day', this.state.firstDate, this.state.secondDate).then(res => {
+        this.setState({ fetched: true })
+      })
+    }
   }
 
   shouldUpdateData (d1, d2, per) {
@@ -77,18 +98,6 @@ export default class MembersAnalytics extends React.Component {
             { this.props.board.title }
           </div>
           <DashboardNav boardId={this.props._id} currentPage='users' />
-          <div className='legend'>
-            {
-              this.props.users.map((u, i) => (
-                <div key={i} className='list-legend'>
-                  <div
-                    className={`color ${this.state.userFocused === i ? 'selected' : ''}`}
-                    onClick={this.filterUser.bind(this, i)}
-                  />
-                  {u.user.name}
-                </div>)
-              )}
-          </div>
           { this.state.userFocused < 0
             ? <div className='title'>Global users analytics</div>
             : null
@@ -120,6 +129,7 @@ export default class MembersAnalytics extends React.Component {
           </div>
           : null
         }
+        <div className='date-filter'><DateFilter minDate={this.props.board.createdAt} maxDate={Date.now()} onChange={this.onFilterChange.bind(this)}/></div>
         <style jsx>{styles}</style>
       </div>
     )

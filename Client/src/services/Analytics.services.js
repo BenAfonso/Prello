@@ -24,7 +24,7 @@ export function fetchBoards (provider) {
 export function fetchBoardAnalytics (provider, boardId, per, dateFrom, dateTo) {
   return new Promise((resolve, reject) => {
     let base = getBaseUrl('TheMightyPrello')
-    axios.get(`${base}/analytics/boards/${boardId}?per=${per}&from=${dateFrom}&to=${dateTo}`).then((res) => {
+    axios.get(`${base}/analytics/boards/${boardId}?per=${per}${dateFrom ? `&from=${dateFrom}` : ''}${dateTo ? `&to=${dateTo}` : ''}`).then((res) => {
       resolve(res.data)
     }).catch((err) => {
       reject(err)
@@ -35,7 +35,7 @@ export function fetchBoardAnalytics (provider, boardId, per, dateFrom, dateTo) {
 export function fetchListsAnalytics (provider, boardId, per, dateFrom, dateTo) {
   return new Promise((resolve, reject) => {
     let base = getBaseUrl('TheMightyPrello')
-    axios.get(`${base}/analytics/boards/${boardId}/lists?per=${per}`).then((res) => {
+    axios.get(`${base}/analytics/boards/${boardId}/lists?per=${per}${dateFrom ? `&from=${dateFrom}` : ''}${dateTo ? `&to=${dateTo}` : ''}`).then((res) => {
       resolve(res.data)
     }).catch((err) => {
       reject(err)
@@ -46,7 +46,7 @@ export function fetchListsAnalytics (provider, boardId, per, dateFrom, dateTo) {
 export function fetchUsersAnalytics (provider, boardId, per, dateFrom, dateTo) {
   return new Promise((resolve, reject) => {
     let base = getBaseUrl('TheMightyPrello')
-    axios.get(`${base}/analytics/boards/${boardId}/members?per=${per}`).then((res) => {
+    axios.get(`${base}/analytics/boards/${boardId}/members?per=${per}${dateFrom ? `&from=${dateFrom}` : ''}${dateTo ? `&to=${dateTo}` : ''}`).then((res) => {
       resolve(res.data)
     }).catch((err) => {
       reject(err)
