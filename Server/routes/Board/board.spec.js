@@ -114,7 +114,7 @@ module.exports = (server, chai) => {
           .end((err, res) => {
             if (err) {}
             res.should.have.status(201)
-            res.body.owner._id.should.equal(`${user1._id}`)
+            res.body.owner.should.equal(`${user1._id}`)
             res.body.title.should.equal('TestBoard')
             done()
           })
