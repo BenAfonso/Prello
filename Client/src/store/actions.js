@@ -791,6 +791,7 @@ export function setAnalyticsBoards (provider) {
 }
 
 export function setAnalyticsBoard (provider, id) {
+  console.log(provider, id)
   return new Promise((resolve, reject) => {
     fetchAnalyticsBoards(provider).then((data) => {
       store.dispatch({

@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './Board.styles'
 import { connect } from 'react-redux'
-import { setAnalyticsBoard, setBoardAnalytics } from '../../../../store/actions'
+import { setBoardAnalytics } from '../../../../store/actions'
 import DateFilter from '../../DateFilter/DateFilter'
 import { fetchBoardAnalytics } from '../../../../services/Analytics.services'
 import NumbersOverTime from './Charts/NumbersOverTime'
@@ -25,10 +25,6 @@ export default class BoardAnalytics extends React.Component {
       fetched: false
     }
     this.shouldUpdateData = this.shouldUpdateData.bind(this)
-  }
-
-  componentDidMount () {
-    setAnalyticsBoard(this.props.provider || 'TheMightyPrello', this.props._id)
   }
 
   componentWillReceiveProps (props) {
