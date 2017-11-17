@@ -35,7 +35,8 @@ input:focus {
 
 .section {
   width: 300px;
-  padding: 10px 0;
+  padding-top: 10px;
+  position: relative;
 }
 
 .section-title {
@@ -47,7 +48,16 @@ input:focus {
 
 .section-elements {
   overflow-y: auto; 
-  max-height: 200px;
+  height: 200px;
+  border: 1px solid #eee;
+}
+
+.section-blur {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  background: linear-gradient(rgba(249,249,249,0), rgba(249,249,249,1));
 }
 
 .element {
@@ -59,13 +69,13 @@ input:focus {
   color: white;
 }
 
-.element:hover .user-name, .element:hover .user-email {
+.element:hover .user-name, .element:hover .user-email, .element:hover .content-title-text, .element:hover .content-title-info, .element:hover .element-text {
   color: white;
 }
 
 .content {
   width: 100%;
-  padding: 5px 0;  
+  padding: 10px 0;
 }
 
 .element-nothing {
@@ -73,10 +83,19 @@ input:focus {
   font-size: 15px;
 }
 
-.element-title {
-  padding: 4px 0px;
-  font-size: 15px;
+.content-title {
+  display: flex;
+  align-items: baseline; 
+}
+
+.content-title-text {
   font-weight: bold;
+}
+
+.content-title-info {
+  font-size: 13px;
+  color: #999;
+  margin-left: 5px;
 }
 
 .element-text {
@@ -91,19 +110,39 @@ input:focus {
 
 .element-icons {
   display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-top: 5px;
+}
+
+.icons-section {
+  display: flex;
   align-items: center;
-  justify-content: flex-end;
+}
+
+.right .icon {
+  margin-left: 10px;
+}
+
+.left .icon {
+  margin-right: 10px;
 }
 
 .icon {
   display: flex;
   align-items: center;
-  padding: 0 5px;  
 }
 
 .icon-text {
-  padding: 0 5px;
   font-size: 13px;
+  margin-right: 5px;
+}
+
+.icon-late {
+  border-radius: 3px;
+  background: rgba(200,0,0,1);
+  color: white;
+  padding: 0px 5px;
 }
 
 .user {

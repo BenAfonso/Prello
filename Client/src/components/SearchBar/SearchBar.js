@@ -139,8 +139,22 @@ export default class SearchBar extends React.Component {
     return initials
   }
 
+  getLateCards (cards) {
+    const now = Date.now()
+    let late = 0
+    cards.map(card => {
+      if (card.dueDate) {
+        const dueDate = new Date(card.dueDate)
+        late += now >= dueDate && !card.validated ? 1 : 0
+      }
+    })
+    return late
+  }
+
   render () {
     const { matchingBoards, matchingCards, matchingTeams, matchingUsers } = this.state
+    let cardNumber = []
+    let lateCards = []
     return (
       <div className='host'>
         <DropDown
@@ -164,9 +178,52 @@ export default class SearchBar extends React.Component {
                             </li>
                             : matchingBoards.map(board =>
                               <Link to={`/boards/${board._id}`} key={board._id}>
-                                <li className='element'>
+                                <li className='element' onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} >
                                   <div className='content'>
-                                    <div className='element-title'>{board.title}</div>
+                                    <div className='content-title'>
+                                      <div className='content-title-text' style={{color: board.background}}>{board.title}</div>
+                                      <div className='content-title-info'>by <span className='text-emphasis'>{board.owner.name}</span></div>
+                                    </div>
+                                    <div className='element-icons'>
+                                      <div className='icons-section left'>
+                                        {
+                                          board.lists.map(list => {
+                                            lateCards[board._id]
+                                              ? lateCards[board._id] += this.getLateCards(list.cards)
+                                              : lateCards[board._id] = this.getLateCards(list.cards)
+                                          })
+                                        }
+                                        {
+                                          lateCards[board._id] === 0
+                                            ? null
+                                            : <div className='icon icon-late'>
+                                              <div className='icon-text'>{lateCards[board._id]}</div>
+                                              <Icon fontSize='13px' name='clock-o' color='white'/>
+                                            </div>
+                                        }
+                                      </div>
+                                      <div className='icons-section right'>
+                                        <div className='icon'>
+                                          <div className='icon-text'>{board.collaborators.length}</div>
+                                          <Icon fontSize='13px' name='user' color={board.background}/>
+                                        </div>
+                                        <div className='icon'>
+                                          <div className='icon-text'>{board.teams.length}</div>
+                                          <Icon fontSize='13px' name='users' color={board.background}/>
+                                        </div>
+                                        <div className='icon'>
+                                          {
+                                            board.lists.map(list => {
+                                              cardNumber[board._id]
+                                                ? cardNumber[board._id] += list.cards.length
+                                                : cardNumber[board._id] = list.cards.length
+                                            })
+                                          }
+                                          <div className='icon-text'>{cardNumber[board._id]}</div>
+                                          <Icon fontSize='13px' name='list-alt' color={board.background}/>
+                                        </div>
+                                      </div>
+                                    </div>
                                   </div>
                                   <div className='separator' />
                                 </li>
@@ -174,6 +231,7 @@ export default class SearchBar extends React.Component {
                             )
                         }
                       </ul>
+                      <div className='section-blur' />
                     </li>
                     <li className='section'>
                       <div className='section-title'>Cards</div>
@@ -187,11 +245,15 @@ export default class SearchBar extends React.Component {
                               <li className='element' key={card.card._id}>
                                 <div className='content'>
                                   <div className='element-title'>{card.card.text}</div>
-                                  <div className='element-text'>in <span className='text-emphasis'>{card.list.name}</span> on <span className='text-emphasis'>{card.board.title}</span></div>
+                                  <div className='element-text'>in <span className='text-emphasis'>{card.list.name}</span> on <span className='text-emphasis' style={{color: card.board.background}}>{card.board.title}</span></div>
                                   <div className='element-icons'>
-                                    <div className='icon'>
-                                      <div className='icon-text'>{card.card.collaborators.length}</div>
-                                      <Icon fontSize='13px' name='users' color='#999'/>
+                                    <div className='icons-section'>
+                                    </div>
+                                    <div className='icons-section'>
+                                      <div className='icon'>
+                                        <div className='icon-text'>{card.card.collaborators.length}</div>
+                                        <Icon fontSize='13px' name='user' color='#999'/>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -200,6 +262,7 @@ export default class SearchBar extends React.Component {
                             )
                         }
                       </ul>
+                      <div className='section-blur' />
                     </li>
                   </ul>
                   <ul className='search-column'>
@@ -212,18 +275,22 @@ export default class SearchBar extends React.Component {
                               <div className='element-nothing'>We found nothing at all there..</div>
                             </li>
                             : matchingTeams.map(team =>
-                              <Link to={`/teams/${team._id}`} key={team._id}>
+                              <Link to={`/teams/${team._id}`} key={team._id} replace>
                                 <li className='element'>
                                   <div className='content'>
                                     <div className='element-title'>{team.name}</div>
                                     <div className='element-icons'>
-                                      <div className='icon'>
-                                        <div className='icon-text'>{team.users.length}</div>
-                                        <Icon fontSize='13px' name='users' color='#999'/>
+                                      <div className='icons-section'>
                                       </div>
-                                      <div className='icon'>
-                                        <div className='icon-text'>{team.boards.length}</div>
-                                        <Icon fontSize='13px' name='window-restore' color='#999'/>
+                                      <div className='icons-section'>
+                                        <div className='icon'>
+                                          <div className='icon-text'>{team.users.length}</div>
+                                          <Icon fontSize='13px' name='users' color='#999'/>
+                                        </div>
+                                        <div className='icon'>
+                                          <div className='icon-text'>{team.boards.length}</div>
+                                          <Icon fontSize='13px' name='window-restore' color='#999'/>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
@@ -233,6 +300,7 @@ export default class SearchBar extends React.Component {
                             )
                         }
                       </ul>
+                      <div className='section-blur' />
                     </li>
                     <li className='section'>
                       <div className='section-title'>Users</div>
@@ -249,6 +317,7 @@ export default class SearchBar extends React.Component {
                             )
                         }
                       </ul>
+                      <div className='section-blur' />
                     </li>
                   </ul>
                 </div>
