@@ -1,12 +1,24 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import { } from 'recharts'
+import moment from 'moment'
+import PropTypes from 'prop-types'
+
 @connect(store => {
   return {
     board: store.analytics.board
   }
 })
 export default class DateFilter extends React.Component {
+  static propTypes = {
+    updateOnRelease: PropTypes.bool,
+    updateOnChange: PropTypes.bool
+  }
+
+  static defaultProps = {
+    updateOnRelease: true,
+    updateOnChange: false
+  }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -16,6 +28,7 @@ export default class DateFilter extends React.Component {
       secondTrigger: 1
     }
     this.onChange = this.onChange.bind(this)
+    this.release = this.release.bind(this)
   }
 
   onChange (d1, d2) {
@@ -29,10 +42,7 @@ export default class DateFilter extends React.Component {
     })
 
     this.host.addEventListener('mouseup', e => {
-      this.setState({
-        firstPressed: false,
-        secondPressed: false
-      })
+      this.release()
     })
 
     this.host.addEventListener('mouseleave', e => {
@@ -62,6 +72,13 @@ export default class DateFilter extends React.Component {
     })
   }
 
+  release () {
+    this.setState({ firstPressed: false, secondPressed: false })
+    if (this.props.updateOnRelease) {
+      this.onChange(this.getDateFraction(this.state.firstTrigger), this.getDateFraction(this.state.secondTrigger))
+    }
+  }
+
   pressSecond () {
     this.setState({ secondPressed: true })
   }
@@ -73,9 +90,25 @@ export default class DateFilter extends React.Component {
   adjustFirst (e) {
     let windowWidth = window.innerWidth
     let mouseX = e.pageX
+    let fraction = mouseX / windowWidth
+    let cursorFraction = 20 / windowWidth
+    if (fraction >= this.state.firstTrigger) {
+      if (fraction < this.state.firstTrigger + cursorFraction) {
+        return
+      }
+    } else {
+      if (fraction > this.state.firstTrigger - cursorFraction) {
+        return
+      }
+    }
+
+    // if (this.getDateFraction(fraction) === this.getDateFraction(this.state.firstTrigger)) {
+    //  return
+    // }
     this.setState({ firstTrigger: mouseX / windowWidth })
-    this.getDateFraction(this.state.firstTrigger)
-    this.onChange(this.getDateFraction(this.state.firstTrigger), this.getDateFraction(this.state.secondTrigger))
+    if (this.props.updateOnChange) {
+      this.onChange(this.getDateFraction(this.state.firstTrigger), this.getDateFraction(this.state.secondTrigger))
+    }
   }
 
   adjustSecond (e) {
@@ -83,14 +116,17 @@ export default class DateFilter extends React.Component {
     let mouseX = e.pageX
     this.setState({ secondTrigger: mouseX / windowWidth })
     this.onChange(this.getDateFraction(this.state.firstTrigger), this.getDateFraction(this.state.secondTrigger))
+    if (this.props.updateOnChange) {
+      this.onChange(this.getDateFraction(this.state.firstTrigger), this.getDateFraction(this.state.secondTrigger))
+    }
   }
 
   getDateFraction (fraction) {
-    let minDate = new Date(this.props.minDate)
-    let maxDate = new Date(this.props.maxDate)
-    let delta = maxDate.getDate() - minDate.getDate()
-    let newDay = Math.floor(minDate.getDate() + delta * fraction)
-    let newDate = new Date(minDate.getUTCFullYear(), minDate.getMonth(), newDay)
+    let minDate = moment(new Date(this.props.minDate))
+    let maxDate = moment(new Date(this.props.maxDate))
+    let diffInDays = maxDate.diff(minDate)
+    let daysToAdd = Math.floor(diffInDays * fraction)
+    let newDate = minDate.add(daysToAdd).toDate()
     return `${newDate.getDate() < 10 ? `0${newDate.getDate()}` : newDate.getDate()}/${(newDate.getMonth() + 1) < 10 ? `0${newDate.getMonth() + 1}` : newDate.getMonth() + 1}/${newDate.getUTCFullYear()}`
   }
 
@@ -119,6 +155,10 @@ export default class DateFilter extends React.Component {
           box-shadow: 0px -3px 5px 0px rgba(174, 77, 123, 0.5);
         }
 
+        .host * {
+          user-select: none;
+        }
+
         .bar {
           position: absolute;
           bottom: 0;
@@ -126,6 +166,7 @@ export default class DateFilter extends React.Component {
           height: 100%;
           background-color: #fff;
           z-index: 2;
+          cursor: pointer;
         }
 
         .selectedArea {

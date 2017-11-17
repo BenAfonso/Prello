@@ -7,6 +7,8 @@ import { fetchBoardAnalytics } from '../../../../services/Analytics.services'
 import NumbersOverTime from './Charts/NumbersOverTime'
 import NumbersCreationOverTime from './Charts/NumbersCreationOverTime'
 import DashboardNav from '../Nav/Nav'
+import LoadingPage from '../../../../pages/LoadingPage/loading.page'
+import {displayNotification} from '../../../../services/Notification.service'
 
 @connect(store => {
   return {
@@ -20,7 +22,7 @@ export default class BoardAnalytics extends React.Component {
     this.state = {
       firstDate: '',
       secondDate: '',
-      fetching: false
+      fetched: false
     }
     this.shouldUpdateData = this.shouldUpdateData.bind(this)
   }
@@ -42,7 +44,14 @@ export default class BoardAnalytics extends React.Component {
       fetchBoardAnalytics(props.provier || 'TheMightyPrello', props._id, 'day', date1, date2).then(analytics => {
         setBoardAnalytics(analytics)
         this.numbers = analytics
+        this.setState({
+          fetched: true
+        })
       }).catch(err => {
+        this.setState({
+          fetched: true
+        })
+        displayNotification({type: 'error', title: 'Error', content: 'An error occured while fetching analytics... It may be Nick\'s fault!'})
         console.error(err)
       })
     }
@@ -53,7 +62,14 @@ export default class BoardAnalytics extends React.Component {
       fetchBoardAnalytics(this.props.provier || 'TheMightyPrello', this.props._id, 'day', this.state.firstDate, this.state.secondDate).then(analytics => {
         setBoardAnalytics(analytics)
         this.numbers = analytics
+        this.setState({
+          fetched: true
+        })
       }).catch(err => {
+        this.setState({
+          fetched: true
+        })
+        displayNotification({type: 'error', title: 'Error', content: 'An error occured while fetching analytics... It may be Nick\'s fault!'})
         console.error(err)
       })
     }
@@ -89,42 +105,45 @@ export default class BoardAnalytics extends React.Component {
         nbCardsCreated: a.numberOfCardsCreated,
         nbListsCreated: a.numberOfListsCreated
       }))
-    return (
-      <div className='host'>
-        <div className='header'>
-          <div className='title'>
-            { this.props.board.title }
-          </div>
-          <DashboardNav boardId={this.props._id} currentPage='board' />
-          { data.length > 0
-            ? <div className='bigNumbers'>
-              <span className='number'>{data[data.length - 1].nbCards}<span>Cards</span></span>
-              <span className='number'>{data[data.length - 1].nbLists}<span>Lists</span></span>
+
+    if (this.state.fetched) {
+      return (
+        <div className='host'>
+          <div className='header'>
+            <div className='title'>
+              { this.props.board.title }
             </div>
-            : null
-          }
-        </div>
-        <div className='charts'>
-          <div className='chart'>
-            <NumbersOverTime
-              dataKeys={['nbCards', 'nbLists', 'nbCardsArchived', 'nbListsArchived']}
-              nameKey='name'
-              data={data}
-            />
+            <DashboardNav boardId={this.props._id} currentPage='board' />
+            { data.length > 0
+              ? <div className='bigNumbers'>
+                <span className='number'>{data[data.length - 1].nbCards}<span>Cards</span></span>
+                <span className='number'>{data[data.length - 1].nbLists}<span>Lists</span></span>
+              </div>
+              : null
+            }
           </div>
-          <div className='chart'>
-            <NumbersCreationOverTime
-              dataKeys={['nbCardsCreated', 'nbListsCreated']}
-              nameKey='name'
-              data={data}
-            />
+          <div className='charts'>
+            <div className='chart'>
+              <NumbersOverTime
+                dataKeys={['nbCards', 'nbLists', 'nbCardsArchived', 'nbListsArchived']}
+                nameKey='name'
+                data={data}
+              />
+            </div>
+            <div className='chart'>
+              <NumbersCreationOverTime
+                dataKeys={['nbCardsCreated', 'nbListsCreated']}
+                nameKey='name'
+                data={data}
+              />
+            </div>
           </div>
+          <div className='date-filter'><DateFilter minDate={this.props.board.createdAt} maxDate={Date.now()} onChange={this.onFilterChange.bind(this)}/></div>
+          <style jsx>{styles}</style>
         </div>
-
-        <div className='date-filter'><DateFilter minDate={this.props.board.createdAt} maxDate={Date.now()} onChange={this.onFilterChange.bind(this)}/></div>
-
-        <style jsx>{styles}</style>
-      </div>
-    )
+      )
+    } else {
+      return <LoadingPage />
+    }
   }
 }

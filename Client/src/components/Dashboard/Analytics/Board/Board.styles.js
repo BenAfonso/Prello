@@ -4,6 +4,7 @@ export default `
   padding: 20px;
   color: #444;
   min-height: calc(100% - 40px);
+  padding-bottom: 60px;
 }
 
 .date-filter {
@@ -17,7 +18,7 @@ export default `
   width: 45%;
   min-width: 580px;
   min-height: 250px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .charts {

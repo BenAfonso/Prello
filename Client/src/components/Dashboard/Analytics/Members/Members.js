@@ -2,12 +2,14 @@ import React from 'react'
 import styles from './Members.styles'
 import { connect } from 'react-redux'
 import DashboardNav from '../Nav/Nav'
-import { setUsersAnalytics, setAnalyticsBoard } from '../../../../store/actions'
+import { setUsersAnalytics } from '../../../../store/actions'
 import {shuffle} from 'underscore'
 import CardProportion from './Charts/CardProportion'
 import ActivityProportion from './Charts/ActivityProportion'
 import DailyActivityPerUser from './Charts/DailyActivityPerUser'
 import DateFilter from '../../DateFilter/DateFilter'
+import LoadingPage from '../../../../pages/LoadingPage/loading.page'
+import {displayNotification} from '../../../../services/Notification.service'
 
 @connect(store => {
   return {
@@ -32,9 +34,14 @@ export default class MembersAnalytics extends React.Component {
     if (this.state.fetched) {
       return
     }
-    setAnalyticsBoard(this.props.provider || 'TheMightyPrello', this.props._id)
     setUsersAnalytics(this.props.provider || 'TheMightyPrello', this.props._id, 'day').then(res => {
       this.setState({ fetched: true })
+    }).catch(err => {
+      this.setState({
+        fetched: true
+      })
+      displayNotification({type: 'error', title: 'Error', content: 'An error occured while fetching analytics... It may be Nick\'s fault!'})
+      console.error(err)
     })
   }
 
@@ -56,6 +63,12 @@ export default class MembersAnalytics extends React.Component {
       })
       setUsersAnalytics(this.props.provider || 'TheMightyPrello', this.props._id, 'day', this.state.firstDate, this.state.secondDate).then(res => {
         this.setState({ fetched: true })
+      }).catch(err => {
+        this.setState({
+          fetched: true
+        })
+        displayNotification({type: 'error', title: 'Error', content: 'An error occured while fetching analytics... It may be Nick\'s fault!'})
+        console.error(err)
       })
     }
   }
@@ -91,47 +104,51 @@ export default class MembersAnalytics extends React.Component {
   }
 
   render () {
-    return (
-      <div className='host'>
-        <div className='header'>
-          <div className='title'>
-            { this.props.board.title }
+    if (this.state.fetched) {
+      return (
+        <div className='host'>
+          <div className='header'>
+            <div className='title'>
+              { this.props.board.title }
+            </div>
+            <DashboardNav boardId={this.props._id} currentPage='users' />
+            { this.state.userFocused < 0
+              ? <div className='title'>Global users analytics</div>
+              : null
+            }
           </div>
-          <DashboardNav boardId={this.props._id} currentPage='users' />
-          { this.state.userFocused < 0
-            ? <div className='title'>Global users analytics</div>
+          { this.state.fetched
+            ? <div className='charts'>
+              { this.state.userFocused < 0 ? <div className='chart block'>
+                <DailyActivityPerUser
+                  data={this.props.users}
+                  colors={this.colors}
+                />
+              </div>
+                : null }
+              { this.state.userFocused < 0 ? <div className='chart'>
+                <CardProportion
+                  data={this.props.users}
+                  colors={this.colors}
+                />
+              </div>
+                : null }
+              { this.state.userFocused < 0 ? <div className='chart'>
+                <ActivityProportion
+                  data={this.props.users}
+                  colors={this.colors}
+                />
+              </div>
+                : null }
+            </div>
             : null
           }
+          <div className='date-filter'><DateFilter minDate={this.props.board.createdAt} maxDate={Date.now()} onChange={this.onFilterChange.bind(this)}/></div>
+          <style jsx>{styles}</style>
         </div>
-        { this.state.fetched
-          ? <div className='charts'>
-            { this.state.userFocused < 0 ? <div className='chart block'>
-              <DailyActivityPerUser
-                data={this.props.users}
-                colors={this.colors}
-              />
-            </div>
-              : null }
-            { this.state.userFocused < 0 ? <div className='chart'>
-              <CardProportion
-                data={this.props.users}
-                colors={this.colors}
-              />
-            </div>
-              : null }
-            { this.state.userFocused < 0 ? <div className='chart'>
-              <ActivityProportion
-                data={this.props.users}
-                colors={this.colors}
-              />
-            </div>
-              : null }
-          </div>
-          : null
-        }
-        <div className='date-filter'><DateFilter minDate={this.props.board.createdAt} maxDate={Date.now()} onChange={this.onFilterChange.bind(this)}/></div>
-        <style jsx>{styles}</style>
-      </div>
-    )
+      )
+    } else {
+      return <LoadingPage />
+    }
   }
 }
