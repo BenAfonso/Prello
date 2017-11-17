@@ -347,18 +347,20 @@ export default class SearchBar extends React.Component {
                               <Link to={`/teams/${team._id}`} key={team._id}>
                                 <li className='element'>
                                   <div className='content'>
-                                    <div className='element-title'>{team.name}</div>
+                                    <div className='content-title'>
+                                      <div className='content-title-text'>{team.name}</div>
+                                    </div>
                                     <div className='element-icons'>
-                                      <div className='icons-section'>
+                                      <div className='icons-section left'>
                                       </div>
-                                      <div className='icons-section'>
-                                        <div className='icon'>
+                                      <div className='icons-section right'>
+                                        <div className='icon' style={{ color: '#999' }}>
                                           <div className='icon-text'>{team.users.length}</div>
-                                          <Icon fontSize='13px' name='users' color='#999'/>
+                                          <Icon fontSize='13px' name='users' color=''/>
                                         </div>
-                                        <div className='icon'>
+                                        <div className='icon' style={{ color: '#999' }}>
                                           <div className='icon-text'>{team.boards.length}</div>
-                                          <Icon fontSize='13px' name='window-restore' color='#999'/>
+                                          <Icon fontSize='13px' name='window-restore' color=''/>
                                         </div>
                                       </div>
                                     </div>
@@ -381,7 +383,10 @@ export default class SearchBar extends React.Component {
                             </li>
                             : matchingUsers.map(user =>
                               <Link to={`/users/${user._id}/profile`} key={user._id}>
-                                <li className='element'>{this.renderUser(user)}</li>
+                                <li className='element'>
+                                  {this.renderUser(user)}
+                                  <div className='separator' />
+                                </li>
                               </Link>
                             )
                         }

@@ -69,7 +69,6 @@ export default class Board extends React.Component {
         console.error(err)
       })
     }
-    console.log(history.location.pathname)
     if (history.location.pathname.split('/').indexOf('cards') !== -1) {
       if (this.props.board !== nextProps.board && nextProps.board.lists.length > 0) {
         this.displayCardDetails(this.props.cardId, nextProps.board)
