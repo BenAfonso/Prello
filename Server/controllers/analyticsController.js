@@ -56,15 +56,20 @@ analyticsController.getListsAnalytics = (boardId, per, beginDate, endDate) => {
         list.modification = result.board.modification
         let funcs = constructFuncArray(list, analyticsController.getListAnalyticsByDate, [], per, result.beginDate, result.endDate)
         executeFuncRecursive(funcs, [], 0).then(res => {
-          getNumberOfCardsComplete(list.cards).then(numberOfCardsDone => {
-            if (numberOfCardsDone === undefined) {
+          getNumberOfCardsComplete(list.cards).then(cardsDone => {
+            let numberOfCardsDone
+            if (cardsDone === []) {
               numberOfCardsDone = 0
+            } else {
+              numberOfCardsDone = cardsDone.length
             }
-            let listStat = {name: list.name, numberOfCardsDone: numberOfCardsDone, numberOfCardsToDo: list.cards.length - numberOfCardsDone, numbers: res}
-            listStats.push(listStat)
-            if (result.board.lists.length - 1 === index) {
-              resolve(listStats)
-            }
+            getNumberOfCardsCompleteLate(cardsDone, result.board.modification).then(cardsDoneLate => {
+              let listStat = {name: list.name, numberOfCardsDone: numberOfCardsDone, numberOfCardsToDo: list.cards.length - numberOfCardsDone, numberOfCardsDoneLate: cardsDoneLate.length, numbers: res}
+              listStats.push(listStat)
+              if (result.board.lists.length - 1 === index) {
+                resolve(listStats)
+              }
+            })
           })
         }).catch(err => {
           console.log(err)
@@ -134,15 +139,20 @@ analyticsController.getMembersAnalytics = (boardId, per, beginDate, endDate) => 
         })
         let funcs = constructFuncArray(user, analyticsController.getMemberAnalyticsByDate, [], per, result.beginDate, result.endDate)
         executeFuncRecursive(funcs, [], 0).then(res => {
-          getNumberOfCardsComplete(userCards).then(numberOfCardsDone => {
-            if (numberOfCardsDone === undefined) {
+          getNumberOfCardsComplete(userCards).then(cardsDone => {
+            let numberOfCardsDone
+            if (cardsDone === []) {
               numberOfCardsDone = 0
+            } else {
+              numberOfCardsDone = cardsDone.length
             }
-            let memberStat = {user: user, numberOfCardsDone: numberOfCardsDone, numberOfCardsToDo: userCards.length - numberOfCardsDone, numbers: res}
-            memberStats.push(memberStat)
-            if (memberStats.length - 1 === index) {
-              resolve(memberStats)
-            }
+            getNumberOfCardsCompleteLate(cardsDone, result.board.modification).then(cardsDoneLate => {
+              let memberStat = {user: user, numberOfCardsDone: numberOfCardsDone, numberOfCardsToDo: userCards.length - numberOfCardsDone, numberOfCardsDoneLate: cardsDoneLate.length, numbers: res}
+              memberStats.push(memberStat)
+              if (memberStats.length - 1 === index) {
+                resolve(memberStats)
+              }
+            })
           })
         }).catch(err => {
           console.log(err)
@@ -324,11 +334,24 @@ analyticsController.getMemberAnalyticsByDate = (user, beginDate, endDate, per) =
     })
   })
 }
+const getNumberOfCardsCompleteLate = (cards, modifications) => {
+  return new Promise((resolve, reject) => {
+    cards = cards.filter(card => {
+      let allMarkDoneModif = modifications.filter((item) => {
+        return (item.type === 'MARKED_DUE_DATE_COMPLETE' && card._id.toString() === item.card._id.toString())
+      })
+      if (allMarkDoneModif.length > 0) {
+        return allMarkDoneModif[0].timestamp.getTime() >= card.dueDate.getTime()
+      } else {
+        return false
+      }
+    })
+    resolve(cards)
+  })
+}
 const getNumberOfCardsComplete = (cards, endDate) => {
   return new Promise((resolve, reject) => {
-    resolve(_.countBy(cards, function (card) {
-      return card.validated
-    }).true)
+    resolve(cards.filter(card => card.validated))
   })
 }
 
