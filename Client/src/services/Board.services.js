@@ -2,7 +2,7 @@ import Config from '../config'
 import axios from 'axios'
 // import { addListDistant } from './List.services'
 import { logout } from './Authentication.services'
-import {addBoardLocal} from '../store/actions'
+import {addBoardLocal, addTeamBoardLocal} from '../store/actions'
 
 export function addBoardDistant (payload) {
   return new Promise((resolve, reject) => {
@@ -63,11 +63,13 @@ export function addTeamBoardDistant (payload) {
 
 export function addKanbanTeamBoardDistant (payload) {
   return new Promise((resolve, reject) => {
-    axios.post(`${Config.API_URL}/boards`, {
+    axios.post(`${Config.API_URL}/boards?template=kanban`, {
       title: payload.title,
       background: payload.color,
       teams: payload.teams
     }).then(res => {
+      addBoardLocal(res.data)
+      addTeamBoardLocal(res.data)
       resolve(res.data)
     }).catch(err => {
       reject(err)
@@ -82,6 +84,8 @@ export function addScrumTeamBoardDistant (payload) {
       background: payload.color,
       teams: payload.teams
     }).then(res => {
+      addBoardLocal(res.data)
+      addTeamBoardLocal(res.data)
       resolve(res.data)
     }).catch(err => {
       reject(err)
