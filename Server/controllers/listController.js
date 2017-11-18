@@ -23,6 +23,92 @@ listController.createList = (req) => {
     })
   })
 }
+
+listController.createListByBoardId = (boardId, name) => {
+  return new Promise((resolve, reject) => {
+    const listToAdd = new List({name})
+    listToAdd.save((err, item) => {
+      if (err) {
+        reject(err)
+      } else {
+        boardController.addListToBoard(boardId, listToAdd)
+            .then((data) => {
+              resolve(item)
+            })
+            .catch((err) => {
+              reject(err)
+            })
+      }
+    })
+  })
+}
+
+listController.createScrumLists = (boardId) => { // <- NOT SURE ABOUT THE CODE QUALITY
+  return new Promise((resolve, reject) => {
+    listController.createListByBoardId(boardId, 'Product Backlog').then(data => {
+      listController.createListByBoardId(boardId, 'Sprint Planning').then(data => {
+        listController.createListByBoardId(boardId, 'TO DO').then(data => {
+          listController.createListByBoardId(boardId, 'WIP').then(data => {
+            listController.createListByBoardId(boardId, 'Review').then(data => {
+              listController.createListByBoardId(boardId, 'Sprint 1').then(data => {
+                resolve(data)
+              }).catch(err => {
+                reject(err)
+              })
+            }).catch(err => {
+              reject(err)
+            })
+          }).catch(err => {
+            reject(err)
+          })
+        }).catch(err => {
+          reject(err)
+        })
+      }).catch(err => {
+        reject(err)
+      })
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+listController.createKanbanLists = (boardId) => {
+  return new Promise((resolve, reject) => {
+    listController.createListByBoardId(boardId, 'Backlog')
+    .then(data => {
+      listController.createListByBoardId(boardId, 'Ready')
+      .then(data => {
+        listController.createListByBoardId(boardId, 'Coding')
+        .then(data => {
+          listController.createListByBoardId(boardId, 'Testing')
+          .then(data => {
+            listController.createListByBoardId(boardId, 'Approval')
+            .then(data => {
+              listController.createListByBoardId(boardId, 'Done')
+              .then(data => {
+                resolve(data)
+              }).catch(err => {
+                reject(err)
+              })
+            }).catch(err => {
+              reject(err)
+            })
+          }).catch(err => {
+            reject(err)
+          })
+        }).catch(err => {
+          reject(err)
+        })
+      }).catch(err => {
+        reject(err)
+      })
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
 listController.removeList = (boardId, listId) => {
   return new Promise((resolve, reject) => {
     List.findOneAndRemove({ '_id': listId }, (err, item) => {
