@@ -155,7 +155,7 @@ export default class ProfilePage extends React.Component {
   }
 
   loadMoreModifs (page) {
-    setFetchedUserHistory(this.props._id, 5, page * 5).then(newInfos => {
+    setFetchedUserHistory(this.props._id, 5, page * 5).then(newInfos => { // Take 5 elements, Skip page * 5 elements
       if (newInfos.length > 0) {
         let newHistory = this.props.userFetched.modifications
         newHistory = newHistory.concat(newInfos)

@@ -74,6 +74,12 @@ export default class ModificationListElement extends React.Component {
     }
   }
 
+  getInitials (name) {
+    const matches = name.match(/\b(\w)/g)
+    const initials = matches.join('').toUpperCase()
+    return initials
+  }
+
   render () {
     const date = new Date(this.props.modification.timestamp)
     if (this.getModificationContent() !== null) {
@@ -85,7 +91,7 @@ export default class ModificationListElement extends React.Component {
               fontSize='24px'
               thumbnail={this.props.modification.user.picture}
               bgColor={this.props.modification.user.bgColor}
-              initials='a a'
+              initials={this.getInitials(this.props.modification.user.name)}
               color='black'/>
           </div>
           <div className='content'>
