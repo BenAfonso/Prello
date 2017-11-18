@@ -65,6 +65,23 @@ export default class ProfilePage extends React.Component {
     })
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (this.props._id !== nextProps._id) {
+      setFetchedUser(this.props._id).then(() => {
+      }).catch(err => {
+        console.error(err)
+      })
+      setFetchedUserTeams(this.props._id).then(() => {
+      }).catch(err => {
+        console.error(err)
+      })
+      setFetchedUserBoards(this.props._id).then(() => {
+      }).catch(err => {
+        console.error(err)
+      })
+    }
+  }
+
   displayModifyProfileForm () {
     this.setState({ displayModifyProfileForm: true })
   }

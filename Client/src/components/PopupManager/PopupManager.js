@@ -1,6 +1,7 @@
 import React from 'react'
 import {PortalWithState} from 'react-portal'
 import PopoverPage from '../../pages/popup.page'
+import history from '../../history'
 
 export default class PopupManager extends React.Component {
   constructor (props) {
@@ -15,6 +16,7 @@ export default class PopupManager extends React.Component {
   }
 
   dismissPopover () {
+    history.replace(`/boards/${this.props.boardId}`)
     this.popover.onDismiss(() => {
       this.setState({ popoverDisplayed: false })
     })

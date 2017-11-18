@@ -99,7 +99,7 @@ export default class DropDown extends React.Component {
         <div {...props} className='host'>
 
           {
-            input ? <div onClick={this.openDropdown} ref={b => { this.input = b }}>{input}</div>
+            input ? <div onClick={this.openDropdown} ref={b => { this.input = b }} onChange={this.openDropdown} >{input}</div>
               : <div onClick={this.toggleDropdown} ref={b => { this.button = b }}>{children}</div>
           }
           {
@@ -136,7 +136,11 @@ export default class DropDown extends React.Component {
     } else if (layout === 'custom') {
       return (
         <div {...props} className='host'>
-          <div onClick={this.toggleDropdown} ref={b => { this.button = b }}>{button}</div>
+          {
+            input
+              ? <div onClick={this.openDropdown} ref={b => { this.input = b }} onChange={this.openDropdown}>{input}</div>
+              : <div onClick={this.toggleDropdown} ref={b => { this.button = b }}>{button}</div>
+          }
           {
             this.state.expanded
               ? <div className='dropdown-content' ref={e => { this.dd = e }} style={{ ...dropDownStyles }}>
