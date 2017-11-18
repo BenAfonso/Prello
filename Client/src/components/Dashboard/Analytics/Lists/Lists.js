@@ -14,6 +14,7 @@ import CompletionBarChart from './Charts/CompletionBarChart'
 import DateFilter from '../../DateFilter/DateFilter'
 import LoadingPage from '../../../../pages/LoadingPage/loading.page'
 import {displayNotification} from '../../../../services/Notification.service'
+import COLORS from '../../Charts/Colors'
 
 @connect(store => {
   return {
@@ -31,7 +32,7 @@ export default class ListsAnalytics extends React.Component {
       listFocused: -1
     }
     this.shouldUpdateData = this.shouldUpdateData.bind(this)
-    this.colors = shuffle(['#8884d8', '#82ca9d', '#F9A825', '#FF1744', '#F06292', '#AB47BC', '#651FFF', '#80D8FF', '#00E5FF', '#69F0AE'])
+    this.colors = shuffle(COLORS)
   }
 
   componentDidMount () {

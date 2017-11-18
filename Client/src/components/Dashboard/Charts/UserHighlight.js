@@ -15,9 +15,9 @@ export default (props) => (
               : props.user.name.split(' ').length > 1
                 ? `${props.user.name.split(' ')[0].charAt(0)}${props.user.name.split(' ')[0].charAt(0)}`
                 : `${props.user.name.split('')[0]}`
-            : ''
+            : '??'
         }</div>
-      <div className='user-name'>{props.user.name}</div>
+      <div className='user-name'>{props.user ? props.user.name : 'M. Nobody'}</div>
     </div>
     <style jsx>{`
     .host {
@@ -53,6 +53,7 @@ export default (props) => (
       border-radius: 50%;
       background-color: #444;
       color: white;
+      font-weight: bold;
       text-align: center;
       font-size: 40px;
       line-height: 80px;

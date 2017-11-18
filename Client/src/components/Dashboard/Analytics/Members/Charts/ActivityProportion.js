@@ -5,7 +5,7 @@ import { Pie, Cell, PieChart, Legend, Tooltip } from 'recharts'
 export default (props) => {
   let data = props.data.map(u => (
     {
-      value: u.numbers ? u.numbers[u.numbers.length - 1] ? u.numbers[u.numbers.length - 1].numberOfModifications : 0 : 0,
+      value: u.numbers ? u.numbers[u.numbers.length - 1] ? u.numbers[u.numbers.length - 1].cumulateNumberOfModifications : 0 : 0,
       name: u.user.name
     }
   ))

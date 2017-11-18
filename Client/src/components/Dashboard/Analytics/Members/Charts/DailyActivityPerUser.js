@@ -29,7 +29,7 @@ export default (props) => {
         <Legend />
         {
           names.map((n, i) => (
-            <Bar dataKey={n} fill={props.colors[i]} />
+            <Bar key={i} dataKey={n} fill={props.colors[i]} />
           ))
         }
       </BarChart>
