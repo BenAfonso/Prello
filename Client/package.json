@@ -50,7 +50,6 @@
     "react-dropzone": "^4.2.1",
     "react-google-login": "^2.11.3",
     "react-gsap-enhancer": "^0.3.0",
-    "react-infinite": "^0.12.1",
     "react-markdown": "^2.5.0",
     "react-portal": "next",
     "react-redux": "^5.0.6",
