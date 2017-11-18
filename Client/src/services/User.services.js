@@ -34,6 +34,22 @@ export function fetchUserBoards (id) {
   })
 }
 
+export function fetchUserHistory (id, limit = 5, skip = 0) {
+  return new Promise((resolve, reject) => {
+    axios.get(`${Config.API_URL}/users/${id}/history`, {
+      params: {
+        limit: limit,
+        skip: skip
+      }
+    })
+      .then((res) => {
+        resolve(res.data)
+      }).catch((err) => {
+        reject(err)
+      })
+  })
+}
+
 export function fetchMatchingUsersEmail (email) {
   return new Promise((resolve, reject) => {
     axios.get(`${Config.API_URL}/users`, {

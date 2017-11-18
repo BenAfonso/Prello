@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
 const {requiresLogin} = require('../../config/middlewares/authorization')
+const modificationController = require('../../controllers/modificationController')
 
 /**
   * @swagger
@@ -140,5 +141,13 @@ module.exports = (router, userController) => {
     } else {
       return res.status(403).send('Wrong user')
     }
+  })
+
+  router.get('/users/:userId/history', [requiresLogin], (req, res) => {
+    modificationController.findUserHistory(req.params.userId, parseInt(req.query.limit), parseInt(req.query.skip)).then(history => {
+      return res.status(200).send(history)
+    }).catch(err => {
+      return res.status(400).send(err)
+    })
   })
 }

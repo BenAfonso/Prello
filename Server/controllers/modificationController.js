@@ -230,4 +230,25 @@ modificationController.findCardHistory = (cardId) => {
   })
 }
 
+modificationController.findUserHistory = (userId, limit, skip) => {
+  return new Promise((resolve, reject) => {
+    let populateBoardTeams = {path: 'board', populate: {path: 'teams', model: 'Team'}}
+    let populateBoardOwner = {path: 'board', populate: {path: 'owner', model: 'User'}}
+    let populateQueryBoardCollabs = {path: 'board', populate: {path: 'collaborators', model: 'User'}}
+    let populateUsersTeam = {path: 'board', populate: {path: 'teams', populate: {path: 'users', model: 'User'}}}
+    let populateAdminsTeam = {path: 'board', populate: {path: 'teams', populate: {path: 'admins', model: 'User'}}}
+    Modification.find({'user': userId}).limit(limit).skip(skip).populate('fromList toList targetUser comment list board user card', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 })
+    .populate(populateBoardTeams)
+    .populate(populateBoardOwner)
+    .populate(populateQueryBoardCollabs)
+    .populate(populateUsersTeam)
+    .populate(populateAdminsTeam).sort({timestamp: 'desc'}).exec((err, items) => {
+      if (err) {
+        reject(err)
+      }
+      resolve(items)
+    })
+  })
+}
+
 module.exports = modificationController

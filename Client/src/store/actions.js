@@ -2,7 +2,7 @@ import { fetchTeams, addTeamDistant, addTeamMemberDistant, removeTeamMemberDista
 import { fetchBoards, fetchBoard, addBoardDistant, addScrumBoardDistant, addKanbanBoardDistant, addTeamBoardDistant, deleteBoardDistant, addCollaboratorDistant, removeCollaboratorDistant, addTeamToBoardDistant, addScrumTeamBoardDistant, addKanbanTeamBoardDistant, removeTeamFromBoardDistant, updateBoardNameDistant } from '../services/Board.services'
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
-import { fetchMatchingUsersEmail, fetchUser, fetchUserTeams, fetchUserBoards } from '../services/User.services'
+import { fetchMatchingUsersEmail, fetchUser, fetchUserTeams, fetchUserBoards, fetchUserHistory } from '../services/User.services'
 import { fetchBoards as fetchAnalyticsBoards, fetchListsAnalytics, fetchUsersAnalytics } from '../services/Analytics.services'
 
 import store from '../store/store'
@@ -803,6 +803,23 @@ export function setFetchedUserBoards (id) {
     }).catch(err => {
       reject(err)
     })
+  })
+}
+
+export function setFetchedUserHistory (id, limit = 5, skip) {
+  return new Promise((resolve, reject) => {
+    fetchUserHistory(id, limit, skip).then(history => {
+      resolve(history)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+export function setFetchedUserHistoryLocally (history) {
+  store.dispatch({
+    type: 'SET_FETCHED_USER_HISTORY',
+    payload: history
   })
 }
 
