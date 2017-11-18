@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {setBoardHistory, addBoardHistory} from '../../../store/actions'
+import {setBoardHistory, addModifications} from '../../../store/actions'
 import { getBoardHistory } from '../../../services/Board.services'
 import Modification from '../../UI/Modification/Modification'
 import AvatarThumbnail from '../../UI/AvatarThumbnail/AvatarThumbnail'
@@ -39,7 +39,7 @@ export default class ActivityMenu extends React.Component {
 
   buildElements (limit, skip) {
     getBoardHistory(this.props.board._id, limit, skip).then(history => {
-      addBoardHistory(history)
+      addModifications(history)
       this.setState({isLoading: false})
     })
   }
