@@ -101,6 +101,18 @@ export default class ActivityMenu extends React.Component {
           background-color: #00e49f; 
         }
 
+        .CREATED_CARD {
+          background-color: #00e49f; 
+        }
+
+        .UNARCHIVED_CARD {
+          background-color: #00e49f; 
+        }
+
+        .UNARCHIVED_LIST {
+          background-color: #00e49f; 
+        }
+
         .REMOVED_COLLABORATOR_BOARD {
           background-color: #ff006a; 
         }

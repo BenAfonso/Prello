@@ -17,6 +17,7 @@ import ModificationListElement from '../../components/UI/ModificationListElement
 import NewBoardForm from '../../components/CreateMenu/Forms/NewBoardForm/NewBoardForm'
 import NewTeamForm from '../../components/CreateMenu/Forms/NewTeamForm/NewTeamForm'
 import InfiniteScroll from 'react-infinite-scroller'
+import LoadingPage from '../../pages/LoadingPage/loading.page'
 
 @connect(store => {
   return {
@@ -470,7 +471,7 @@ export default class ProfilePage extends React.Component {
         </div>
       )
     } else {
-      return (<p>Loading</p>)
+      return (<LoadingPage />)
     }
   }
 }

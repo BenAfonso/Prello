@@ -1,12 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import {toggleLabelsExpanded} from '../../../store/actions'
+import { TimelineMax } from 'gsap'
+import GSAP from 'react-gsap-enhancer'
 
+@GSAP()
 export default class LabelThumbnail extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-      isExpanded: false
-    }
     this.expandLabel = this.expandLabel.bind(this)
   }
 
@@ -22,6 +23,14 @@ export default class LabelThumbnail extends React.Component {
     isThumbnail: PropTypes.bool
   }
 
+  componentWillReceiveProps (props) {
+    if (props.isExpanded) {
+      this.addAnimation(this.animateExpand.bind(this))
+    } else {
+      this.addAnimation(this.animateCollapse.bind(this))
+    }
+  }
+
   static defaultProps = {
     height: '30px',
     width: '90px',
@@ -35,16 +44,21 @@ export default class LabelThumbnail extends React.Component {
     isThumbnail: false
   }
 
-  expandLabel (event) {
-    event.stopPropagation()
-    this.setState({
-      isExpanded: !this.state.isExpanded
-    })
+  expandLabel (e) {
+    toggleLabelsExpanded()
+    e.stopPropagation()
+  }
+
+  animateExpand ({ target }) {
+    return new TimelineMax().to(this.label, 0.25, { width: '60px' }).to(this.label, 0.25, { height: '15px' }).to(this.labelText, 0, { opacity: 1 })
+  }
+
+  animateCollapse ({ target }) {
+    return new TimelineMax().to(this.label, 0.25, { height: '8px' }).to(this.label, 0.25, { width: '40px' })
   }
 
   render () {
     const {
-      labelText,
       width,
       height,
       fontWeight,
@@ -58,8 +72,8 @@ export default class LabelThumbnail extends React.Component {
     } = this.props
 
     props.style = {
-      width: '50px',
-      height: '15px',
+      width: '40px',
+      height: '8px',
       fontSize,
       fontWeight,
       backgroundColor,
@@ -70,7 +84,13 @@ export default class LabelThumbnail extends React.Component {
       ...props.style
     }
 
-    if (this.state.isExpanded) return <div onMouseLeave={this.expandLabel} style={props.style}>{this.props.labelText}</div>
-    else return <div onMouseEnter={this.expandLabel} style={props.style}></div>
+    if (this.props.isExpanded) {
+      let labelText = this.props.labelText.length > 8 ? this.props.labelText.substring(0, 8) + '...' : this.props.labelText
+      return <div ref={l => { this.label = l }} onClick={this.expandLabel} style={props.style}>
+        <span ref={l => { this.labelText = l }} style={{ opacity: 0 }}>{labelText}</span>
+      </div>
+    } else {
+      return <div ref={l => { this.label = l }} onClick={this.expandLabel} style={props.style}></div>
+    }
   }
 }

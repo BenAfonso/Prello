@@ -6,7 +6,7 @@ import Icon from '../UI/Icon/Icon'
 import Button from '../UI/Button/Button'
 import NewBoardForm from '../CreateMenu/Forms/NewBoardForm/NewBoardForm'
 import {connect} from 'react-redux'
-import { setBoardslist, setTeamslist } from '../../store/actions'
+import { setBoardslist } from '../../store/actions'
 import { subscribeToBoardslist } from '../../services/api'
 
 @connect(store => {
@@ -29,10 +29,6 @@ export default class Boardslist extends React.Component {
     }).catch(err => {
       console.error(err)
     })
-    setTeamslist(this.props.dispatch).then(() => {
-    }).catch(err => {
-      console.error(err)
-    })
   }
 
   findBoard (id) {
@@ -46,7 +42,7 @@ export default class Boardslist extends React.Component {
   render () {
     return (<div className='host'>
       <div className='titleSection'>
-        <Icon color='#dcdcda' name='window-restore' fontSize='40px' />
+        <Icon color='white' name='window-restore' fontSize='40px' />
         <h1>My boards</h1>
       </div>
 
@@ -82,7 +78,7 @@ export default class Boardslist extends React.Component {
       </ul>
 
       <div className='titleSection'>
-        <Icon color='#dcdcda' name='users' fontSize='40px' />
+        <Icon color='white' name='users' fontSize='40px' />
         <h1>My teams</h1>
       </div>
       <ul className='teams'>
@@ -98,11 +94,11 @@ export default class Boardslist extends React.Component {
                         <Button
                           bgColor='rgba(255,255,255,0.1)'
                           hoverBgColor='rgba(255,255,255,0.3)'
-                          color='#dcdcda'
+                          color='white'
                           gradient
                           size='small'
                           onClick={null}>
-                          <Icon color='#dcdcda' name='window-restore' fontSize='20px' />&nbsp;Boards
+                          <Icon color='white' name='window-restore' fontSize='20px' />&nbsp;Boards
                         </Button>
                       </Link>
                     </div>
@@ -111,11 +107,11 @@ export default class Boardslist extends React.Component {
                         <Button
                           bgColor='rgba(255,255,255,0.1)'
                           hoverBgColor='rgba(255,255,255,0.3)'
-                          color='#dcdcda'
+                          color='white'
                           gradient
                           size='small'
                           onClick={null}>
-                          <Icon color='#dcdcda' name='user' fontSize='20px' />&nbsp;Members
+                          <Icon color='white' name='user' fontSize='20px' />&nbsp;Members
                         </Button>
                       </Link>
                     </div>

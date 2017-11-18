@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './Header.styles'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { isAuthenticated, logout } from '../../services/Authentication.services'
 import Icon from '../UI/Icon/Icon'
 import AvatarThumbnail from '../UI/AvatarThumbnail/AvatarThumbnail'
@@ -26,8 +26,18 @@ export default class Header extends React.Component {
     color: 'white'
   }
 
-  goToProfilePage () {
-    window.location = `/users/${this.props.currentUser._id}/profile`
+  constructor (props) {
+    super(props)
+    this.state = {
+      redirectTo: ''
+    }
+    this.redirectTo = this.redirectTo.bind(this)
+  }
+
+  redirectTo (url) {
+    this.setState({
+      redirectTo: url
+    })
   }
 
   render () {
@@ -36,6 +46,11 @@ export default class Header extends React.Component {
       color: this.props.color
     }}>
 
+      {
+        this.state.redirectTo !== ''
+          ? <Redirect to={this.state.redirectTo} />
+          : null
+      }
       <div className='searchBar'>
         <SearchBar />
       </div>
@@ -72,12 +87,16 @@ export default class Header extends React.Component {
                 orientation='right'
                 menuElements={[
                   {
-                    action: this.goToProfilePage.bind(this),
+                    action: () => { this.redirectTo(`/users/${this.props.currentUser._id}/profile`) },
                     placeholder: 'Profile'
                   },
                   {
                     action: logout,
                     placeholder: 'Logout'
+                  },
+                  {
+                    action: () => { this.redirectTo('/dashboard') },
+                    placeholder: 'Dashboard'
                   },
                   {
                     action: () => { window.location = '/developers' },

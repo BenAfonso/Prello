@@ -50,7 +50,7 @@ export default class Import extends React.Component {
     delete board['powerUps']
     delete board['shortUrl']
     delete board['actions']
-    board['cards'].map((card) => {
+    board['cards'].map(card => {
       delete card['limits']
       delete card['idMembersVoted']
       delete card['idShort']
@@ -62,14 +62,15 @@ export default class Import extends React.Component {
       delete card['subscribed']
       delete card['url']
       delete card['pluginData']
+      return card
     })
-    board['lists'].map((list) => {
+    board['lists'].map(list => {
       delete list['limits']
+      return list
     })
     delete board['members']
     delete board['memberships']
     delete board['pluginData']
-    console.log(board)
     return board
   }
 
