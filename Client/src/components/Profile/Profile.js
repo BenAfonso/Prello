@@ -4,7 +4,7 @@ import Button from '../../components/UI/Button/Button'
 import Icon from '../../components/UI/Icon/Icon'
 import styles from './profile.style'
 import { updateProfile } from '../../services/User.services'
-import { updateProfileAction, updateProfilePageAction, setFetchedUser, setFetchedUserTeams, setFetchedUserBoards, setFetchedUserHistory, setFetchedUserHistoryLocally } from '../../store/actions'
+import { updateProfileAction, updateProfilePageAction, setFetchedUser, setFetchedUserTeams, setFetchedUserBoards, setFetchedUserHistory } from '../../store/actions'
 import { updateProfileLocalStorage } from '../../services/Authentication.services'
 import { displayNotification } from '../../services/Notification.service'
 import AvatarThumbnail from '../../components/UI/AvatarThumbnail/AvatarThumbnail'
@@ -33,9 +33,10 @@ export default class ProfilePage extends React.Component {
       displayModifyProfileForm: false,
       avatarUrl: '',
       displayNewPasswordForm: false,
-      numberModifToSkip: 0,
-      isInfiniteLoading: false,
-      hasMoreItems: true
+      hasMoreItems: true,
+      modifications: [],
+      start: -5,
+      response: undefined
     }
 
     this.renderModifyProfileForm = this.renderModifyProfileForm.bind(this)
@@ -69,14 +70,10 @@ export default class ProfilePage extends React.Component {
     }).catch(err => {
       console.error(err)
     })
-    setFetchedUserHistory(this.props._id, 5, 0).then((history) => { // Take 20 modifs, skip 20
-      setFetchedUserHistoryLocally(history)
-    }).catch(err => {
-      console.error(err)
-    })
+    this.loadMoreModifs()
   }
 
-  componentWillReceiveProps (nextProps) {
+  /* componentWillReceiveProps (nextProps) {
     if (this.props._id !== nextProps._id) {
       setFetchedUser(this.props._id).then(() => {
       }).catch(err => {
@@ -91,7 +88,7 @@ export default class ProfilePage extends React.Component {
         console.error(err)
       })
     }
-  }
+  } */
 
   displayModifyProfileForm () {
     this.setState({ displayModifyProfileForm: true })
@@ -171,15 +168,17 @@ export default class ProfilePage extends React.Component {
     return isOwner || isCollaborator || isInTeam
   }
 
-  loadMoreModifs (page) {
-    setFetchedUserHistory(this.props._id, 5, page * 5).then(newInfos => { // Take 5 elements, Skip page * 5 elements
+  loadMoreModifs () {
+    const start = this.state.start + 5
+    setFetchedUserHistory(this.props._id, 5, start).then(newInfos => { // Take 5 elements, Skip page * 5 elements
       if (newInfos.length > 0) {
-        let newHistory = this.props.userFetched.modifications
-        newHistory = newHistory.concat(newInfos)
-        setFetchedUserHistoryLocally(newHistory)
+        let newHistory = this.state.modifications.concat(newInfos)
+        // setFetchedUserHistoryLocally(newHistory)
+        this.setState({ modifications: newHistory, start })
       } else {
         this.setState({ hasMoreItems: false })
       }
+      this.setState({response: 'finished'})
     })
   }
 
@@ -276,15 +275,14 @@ export default class ProfilePage extends React.Component {
   }
 
   renderProfileTab () {
-    let modificationsToRender = this.props.userFetched.modifications.map(modif => (
-      modif.board !== null && this.currentUserIsRelatedToBoard(modif.board)
-        ? <div className='modificationElement' key={modif._id}>
-          <ModificationListElement modification={modif}/>
-          <Link to={`/boards/${modif.board._id}`}><span className='modifBoardTitle'
-            style={{color: 'black', textDecoration: 'underline', marginLeft: '20px'}}>Go to board</span></Link>
-          <hr className='separator'/>
-        </div>
-        : null
+    const { modifications } = this.state
+    let modificationsToRender = modifications.filter(modif => modif.board !== null).map(modif => (
+      <div className='modificationElement' key={modif._id}>
+        <ModificationListElement modification={modif}/>
+        <Link to={`/boards/${modif.board._id}`}><span className='modifBoardTitle'
+          style={{color: 'black', textDecoration: 'underline', marginLeft: '20px'}}>Go to board</span></Link>
+        <hr className='separator'/>
+      </div>
     ))
     return (
       <div className='profileTab'>
@@ -332,8 +330,9 @@ export default class ProfilePage extends React.Component {
           <hr className='titleAndContentSeparator'/>
           <div className='activityFeedList'>
             <InfiniteScroll
-              pageStart={0}
               hasMore={this.state.hasMoreItems}
+              useWindow={false}
+              threshold={5}
               loadMore={this.loadMoreModifs}>
               {modificationsToRender}
             </InfiniteScroll>
@@ -424,50 +423,54 @@ export default class ProfilePage extends React.Component {
   }
 
   render () {
-    return (
-      <div className='host'>
-        {!this.state.displayModifyProfileForm
-          ? <div className='profileInfos'>
-            {this.renderUserAvatar(this.props.userFetched)}
-            <span className='nameSpan'>{this.props.userFetched.name}</span>
-            <span className='usernameSpan'>@{this.props.userFetched.username}</span>
-            <div className='biopicDiv'>{this.props.userFetched.bio}</div>
-            {this.props.currentUser._id === this.props._id
-              ? <div className='modifyButton'>
-                <Button onClick={this.displayModifyProfileForm}
-                  bgColor='#E2E4E6'
-                  hoverBgColor='#d6d6d6'
-                  color='black'
-                  fontSize='12px'
-                  bold
-                  block
-                  shadow><Icon name='pencil' fontSize='10px' style={{marginRight: '5px'}}/>Edit
-                </Button>
-              </div>
-              : null}
+    if (this.state.response) {
+      return (
+        <div className='host'>
+          {!this.state.displayModifyProfileForm
+            ? <div className='profileInfos'>
+              {this.renderUserAvatar(this.props.userFetched)}
+              <span className='nameSpan'>{this.props.userFetched.name}</span>
+              <span className='usernameSpan'>@{this.props.userFetched.username}</span>
+              <div className='biopicDiv'>{this.props.userFetched.bio}</div>
+              {this.props.currentUser._id === this.props._id
+                ? <div className='modifyButton'>
+                  <Button onClick={this.displayModifyProfileForm}
+                    bgColor='#E2E4E6'
+                    hoverBgColor='#d6d6d6'
+                    color='black'
+                    fontSize='12px'
+                    bold
+                    block
+                    shadow><Icon name='pencil' fontSize='10px' style={{marginRight: '5px'}}/>Edit
+                  </Button>
+                </div>
+                : null}
+            </div>
+            : <div className='editProfilePart'>
+              {this.renderUserAvatar(this.props.userFetched)}
+              {this.renderModifyProfileForm()}
+            </div>
+          }
+          <div className='tabSection'>
+            <Tabs selected={0}>
+              <TabPanel label='Profile'>
+                {this.renderProfileTab()}
+              </TabPanel>
+              <TabPanel label='Boards'>
+                {this.renderBoardsTab()}
+              </TabPanel>
+              <TabPanel label='Options'>
+                {this.renderOptionsTab()}
+              </TabPanel>
+            </Tabs>
           </div>
-          : <div className='editProfilePart'>
-            {this.renderUserAvatar(this.props.userFetched)}
-            {this.renderModifyProfileForm()}
-          </div>
-        }
-        <div className='tabSection'>
-          <Tabs selected={0}>
-            <TabPanel label='Profile'>
-              {this.renderProfileTab()}
-            </TabPanel>
-            <TabPanel label='Boards'>
-              {this.renderBoardsTab()}
-            </TabPanel>
-            <TabPanel label='Options'>
-              {this.renderOptionsTab()}
-            </TabPanel>
-          </Tabs>
+          <style jsx>
+            {styles}
+          </style>
         </div>
-        <style jsx>
-          {styles}
-        </style>
-      </div>
-    )
+      )
+    } else {
+      return (<p>Loading</p>)
+    }
   }
 }
