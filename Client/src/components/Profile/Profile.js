@@ -16,8 +16,6 @@ import TeamListElement from '../../components/UI/TeamListElement/TeamListElement
 import ModificationListElement from '../../components/UI/ModificationListElement/ModificationListElement'
 import NewBoardForm from '../../components/CreateMenu/Forms/NewBoardForm/NewBoardForm'
 import NewTeamForm from '../../components/CreateMenu/Forms/NewTeamForm/NewTeamForm'
-import InfiniteScroll from 'react-infinite-scroller'
-import LoadingPage from '../../pages/LoadingPage/loading.page'
 
 @connect(store => {
   return {
@@ -34,9 +32,7 @@ export default class ProfilePage extends React.Component {
       displayModifyProfileForm: false,
       avatarUrl: '',
       displayNewPasswordForm: false,
-      hasMoreItems: true,
       modifications: [],
-      start: -5,
       response: undefined
     }
 
@@ -55,7 +51,7 @@ export default class ProfilePage extends React.Component {
     this.updatePassword = this.updatePassword.bind(this)
     this.currentUserIsInTeam = this.currentUserIsInTeam.bind(this)
     this.currentUserIsRelatedToBoard = this.currentUserIsRelatedToBoard.bind(this)
-    this.loadMoreModifs = this.loadMoreModifs.bind(this)
+    this.loadModifs = this.loadModifs.bind(this)
   }
 
   componentDidMount () {
@@ -71,7 +67,7 @@ export default class ProfilePage extends React.Component {
     }).catch(err => {
       console.error(err)
     })
-    this.loadMoreModifs()
+    this.loadModifs()
   }
 
   /* componentWillReceiveProps (nextProps) {
@@ -169,17 +165,9 @@ export default class ProfilePage extends React.Component {
     return isOwner || isCollaborator || isInTeam
   }
 
-  loadMoreModifs () {
-    const start = this.state.start + 5
-    setFetchedUserHistory(this.props._id, 5, start).then(newInfos => { // Take 5 elements, Skip page * 5 elements
-      if (newInfos.length > 0) {
-        let newHistory = this.state.modifications.concat(newInfos)
-        // setFetchedUserHistoryLocally(newHistory)
-        this.setState({ modifications: newHistory, start })
-      } else {
-        this.setState({ hasMoreItems: false })
-      }
-      this.setState({response: 'finished'})
+  loadModifs () {
+    setFetchedUserHistory(this.props._id, 20, 0).then(newInfos => {
+      this.setState({ modifications: newInfos })
     })
   }
 
@@ -330,13 +318,7 @@ export default class ProfilePage extends React.Component {
           </div>
           <hr className='titleAndContentSeparator'/>
           <div className='activityFeedList'>
-            <InfiniteScroll
-              hasMore={this.state.hasMoreItems}
-              useWindow={false}
-              threshold={5}
-              loadMore={this.loadMoreModifs}>
-              {modificationsToRender}
-            </InfiniteScroll>
+            {modificationsToRender}
           </div>
         </div>
         <style jsx>
@@ -424,51 +406,47 @@ export default class ProfilePage extends React.Component {
   }
 
   render () {
-    if (this.state.response) {
-      return (
-        <div className='host'>
-          {!this.state.displayModifyProfileForm
-            ? <div className='profileInfos'>
-              {this.renderUserAvatar(this.props.userFetched)}
-              <span className='nameSpan'>{this.props.userFetched.name}</span>
-              <span className='usernameSpan'>@{this.props.userFetched.username}</span>
-              <div className='biopicDiv'>{this.props.userFetched.bio}</div>
-              {this.props.currentUser._id === this.props._id
-                ? <div className='modifyButton'>
-                  <Button onClick={this.displayModifyProfileForm}
-                    bgColor='#E2E4E6'
-                    hoverBgColor='#d6d6d6'
-                    color='black'
-                    fontSize='12px'
-                    bold
-                    block
-                    shadow><Icon name='pencil' fontSize='10px' style={{marginRight: '5px'}}/>Edit
-                  </Button>
-                </div>
-                : null}
-            </div>
-            : <div className='editProfilePart'>
-              {this.renderUserAvatar(this.props.userFetched)}
-              {this.renderModifyProfileForm()}
-            </div>
-          }
-          <div className='tabSection'>
-            <Tabs selected={0}>
-              <TabPanel label='Profile'>
-                {this.renderProfileTab()}
-              </TabPanel>
-              <TabPanel label='Boards'>
-                {this.renderBoardsTab()}
-              </TabPanel>
-            </Tabs>
+    return (
+      <div className='host'>
+        {!this.state.displayModifyProfileForm
+          ? <div className='profileInfos'>
+            {this.renderUserAvatar(this.props.userFetched)}
+            <span className='nameSpan'>{this.props.userFetched.name}</span>
+            <span className='usernameSpan'>@{this.props.userFetched.username}</span>
+            <div className='biopicDiv'>{this.props.userFetched.bio}</div>
+            {this.props.currentUser._id === this.props._id
+              ? <div className='modifyButton'>
+                <Button onClick={this.displayModifyProfileForm}
+                  bgColor='#E2E4E6'
+                  hoverBgColor='#d6d6d6'
+                  color='black'
+                  fontSize='12px'
+                  bold
+                  block
+                  shadow><Icon name='pencil' fontSize='10px' style={{marginRight: '5px'}}/>Edit
+                </Button>
+              </div>
+              : null}
           </div>
-          <style jsx>
-            {styles}
-          </style>
+          : <div className='editProfilePart'>
+            {this.renderUserAvatar(this.props.userFetched)}
+            {this.renderModifyProfileForm()}
+          </div>
+        }
+        <div className='tabSection'>
+          <Tabs selected={0}>
+            <TabPanel label='Profile'>
+              {this.renderProfileTab()}
+            </TabPanel>
+            <TabPanel label='Boards'>
+              {this.renderBoardsTab()}
+            </TabPanel>
+          </Tabs>
         </div>
-      )
-    } else {
-      return (<LoadingPage />)
-    }
+        <style jsx>
+          {styles}
+        </style>
+      </div>
+    )
   }
 }
