@@ -21,7 +21,7 @@ export default class CardDetailsLabels extends React.Component {
   render () {
     return (
       <ul>
-        {this.props.cardLabels.map((label, index) => <li key={index}><Label isThumbnail={true} labelText={label['name']} backgroundColor={label['color']} /></li>)}
+        {this.props.cardLabels.map((label, index) => <li key={index}><Label isThumbnail={true} labelText={label['name'] ? label['name'].length > 6 ? label['name'].substring(0, 6) + '...' : label['name'] : ''} backgroundColor={label['color']} /></li>)}
         <style jsx>
           {`
       ul {

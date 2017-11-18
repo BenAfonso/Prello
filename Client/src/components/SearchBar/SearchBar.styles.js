@@ -8,7 +8,7 @@ export default `
 }
 
 input {
-  font-size: 20px;
+  font-size: 14px;
   color: #666;
   height: 30px;
   padding: 4px;

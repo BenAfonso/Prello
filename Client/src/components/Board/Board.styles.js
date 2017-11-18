@@ -14,14 +14,22 @@ export default `
     margin-left: 10px;
   }
 
+  .dashboard-button {
+    font-size: 12px;
+    text-decoration: underline;
+    margin-left: 30px;
+    cursor: pointer;
+    font-weight: 400;
+  }
+
   ul {
-    height: calc(100% - 22px);
     display: flex;
     flex-wrap: nowrap;
     align-items: flex-start;
     overflow-x: auto;
     padding-left: 10px;
     padding-right: 10px;
+    height: calc(100% - 50px);
   }
 
   ul li {

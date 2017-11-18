@@ -295,7 +295,6 @@ boardController.moveList = function (req) {
     let boardId = req.params.boardId
     let listId = req.params.listId
     let position = req.body.position
-    console.log(position)
     Board.findOne({ '_id': boardId }).exec(function (err, res) {
       if (err) {
         reject(err)
@@ -562,7 +561,6 @@ boardController.deleteBoard = (boardId) => {
       if (err) {
         reject(err)
       } else {
-        console.log(res)
         emit(boardId, 'BOARD_DELETED', res)
         resolve(res)
       }

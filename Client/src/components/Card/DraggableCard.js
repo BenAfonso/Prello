@@ -149,6 +149,7 @@ export default class DraggableCard extends React.Component {
       } else {
         return c
       }
+      return undefined
     })
     if (col[0] === undefined) {
       col = []
@@ -185,6 +186,7 @@ export default class DraggableCard extends React.Component {
           collaborators={col}
           responsible={resp}
           attachments={attachments}
+          labelsExpanded={this.props.currentBoard.labelsExpanded}
           labels={
             labels
               ? labels.map(l => l._id

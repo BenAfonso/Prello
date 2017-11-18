@@ -201,7 +201,7 @@ export default class Label extends React.Component {
                 <div>
                   <div>
                     <h3 style={{ color: 'black', marginLeft: '10%' }}>Label name</h3>
-                    <input style={{ width: '75%', height: '40px', marginLeft: '10%', marginTop: '5%', borderRadius: '3%', textAlign: 'center' }} type='text' autoFocus ref={(v) => { this.newlabelTitle = v } } placeholder='Labelo title'/>
+                    <input style={{ width: '75%', height: '40px', marginLeft: '10%', marginTop: '5%', borderRadius: '3%', textAlign: 'center' }} type='text' autoFocus ref={(v) => { this.newlabelTitle = v } } placeholder='Label title'/>
                   </div>
                   <div>
                     <h3 style={{ color: 'black', marginLeft: '10%' }}>Label color</h3>

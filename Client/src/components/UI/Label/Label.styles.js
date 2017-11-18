@@ -6,4 +6,8 @@ export default `
 .labelItem {
     display: flex
 }
+
+.label-text {
+  opacity: 0;
+}
 `
