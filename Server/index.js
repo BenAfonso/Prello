@@ -16,12 +16,11 @@ require('./components/oauth/routes')(app)
 if (process.env.NODE_ENV !== 'test') { // Not logging while testing
   app.use(logger('dev'))
 }
-
+app.use(bodyParser.json({limit: '5mb'}))
 app.get('/swagger.json', function (req, res) {
   res.setHeader('Content-Type', 'application/json')
   res.send(swaggerSpec)
 })
-app.use(bodyParser.json({limit: '5mb'}))
 
 app.all('/*', (req, res, next) => {
   // CORS headers

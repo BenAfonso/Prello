@@ -3,6 +3,8 @@ import {connect} from 'react-redux'
 import Button from '../../UI/Button/Button'
 import Icon from '../../UI/Icon/Icon'
 import { deleteBoard } from '../../../store/actions'
+import {Redirect} from 'react-router-dom'
+import { displayNotification } from '../../../services/Notification.service'
 
 @connect(store => {
   return {
@@ -15,6 +17,9 @@ import { deleteBoard } from '../../../store/actions'
 export default class SettingsMenu extends React.Component {
   constructor (props) {
     super(props)
+    this.state = {
+
+    }
     this.deleteBoard = this.deleteBoard.bind(this)
   }
 
@@ -24,10 +29,16 @@ export default class SettingsMenu extends React.Component {
   }
 
   deleteBoard () {
-    deleteBoard(this.props.board._id)
+    deleteBoard(this.props.board._id).then(() => {
+      this.setState({redirectTo: '/'})
+      displayNotification({type: 'success', title: 'Board deleted', content: `The board ${this.props.board.title} was successfully deleted`})
+    })
   }
 
   render () {
+    if (this.state.redirectTo) {
+      return (<Redirect to={this.state.redirectTo} />)
+    }
     return (
       <div className='host'>
         <div className='settingsmenu-buttons'>
