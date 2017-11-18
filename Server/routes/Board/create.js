@@ -1,5 +1,6 @@
 const Util = require('../../controllers/Util')
 const {requiresLogin} = require('../../config/middlewares/authorization')
+const listController = require('../../controllers/listController')
 
 module.exports = (router, controller) => {
   /**
@@ -47,7 +48,36 @@ module.exports = (router, controller) => {
       res.status(400).json(`Missing ${stringMessage}`)
       return
     }
-    controller
+    if (req.query.template === 'scrum') {
+      controller
+      .createBoard({...req.body, owner: req.user._id, collaborators: [req.user._id]})
+      .then(data => {
+        let boardId = data._id
+        listController.createScrumLists(boardId).then(data => {
+        }).catch(err => {
+          res.status(500).json(err)
+        })
+        res.status(201).json(data)
+      })
+      .catch(err => {
+        res.status(500).json(err)
+      })
+    } else if (req.query.template === 'kanban') {
+      controller
+      .createBoard({...req.body, owner: req.user._id, collaborators: [req.user._id]})
+      .then(data => {
+        let boardId = data._id
+        listController.createKanbanLists(boardId).then(data => {
+        }).catch(err => {
+          res.status(500).json(err)
+        })
+        res.status(201).json(data)
+      })
+      .catch(err => {
+        res.status(500).json(err)
+      })
+    } else {
+      controller
       .createBoard({...req.body, owner: req.user._id, collaborators: [req.user._id]})
       .then(data => {
         res.status(201).json(data)
@@ -55,5 +85,6 @@ module.exports = (router, controller) => {
       .catch(err => {
         res.status(500).json(err)
       })
+    }
   })
 }
