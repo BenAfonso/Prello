@@ -726,18 +726,20 @@ export function setFetchedUserBoards (id) {
   })
 }
 
-export function setFetchedUserHistory (id) {
+export function setFetchedUserHistory (id, limit = 5, skip) {
   return new Promise((resolve, reject) => {
-    fetchUserHistory(id).then(history => {
-      store.dispatch({
-        type: 'SET_FETCHED_USER_HISTORY',
-        payload: history
-      })
-    }).then(boards => {
-      resolve(boards)
+    fetchUserHistory(id, limit, skip).then(history => {
+      resolve(history)
     }).catch(err => {
       reject(err)
     })
+  })
+}
+
+export function setFetchedUserHistoryLocally (history) {
+  store.dispatch({
+    type: 'SET_FETCHED_USER_HISTORY',
+    payload: history
   })
 }
 

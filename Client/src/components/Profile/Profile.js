@@ -4,7 +4,7 @@ import Button from '../../components/UI/Button/Button'
 import Icon from '../../components/UI/Icon/Icon'
 import styles from './profile.style'
 import { updateProfile } from '../../services/User.services'
-import { updateProfileAction, updateProfilePageAction, setFetchedUser, setFetchedUserTeams, setFetchedUserBoards, setFetchedUserHistory } from '../../store/actions'
+import { updateProfileAction, updateProfilePageAction, setFetchedUser, setFetchedUserTeams, setFetchedUserBoards, setFetchedUserHistory, setFetchedUserHistoryLocally } from '../../store/actions'
 import { updateProfileLocalStorage } from '../../services/Authentication.services'
 import { displayNotification } from '../../services/Notification.service'
 import AvatarThumbnail from '../../components/UI/AvatarThumbnail/AvatarThumbnail'
@@ -16,6 +16,7 @@ import TeamListElement from '../../components/UI/TeamListElement/TeamListElement
 import ModificationListElement from '../../components/UI/ModificationListElement/ModificationListElement'
 import NewBoardForm from '../../components/CreateMenu/Forms/NewBoardForm/NewBoardForm'
 import NewTeamForm from '../../components/CreateMenu/Forms/NewTeamForm/NewTeamForm'
+import InfiniteScroll from 'react-infinite-scroller'
 
 @connect(store => {
   return {
@@ -31,7 +32,10 @@ export default class ProfilePage extends React.Component {
     this.state = {
       displayModifyProfileForm: false,
       avatarUrl: '',
-      displayNewPasswordForm: false
+      displayNewPasswordForm: false,
+      numberModifToSkip: 0,
+      isInfiniteLoading: false,
+      hasMoreItems: true
     }
 
     this.renderModifyProfileForm = this.renderModifyProfileForm.bind(this)
@@ -49,6 +53,7 @@ export default class ProfilePage extends React.Component {
     this.updatePassword = this.updatePassword.bind(this)
     this.currentUserIsInTeam = this.currentUserIsInTeam.bind(this)
     this.currentUserIsRelatedToBoard = this.currentUserIsRelatedToBoard.bind(this)
+    this.loadMoreModifs = this.loadMoreModifs.bind(this)
   }
 
   componentDidMount () {
@@ -64,7 +69,8 @@ export default class ProfilePage extends React.Component {
     }).catch(err => {
       console.error(err)
     })
-    setFetchedUserHistory(this.props._id).then(() => {
+    setFetchedUserHistory(this.props._id, 5, 0).then((history) => { // Take 20 modifs, skip 20
+      setFetchedUserHistoryLocally(history)
     }).catch(err => {
       console.error(err)
     })
@@ -146,6 +152,18 @@ export default class ProfilePage extends React.Component {
     let isCollaborator = board.collaborators.filter(collab => collab._id === this.props.currentUser._id)[0] !== undefined
     let isInTeam = board.teams.filter(team => (this.currentUserIsInTeam(team))).filter(result => result)[0] !== undefined
     return isOwner || isCollaborator || isInTeam
+  }
+
+  loadMoreModifs (page) {
+    setFetchedUserHistory(this.props._id, 5, page * 5).then(newInfos => {
+      if (newInfos.length > 0) {
+        let newHistory = this.props.userFetched.modifications
+        newHistory = newHistory.concat(newInfos)
+        setFetchedUserHistoryLocally(newHistory)
+      } else {
+        this.setState({ hasMoreItems: false })
+      }
+    })
   }
 
   renderModifyProfileForm () {
@@ -241,6 +259,15 @@ export default class ProfilePage extends React.Component {
   }
 
   renderProfileTab () {
+    let modificationsToRender = this.props.userFetched.modifications.map(modif => (
+      modif.board !== null && this.currentUserIsRelatedToBoard(modif.board)
+        ? <div className='modificationElement' key={modif._id}>
+          <ModificationListElement modification={modif}/>
+          <Link to={`/boards/${modif.board._id}`}><span className='modifBoardTitle' style={{color: 'white'}}>Board page</span></Link>
+          <hr className='separator'/>
+        </div>
+        : null
+    ))
     return (
       <div className='profileTab'>
         <div className='teamPart'>
@@ -286,17 +313,12 @@ export default class ProfilePage extends React.Component {
           </div>
           <hr className='titleAndContentSeparator'/>
           <div className='activityFeedList'>
-            <ul>
-              {this.props.userFetched.modifications.map(modif => (
-                modif.board !== null && this.currentUserIsRelatedToBoard(modif.board)
-                  ? <li key={modif._id} className='modificationElement'>
-                    <ModificationListElement modification={modif}/>
-                    <Link to={`/boards/${modif.board._id}`}><span className='modifBoardTitle'>Board page</span></Link>
-                    <hr className='separator'/>
-                  </li>
-                  : null
-              ))}
-            </ul>
+            <InfiniteScroll
+              pageStart={0}
+              hasMore={this.state.hasMoreItems}
+              loadMore={this.loadMoreModifs}>
+              {modificationsToRender}
+            </InfiniteScroll>
           </div>
         </div>
         <style jsx>

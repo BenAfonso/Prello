@@ -144,7 +144,7 @@ module.exports = (router, userController) => {
   })
 
   router.get('/users/:userId/history', [requiresLogin], (req, res) => {
-    modificationController.findUserHistory(req.params.userId).then(history => {
+    modificationController.findUserHistory(req.params.userId, parseInt(req.query.limit), parseInt(req.query.skip)).then(history => {
       return res.status(200).send(history)
     }).catch(err => {
       return res.status(400).send(err)

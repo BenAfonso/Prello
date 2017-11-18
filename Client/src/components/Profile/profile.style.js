@@ -38,6 +38,13 @@ export default `
     font-size: 120%;
     font-weight: bold;
 }
+.activityFeedList {
+    width: 75%;
+    min-width: 300px;
+    height: 300px;
+    overflow-y: auto;
+    margin: auto;
+}
 .input,
 .textarea {
     margin-left: 3%;
@@ -208,5 +215,12 @@ modifBoardTitle:hover {
 }
 .modifBoardTitle {
     margin-bottom: 5px;
+}
+.moreOrLessButtons {
+    margin-top: 20px;
+    margin-left: 40px;
+}
+.plusButton {
+    margin-right: 10px;
 }
 `

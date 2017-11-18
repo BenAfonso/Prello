@@ -8205,6 +8205,12 @@ react-icons@^2.2.5:
   dependencies:
     react-icon-base "2.0.7"
 
+react-infinite-scroller@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-infinite-scroller/-/react-infinite-scroller-1.1.1.tgz#957ac692fdb90e02ca265c6b597d1b5c6c9ce42a"
+  dependencies:
+    prop-types "^15.5.8"
+
 react-inspector@^2.1.6:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/react-inspector/-/react-inspector-2.2.0.tgz#2aa0778c3512063f598d7a89a28a5d5c7733cad7"
