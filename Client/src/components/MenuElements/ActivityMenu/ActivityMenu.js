@@ -44,19 +44,6 @@ export default class ActivityMenu extends React.Component {
     })
   }
 
-  handleInfiniteLoad () {
-    this.setState({isLoading: true})
-    setTimeout(() => {
-      const elemLength = this.props.board.modifications.length
-      this.buildElements(20, elemLength)
-    }
-      , 2000)
-  }
-
-  elementInfiniteLoad () {
-    return (<div className='infinite-list-item'>Loading...</div>)
-  }
-
   handleHover () {
     this.setState({isLoading: true})
     setTimeout(() => {
@@ -170,7 +157,7 @@ export default class ActivityMenu extends React.Component {
             background-color: #ff006a; 
           }
   
-          ul li:last-child .line {
+          li:last-child .line {
             display: none;
           }
           `}</style>
@@ -215,7 +202,7 @@ export default class ActivityMenu extends React.Component {
         .loader-animation {
           padding-top: 10px;          
           display: inline-block;
-          border: 8px solid #f3f3f3;
+          border: 8px solid white;
           border-radius: 50%;
           width: 45px;
           height: 45px;
@@ -226,11 +213,6 @@ export default class ActivityMenu extends React.Component {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
-
-        ul li:last-child .line {
-          display: none;
-        }
-        
         `}</style>
       </div>
     )
