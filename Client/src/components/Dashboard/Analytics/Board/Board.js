@@ -119,7 +119,7 @@ export default class BoardAnalytics extends React.Component {
             { data.length > 0
               ? <div className='bigNumbers'>
                 <div className='number'><NumberHighlight title='Number of cards' value={data[data.length - 1].nbCards} /></div>
-                <div className='number'><NumberHighlight title='Number of cards' value={data[data.length - 1].nbCards} /></div>
+                <div className='number'><NumberHighlight title='Number of lists' value={data[data.length - 1].nbLists} /></div>
                 <div className='number'><UserHighlight title='Most active user' user={mostActiveUser} /></div>
                 <div className='number'><UserHighlight title='Less active user' user={minActiveUser} /></div>
               </div>

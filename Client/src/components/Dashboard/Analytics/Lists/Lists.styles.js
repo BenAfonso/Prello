@@ -49,6 +49,7 @@ export default `
   position: relative;
   font-weight: bold;
   font-size: 30px;
+  margin-bottom: 20px;
   color: white;
 }
 

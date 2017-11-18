@@ -18,6 +18,24 @@ export default `
   border: 3px solid rgba(0,0,0,0.5);
 }
 
+.bigNumbers {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 20px;
+  justify-content: center;
+  padding-right: 20px;
+  margin-bottom: 20px;
+  margin-top: 28px;
+}
+
+.number {
+  font-size: 60px;
+  font-weight: bold;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+
 .chart {
   width: 45%;
   min-width: 580px;

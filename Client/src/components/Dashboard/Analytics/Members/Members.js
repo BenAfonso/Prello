@@ -3,13 +3,14 @@ import styles from './Members.styles'
 import { connect } from 'react-redux'
 import DashboardNav from '../Nav/Nav'
 import { setUsersAnalytics } from '../../../../store/actions'
-import {shuffle} from 'underscore'
+import {shuffle, max, min} from 'underscore'
 import CardProportion from './Charts/CardProportion'
 import ActivityProportion from './Charts/ActivityProportion'
 import DailyActivityPerUser from './Charts/DailyActivityPerUser'
 import DateFilter from '../../DateFilter/DateFilter'
 import LoadingPage from '../../../../pages/LoadingPage/loading.page'
 import {displayNotification} from '../../../../services/Notification.service'
+import UserHighlight from '../../Charts/UserHighlight'
 
 @connect(store => {
   return {
@@ -104,6 +105,11 @@ export default class MembersAnalytics extends React.Component {
   }
 
   render () {
+    let mostActiveUserToday = max(this.props.users, (entry) => { return entry.numbers[entry.numbers.length - 1].numberOfModifications }).user
+    let doesEverything = max(this.props.users, (entry) => { return entry.numberOfCardsDone + entry.numberOfCardsDone }).user
+    let mostAccurate = min(this.props.users, (entry) => { return entry.numberOfCardsDoneLate / (entry.numberOfCardsDone + entry.numberOfCardsToDo) }).user
+    let alwaysLate = max(this.props.users, (entry) => { return entry.numberOfCardsDoneLate / (entry.numberOfCardsDone + entry.numberOfCardsToDo) }).user
+
     if (this.state.fetched) {
       return (
         <div className='host'>
@@ -119,6 +125,12 @@ export default class MembersAnalytics extends React.Component {
           </div>
           { this.state.fetched
             ? <div className='charts'>
+              <div className='bigNumbers'>
+                <div className='number'><UserHighlight title='Most active today' user={mostActiveUserToday} /></div>
+                <div className='number'><UserHighlight title='Does everything' user={doesEverything} /></div>
+                <div className='number'><UserHighlight title='On-time' user={mostAccurate} /></div>
+                <div className='number'><UserHighlight title='Always late' user={alwaysLate} /></div>
+              </div>
               { this.state.userFocused < 0 ? <div className='chart block'>
                 <DailyActivityPerUser
                   data={this.props.users}

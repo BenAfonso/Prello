@@ -5,8 +5,18 @@ export default (props) => (
     <div className='title'>{props.title}</div>
     <div className='content'>
       <div className='user-image' style={{
-        backgroundImage: `url(${props.user.picture})`
-      }} />
+        backgroundImage: `url(${
+          props.user ? props.user.picture : ''
+        })`
+      }}>{
+          props.user
+            ? props.user.picture
+              ? ''
+              : props.user.name.split(' ').length > 1
+                ? `${props.user.name.split(' ')[0].charAt(0)}${props.user.name.split(' ')[0].charAt(0)}`
+                : `${props.user.name.split('')[0]}`
+            : ''
+        }</div>
       <div className='user-name'>{props.user.name}</div>
     </div>
     <style jsx>{`
@@ -41,6 +51,11 @@ export default (props) => (
       margin-top: 27px;
       margin-left: calc(50% - 40px);
       border-radius: 50%;
+      background-color: #444;
+      color: white;
+      text-align: center;
+      font-size: 40px;
+      line-height: 80px;
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
