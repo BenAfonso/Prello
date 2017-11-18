@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const Modification = mongoose.model('Modification')
-
 const modificationController = {}
 
 modificationController.MOVED_CARD = (boardId, userId, cardId, fromListId, toListId) => {

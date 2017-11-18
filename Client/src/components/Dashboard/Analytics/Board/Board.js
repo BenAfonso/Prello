@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './Board.styles'
 import { connect } from 'react-redux'
-import { setBoardAnalytics } from '../../../../store/actions'
+import { setBoardAnalytics, setUsersAnalytics } from '../../../../store/actions'
 import DateFilter from '../../DateFilter/DateFilter'
 import { fetchBoardAnalytics } from '../../../../services/Analytics.services'
 import NumbersOverTime from './Charts/NumbersOverTime'
@@ -9,6 +9,9 @@ import NumbersCreationOverTime from './Charts/NumbersCreationOverTime'
 import DashboardNav from '../Nav/Nav'
 import LoadingPage from '../../../../pages/LoadingPage/loading.page'
 import {displayNotification} from '../../../../services/Notification.service'
+import NumberHighlight from '../../Charts/NumberHighlight'
+import UserHighlight from '../../Charts/UserHighlight'
+import { max, min } from 'underscore'
 
 @connect(store => {
   return {
@@ -37,6 +40,7 @@ export default class BoardAnalytics extends React.Component {
         firstDate: date1,
         secondDate: date2
       })
+      setUsersAnalytics(this.props.provider || 'TheMightyPrello', this.props._id, 'day', date1, date2)
       fetchBoardAnalytics(props.provier || 'TheMightyPrello', props._id, 'day', date1, date2).then(analytics => {
         setBoardAnalytics(analytics)
         this.numbers = analytics
@@ -91,6 +95,8 @@ export default class BoardAnalytics extends React.Component {
   }
 
   render () {
+    let mostActiveUser = max(this.props.analytics.users, (entry) => { return entry.numbers[entry.numbers.length - 1].cumulateNumberOfModifications }).user
+    let minActiveUser = min(this.props.analytics.users, (entry) => { return entry.numbers[entry.numbers.length - 1].cumulateNumberOfModifications }).user
     let data = this.props.analytics.board.numbers.map(a => (
       {
         name: this.renderDate(a.date),
@@ -112,8 +118,10 @@ export default class BoardAnalytics extends React.Component {
             <DashboardNav boardId={this.props._id} currentPage='board' />
             { data.length > 0
               ? <div className='bigNumbers'>
-                <span className='number'>{data[data.length - 1].nbCards}<span>Cards</span></span>
-                <span className='number'>{data[data.length - 1].nbLists}<span>Lists</span></span>
+                <div className='number'><NumberHighlight title='Number of cards' value={data[data.length - 1].nbCards} /></div>
+                <div className='number'><NumberHighlight title='Number of cards' value={data[data.length - 1].nbCards} /></div>
+                <div className='number'><UserHighlight title='Most active user' user={mostActiveUser} /></div>
+                <div className='number'><UserHighlight title='Less active user' user={minActiveUser} /></div>
               </div>
               : null
             }

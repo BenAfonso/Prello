@@ -64,5 +64,5 @@ socket.on('LABEL_UPDATED', (labels) => {
 })
 
 socket.on('NEW_MODIFICATION', (modification) => {
-  addModifications([modification])
+  addModifications([modification], false)
 })
