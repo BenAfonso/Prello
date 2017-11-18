@@ -276,7 +276,7 @@ export default class ProfilePage extends React.Component {
 
   renderProfileTab () {
     const { modifications } = this.state
-    let modificationsToRender = modifications.filter(modif => modif.board !== null).map(modif => (
+    let modificationsToRender = modifications.filter(modif => modif.board !== null).filter(modif => this.currentUserIsRelatedToBoard(modif.board)).map(modif => (
       <div className='modificationElement' key={modif._id}>
         <ModificationListElement modification={modif}/>
         <Link to={`/boards/${modif.board._id}`}><span className='modifBoardTitle'
