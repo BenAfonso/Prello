@@ -280,7 +280,7 @@ export default class ProfilePage extends React.Component {
       modif.board !== null && this.currentUserIsRelatedToBoard(modif.board)
         ? <div className='modificationElement' key={modif._id}>
           <ModificationListElement modification={modif}/>
-          <Link to={`/boards/${modif.board._id}`}><span className='modifBoardTitle' style={{color: 'white'}}>Board page</span></Link>
+          <Link to={`/boards/${modif.board._id}`}><span className='modifBoardTitle' style={{color: 'white', textDecoration: 'underline'}}>Board page</span></Link>
           <hr className='separator'/>
         </div>
         : null
