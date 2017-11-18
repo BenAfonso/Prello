@@ -149,6 +149,7 @@ export default class DraggableCard extends React.Component {
       } else {
         return c
       }
+      return undefined
     })
     if (col[0] === undefined) {
       col = []
