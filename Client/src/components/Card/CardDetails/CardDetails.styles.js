@@ -5,7 +5,7 @@ export default `
   display: flex;
   width: 100%;
   background-color: white;
-  borderradius: 8px;
+  border-radius: 8px;
   padding: 20px;
   border-radius: 8px;
   overflow-y: auto;

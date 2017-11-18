@@ -6,11 +6,13 @@ import { addList, setBoard, updateLists, removeList, resetBoard, updateBoardName
 import { DragDropContext } from 'react-dnd'
 import HTML5toTouch from 'react-dnd-multi-backend/lib/HTML5toTouch'
 import Button from '../UI/Button/Button'
+import CardDetails from '../Card/CardDetails/CardDetails'
 import { subscribeToBoard } from '../../services/api'
 import CustomDragLayer from '../CustomDragLayer'
 import PropTypes from 'prop-types'
 import MultiBackend from 'react-dnd-multi-backend'
 import {Redirect} from 'react-router-dom'
+import history from '../../history'
 
 @connect(store => {
   return {
@@ -58,9 +60,38 @@ export default class Board extends React.Component {
     })
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (this.props._id !== nextProps._id) {
+      setBoard(this.props.dispatch, nextProps._id).then(board => {
+        subscribeToBoard(board)
+      }).catch(err => {
+        this.setState({ redirectTo: '/boards' })
+        console.error(err)
+      })
+    }
+    if (history.location.pathname.split('/').indexOf('cards') !== -1) {
+      if (this.props.board !== nextProps.board && nextProps.board.lists.length > 0) {
+        this.displayCardDetails(this.props.cardId, nextProps.board)
+      }
+    }
+  }
+
   componentWillUnmount () {
     document.removeEventListener('mousedown', this.handleClickOutside)
     resetBoard()
+  }
+
+  displayCardDetails (cardId, board) {
+    const lists = board.lists
+    const listIndex = lists.indexOf(lists.filter(l => l.cards.filter(c => c._id === cardId))[0])
+    const list = lists[listIndex]
+    const cards = list.cards
+    const card = cards.filter(card => card._id === cardId)[0]
+    const index = cards.indexOf(card)
+    this.props.popoverManager.setRenderedComponent(
+      <CardDetails id={cardId} index={index} listIndex={listIndex} board={board} cards={cards} dismissPopover={this.props.popoverManager.dismissPopover} />
+    )
+    this.props.popoverManager.displayPopover()
   }
 
   handleClickOutside (event) {
@@ -199,6 +230,10 @@ export default class Board extends React.Component {
     this.title = ''
   }
 
+  goToDashboard () {
+    this.setState({ redirectTo: `/boards/${this.props.board._id}/dashboard/board` })
+  }
+
   render () {
     if (this.state.redirectTo) {
       return (<Redirect to={this.state.redirectTo} />)
@@ -212,7 +247,10 @@ export default class Board extends React.Component {
       {
         this.state.renameBoardDisplayed
           ? this.renderRenameBoard()
-          : <div className='boardTitle' onClick={this.isCurrentUserOwner() ? this.displayRenameBoard : null}>{this.props.board.title}</div>
+          : <div className='boardTitle' onClick={this.isCurrentUserOwner() ? this.displayRenameBoard : null}>
+            {this.props.board.title}
+            <span className='dashboard-button' onClick={this.goToDashboard.bind(this)}>Dashboard</span>
+          </div>
       }
       <CustomDragLayer snapToGrid={false} />
       <ul>

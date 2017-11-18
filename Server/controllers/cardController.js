@@ -24,6 +24,7 @@ cardController.createCard = (req) => {
                 card: item,
                 listId: req.params.listId
               }
+              modificationController.CREATED_CARD(req.params.boardId, req.user._id, item._id, req.params.listId)
               emit(req.params.boardId, 'NEW_CARD', cardToEmit)
               resolve(item)
             })
@@ -75,6 +76,11 @@ cardController.updateCard = (req) => {
           }
           if (req.body.isArchived && (!item.isArchived || item.isArchived === undefined)) {
             modificationController.ARCHIVED_CARD(req.params.boardId, req.user._id, req.params.cardId).catch((err) => {
+              reject(err)
+            })
+          }
+          if (!req.body.isArchived && item.isArchived) {
+            modificationController.UNARCHIVED_CARD(req.params.boardId, req.user._id, req.params.cardId).catch((err) => {
               reject(err)
             })
           }

@@ -3,6 +3,7 @@ import { fetchBoards, fetchBoard, addBoardDistant, addTeamBoardDistant, deleteBo
 import { addListDistant, postCard, deleteList, moveListDistant, updateList } from '../services/List.services'
 import { moveCard, addMemberDistant, removeMemberDistant, updateCard, updateResponsibleDistant, removeResponsibleDistant } from '../services/Card.services'
 import { fetchMatchingUsersEmail, fetchUser, fetchUserTeams, fetchUserBoards } from '../services/User.services'
+import { fetchBoards as fetchAnalyticsBoards, fetchListsAnalytics, fetchUsersAnalytics } from '../services/Analytics.services'
 
 import store from '../store/store'
 
@@ -112,6 +113,12 @@ export function resetBoard (dispatch) {
   })
 }
 
+export function toggleLabelsExpanded (dispatch) {
+  store.dispatch({
+    type: 'TOGGLE_LABELS_EXPANDED'
+  })
+}
+
 export function updateLists (dispatch, lists) {
   dispatch({
     type: 'UPDATE_LISTS',
@@ -151,6 +158,16 @@ export function removeListLocal (list) {
   store.dispatch({
     type: 'REMOVE_LIST',
     payload: list
+  })
+}
+
+export function addModifications (modifications, atBottom = true) {
+  store.dispatch({
+    type: 'ADD_BOARD_MODIFICATIONS',
+    payload: {
+      modifications: modifications,
+      atBottom: atBottom
+    }
   })
 }
 
@@ -236,10 +253,13 @@ export function addTeamBoardLocal (teamId, board) {
 }
 
 export function deleteBoard (boardId) {
-  deleteBoardDistant(boardId).then((board) => {
-    // <= HANDLED FROM SOCKETS
-  }).catch(err => {
-    return err
+  return new Promise((resolve, reject) => {
+    deleteBoardDistant(boardId).then((board) => {
+      // <= HANDLED FROM SOCKETS
+      resolve()
+    }).catch(err => {
+      return err
+    })
   })
 }
 
@@ -336,10 +356,13 @@ export function addTeamMember (teamId, email) {
 }
 
 export function removeTeamMember (teamId, userId) {
-  removeTeamMemberDistant(teamId, userId).then((res) => {
-    removeTeamMemberLocal(userId)
-  }).catch(err => {
-    return err
+  return new Promise((resolve, reject) => {
+    removeTeamMemberDistant(teamId, userId).then((res) => {
+      removeTeamMemberLocal(userId)
+      resolve()
+    }).catch(err => {
+      return err
+    })
   })
 }
 
@@ -353,10 +376,13 @@ export function removeTeamMemberLocal (userId) {
 }
 
 export function removeTeamAdmin (teamId, userId) {
-  removeTeamAdminDistant(teamId, userId).then((res) => {
-    removeTeamAdminLocal(userId)
-  }).catch(err => {
-    return err
+  return new Promise((resolve, reject) => {
+    removeTeamAdminDistant(teamId, userId).then((res) => {
+      removeTeamAdminLocal(userId)
+      resolve()
+    }).catch(err => {
+      return err
+    })
   })
 }
 
@@ -443,7 +469,7 @@ export function setBoardHistory (history) {
 
 export function addBoardHistory (history) {
   store.dispatch({
-    type: 'ADD_BOARD_HISTORY',
+    type: 'ADD_BOARD_MODIFICATIONS',
     payload: history
   })
 }
@@ -773,5 +799,74 @@ export function updateProfilePageAction (datas) {
   store.dispatch({
     type: 'UPDATE_USER_PROFILE_PAGE',
     payload: datas
+  })
+}
+
+/**
+ *
+ * ANALYTICS
+ *
+ */
+
+export function setAnalyticsBoards (provider) {
+  return new Promise((resolve, reject) => {
+    fetchAnalyticsBoards(provider).then((data) => {
+      store.dispatch({
+        type: 'SET_ANALYTICS_BOARDS',
+        payload: data
+      })
+      resolve(data)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export function setAnalyticsBoard (provider, id) {
+  return new Promise((resolve, reject) => {
+    fetchAnalyticsBoards(provider).then((data) => {
+      store.dispatch({
+        type: 'SET_ANALYTICS_BOARD',
+        payload: data.filter(x => x._id === id)[0]
+      })
+      resolve(data.filter(x => x._id === id)[0])
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export function setListsAnalytics (provider, boardId, per, dateFrom, dateTo) {
+  return new Promise((resolve, reject) => {
+    fetchListsAnalytics(provider, boardId, per, dateFrom, dateTo).then((data) => {
+      store.dispatch({
+        type: 'SET_LISTS_ANALYTICS',
+        payload: data
+      })
+      resolve(data)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export function setUsersAnalytics (provider, boardId, per, dateFrom, dateTo) {
+  return new Promise((resolve, reject) => {
+    fetchUsersAnalytics(provider, boardId, per, dateFrom, dateTo).then((data) => {
+      store.dispatch({
+        type: 'SET_USERS_ANALYTICS',
+        payload: data
+      })
+      resolve(data)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export function setBoardAnalytics (analytics) {
+  store.dispatch({
+    type: 'SET_BOARD_ANALYTICS',
+    payload: analytics
   })
 }

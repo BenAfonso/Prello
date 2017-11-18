@@ -9,6 +9,12 @@ export default `
   box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
 }
 
+.searchBar {
+  position: absolute;
+  display: inline-block;
+  left: 50px;
+}
+
 .brand {
   position: absolute;
   top: 20%;

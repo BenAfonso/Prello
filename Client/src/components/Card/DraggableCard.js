@@ -75,7 +75,7 @@ const cardTarget = {
   connectDragPreview: connect.dragPreview(),
   isDragging: monitor.isDragging()
 }))
-export default class CardComponent extends React.Component {
+export default class DraggableCard extends React.Component {
   static propTypes = {
     id: PropTypes.any,
     listId: PropTypes.any,
@@ -149,6 +149,7 @@ export default class CardComponent extends React.Component {
       } else {
         return c
       }
+      return undefined
     })
     if (col[0] === undefined) {
       col = []
@@ -185,6 +186,7 @@ export default class CardComponent extends React.Component {
           collaborators={col}
           responsible={resp}
           attachments={attachments}
+          labelsExpanded={this.props.currentBoard.labelsExpanded}
           labels={
             labels
               ? labels.map(l => l._id

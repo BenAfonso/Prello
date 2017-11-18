@@ -17,7 +17,6 @@ const enhancer = composeEnhancers(
 )
 
 export const defaultCurrentUserState = {
-  _id: '',
   username: '',
   name: '',
   picture: '',
@@ -53,6 +52,7 @@ export const defaultBoardState = {
   fetching: false,
   fetched: false,
   error: null,
+  labelsExpanded: false,
   board: {
     _id: '',
     title: '',
@@ -65,6 +65,22 @@ export const defaultBoardState = {
     labels: [],
     modifications: []
   }
+}
+
+export const defaultDashboardState = {
+  fetching: false,
+  fetched: false,
+  error: null,
+  boards: [],
+  board: {
+    _id: '',
+    title: '',
+    background: '#fff',
+    provider: '',
+    numbers: []
+  },
+  lists: [],
+  users: []
 }
 
 export const defaultBoardslistState = {
