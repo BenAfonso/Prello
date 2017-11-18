@@ -50,12 +50,10 @@ export default class LabelThumbnail extends React.Component {
   }
 
   animateExpand ({ target }) {
-    console.log('Expand anim')
     return new TimelineMax().to(this.label, 0.25, { width: '60px' }).to(this.label, 0.25, { height: '15px' }).to(this.labelText, 0, { opacity: 1 })
   }
 
   animateCollapse ({ target }) {
-    console.log('Collapse anim')
     return new TimelineMax().to(this.label, 0.25, { height: '8px' }).to(this.label, 0.25, { width: '40px' })
   }
 

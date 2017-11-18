@@ -10,7 +10,6 @@ import {logout} from '../services/Authentication.services'
 export default class BoardDasboardPage extends React.Component {
   componentDidMount () {
     setAnalyticsBoard(this.props.provider || 'TheMightyPrello', this.props.match.params.id).then(res => {
-      console.log(res)
     }).catch(err => {
       logout()
       console.error(err)

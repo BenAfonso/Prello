@@ -69,7 +69,6 @@ export default class Import extends React.Component {
     delete board['members']
     delete board['memberships']
     delete board['pluginData']
-    console.log(board)
     return board
   }
 
