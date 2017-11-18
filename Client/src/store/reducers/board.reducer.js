@@ -5,6 +5,7 @@ export default (state = defaultBoardState, action) => {
     case 'RESET_BOARD': {
       return {
         ...state.currentBoard,
+        labelsExpanded: false,
         board: {
           _id: '',
           title: '',
@@ -126,6 +127,12 @@ export default (state = defaultBoardState, action) => {
         }
       }
     }
+    case 'TOGGLE_LABELS_EXPANDED': {
+      return {
+        ...state,
+        labelsExpanded: !state.labelsExpanded
+      }
+    }
     case 'ADD_CARD': {
       if (action.payload.card.text.length > 0) {
         let newLists = state.board.lists.map((l) => {
@@ -238,6 +245,21 @@ export default (state = defaultBoardState, action) => {
         board: {
           ...state.board,
           modifications: action.payload
+        }
+      }
+    }
+    case 'ADD_BOARD_MODIFICATIONS': {
+      let modifications = state.board.modifications.slice()
+      if (action.payload.atBottom) {
+        modifications = modifications.concat(action.payload.modifications)
+      } else {
+        modifications = action.payload.modifications.concat(modifications)
+      }
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          modifications: modifications
         }
       }
     }

@@ -81,7 +81,6 @@ input {
   border-radius: 3px;
   font-size: 12px;
   align-items: center;
-  margin-top: 5px;
 }
 
 .dueDate-icon {

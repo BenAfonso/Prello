@@ -35,7 +35,6 @@ export default class Input extends React.Component {
       ...props
     } = this.props
 
-    console.log(value)
     props.style = {
       width,
       height,

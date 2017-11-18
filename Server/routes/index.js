@@ -12,14 +12,6 @@ router.all('/me/*', [requiresLogin], (req, res, next) => {
   next()
 })
 
-router.put('/me/*', [requiresLogin], (req, res, next) => {
-  let request = req.originalUrl.split('/').filter(e => e !== '')
-  request[0] = `/users/${req.user._id}`
-  request = request.join('/')
-  req.url = request
-  next()
-})
-
 router.post('/boards/*', [authenticate({scope: 'boards:write'})], (req, res, next) => {
   next()
 })
@@ -73,6 +65,7 @@ require('./Attachment')(router, controllers.attachmentController)
 require('./Checklist')(router, controllers.checklistController)
 require('./Team')(router, controllers.teamController)
 require('./Label')(router, controllers)
+require('./Analytics')(router, controllers.analyticsController)
 
 router.get('/', (req, res) => {
   res.redirect('/api-docs')

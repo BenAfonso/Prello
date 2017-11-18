@@ -138,6 +138,11 @@ listController.updateList = (req) => {
             reject(err)
           })
         }
+        if (!req.body.isArchived && item.isArchived) {
+          modificationController.UNARCHIVED_LIST(req.params.boardId, req.user._id, req.params.listId).catch((err) => {
+            reject(err)
+          })
+        }
         boardController.refreshOneboard('LIST_UPDATED', req.params.boardId)
         // TODO: Log update to history
         return resolve(item)

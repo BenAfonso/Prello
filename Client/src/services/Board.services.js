@@ -136,9 +136,11 @@ export function fetchBoard (boardId) {
   })
 }
 
-export function getBoardHistory (boardId) {
+export function getBoardHistory (boardId, limit, skip) {
+  if (skip === undefined) skip = 0
+  if (limit === undefined) limit = 20
   return new Promise((resolve, reject) => {
-    axios.get(`${Config.API_URL}/boards/${boardId}/history?limit=20&skip=0`).then(res => {
+    axios.get(`${Config.API_URL}/boards/${boardId}/history?limit=${limit}&skip=${skip}`).then(res => {
       resolve(res.data)
     }).catch(err => {
       reject(err)
