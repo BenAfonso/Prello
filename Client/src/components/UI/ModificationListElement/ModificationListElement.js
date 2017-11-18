@@ -41,9 +41,7 @@ export default class ModificationListElement extends React.Component {
 
   renderCard (card) {
     if (!card) { return <span>[ ? ]</span> }
-    const style = { textDecoration: 'underline', cursor: 'pointer' }
-    if (!card) { return <span>[?]</span> }
-    return <span style={style}>card.text</span>
+    return <span>card.text</span>
   }
 
   renderList (list) {
