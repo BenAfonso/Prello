@@ -2,6 +2,7 @@ export default `
 .host {
   width: 80%;
   margin-bottom: 5px;
+  margin-left: 20px;
 }
 .avatar {
   display: inline-block;
@@ -16,11 +17,11 @@ export default `
 }
 
 .textContent {
-  color: white;
+  color: black;
 }
 
 .dateContent {
-  color: white;
+  color: black;
 }
 .separator {
   color: white;

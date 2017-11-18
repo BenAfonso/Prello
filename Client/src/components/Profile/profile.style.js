@@ -42,6 +42,8 @@ export default `
     width: 75%;
     min-width: 300px;
     height: 300px;
+    background-color: white;
+    border-radius: 15px;
     overflow-y: auto;
     margin: auto;
 }
