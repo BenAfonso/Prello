@@ -460,9 +460,6 @@ export default class ProfilePage extends React.Component {
               <TabPanel label='Boards'>
                 {this.renderBoardsTab()}
               </TabPanel>
-              <TabPanel label='Options'>
-                {this.renderOptionsTab()}
-              </TabPanel>
             </Tabs>
           </div>
           <style jsx>

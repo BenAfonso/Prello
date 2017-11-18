@@ -143,7 +143,7 @@ export default class ModificationListElement extends React.Component {
       case 'ADDED_USER_CARD':
         return this.renderAddedUserCard(this.props.modification.user, this.props.modification.targetUser, this.props.modification.card, this.props.modification.timestamp)
       case 'REMOVED_USER_CARD':
-        return this.renderRemovedUserCard(this.modification.props.user, this.props.modification.targetUser, this.props.modification.card, this.props.modification.timestamp)
+        return this.renderRemovedUserCard(this.props.modification.user, this.props.modification.targetUser, this.props.modification.card, this.props.modification.timestamp)
       case 'CREATED_CARD':
         return this.renderCreatedCard(this.props.modification.user, this.props.modification.card, this.props.modification.list, this.props.modification.timestamp)
       case 'MOVED_CARD':
@@ -165,7 +165,7 @@ export default class ModificationListElement extends React.Component {
       case 'MARKED_DUE_DATE_COMPLETE':
         return this.renderMarkedDueDateComplete(this.props.modification.user, this.props.modification.card, this.props.modification.timestamp)
       case 'MARKED_DUE_DATE_INCOMPLETE':
-        return this.renderMarkedDueDateIncomplete(this.props.modification.user, this.props.modification.card, this.modification.props.timestamp)
+        return this.renderMarkedDueDateIncomplete(this.props.modification.user, this.props.modification.card, this.props.modification.timestamp)
       default:
         return null
     }
