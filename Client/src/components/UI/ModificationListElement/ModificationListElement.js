@@ -41,7 +41,7 @@ export default class ModificationListElement extends React.Component {
 
   renderCard (card) {
     if (!card) { return <span>[ ? ]</span> }
-    return <span>card.text</span>
+    return <span>{card.text}</span>
   }
 
   renderList (list) {
