@@ -269,7 +269,7 @@ function validatePrelloCode (code, origin) {
   const authenticate = Buffer.from('2bdc68692f333d9d97a8:b40fb4c666ddb00b9949').toString('base64')
   const data = querystring.stringify({
     code: code,
-    redirect_uri: 'http://localhost:3000/dashboard',
+    redirect_uri: 'https://themightyprello.igpolytech.fr/dashboard',
     grant_type: 'authorization_code'
   })
   return new Promise((resolve, reject) => {

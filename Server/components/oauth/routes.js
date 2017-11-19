@@ -152,10 +152,8 @@ module.exports = function (app) {
   })
   app.post('/auth/prello/callback', [requiresLogin], (req, res, next) => {
     oauthModel.validatePrelloCode(req.body.code, req.headers.origin).then(result => {
-      console.log('hey')
       result = JSON.parse(result)
       let data = {theprello: {accessToken: result.accessToken, refreshToken: result.refreshToken}}
-      console.log(data)
       User.findOneAndUpdate({'_id': req.user._id}, data).then((result) => {
         res.status(200).send('Success to link your prello account')
       })
