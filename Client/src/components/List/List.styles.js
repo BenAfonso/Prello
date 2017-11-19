@@ -7,6 +7,10 @@ export default `
   position: relative;
 }
 
+.host.isDragging {
+  transform: rotate(4deg);
+}
+
 .overlay {
   position: absolute;
   z-index: 1;
@@ -29,6 +33,7 @@ export default `
 
 ul {
   overflow-y: auto;
+  min-height: 30px;
 }
 
 ul li {

@@ -44,7 +44,7 @@ module.exports = function (router, controller) {
             let boardsDist = JSON.parse(response.body)
             boardsDist.map(boardDist => {
               if (boardDist.createdAt === undefined) {
-                boardDist.createdAt = '11-01-2017'
+                boardDist.createdAt = new Date('11/01/2017')
               }
               data.push({provider: 'ThePrello', title: boardDist.name, _id: boardDist._id, createdAt: boardDist.createdAt})
             })

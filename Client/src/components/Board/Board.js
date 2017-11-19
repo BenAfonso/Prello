@@ -2,17 +2,15 @@ import React from 'react'
 import styles from './Board.styles'
 import List from '../List/List'
 import {connect} from 'react-redux'
-import { addList, setBoard, updateLists, removeList, resetBoard, updateBoardName } from '../../store/actions'
-import { DragDropContext } from 'react-dnd'
-import HTML5toTouch from 'react-dnd-multi-backend/lib/HTML5toTouch'
+import { addList, setBoard, updateLists, removeList, resetBoard, updateBoardName, moveCardDistant, moveList } from '../../store/actions'
 import Button from '../UI/Button/Button'
 import CardDetails from '../Card/CardDetails/CardDetails'
 import { subscribeToBoard } from '../../services/api'
-import CustomDragLayer from '../CustomDragLayer'
 import PropTypes from 'prop-types'
-import MultiBackend from 'react-dnd-multi-backend'
 import {Redirect} from 'react-router-dom'
 import history from '../../history'
+import {DragDropContext, Droppable} from 'react-beautiful-dnd'
+import {findWhere} from 'underscore'
 
 @connect(store => {
   return {
@@ -21,7 +19,6 @@ import history from '../../history'
     currentUser: store.currentUser
   }
 })
-@DragDropContext(MultiBackend(HTML5toTouch))
 export default class Board extends React.Component {
   static propTypes = {
     primaryColor: PropTypes.any,
@@ -234,6 +231,36 @@ export default class Board extends React.Component {
     this.setState({ redirectTo: `/boards/${this.props.board._id}/dashboard/board` })
   }
 
+  onDragStart = (initial) => {
+  }
+
+  onDragEnd = (result) => {
+    if (!result.destination) { return }
+    if (result.type === 'CARD') {
+      let originalList = findWhere(this.props.board.lists, {_id: result.source.droppableId})
+      let originalListIndex = this.props.board.lists.indexOf(originalList)
+      let newList = findWhere(this.props.board.lists, { _id: result.destination.droppableId })
+      let newListIndex = this.props.board.lists.indexOf(newList)
+      let newLists = this.props.board.lists.slice()
+      let card = this.props.board.lists[originalListIndex].cards[result.source.index]
+      newLists[originalListIndex].cards.splice(result.source.index, 1)
+      newLists[newListIndex].cards.splice(result.destination.index, 0, card)
+      updateLists(this.props.dispatch, newLists)
+
+      moveCardDistant(
+        this.props.board._id,
+        result.draggableId,
+        result.source.droppableId,
+        result.destination.droppableId,
+        result.destination.index
+      )
+    }
+    if (result.type === 'LIST') {
+      this.moveList(result.draggableId, result.destination.index)
+      moveList(this.props.dispatch, this.props.board._id, result.draggableId, result.destination.index)
+    }
+  }
+
   render () {
     if (this.state.redirectTo) {
       return (<Redirect to={this.state.redirectTo} />)
@@ -243,52 +270,63 @@ export default class Board extends React.Component {
       backgroundColor: this.props.primaryColor
     }
 
-    return <div className='host' style={boardStyle} >
-      {
-        this.state.renameBoardDisplayed
-          ? this.renderRenameBoard()
-          : <div className='boardTitle' onClick={this.isCurrentUserOwner() ? this.displayRenameBoard : null}>
-            {this.props.board.title}
-            <span className='dashboard-button' onClick={this.goToDashboard.bind(this)}>Dashboard</span>
-          </div>
-      }
-      <CustomDragLayer snapToGrid={false} />
-      <ul>
+    return <DragDropContext
+      onDragStart={this.onDragStart}
+      onDragEnd={this.onDragEnd}
+    >
+      <div className='host' style={boardStyle} >
         {
-          this.props.board.lists.map((list, i) => (
-            { ...list, index: i }
-          )).filter(l =>
-            !l.isArchived
-          ).map(list => (
-            <li key={list._id}>
-              <List
-                id={list._id}
-                key={list._id}
-                title={list.name}
-                index={list.index}
-                cards={list.cards}
-                shadowColor={this.props.secondaryColor}
-                moveList={this.moveList}
-                findList={this.findList}
-                removeAction={this.removeList}
-                popoverManager={this.props.popoverManager}
-              />
-            </li>
-          ))
+          this.state.renameBoardDisplayed
+            ? this.renderRenameBoard()
+            : <div className='boardTitle' onClick={this.isCurrentUserOwner() ? this.displayRenameBoard : null}>
+              {this.props.board.title}
+              <span className='dashboard-button' onClick={this.goToDashboard.bind(this)}>Dashboard</span>
+            </div>
         }
+        <Droppable
+          droppableId="board"
+          type="LIST"
+          direction="horizontal"
+        >
+          {(provided) => (
+            <ul>
+              {
+                this.props.board.lists.map((list, i) => (
+                  { ...list, index: i }
+                )).filter(l =>
+                  !l.isArchived
+                ).map(list => (
+                  <li key={list._id}>
+                    <List
+                      id={list._id}
+                      title={list.name}
+                      index={list.index}
+                      cards={list.cards}
+                      shadowColor={this.props.secondaryColor}
+                      moveList={this.moveList}
+                      findList={this.findList}
+                      removeAction={this.removeList}
+                      popoverManager={this.props.popoverManager}
+                    />
+                  </li>
+                ))
+              }
+              {provided.placeholder}
+              <li className='newList' style={{
+                backgroundColor: this.props.secondaryColor
+              }}>
+                {
+                  this.state.newListFormDisplayed
+                    ? this.renderNewListForm()
+                    : <div className='newListButton' onClick={this.displayNewListForm}>Add a list...</div>
+                }
+              </li>
 
-        <li className='newList' style={{
-          backgroundColor: this.props.secondaryColor
-        }}>
-          {
-            this.state.newListFormDisplayed
-              ? this.renderNewListForm()
-              : <div className='newListButton' onClick={this.displayNewListForm}>Add a list...</div>
-          }
-        </li>
-
-      </ul>
-      <style jsx>{styles}</style>
-    </div>
+            </ul>
+          )}
+        </Droppable>
+        <style jsx>{styles}</style>
+      </div>
+    </DragDropContext>
   }
 }
