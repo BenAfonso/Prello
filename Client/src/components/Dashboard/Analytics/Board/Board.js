@@ -99,7 +99,7 @@ export default class BoardAnalytics extends React.Component {
 
   render () {
     let mostActiveUser = max(this.props.analytics.users, (entry) => {
-      if (entry.numbers > 0) {
+      if (entry.numbers.length > 0) {
         return entry.numbers[entry.numbers.length - 1].cumulateNumberOfModifications
       } else {
         return 0
@@ -107,7 +107,7 @@ export default class BoardAnalytics extends React.Component {
     }).user
 
     let minActiveUser = min(this.props.analytics.users, (entry) => {
-      if (entry.numbers > 0) {
+      if (entry.numbers.length > 0) {
         return entry.numbers[entry.numbers.length - 1].cumulateNumberOfModifications
       } else {
         return 0
