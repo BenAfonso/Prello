@@ -2,6 +2,7 @@ const oauthServer = require('oauth2-server')
 const Request = oauthServer.Request
 const Response = oauthServer.Response
 const mongoose = require('mongoose')
+const User = mongoose.model('User')
 const OAuthClient = mongoose.model('OAuthClient')
 const OAuthAuthorizationCode = mongoose.model('OAuthAuthorizationCode')
 const crypto = require('crypto')
@@ -144,6 +145,19 @@ module.exports = function (app) {
             return res.status(200).send({ token: result.accessToken })
           })
         })
+      })
+    }).catch(err => {
+      return res.status(400).send(err) // Change code 400
+    })
+  })
+  app.post('/auth/prello/callback', [requiresLogin], (req, res, next) => {
+    oauthModel.validatePrelloCode(req.body.code, req.headers.origin).then(result => {
+      console.log('hey')
+      result = JSON.parse(result)
+      let data = {theprello: {accessToken: result.accessToken, refreshToken: result.refreshToken}}
+      console.log(data)
+      User.findOneAndUpdate({'_id': req.user._id}, data).then((result) => {
+        res.status(200).send('Success to link your prello account')
       })
     }).catch(err => {
       return res.status(400).send(err) // Change code 400

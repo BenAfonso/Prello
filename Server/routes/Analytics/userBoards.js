@@ -1,4 +1,6 @@
 const {requiresLogin} = require('../../config/middlewares/authorization')
+const request = require('request')
+
 module.exports = function (router, controller) {
   /**
   * @swagger
@@ -28,8 +30,32 @@ module.exports = function (router, controller) {
   *         description: Internal error
   */
   router.get('/analytics/boards/', [requiresLogin], function (req, res) {
-    controller.getBoardAnalytics(req.user._id).then((data) => {
-      res.status(200).json(data)
+    controller.getAllUserBoards(req.user._id).then((data) => {
+      if (req.user.theprello !== undefined) {
+        request({
+          headers: {
+            'authorization': `Bearer ${req.user.theprello.accessToken}`
+          },
+          method: 'get',
+          url: 'https://theprello-api.igpolytech.fr/api/analytics/boards',
+          form: data
+        }, (error, response) => {
+          if (!error && response.statusCode === 200) {
+            let boardsDist = JSON.parse(response.body)
+            boardsDist.map(boardDist => {
+              if (!boardDist.createdAt) {
+                boardDist.createdAt = '11-01-2017'
+              }
+              data.push({provider: 'ThePrello', title: boardDist.name, _id: boardDist._id, createdAt: boardDist.createdAt})
+            })
+            res.status(200).json(data)
+          } else {
+            res.status(200).json(data)
+          }
+        })
+      } else {
+        res.status(200).json(data)
+      }
     })
       .catch((err) => {
         res.status(err.status).json(err)

@@ -14,7 +14,8 @@ const UserSchema = new Schema({
   picture: { type: String, default: '' },
   bio: {type: String, default: ''},
   bgColor: {type: String, default: '#ff3399'},
-  google: {}
+  google: {},
+  theprello: {}
 })
 
 const oAuthTypes = ['google']
