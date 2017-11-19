@@ -232,7 +232,6 @@ export default class Board extends React.Component {
   }
 
   onDragStart = (initial) => {
-    console.log(initial)
   }
 
   onDragEnd = (result) => {
