@@ -1,3 +1,4 @@
+const {requiresLogin} = require('../../config/middlewares/authorization')
 
 module.exports = function (router, controller) {
   /**
@@ -37,7 +38,7 @@ module.exports = function (router, controller) {
   *       500:
   *         description: Internal error
   */
-  router.get('/analytics/boards/:boardId/cards', [], function (req, res) {
+  router.get('/analytics/boards/:boardId/cards', [requiresLogin], function (req, res) {
     controller.getCardsAnalytics(req.params.boardId, req.query.per, req.query.from, req.query.to).then((data) => {
       res.status(200).json(data)
     })
