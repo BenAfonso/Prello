@@ -5,8 +5,7 @@ import {connect} from 'react-redux'
 import DropDown from '../UI/DropDown/DropDown'
 import AvatarThumbnail from '../UI/AvatarThumbnail/AvatarThumbnail'
 import Icon from '../UI/Icon/Icon'
-import { setBoardslist, setTeamslist, fetchMatchingUsers } from '../../store/actions'
-import { subscribeToBoardslist } from '../../services/api'
+import { fetchMatchingUsers } from '../../store/actions'
 
 @connect(store => {
   return {
@@ -38,18 +37,6 @@ export default class SearchBar extends React.Component {
     this.setMatchingTeams = this.setMatchingTeams.bind(this)
     this.renderUser = this.renderUser.bind(this)
     this.redirectToCard = this.redirectToCard.bind(this)
-  }
-
-  componentDidMount () {
-    setBoardslist(this.props.dispatch).then(() => {
-      subscribeToBoardslist('testID')
-    }).catch(err => {
-      console.error(err)
-    })
-    setTeamslist(this.props.dispatch).then(() => {
-    }).catch(err => {
-      console.error(err)
-    })
   }
 
   setMatchingBoards (input) {
@@ -199,7 +186,7 @@ export default class SearchBar extends React.Component {
           input={
             <div className='input-block'>
               <div className='input-icon'>
-                <Icon fontSize='20px' color='#999' name='search' />
+                <Icon fontSize='20px' color='' name='search' />
               </div>
               <input type='text' className='search-input' placeholder='Search...' ref={(input) => { this.input = input }} onFocus={this.handleFocus} onChange={this.onChange} />
             </div>
@@ -213,7 +200,7 @@ export default class SearchBar extends React.Component {
                   <ul className='search-column'>
                     <li className='section'>
                       <div className='section-title'>Boards</div>
-                      <ul className='section-elements'>
+                      <ul className='section-elements' >
                         {
                           matchingBoards.length === 0
                             ? <li className='element'>
@@ -221,7 +208,7 @@ export default class SearchBar extends React.Component {
                             </li>
                             : matchingBoards.map(board =>
                               <Link to={`/boards/${board._id}`} key={board._id}>
-                                <li className='element' onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} >
+                                <li className='element' onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                                   <div className='content'>
                                     <div className='content-title'>
                                       <div className='content-title-text' style={{color: board.background}}>{board.title}</div>

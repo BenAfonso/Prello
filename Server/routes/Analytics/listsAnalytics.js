@@ -1,3 +1,5 @@
+const {requiresLogin} = require('../../config/middlewares/authorization')
+const request = require('request')
 
 module.exports = function (router, controller) {
   /**
@@ -37,12 +39,32 @@ module.exports = function (router, controller) {
   *       500:
   *         description: Internal error
   */
-  router.get('/analytics/boards/:boardId/lists', [], function (req, res) {
-    controller.getListsAnalytics(req.params.boardId, req.query.per, req.query.from, req.query.to).then((data) => {
-      res.status(200).json(data)
-    })
-      .catch((err) => {
-        res.status(err.status).json(err)
+  router.get('/analytics/boards/:boardId/lists', [requiresLogin], function (req, res) {
+    if (req.query.provider === 'ThePrello') {
+      if (req.user.theprello !== undefined) {
+        request({
+          headers: {
+            'authorization': `Bearer ${req.user.theprello.accessToken}`
+          },
+          method: 'get',
+          url: `https://theprello-api.igpolytech.fr/api/analytics/boards/${req.params.boardId}/lists?per=${req.query.per}${req.query.from ? `&from=${req.query.from}` : ''}${req.query.to ? `&to=${req.query.to}` : ''}`
+        }, (error, response) => {
+          if (!error && response.statusCode === 200) {
+            res.status(200).json(JSON.parse(response.body))
+          } else {
+            res.status(response.statusCode).json(error)
+          }
+        })
+      } else {
+        res.status(401).send('No accessToken for the prello')
+      }
+    } else {
+      controller.getListsAnalytics(req.params.boardId, req.query.per, req.query.from, req.query.to).then((data) => {
+        res.status(200).json(data)
       })
+        .catch((err) => {
+          res.status(err.status).json(err)
+        })
+    }
   })
 }

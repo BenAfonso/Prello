@@ -38,6 +38,24 @@ export default (state = defaultDashboardState, action) => {
         users: action.payload
       }
     }
+    case 'RESET_BOARD_ANALYTICS': {
+      return {
+        ...state,
+        fetching: false,
+        fetched: false,
+        error: null,
+        boards: [],
+        board: {
+          _id: '',
+          title: '',
+          background: '#fff',
+          provider: '',
+          numbers: []
+        },
+        lists: [],
+        users: []
+      }
+    }
     default:
       return {
         ...state

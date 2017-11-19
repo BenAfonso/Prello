@@ -17,12 +17,16 @@ export default class DashboardNav extends React.Component {
   }
 
   render () {
-    const { boardId, currentPage } = this.props
+    const { provider, boardId, currentPage } = this.props
     if (!this.props.boardId) { this.redirectTo('/dashboard') }
     if (this.state.redirectTo) { return <Redirect to={this.state.redirectTo} /> }
     return (
       <ul>
-        <li onClick={() => this.redirectTo(`/boards/${boardId}`)}>Go back to board</li>
+        {
+          provider === 'TheMightyPrello'
+            ? <li onClick={() => this.redirectTo(`/boards/${boardId}`)}>Go back to board</li>
+            : null
+        }
         {
           currentPage !== 'board'
             ? <li onClick={() => this.redirectTo(`/boards/${boardId}/dashboard/board`)}>Board</li>

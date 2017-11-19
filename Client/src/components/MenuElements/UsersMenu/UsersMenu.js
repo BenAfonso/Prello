@@ -3,8 +3,9 @@ import {connect} from 'react-redux'
 import Icon from '../../UI/Icon/Icon'
 import AvatarThumbnail from '../../UI/AvatarThumbnail/AvatarThumbnail'
 import AddCollaboratorMenu from './AddCollaboratorMenu/AddCollaboratorMenu'
-import DropDown from '../../UI/DropDown/DropDown'
 import { removeCollaborator } from '../../../store/actions'
+import {Redirect} from 'react-router-dom'
+import { displayNotification } from '../../../services/Notification.service'
 
 @connect(store => {
   return {
@@ -17,9 +18,14 @@ import { removeCollaborator } from '../../../store/actions'
 export default class UsersMenu extends React.Component {
   constructor (props) {
     super(props)
+    this.state = {
+      user: -1
+    }
     this.getInitials = this.getInitials.bind(this)
     this.renderUserAvatar = this.renderUserAvatar.bind(this)
     this.removeCollaborator = this.removeCollaborator.bind(this)
+    this.handleOutCollaborator = this.handleOutCollaborator.bind(this)
+    this.handleInCollaborator = this.handleInCollaborator.bind(this)
   }
 
   isCurrentUserOwner () {
@@ -31,6 +37,28 @@ export default class UsersMenu extends React.Component {
     }
   }
 
+  isUserCurrentUser (userId) {
+    const isSame = this.props.currentUser._id === userId
+    return isSame
+  }
+
+  isSelectedOwner (user) {
+    if (this.props.board.owner !== undefined) {
+      const isAdmin = user._id === this.props.board.owner._id
+      return isAdmin
+    } else {
+      return false
+    }
+  }
+
+  handleInCollaborator (i) {
+    this.setState({user: i})
+  }
+
+  handleOutCollaborator () {
+    this.setState({user: -1})
+  }
+
   getInitials (name) {
     const matches = name.match(/\b(\w)/g)
     const initials = matches.join('').toUpperCase()
@@ -39,6 +67,11 @@ export default class UsersMenu extends React.Component {
 
   removeCollaborator (userId) {
     removeCollaborator(this.props.board._id, userId)
+    this.setState({user: -1})
+    if (this.isUserCurrentUser(userId)) {
+      this.setState({redirectTo: '/'})
+      displayNotification({type: 'success', title: 'You left the board', content: `You're no longer a collaborator of the board ${this.props.board.title}`})
+    }
   }
 
   renderUserAvatar (user) {
@@ -65,7 +98,38 @@ export default class UsersMenu extends React.Component {
     )
   }
 
+  renderDeleteUser () {
+    return (
+      <div className='avatar'>
+        <div className='delete'>X</div>
+        <style jsx>
+          {`
+          .avatar{
+            display: inline-block;
+            padding: 5px 5px;
+            cursor: pointer;
+          }
+          .delete{
+            width: 30px;
+            height: 30px;
+            background: #ff3399;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;         
+          }
+          `}
+        </style>
+      </div>
+    )
+  }
+
   render () {
+    if (this.state.redirectTo) {
+      return (<Redirect to={this.state.redirectTo} />)
+    }
     const { collaborators, owner } = this.props.board
     const boardId = this.props.board._id
 
@@ -78,33 +142,15 @@ export default class UsersMenu extends React.Component {
           <ul className='collaborators'>
             {
               collaborators.map((user, i) => (
-                !user.isTeamUser ? <div className='collaborator' key={i}>
+                !user.isTeamUser ? <div className='collaborator' key={i} onClick={!this.isSelectedOwner(user) && (this.isCurrentUserOwner() || this.isUserCurrentUser(user._id)) ? () => this.removeCollaborator(user._id) : null} onMouseEnter={!this.isSelectedOwner(user) && (this.isCurrentUserOwner() || this.isUserCurrentUser(user._id)) ? () => this.handleInCollaborator(i) : null} onMouseLeave={!this.isSelectedOwner(user) && (this.isCurrentUserOwner() || this.isUserCurrentUser(user._id)) ? this.handleOutCollaborator : null}>
                   {
                     user._id === owner._id ? <div className='ownerIcon'><Icon color='#ffff00' name='star' fontSize='20px' /></div> : null
                   }
-                  <div className='collaborator-menu'>
-                    <DropDown
-                      orientation='right'
-                      menuElements={[
-                        {
-                          action: null,
-                          placeholder: <div className='collaborator-menu-element-title'>Modify permissions...<div className='collaborator-menu-element-infos'>(Permission lvl)</div></div>
-                        },
-                        {
-                          action: null,
-                          placeholder: <div className='collaborator-menu-element-title'>Show activity feed</div>,
-                          closer: true
-                        },
-                        {
-                          action: () => this.removeCollaborator(user._id),
-                          placeholder: <div className='collaborator-menu-element-title'>Remove from board</div>,
-                          closer: true,
-                          disabled: user._id === this.props.board.owner._id
-                        }
-                      ]}
-                      input={this.renderUserAvatar(user)}
-                    />
-                  </div>
+                  {
+                    this.state.user === i
+                      ? this.renderDeleteUser()
+                      : this.renderUserAvatar(user)
+                  }
                 </div>
                   : null))
             }
@@ -144,15 +190,6 @@ export default class UsersMenu extends React.Component {
             position: relative;
             width: auto;
             height: auto;            
-          }
-
-          .collaborator-menu {
-            z-index: 1000;
-          }
-
-          .collaborator-menu-element-infos {
-            font-size: 12px;
-            color: #999;
           }
 
           .ownerIcon {

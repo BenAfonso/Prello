@@ -78,15 +78,6 @@ export default class CardDetails extends React.Component {
     }
   }
 
-  isCurrentUserOwner () {
-    if (this.props.board.owner !== undefined) {
-      const isAdmin = this.props.currentUser._id === this.props.board.owner._id
-      return isAdmin
-    } else {
-      return false
-    }
-  }
-
   displayRenameCard () {
     this.setState({
       renameCardDisplayed: true
@@ -208,7 +199,7 @@ export default class CardDetails extends React.Component {
             {
               this.state.renameCardDisplayed
                 ? this.renderRenameCard(card)
-                : <h1 onClick={this.isCurrentUserOwner() ? this.displayRenameCard : null}>{card.text}</h1>
+                : <h1 onClick={this.displayRenameCard}>{card.text}</h1>
             }
           </div>
           <CardDetailsInformations {...this.props} cardLabels={cardLabels} onDeleteCardLabel={this.deleteCardLabel.bind(this)} onAddCardLabel={this.addCardLabel.bind(this)} onUpdateBoardLabel={this.updateBoardLabel.bind(this)} onDeleteBoardLabel={this.deleteBoardLabel.bind(this)} labels={this.props.board.labels} onAddBoardLabel={this.addBoardLabel.bind(this)} />
