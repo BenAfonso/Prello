@@ -15,7 +15,6 @@ export default class DraggableCard extends React.Component {
   static propTypes = {
     id: PropTypes.any,
     listId: PropTypes.any,
-    connectCardDragSource: PropTypes.func.isRequired,
     checklists: PropTypes.arrayOf(PropTypes.shape({
       text: PropTypes.string.isRequired,
       index: PropTypes.number,

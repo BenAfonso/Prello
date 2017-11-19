@@ -289,7 +289,10 @@ export default class Board extends React.Component {
           direction="horizontal"
         >
           {(provided) => (
-            <ul>
+            <ul ref={provided.innerRef}
+              style={{
+                ...provided.draggableStyle
+              }}>
               {
                 this.props.board.lists.map((list, i) => (
                   { ...list, index: i }
