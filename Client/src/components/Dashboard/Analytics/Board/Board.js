@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './Board.styles'
 import { connect } from 'react-redux'
-import { setBoardAnalytics, setUsersAnalytics } from '../../../../store/actions'
+import { setBoardAnalytics, setUsersAnalytics, resetBoardAnalytics } from '../../../../store/actions'
 import DateFilter from '../../DateFilter/DateFilter'
 import { fetchBoardAnalytics } from '../../../../services/Analytics.services'
 import NumbersOverTime from './Charts/NumbersOverTime'
@@ -29,9 +29,11 @@ export default class BoardAnalytics extends React.Component {
     }
     this.shouldUpdateData = this.shouldUpdateData.bind(this)
   }
-
+  componentWillUnmount () {
+    resetBoardAnalytics()
+  }
   componentWillReceiveProps (props) {
-    if (props.board.createdAt && this.state.firstDate === '' && this.state.secondDate === '') {
+    if (props.board._id !== '' && props.board.createdAt && this.state.firstDate === '' && this.state.secondDate === '') {
       let date1 = new Date(props.board.createdAt)
       date1 = `${date1.getFullYear()}-${date1.getMonth() + 1}-${date1.getDate()}`
       let date2 = new Date(Date.now())
@@ -40,8 +42,9 @@ export default class BoardAnalytics extends React.Component {
         firstDate: date1,
         secondDate: date2
       })
-      setUsersAnalytics(this.props.provider || 'TheMightyPrello', this.props._id, 'day', date1, date2)
-      fetchBoardAnalytics(props.provier || 'TheMightyPrello', props._id, 'day', date1, date2).then(analytics => {
+      let provider = props.board.provider || 'TheMightyPrello'
+      setUsersAnalytics(provider, this.props._id, 'day', date1, date2)
+      fetchBoardAnalytics(provider, props._id, 'day', date1, date2).then(analytics => {
         setBoardAnalytics(analytics)
         this.numbers = analytics
         this.setState({
@@ -53,6 +56,10 @@ export default class BoardAnalytics extends React.Component {
         })
         displayNotification({type: 'error', title: 'Error', content: 'An error occured while fetching analytics... It may be Nick\'s fault!'})
         console.error(err)
+      })
+    } else {
+      this.setState({
+        fetched: true
       })
     }
   }
@@ -95,8 +102,21 @@ export default class BoardAnalytics extends React.Component {
   }
 
   render () {
-    let mostActiveUser = max(this.props.analytics.users, (entry) => { return entry.numbers[entry.numbers.length - 1].cumulateNumberOfModifications }).user
-    let minActiveUser = min(this.props.analytics.users, (entry) => { return entry.numbers[entry.numbers.length - 1].cumulateNumberOfModifications }).user
+    let mostActiveUser = max(this.props.analytics.users, (entry) => {
+      if (entry.numbers > 0) {
+        return entry.numbers[entry.numbers.length - 1].cumulateNumberOfModifications
+      } else {
+        return 0
+      }
+    }).user
+
+    let minActiveUser = min(this.props.analytics.users, (entry) => {
+      if (entry.numbers > 0) {
+        return entry.numbers[entry.numbers.length - 1].cumulateNumberOfModifications
+      } else {
+        return 0
+      }
+    }).user
     let data = this.props.analytics.board.numbers.map(a => (
       {
         name: this.renderDate(a.date),
@@ -115,7 +135,7 @@ export default class BoardAnalytics extends React.Component {
             <div className='title'>
               { this.props.board.title }
             </div>
-            <DashboardNav boardId={this.props._id} currentPage='board' />
+            <DashboardNav provider={this.props.board.provider || 'TheMightyPrello'} boardId={this.props._id} currentPage='board' />
             { data.length > 0
               ? <div className='bigNumbers'>
                 <div className='number'><NumberHighlight title='Number of cards' value={data[data.length - 1].nbCards} /></div>
