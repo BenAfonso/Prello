@@ -33,7 +33,6 @@ export default class BoardAnalytics extends React.Component {
     resetBoardAnalytics()
   }
   componentWillReceiveProps (props) {
-    console.log(props.board)
     if (props.board._id !== '' && props.board.createdAt && this.state.firstDate === '' && this.state.secondDate === '') {
       let date1 = new Date(props.board.createdAt)
       date1 = `${date1.getFullYear()}-${date1.getMonth() + 1}-${date1.getDate()}`
