@@ -34,7 +34,7 @@ export default class DashboardBoards extends React.Component {
               { <ThePrelloLogin
                 className='oauth'
                 clientId='2bdc68692f333d9d97a8'
-                redirectUri='http://localhost:3000/dashboard'
+                redirectUri='https://themightyprello.igpolytech.fr/dashboard'
                 onSuccess={loginPrello}
               >ThePrello</ThePrelloLogin>
               }
