@@ -6,8 +6,7 @@ import Icon from '../UI/Icon/Icon'
 import Button from '../UI/Button/Button'
 import NewBoardForm from '../CreateMenu/Forms/NewBoardForm/NewBoardForm'
 import {connect} from 'react-redux'
-import { setBoardslist } from '../../store/actions'
-import { subscribeToBoardslist } from '../../services/api'
+import { setBoardslist, setTeamslist } from '../../store/actions'
 
 @connect(store => {
   return {
@@ -25,10 +24,17 @@ export default class Boardslist extends React.Component {
 
   componentDidMount () {
     setBoardslist(this.props.dispatch).then(() => {
-      subscribeToBoardslist('testID')
     }).catch(err => {
       console.error(err)
     })
+    setTeamslist(this.props.dispatch).then(() => {
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  isCurrentTeamAdmin (team) {
+    return (team.admins.filter(admin => admin._id === this.props.currentUser._id)[0] !== undefined)
   }
 
   findBoard (id) {
@@ -133,18 +139,22 @@ export default class Boardslist extends React.Component {
                       </li>
                     ))
                   }
-                  <li>
-                    <NewBoardForm
-                      currentTeam={team}
-                      button={
-                        <div className='createBoard'>
-                          <div className='createBoard-title'>
-                            Create a board...
-                          </div>
-                        </div>
-                      }
-                    />
-                  </li>
+                  {
+                    this.isCurrentTeamAdmin(team)
+                      ? <li>
+                        <NewBoardForm
+                          currentTeam={team}
+                          button={
+                            <div className='createBoard'>
+                              <div className='createBoard-title'>
+                                Create a board...
+                              </div>
+                            </div>
+                          }
+                        />
+                      </li>
+                      : undefined
+                  }
                 </ul>
               </div>
             </li>
