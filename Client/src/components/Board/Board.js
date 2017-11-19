@@ -3,17 +3,13 @@ import styles from './Board.styles'
 import List from '../List/List'
 import {connect} from 'react-redux'
 import { addList, setBoard, updateLists, removeList, resetBoard, updateBoardName, moveCardDistant, moveList } from '../../store/actions'
-// import { DragDropContext } from 'react-dnd'
-// import HTML5toTouch from 'react-dnd-multi-backend/lib/HTML5toTouch'
 import Button from '../UI/Button/Button'
 import CardDetails from '../Card/CardDetails/CardDetails'
 import { subscribeToBoard } from '../../services/api'
-// import CustomDragLayer from '../CustomDragLayer'
 import PropTypes from 'prop-types'
-// import MultiBackend from 'react-dnd-multi-backend'
 import {Redirect} from 'react-router-dom'
 import history from '../../history'
-import {DragDropContext, Droppable} from 'react-beautiful-dnd'
+import {DragDropContext} from 'react-beautiful-dnd'
 import {findWhere} from 'underscore'
 
 @connect(store => {
@@ -240,7 +236,6 @@ export default class Board extends React.Component {
   }
 
   onDragEnd = (result) => {
-    console.log(result)
     if (!result.destination) { return }
     if (result.type === 'CARD') {
       let originalList = findWhere(this.props.board.lists, {_id: result.source.droppableId})
@@ -289,13 +284,7 @@ export default class Board extends React.Component {
               <span className='dashboard-button' onClick={this.goToDashboard.bind(this)}>Dashboard</span>
             </div>
         }
-        <Droppable
-          droppableId="board"
-          type="LIST"
-          direction="horizontal"
-        >
-          {(provided) => (
-            <ul ref={provided.innerRef}>
+            <ul>
               {
                 this.props.board.lists.map((list, i) => (
                   { ...list, index: i }
@@ -317,7 +306,6 @@ export default class Board extends React.Component {
                   </li>
                 ))
               }
-
               <li className='newList' style={{
                 backgroundColor: this.props.secondaryColor
               }}>
@@ -329,8 +317,6 @@ export default class Board extends React.Component {
               </li>
 
             </ul>
-          )}
-        </Droppable>
         <style jsx>{styles}</style>
       </div>
     </DragDropContext>

@@ -3337,15 +3337,6 @@ dlv@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/dlv/-/dlv-1.1.0.tgz#fee1a7c43f63be75f3f679e85262da5f102764a7"
 
-dnd-core@^2.5.3:
-  version "2.5.3"
-  resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-2.5.3.tgz#a4163d59a01779860d2edbdadab5183ce321147c"
-  dependencies:
-    asap "^2.0.6"
-    invariant "^2.0.0"
-    lodash "^4.2.0"
-    redux "^3.7.1"
-
 dnd-core@^2.5.4:
   version "2.5.4"
   resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-2.5.4.tgz#0c70a8dcbb609c0b222e275fcae9fa83e5897397"
@@ -8216,9 +8207,9 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-beautiful-dnd@^2.6.2:
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/react-beautiful-dnd/-/react-beautiful-dnd-2.6.2.tgz#0a081944a875d1b93043235b5a5b768c4cedac84"
+react-beautiful-dnd@2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/react-beautiful-dnd/-/react-beautiful-dnd-2.6.0.tgz#aabd8191f3519e3307af68264da9544955d5b440"
   dependencies:
     babel-plugin-react-flow-props-to-prop-types "0.15.0"
     babel-runtime "6.26.0"
@@ -8319,17 +8310,6 @@ react-dnd@*, react-dnd@^2.5.1:
   dependencies:
     disposables "^1.0.1"
     dnd-core "^2.5.4"
-    hoist-non-react-statics "^2.1.0"
-    invariant "^2.1.0"
-    lodash "^4.2.0"
-    prop-types "^15.5.10"
-
-react-dnd@^2.5.3:
-  version "2.5.3"
-  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-2.5.3.tgz#ee5357da19d4ebd0e0da0a070a862bbc133e3241"
-  dependencies:
-    disposables "^1.0.1"
-    dnd-core "^2.5.3"
     hoist-non-react-statics "^2.1.0"
     invariant "^2.1.0"
     lodash "^4.2.0"

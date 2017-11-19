@@ -105,7 +105,27 @@ export default class DraggableCard extends React.Component {
               ...provided.draggableStyle
             }}
             onClick={this.displayCardDetails.bind(this)}>
-            Hello world 
+            <Card
+              id={id}
+              style={{ opacity: 1, backgroundColor: bgColor }}
+              index={index}
+              isDragging={snapshot.isDragging}
+              listIndex={listIndex}
+              content={content}
+              nbComments={nbComments}
+              nbChecklists={nbChecklists}
+              checklists={checklists}
+              collaborators={col}
+              responsible={resp}
+              attachments={attachments}
+              labelsExpanded={this.props.currentBoard.labelsExpanded}
+              labels={
+                labels
+                  ? labels.map(l => l._id
+                    ? l
+                    : this.props.board.labels.filter(l2 => l === l2._id)[0])
+                  : null
+              } />
             {provided.placeholder}
           </div>
         )}
