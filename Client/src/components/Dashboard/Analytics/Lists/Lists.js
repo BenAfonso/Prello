@@ -70,10 +70,6 @@ export default class ListsAnalytics extends React.Component {
         displayNotification({type: 'error', title: 'Error', content: 'An error occured while fetching analytics... It may be Nick\'s fault!'})
         console.error(err)
       })
-    } else {
-      this.setState({
-        fetched: true
-      })
     }
   }
 
