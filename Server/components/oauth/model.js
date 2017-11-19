@@ -7,6 +7,7 @@ const User = mongoose.model('User')
 const jwt = require('jsonwebtoken')
 const secretKey = require('../../config').secretKey
 const request = require('request')
+const querystring = require('querystring')
 
 function getAccessToken (bearerToken) {
   return OAuthAccessToken
@@ -264,6 +265,31 @@ function validateGoogleCode (code, origin) {
   })
 }
 
+function validatePrelloCode (code, origin) {
+  const authenticate = Buffer.from('2bdc68692f333d9d97a8:b40fb4c666ddb00b9949').toString('base64')
+  const data = querystring.stringify({
+    code: code,
+    redirect_uri: 'https://themightyprello.igpolytech.fr/dashboard',
+    grant_type: 'authorization_code'
+  })
+  return new Promise((resolve, reject) => {
+    request({
+      headers: {
+        'authorization': `Basic ${authenticate}`
+      },
+      method: 'post',
+      url: 'https://theprello-api.igpolytech.fr/oauth/token',
+      form: data
+    }, (error, response) => {
+      if (!error && response.statusCode === 200) {
+        resolve(response.body)
+      } else {
+        return reject(response.body)
+      }
+    })
+  })
+}
+
 module.exports = {
   generateAccessToken: generateAccessToken, //, optional - used for jwt
   getAccessToken: getAccessToken,
@@ -278,5 +304,6 @@ module.exports = {
   saveAuthorizationCode: saveAuthorizationCode, // renamed saveOAuthAuthorizationCode,
   validateScope: validateScope,
   verifyScope: verifyScope,
-  validateGoogleCode: validateGoogleCode
+  validateGoogleCode: validateGoogleCode,
+  validatePrelloCode: validatePrelloCode
 }

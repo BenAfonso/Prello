@@ -112,7 +112,11 @@ export function resetBoard (dispatch) {
     type: 'RESET_BOARD'
   })
 }
-
+export function resetBoardAnalytics (dispatch) {
+  store.dispatch({
+    type: 'RESET_BOARD_ANALYTICS'
+  })
+}
 export function toggleLabelsExpanded (dispatch) {
   store.dispatch({
     type: 'TOGGLE_LABELS_EXPANDED'

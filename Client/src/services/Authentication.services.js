@@ -77,6 +77,17 @@ export function loginGoogle (code) {
     })
   })
 }
+export function loginPrello (data) {
+  return new Promise((resolve, reject) => {
+    axios.post(`${Config.API_URL}/auth/prello/callback`, {
+      code: data.code
+    }).then((res) => {
+      resolve(res.data)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
 
 export function register (name, email, password, withLogin) {
   return new Promise((resolve, reject) => {

@@ -4,11 +4,14 @@ import {connect} from 'react-redux'
 import BoardThumbnail from '../../BoardThumbnail/BoardThumbnail'
 import { Link } from 'react-router-dom'
 import { displayNotification } from '../../../services/Notification.service'
-// import ThePrelloLogin from 'react-theprello-login/dist/PrelloLogin'
+import { loginPrello } from '../../../services/Authentication.services'
+
+import ThePrelloLogin from 'react-theprello-login/dist/PrelloLogin'
 
 @connect(store => {
   return {
-    analytics: store.analytics
+    analytics: store.analytics,
+    currentUser: store.currentUser
   }
 })
 export default class DashboardBoards extends React.Component {
@@ -27,14 +30,14 @@ export default class DashboardBoards extends React.Component {
           <h1>Analytics Boards</h1>
           <ul className='services'>
             <li className='service checked'>TheMightyPrello</li>
-            <li className='service unchecked' onClick={this.displayUnavailableOAuth}>
-              { /* <ThePrelloLogin
-              className='oauth'
-              clientId='2d8ef2e3670006d59ca8'
-              redirectUri='http://localhost:3000/dashboard'
-              onSuccess={console.log}
-            >ThePrello</ThePrelloLogin>
-            */ }
+            <li className={`service ${this.props.currentUser.theprello ? 'checked' : 'unchecked'}` } onClick={this.displayUnavailableOAuth}>
+              { <ThePrelloLogin
+                className='oauth'
+                clientId='2bdc68692f333d9d97a8'
+                redirectUri='http://localhost:3000/dashboard'
+                onSuccess={loginPrello}
+              >ThePrello</ThePrelloLogin>
+              }
             </li>
             <li className='service unchecked' onClick={this.displayUnavailableOAuth}>PrelloG3</li>
           </ul>
@@ -44,7 +47,7 @@ export default class DashboardBoards extends React.Component {
             this.props.analytics.boards.map(b => (
               <li>
                 <Link to={`/boards/${b._id}/dashboard/board`} provider={b.provider || 'TheMightyPrello'}>
-                  <BoardThumbnail provider={b.provider} id={b._id} title={b.title} />
+                  <BoardThumbnail provider={b.provider} id={b._id} title={b.title} background={b.provider === 'ThePrello' ? '#7cb1b2' : null} />
                 </Link>
               </li>
             ))

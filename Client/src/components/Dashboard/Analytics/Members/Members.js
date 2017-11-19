@@ -63,7 +63,9 @@ export default class MembersAnalytics extends React.Component {
         firstDate: date1,
         secondDate: date2
       })
-      setUsersAnalytics(this.props.provider || 'TheMightyPrello', this.props._id, 'day', this.state.firstDate, this.state.secondDate).then(res => {
+      let provider = props.board.provider || 'TheMightyPrello'
+      console.log(props.board)
+      setUsersAnalytics(provider, this.props._id, 'day', this.state.firstDate, this.state.secondDate).then(res => {
         this.setState({ fetched: true })
       }).catch(err => {
         this.setState({
@@ -106,10 +108,34 @@ export default class MembersAnalytics extends React.Component {
   }
 
   render () {
-    let mostActiveUserToday = max(this.props.users, (entry) => { return entry.numbers[entry.numbers.length - 1].numberOfModifications }).user
-    let doesEverything = max(this.props.users, (entry) => { return entry.numberOfCardsDone + entry.numberOfCardsDone }).user
-    let mostAccurate = min(this.props.users, (entry) => { return entry.numberOfCardsDoneLate / entry.numberOfCardsDone }).user
-    let alwaysLate = max(this.props.users, (entry) => { return entry.numberOfCardsDoneLate / entry.numberOfCardsDone }).user
+    let mostActiveUserToday = max(this.props.users, (entry) => {
+      if (entry.numbers.length > 0) {
+        return entry.numbers[entry.numbers.length - 1].numberOfModifications
+      } else {
+        return 0
+      }
+    }).user
+    let doesEverything = max(this.props.users, (entry) => {
+      if (!entry.numberOfCardsDone) {
+        return 0
+      } else {
+        return entry.numberOfCardsDone + entry.numberOfCardsDone
+      }
+    }).user
+    let mostAccurate = min(this.props.users, (entry) => {
+      if (!entry.numberOfCardsDone && !entry.numberOfCardsDoneLate) {
+        return 0
+      } else {
+        return entry.numberOfCardsDoneLate / entry.numberOfCardsDone
+      }
+    }).user
+    let alwaysLate = max(this.props.users, (entry) => {
+      if (!entry.numberOfCardsDone && !entry.numberOfCardsDoneLate) {
+        return 0
+      } else {
+        return entry.numberOfCardsDoneLate / entry.numberOfCardsDone
+      }
+    }).user
 
     if (this.state.fetched) {
       return (

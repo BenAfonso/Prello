@@ -12,8 +12,7 @@ export function getBaseUrl (provider) {
 
 export function fetchBoards (provider) {
   return new Promise((resolve, reject) => {
-    let base = getBaseUrl('TheMightyPrello')
-    axios.get(`${base}/me/boards`).then((res) => {
+    axios.get(`${Config.API_URL}/analytics/boards`).then((res) => {
       resolve(res.data)
     }).catch((err) => {
       reject(err)
@@ -22,9 +21,9 @@ export function fetchBoards (provider) {
 }
 
 export function fetchBoardAnalytics (provider, boardId, per, dateFrom, dateTo) {
+  console.log(boardId)
   return new Promise((resolve, reject) => {
-    let base = getBaseUrl('TheMightyPrello')
-    axios.get(`${base}/analytics/boards/${boardId}?per=${per}${dateFrom ? `&from=${dateFrom}` : ''}${dateTo ? `&to=${dateTo}` : ''}`).then((res) => {
+    axios.get(`${Config.API_URL}/analytics/boards/${boardId}?per=${per}${provider ? `&provider=${provider}` : ''}${dateFrom ? `&from=${dateFrom}` : ''}${dateTo ? `&to=${dateTo}` : ''}`).then((res) => {
       resolve(res.data)
     }).catch((err) => {
       reject(err)
@@ -34,8 +33,7 @@ export function fetchBoardAnalytics (provider, boardId, per, dateFrom, dateTo) {
 
 export function fetchListsAnalytics (provider, boardId, per, dateFrom, dateTo) {
   return new Promise((resolve, reject) => {
-    let base = getBaseUrl('TheMightyPrello')
-    axios.get(`${base}/analytics/boards/${boardId}/lists?per=${per}${dateFrom ? `&from=${dateFrom}` : ''}${dateTo ? `&to=${dateTo}` : ''}`).then((res) => {
+    axios.get(`${Config.API_URL}/analytics/boards/${boardId}/lists?per=${per}${provider ? `&provider=${provider}` : ''}${dateFrom ? `&from=${dateFrom}` : ''}${dateTo ? `&to=${dateTo}` : ''}`).then((res) => {
       resolve(res.data)
     }).catch((err) => {
       reject(err)
@@ -45,8 +43,7 @@ export function fetchListsAnalytics (provider, boardId, per, dateFrom, dateTo) {
 
 export function fetchUsersAnalytics (provider, boardId, per, dateFrom, dateTo) {
   return new Promise((resolve, reject) => {
-    let base = getBaseUrl('TheMightyPrello')
-    axios.get(`${base}/analytics/boards/${boardId}/members?per=${per}${dateFrom ? `&from=${dateFrom}` : ''}${dateTo ? `&to=${dateTo}` : ''}`).then((res) => {
+    axios.get(`${Config.API_URL}/analytics/boards/${boardId}/members?per=${per}${provider ? `&provider=${provider}` : ''}${dateFrom ? `&from=${dateFrom}` : ''}${dateTo ? `&to=${dateTo}` : ''}`).then((res) => {
       resolve(res.data)
     }).catch((err) => {
       reject(err)
