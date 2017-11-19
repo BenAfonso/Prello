@@ -1,4 +1,5 @@
 import React from 'react'
+import Card from '../Card/DraggableCard'
 import styles from './List.styles'
 import {connect} from 'react-redux'
 import { addCard, archiveList, updateListName } from '../../store/actions'
@@ -136,39 +137,105 @@ export default class List extends React.Component {
   render () {
     const { title } = this.props
     return (
-          <div className='host'>
-            <Droppable droppableId={`${this.props.index + 1}`}>
-              {(dropProvided, dropSnapshot) => (
-                <ul ref={dropProvided.innerRef} style={{height: 'calc(100vh - 340px)'}}>
-                  {
-                    [{text: 'Aeaz'}, {text: 'zaeazeee'}, {text: 'zaeza'}].map((card, i) => (
-                        <Draggable
-                          key={title + 'droppable-' + i}
-                          draggableId={title + 'droppable-' + i}
-                        >
-                          {(dragProvided, snapshot) => (
-                            <div
-                              ref={dragProvided.innerRef}
-                              style={{
-                                ...dragProvided.draggableStyle,
-                                height: '60px',
-                                backgroundColor: 'yellow',
-                                userSelect: 'none'
-                              }}
-                              {...dragProvided.dragHandleProps}
-                            >
-                              {card.text}
-                              <div style={{ backgroundColor: 'orange' }}>{dragProvided.placeholder}</div>
-                            </div>
-                          )}
-                        </Draggable>
-                    ))}
-                  <div style={{ backgroundColor: 'red'}}>{dropProvided.placeholder}</div>
-                </ul>
+      <Draggable
+        draggableId={this.props.id}
+        type="LIST">
+        {(provided, snapshot) => (
+          <div className='host'
+            ref={provided.innerRef}
+            style={{
+              ...provided.draggableStyle
+            }}
+          >
+            {
+              this.state.renameListDisplayed
+                ? this.renderRenameList()
+                : <div
+                  {...provided.dragHandleProps}
+                  className='title'
+                  onClick={this.isCurrentUserOwner() ? this.displayRenameList : null}>{title}</div>
+            }
+            <div className='button'>
+              <ListMenu archive={this.archive.bind(this)} />
+            </div>
+            <Droppable
+              droppableId={this.props.id}
+              type='CARD'
+            >
+              {(cardsProvided, cardSnapshot) => (
+                <div>
+                  <ul ref={cardsProvided.innerRef} style={{
+                    maxHeight: this.state.newCardFormDisplayed
+                      ? 'calc(100vh - 340px)'
+                      : 'calc(100vh - 230px)'
+                  }}>
+                    {
+                      this.props.cards.map((card, i) => (
+                        { ...card, index: i }
+                      )).filter(card =>
+                        !card.isArchived
+                      ).map(card => (
+                        <li key={card._id}>
+                          <Card
+                            index={card.index}
+                            id={card._id}
+                            checklists={card.checklists}
+                            bgColor={this.props.primaryColor}
+                            listId={this.props.id}
+                            shadowColor={this.props.shadowColor}
+                            listIndex={this.props.index}
+                            comments={card.comments}
+                            attachments={card.attachments}
+                            content={card.text}
+                            collaborators={card.collaborators}
+                            responsible={card.responsible}
+                            labels={card.labels}
+                            popoverManager={this.props.popoverManager} />
+                        </li>
+                      ))
+                    }
+                    <div>{cardsProvided.placeholder}</div>
+                  </ul>
+                </div>
               )}
             </Droppable>
+            {
+              this.state.newCardFormDisplayed
+                ? <div className='newCardForm'>
+                  <form onSubmit={this.addCard}>
+                    <textarea
+                      ref={(t) => { this.newCardTitle = t }}
+                      onKeyPress={(e) => { return e.charCode === 13 ? this.addCard() : null }}
+                    />
+                  </form>
+                  <div className='newCardFormButtons'>
+                    <div>
+                      <Button
+                        bgColor={'#5AAC44'}
+                        gradient
+                        bold
+                        shadow
+                        onClick={this.addCard}>
+                          Add
+                      </Button>
+                    </div>
+                    <div>
+                      <Button
+                        bgColor={'#444'}
+                        gradient
+                        shadow
+                        onClick={this.undisplayNewCardForm}>
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                : <div className='newCardButton'onClick={this.displayNewCardForm}>Add a card...</div>
+            }
             <style jsx>{styles}</style>
           </div>
+        )}
+      </Draggable>
     )
   }
 }

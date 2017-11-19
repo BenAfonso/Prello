@@ -9,7 +9,7 @@ import { subscribeToBoard } from '../../services/api'
 import PropTypes from 'prop-types'
 import {Redirect} from 'react-router-dom'
 import history from '../../history'
-import {DragDropContext} from 'react-beautiful-dnd'
+import {DragDropContext, Droppable} from 'react-beautiful-dnd'
 import {findWhere} from 'underscore'
 
 @connect(store => {
@@ -284,6 +284,12 @@ export default class Board extends React.Component {
               <span className='dashboard-button' onClick={this.goToDashboard.bind(this)}>Dashboard</span>
             </div>
         }
+        <Droppable
+          droppableId="board"
+          type="LIST"
+          direction="horizontal"
+        >
+          {(provided) => (
             <ul>
               {
                 this.props.board.lists.map((list, i) => (
@@ -306,6 +312,7 @@ export default class Board extends React.Component {
                   </li>
                 ))
               }
+              {provided.placeholder}
               <li className='newList' style={{
                 backgroundColor: this.props.secondaryColor
               }}>
@@ -317,6 +324,8 @@ export default class Board extends React.Component {
               </li>
 
             </ul>
+          )}
+        </Droppable>
         <style jsx>{styles}</style>
       </div>
     </DragDropContext>
