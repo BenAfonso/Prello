@@ -48,7 +48,7 @@ export default class ListsAnalytics extends React.Component {
   }
 
   componentWillReceiveProps (props) {
-    if (props.board.createdAt && this.state.firstDate === '' && this.state.secondDate === '') {
+    if (props.board._id !== '' && props.board.createdAt && this.state.firstDate === '' && this.state.secondDate === '') {
       let date1 = new Date(props.board.createdAt)
       date1 = `${date1.getFullYear()}-${date1.getMonth() + 1}-${date1.getDate()}`
       let date2 = new Date(Date.now())
@@ -57,7 +57,9 @@ export default class ListsAnalytics extends React.Component {
         firstDate: date1,
         secondDate: date2
       })
-      setListsAnalytics(this.props.provider || 'TheMightyPrello', props._id, 'day', date1, date2).then(res => {
+      let provider = props.board.provider || 'TheMightyPrello'
+      console.log(props.board)
+      setListsAnalytics(provider, props._id, 'day', date1, date2).then(res => {
         this.setState({
           fetched: true
         })

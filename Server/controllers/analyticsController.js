@@ -18,7 +18,7 @@ const addYears = (theDate, years) => {
 analyticsController.getAllUserBoards = (userId) => {
   return new Promise((resolve, reject) => {
     Team.find({ 'users': userId }).then((teams) => {
-      Board.find({$or: [{ 'owner': userId }, { 'collaborators': userId }, {'teams': {$in: teams}}]}, {name: 1}).then((res) => {
+      Board.find({$or: [{ 'owner': userId }, { 'collaborators': userId }, {'teams': {$in: teams}}]}, {title: 1, createdAt: 1}).then((res) => {
         resolve(res)
       }).catch((err) => {
         reject(err)
