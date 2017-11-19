@@ -29,7 +29,7 @@ export default `
     overflow-x: auto;
     padding-left: 10px;
     padding-right: 10px;
-    height: calc(100% - 50px);
+    height: calc(100% - 40px);
   }
 
   ul li {

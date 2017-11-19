@@ -2,81 +2,11 @@ import React from 'react'
 import Card from '../Card/DraggableCard'
 import styles from './List.styles'
 import {connect} from 'react-redux'
-import { addCard, moveList, moveCardDistant, updateLists, archiveList, updateListName } from '../../store/actions'
-import { DragSource, DropTarget } from 'react-dnd'
-import { ItemTypes } from '../Constants'
+import { addCard, archiveList, updateListName } from '../../store/actions'
 import { PropTypes } from 'prop-types'
-import { findDOMNode } from 'react-dom'
 import Button from '../UI/Button/Button'
-import { getEmptyImage } from 'react-dnd-html5-backend'
 import ListMenu from './ListMenu/ListMenu'
-
-const listSource = {
-  beginDrag (props, monitor, component) {
-    const { clientWidth, clientHeight } = findDOMNode(component)
-    return {
-      id: props.id,
-      originalIndex: props.findList(props.id).index,
-      clientWidth: clientWidth,
-      clientHeight: clientHeight,
-      ...props
-    }
-  },
-
-  endDrag (props, monitor) {
-    const { id: droppedId, originalIndex } = monitor.getItem()
-    if (originalIndex !== props.index) {
-      moveList(props.dispatch, props.board._id, droppedId, props.index)
-    }
-  }
-}
-
-const cardTarget = {
-  canDrop () {
-    return true
-  },
-
-  hover (props, monitor) {
-    const { id: draggedId, originalIndex, originalListIndex } = monitor.getItem()
-    // TODO REPLACE WITH FINDCARD
-    let originalList = props.board.lists.filter((l, listIndex) => {
-      let cardss = l.cards.filter((c, cIndex) => {
-        return c._id === draggedId
-      })
-      return cardss.length > 0
-    })[0]
-    let card = originalList.cards.filter((e, i) => e._id === draggedId)[0]
-
-    if (props.cards.filter(c => !c.isArchived).length === 0) {
-      let newLists = props.board.lists.slice()
-      newLists[props.index].cards.push(card)
-      newLists[originalListIndex].cards.splice(originalIndex, 1)
-      updateLists(props.dispatch, newLists)
-    }
-  },
-  drop (props, monitor) {
-    const { id: draggedId, originalListIndex } = monitor.getItem()
-    let card = props.cards.filter((e, i) => !e.isArchived && e._id === draggedId)[0]
-    if (card !== undefined) {
-      moveCardDistant(props.board._id, card._id, props.board.lists[originalListIndex]._id, props.id, props.cards.indexOf(card))
-    }
-  }
-}
-
-const listTarget = {
-  canDrop () {
-    return false
-  },
-
-  hover (props, monitor) {
-    const { id: draggedId } = monitor.getItem()
-    const { id: overId } = props
-    if (draggedId !== overId) {
-      const { index: overIndex } = props.findList(overId)
-      props.moveList(draggedId, overIndex)
-    }
-  }
-}
+import { Draggable, Droppable } from 'react-beautiful-dnd'
 
 @connect(store => {
   return {
@@ -85,28 +15,9 @@ const listTarget = {
     currentUser: store.currentUser
   }
 })
-// List can be hovered by another dragged list
-@DropTarget(ItemTypes.LIST, listTarget, connect => ({
-  connectListDropTarget: connect.dropTarget()
-}))
-// List can be the target of a card drop
-@DropTarget(ItemTypes.CARD, cardTarget, (connectDragSource, monitor) => ({
-  connectCardDropTarget: connectDragSource.dropTarget()
-}))
-// List are draggable
-@DragSource(ItemTypes.LIST, listSource, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  connectDragPreview: connect.dragPreview(),
-  isDragging: monitor.isDragging()
-}))
 export default class List extends React.Component {
   static propTypes = {
-    connectDragSource: PropTypes.func,
-    connectDropTarget: PropTypes.func,
     index: PropTypes.number.isRequired,
-    isDragging: PropTypes.bool,
-    isOver: PropTypes.bool,
-    canDrop: PropTypes.bool,
     id: PropTypes.any,
     title: PropTypes.string.isRequired,
     moveList: PropTypes.func.isRequired,
@@ -132,10 +43,6 @@ export default class List extends React.Component {
   }
 
   componentDidMount () {
-    document.addEventListener('mousedown', this.handleClickOutside)
-    this.props.connectDragPreview(getEmptyImage(), {
-      captureDraggingState: true
-    })
   }
 
   componentWillUnmount () {
@@ -228,85 +135,105 @@ export default class List extends React.Component {
   }
 
   render () {
-    const { title, shadowColor, isDragging, connectDragSource, connectListDropTarget, connectCardDropTarget } = this.props
-    return connectDragSource(connectListDropTarget(connectCardDropTarget(
-      <div className='host'
-        ref={(l) => { this.host = l }}>
-        { isDragging ? <div className='overlay' style={{backgroundColor: shadowColor}} /> : null }
-        {
-          this.state.renameListDisplayed
-            ? this.renderRenameList()
-            : <div className='title' onClick={this.isCurrentUserOwner() ? this.displayRenameList : null}>{title}</div>
-        }
-        <div className='button'>
-          <ListMenu archive={this.archive.bind(this)} />
-        </div>
-        <ul ref={(l) => { this.cardContainer = l }} style={{
-          maxHeight: this.state.newCardFormDisplayed
-            ? 'calc(100vh - 340px)'
-            : 'calc(100vh - 230px)'
-        }}>
-          {
-            this.props.cards.map((card, i) => (
-              { ...card, index: i }
-            )).filter(card =>
-              !card.isArchived
-            ).map(card => (
-              <li key={card._id}>
-                <Card
-                  index={card.index}
-                  id={card._id}
-                  checklists={card.checklists}
-                  bgColor={this.props.primaryColor}
-                  listId={this.props.id}
-                  shadowColor={this.props.shadowColor}
-                  listIndex={this.props.index}
-                  comments={card.comments}
-                  attachments={card.attachments}
-                  content={card.text}
-                  collaborators={card.collaborators}
-                  responsible={card.responsible}
-                  labels={card.labels}
-                  popoverManager={this.props.popoverManager} />
-              </li>
-            ))
-          }
-        </ul>
-        {
-          this.state.newCardFormDisplayed
-            ? <div className='newCardForm'>
-              <form onSubmit={this.addCard}>
-                <textarea
-                  ref={(t) => { this.newCardTitle = t }}
-                  onKeyPress={(e) => { return e.charCode === 13 ? this.addCard() : null }}
-                />
-              </form>
-              <div className='newCardFormButtons'>
-                <div>
-                  <Button
-                    bgColor={'#5AAC44'}
-                    gradient
-                    bold
-                    shadow
-                    onClick={this.addCard}>
-                      Add
-                  </Button>
-                </div>
-                <div>
-                  <Button
-                    bgColor={'#444'}
-                    gradient
-                    shadow
-                    onClick={this.undisplayNewCardForm}>
-                     Cancel
-                  </Button>
-                </div>
-              </div>
+    const { title } = this.props
+    return (
+      <Draggable
+        draggableId={this.props.id}
+        type="LIST">
+        {(provided, snapshot) => (
+          <div className='host'
+            ref={provided.innerRef}
+            style={{
+              ...provided.draggableStyle
+            }}
+          >
+            {
+              this.state.renameListDisplayed
+                ? this.renderRenameList()
+                : <div
+                  {...provided.dragHandleProps}
+                  className='title'
+                  onClick={this.isCurrentUserOwner() ? this.displayRenameList : null}>{title}</div>
+            }
+            <div className='button'>
+              <ListMenu archive={this.archive.bind(this)} />
             </div>
-            : <div className='newCardButton'onClick={this.displayNewCardForm}>Add a card...</div>
-        }
-        <style jsx>{styles}</style>
-      </div>
-    )))
+            <Droppable
+              droppableId={this.props.id}
+              type='CARD'
+            >
+              {(cardsProvided, cardSnapshot) => (
+                <ul ref={cardsProvided.innerRef} style={{
+                  maxHeight: this.state.newCardFormDisplayed
+                    ? 'calc(100vh - 340px)'
+                    : 'calc(100vh - 230px)'
+                }}>
+                  {
+                    this.props.cards.map((card, i) => (
+                      { ...card, index: i }
+                    )).filter(card =>
+                      !card.isArchived
+                    ).map(card => (
+                      <li key={card._id}>
+                        <Card
+                          index={card.index}
+                          id={card._id}
+                          checklists={card.checklists}
+                          bgColor={this.props.primaryColor}
+                          listId={this.props.id}
+                          shadowColor={this.props.shadowColor}
+                          listIndex={this.props.index}
+                          comments={card.comments}
+                          attachments={card.attachments}
+                          content={card.text}
+                          collaborators={card.collaborators}
+                          responsible={card.responsible}
+                          labels={card.labels}
+                          popoverManager={this.props.popoverManager} />
+                      </li>
+                    ))
+                  }
+                  {cardsProvided.placeholder}
+                </ul>
+              )}
+            </Droppable>
+            {
+              this.state.newCardFormDisplayed
+                ? <div className='newCardForm'>
+                  <form onSubmit={this.addCard}>
+                    <textarea
+                      ref={(t) => { this.newCardTitle = t }}
+                      onKeyPress={(e) => { return e.charCode === 13 ? this.addCard() : null }}
+                    />
+                  </form>
+                  <div className='newCardFormButtons'>
+                    <div>
+                      <Button
+                        bgColor={'#5AAC44'}
+                        gradient
+                        bold
+                        shadow
+                        onClick={this.addCard}>
+                          Add
+                      </Button>
+                    </div>
+                    <div>
+                      <Button
+                        bgColor={'#444'}
+                        gradient
+                        shadow
+                        onClick={this.undisplayNewCardForm}>
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                : <div className='newCardButton'onClick={this.displayNewCardForm}>Add a card...</div>
+            }
+            <style jsx>{styles}</style>
+          </div>
+        )}
+      </Draggable>
+    )
   }
 }

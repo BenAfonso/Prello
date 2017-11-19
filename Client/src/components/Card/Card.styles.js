@@ -12,6 +12,10 @@ export default `
   box-shadow: 1px 1px 4px rgba(0,0,0,0.3);
 }
 
+.root.isDragging {
+  transform: rotate(4deg);
+}
+
 .root:hover {
   background-color: #eee;
 }

@@ -99,7 +99,7 @@ export default class Card extends React.Component {
     let nbAttachments = this.props.attachments ? this.props.attachments.length : 0
     // let labelsToDisplay = card.labels
     return (
-      <div style={{...this.props.style}} ref={c => { this.card = c }} className='root'>
+      <div style={{...this.props.style}} ref={c => { this.card = c }} className={`root ${this.props.isDragging ? 'isDragging' : ''}`}>
         <div className='editButton'><Button size='small' bgColor='rgba(0,0,0,0)' hoverBgColor='rgba(255,255,255,0.6)'><Icon name='edit' color='#444' /></Button></div>
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
           { this.props.labels
