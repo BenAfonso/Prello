@@ -164,15 +164,6 @@ export default class List extends React.Component {
     })
   }
 
-  isCurrentUserOwner () {
-    if (this.props.board.owner !== undefined) {
-      const isAdmin = this.props.currentUser._id === this.props.board.owner._id
-      return isAdmin
-    } else {
-      return false
-    }
-  }
-
   displayRenameList () {
     this.setState({
       renameListDisplayed: true
@@ -236,7 +227,7 @@ export default class List extends React.Component {
         {
           this.state.renameListDisplayed
             ? this.renderRenameList()
-            : <div className='title' onClick={this.isCurrentUserOwner() ? this.displayRenameList : null}>{title}</div>
+            : <div className='title' onClick={this.displayRenameList}>{title}</div>
         }
         <div className='button'>
           <ListMenu archive={this.archive.bind(this)} />

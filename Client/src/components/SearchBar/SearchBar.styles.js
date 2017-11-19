@@ -9,22 +9,29 @@ export default `
 
 input {
   font-size: 14px;
-  color: #666;
   height: 30px;
+  color:white;
   padding: 4px;
   padding-left: 30px;
   width: 200px;
   min-width: 200px;
   border-radius: 3px;
-  border: 1px solid rgba(0,0,0,0.2);
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   transition: min-width 0.75s;    
+  background: rgba(255,255,255,0.3);
+}
+
+input::placeholder {
+  color: white;  
 }
 
 input:focus {
   min-width: 300px;
+  background: rgba(255,255,255,1);
+  color: #666;
 }
 
-.input-icon{
+.input-icon {
   position: absolute;
   left: 5px;
   top: 3px;

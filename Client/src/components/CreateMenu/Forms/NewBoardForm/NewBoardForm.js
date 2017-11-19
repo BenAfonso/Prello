@@ -3,13 +3,14 @@ import {connect} from 'react-redux'
 import NewTeamForm from '../NewTeamForm/NewTeamForm'
 import Button from '../../../UI/Button/Button'
 import DropDown from '../../../UI/DropDown/DropDown'
-import { addBoard, addScrumBoard, addKanbanBoard, addTeamBoard, addScrumTeamBoard, addKanbanTeamBoard, setTeamslist } from '../../../../store/actions'
+import { addBoard, addScrumBoard, addKanbanBoard, addTeamBoard, addScrumTeamBoard, addKanbanTeamBoard } from '../../../../store/actions'
 import styles from './NewBoardForm.styles'
 import PropTypes from 'prop-types'
 
 @connect(store => {
   return {
-    teams: store.teamslist.teams
+    teams: store.teamslist.teams,
+    currentUser: store.currentUser
   }
 })
 
@@ -36,19 +37,16 @@ export default class NewBoardForm extends React.Component {
     this.hideKanbanForm = this.hideKanbanForm.bind(this)
   }
 
-  componentDidMount () {
-    setTeamslist(this.props.dispatch).then(() => {
-    }).catch(err => {
-      console.error(err)
-    })
-  }
-
   componentWillReceiveProps (nextProps) {
     if (this.props.currentTeam !== nextProps.currentTeam) {
       this.setState({
         selected: this.props.self ? [] : [nextProps.currentTeam._id]
       })
     }
+  }
+
+  isCurrentTeamAdmin (team) {
+    return (team.admins.filter(admin => admin._id === this.props.currentUser._id)[0] !== undefined)
   }
 
   displayScrumForm () {
@@ -154,7 +152,7 @@ export default class NewBoardForm extends React.Component {
   }
 
   render () {
-    const { teams, button } = this.props
+    const { button, teams } = this.props
     return (
       <div className='host'>
         <DropDown
@@ -190,8 +188,8 @@ export default class NewBoardForm extends React.Component {
                           {
                             teams.map((team, i) =>
                               <li key={i} className='team'>
-                                <input type='checkbox' className='team-checkbox' defaultChecked={this.state.selected.filter(teamId => teamId === team._id)[0]} onChange={event => this.onTeamCheck(event, team._id)}/>
-                                <div className='team-name'>{team.name}</div>
+                                <input type='checkbox' className='team-checkbox' defaultChecked={this.isCurrentTeamAdmin(team) ? this.state.selected.filter(teamId => teamId === team._id)[0] : false} onChange={event => this.onTeamCheck(event, team._id)} disabled={!this.isCurrentTeamAdmin(team)}/>
+                                <div className='team-name' style={!this.isCurrentTeamAdmin(team) ? {color: '#999'} : null}>{team.name}</div>
                               </li>
                             )
                           }
