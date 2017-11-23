@@ -50,7 +50,6 @@ module.exports = function (router, controller) {
           url: `https://theprello-api.igpolytech.fr/api/analytics/boards/${req.params.boardId}?per=${req.query.per}${req.query.from ? `&from=${req.query.from}` : ''}${req.query.to ? `&to=${req.query.to}` : ''}`
         }, (error, response) => {
           if (!error && response.statusCode === 200) {
-            console.log(response.body)
             res.status(200).json(JSON.parse(response.body).numbers)
           } else {
             res.status(response.statusCode).json(error)

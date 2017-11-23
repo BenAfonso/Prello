@@ -21,7 +21,6 @@ export function fetchBoards (provider) {
 }
 
 export function fetchBoardAnalytics (provider, boardId, per, dateFrom, dateTo) {
-  console.log(boardId)
   return new Promise((resolve, reject) => {
     axios.get(`${Config.API_URL}/analytics/boards/${boardId}?per=${per}${provider ? `&provider=${provider}` : ''}${dateFrom ? `&from=${dateFrom}` : ''}${dateTo ? `&to=${dateTo}` : ''}`).then((res) => {
       resolve(res.data)
