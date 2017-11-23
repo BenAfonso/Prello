@@ -30,7 +30,7 @@ export default class DashboardBoards extends React.Component {
           <h1>Analytics Boards</h1>
           <ul className='services'>
             <li className='service checked'>TheMightyPrello</li>
-            <li className={`service ${this.props.currentUser.theprello ? 'checked' : 'unchecked'}` } onClick={this.displayUnavailableOAuth}>
+            <li className={`service ${this.props.currentUser.theprello ? 'checked' : 'unchecked'}` }>
               { <ThePrelloLogin
                 className='oauth'
                 clientId='2bdc68692f333d9d97a8'
