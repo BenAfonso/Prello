@@ -76,7 +76,7 @@ export default class AddNewClientForm extends React.Component {
             <label>
               Redirect URI:
             </label>
-            <input type='text' ref={r => { this.redirectUri = r }} placeholder='ex., https://themightyprello.igpolytech.fr' />
+            <input type='text' ref={r => { this.redirectUri = r }} placeholder='ex., http://176.142.249.180.igpolytech.fr' />
           </div>
           <div className='input'>
             <label>
