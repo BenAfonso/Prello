@@ -13,7 +13,6 @@ export function addBoardDistant (payload) {
       addBoardLocal(res.data)
       resolve(res.data)
     }).catch(err => {
-      console.log(err)
       reject(err)
     })
   })

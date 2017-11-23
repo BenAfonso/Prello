@@ -262,7 +262,6 @@ cardController.refreshOneCard = (boardId, listId, cardId) => {
       resolve(cardToEmit)
     })
   .catch((err) => {
-    console.log(err)
     err.status = 500
     reject(err)
   })

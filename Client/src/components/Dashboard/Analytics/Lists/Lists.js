@@ -58,7 +58,6 @@ export default class ListsAnalytics extends React.Component {
         secondDate: date2
       })
       let provider = props.board.provider || 'TheMightyPrello'
-      console.log(props.board)
       setListsAnalytics(provider, props._id, 'day', date1, date2).then(res => {
         this.setState({
           fetched: true

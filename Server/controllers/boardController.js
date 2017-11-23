@@ -472,7 +472,6 @@ boardController.getBoardHistory = (boardId, limit, skip) => {
     Modification.find({'board': boardId}).limit(limit).skip(skip).populate('user fromList toList targetUser card comment list', { 'passwordHash': 0, 'salt': 0, 'provider': 0, 'enabled': 0, 'authToken': 0 }).sort({timestamp: 'desc'}).exec((err, items) => {
       if (err) {
         err.status = 500
-        console.log(err)
         reject(err)
       }
       resolve(items)
