@@ -64,7 +64,6 @@ export default class MembersAnalytics extends React.Component {
         secondDate: date2
       })
       let provider = props.board.provider || 'TheMightyPrello'
-      console.log(props.board)
       setUsersAnalytics(provider, this.props._id, 'day', this.state.firstDate, this.state.secondDate).then(res => {
         this.setState({ fetched: true })
       }).catch(err => {

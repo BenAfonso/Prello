@@ -39,7 +39,7 @@ analyticsController.getBoardAnalytics = (boardId, per, beginDate, endDate) => {
       executeFuncRecursive(funcs, [], 0).then(res => {
         resolve(res)
       }).catch(err => {
-        console.log(err)
+        reject(err)
       })
     })
   })
@@ -72,7 +72,7 @@ analyticsController.getListsAnalytics = (boardId, per, beginDate, endDate) => {
             })
           })
         }).catch(err => {
-          console.log(err)
+          reject(err)
         })
       })
     })
@@ -100,7 +100,7 @@ analyticsController.getCardsAnalytics = (boardId, per, beginDate, endDate) => {
             resolve(cardStats)
           }
         }).catch(err => {
-          console.log(err)
+          reject(err)
         })
       })
     })
@@ -155,7 +155,7 @@ analyticsController.getMembersAnalytics = (boardId, per, beginDate, endDate) => 
             })
           })
         }).catch(err => {
-          console.log(err)
+          reject(err)
         })
       })
     })
@@ -198,7 +198,7 @@ const executeFuncRecursive = (funcs, result, index) => {
         result.concat(res)
         resolve(result)
       })
-    }).catch(err => console.log(err))
+    }).catch(err => reject(err))
   })
 }
 const constructFuncArray = (board, func, funcs, per, beginDate, endDate) => {

@@ -52,7 +52,6 @@ module.exports = function (router, controller) {
         res.status(200).json(data)
       })
         .catch((err) => {
-          console.log(err)
           res.status(err.status).json(err)
         })
     })
